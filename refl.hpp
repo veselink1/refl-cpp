@@ -914,7 +914,7 @@ namespace refl
 				constexpr Debug(F write)
 					: write(write)
 				{
-					static_assert(std::is_same_v<std::ostream&, decltype(write(std::declval<std::ostream&>(), util::Placeholder{}))> , "'write' must have a signature of std::ostream&(std::ostream&, <unspecified>)");
+					static_assert(std::is_same_v<void, decltype(write(std::declval<std::ostream&>(), util::Placeholder{}))> , "'write' must have a signature of void(std::ostream&, <unspecified>)");
 				}
 			};
 
