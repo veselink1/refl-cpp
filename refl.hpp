@@ -1,3 +1,8 @@
+/**
+ * Created by veselink1.
+ * Released under the MIT license.
+ */
+
 #ifndef REFL_INCLUDE_HPP
 #define REFL_INCLUDE_HPP
 
