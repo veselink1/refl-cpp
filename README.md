@@ -6,6 +6,8 @@ ReflCpp allows static reflection and inspection of types in C++ with full suppor
 
 Macro-based code-gen has been minimized as must as is possible to support all basic requirements. All higher-level operations are implemented as free types and function in one of the utility namespaces.
 
+Minimum language standard: C++17 (ongoing work to support C++14)
+
 See example.cpp for more usage examples.
 
 Example metadata declaration:
