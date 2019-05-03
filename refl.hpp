@@ -1098,6 +1098,14 @@ namespace refl
 				}
 			}
 
+			template <typename T>
+			std::string debug_str(const T& value, bool compact = false)
+			{
+				std::stringstream ss;
+				debug(ss, value, compact);
+				return ss.str();
+			}
+
 			/// <summary>
 			/// Executes a function F for each field of value. 
 			/// F takes an member name, the value of the field, and an index. (in this order).
@@ -1219,36 +1227,34 @@ namespace refl
 namespace refl::detail
 {
 	template <typename T>
-	auto write_impl(std::ostream& os, T&& t) -> decltype((os << t), std::declval<std::ostream&>())
+	auto write_impl(std::ostream& os, T&& t) -> decltype((os << t), void())
 	{
-		return os << t;
+		os << t;
 	}
 
 	// Dispatches to the appropriate write_impl.
-	static constexpr auto write = [](std::ostream & os, auto && t) -> std::ostream & { return write_impl(os, t); };
+	static constexpr auto write = [](std::ostream& os, auto&& t) -> void { write_impl(os, t); };
 
 	template <typename Tuple, size_t... Idx>
-	std::ostream& write_impl(std::ostream& os, Tuple&& t, std::index_sequence<Idx...>)
+	void write_impl(std::ostream& os, Tuple&& t, std::index_sequence<Idx...>)
 	{
 		refl::util::ignore((os << std::get<Idx>(t))...);
-		return os;
 	}
 
 	template <typename... Ts>
-	std::ostream& write_impl(std::ostream& os, const std::tuple<Ts...>& t)
+	void write_impl(std::ostream& os, const std::tuple<Ts...>& t)
 	{
-		return write_impl(os, t, std::make_index_sequence<sizeof...(Ts)>{});
+		write_impl(os, t, std::make_index_sequence<sizeof...(Ts)>{});
 	}
 
 	template <typename K, typename V>
-	std::ostream& write_impl(std::ostream& os, const std::pair<K, V>& t)
+	void write_impl(std::ostream& os, const std::pair<K, V>& t)
 	{
 		os << "(";
 		write(os, t.first);
 		os << ", ";
 		write(os, t.second);
 		os << ")";
-		return os;
 	}
 } // namespace refl::detail
 

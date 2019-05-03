@@ -1,6 +1,3 @@
-// ReflCpp.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
 #include <cstring>
 #include <string>
@@ -8,6 +5,7 @@
 #include <vector>
 #include <any>
 #include <cassert>
+#include <unordered_map>
 #include "refl.hpp"
 
 class User
@@ -55,37 +53,74 @@ REFL_TYPE(Point)
 REFL_END
 
 template <typename T>
-std::string serialize(const T& t)
-{
-	std::stringstream ss;
-	refl::runtime::for_each_property(t, [&](const char* name, auto&& invoke, auto)
-	{
-		ss << name << "=" << invoke(t) << ";";
-	});
-	return ss.str();
-}
+std::string serialize(const T& t);
 
-int main() try
-{
-	using namespace std::string_literals;
-	using namespace refl;
-	using namespace refl::runtime;
+template <typename TMap, typename TValue, typename TValueCreator>
+TMap to_map(const TValue& t, TValueCreator&& v);
 
+template <typename TMap, typename TValue>
+TMap to_map(const TValue& t);
+
+void showcase_runtime_invoke_point()
+{
 	Point pt{};
-	invoke<int>(pt, "x", 10);
-	int new_x = invoke<int>(pt, "x");
+	// refl::runtime::invoke works with both fields and functions.
+	// All invocations are checked at *compile-time*.
+	refl::runtime::invoke<int>(pt, "x", 10); 
+	assert(pt.x == 10);
+
+	int new_x = refl::runtime::invoke<int>(pt, "x");
 	assert(new_x == 10);
 
+	// refl::runtime::invoke<std::string>(pt, "x", 10); <-- this will fail at compile-time
+	// refl::runtime::invoke<int>(pt, "x", std::string{ "Hi!" }); <-- and so will this
+}
+
+void showcase_custom_converter_point()
+{
+	Point pt{};
+	auto pt_map = to_map<std::unordered_map<std::string, int>>(pt);
+	auto pt_map_exp = std::unordered_map<std::string, int>{
+		{"x", 0},
+		{"y", 0},
+	};
+	assert(pt_map == pt_map_exp);
+}
+
+void showcase_custom_converter_user()
+{
 	User admin(123, "Veselin", "Karaganev");
-	// Example usage of refl::runtime::debug. 
-	debug(std::cout, admin, false);
-	std::cout << "\n";
 
-	// Example usage of the reflection capabilities.
+	auto create_value = [](auto&& x) { return refl::runtime::debug_str(x); };
+	auto admin_map = to_map<std::unordered_map<std::string, std::string>>(admin, create_value);
+
+	auto admin_map_exp = std::unordered_map<std::string, std::string>{
+		{ "id", "123" },
+		{ "firstName", "Veselin" },
+		{ "lastName", "Karaganev" },
+	};
+	assert(admin_map == admin_map_exp);
+}
+
+void showcase_custom_serialization_user()
+{
+	User admin(123, "Veselin", "Karaganev");
 	assert(serialize(admin) == "id=123;firstName=Veselin;lastName=Karaganev;");
+}
 
-	// Example usage of refl::runtime::Proxy. 
-	auto admin_proxy = make_ref_proxy(admin, [](auto member, auto& user, auto&&... args) -> auto {
+void showcase_debug()
+{
+	User admin(123, "Veselin", "Karaganev");
+	refl::runtime::debug(std::cout, admin, false);
+	// Prints { id = 123, firstName = "Veselin", lastName = "Karaganev" }
+	std::cout << "\n";
+}
+
+void showcase_proxy()
+{
+	User admin(123, "Veselin", "Karaganev");
+
+	auto admin_proxy = refl::runtime::make_ref_proxy(admin, [](auto member, auto & user, auto && ... args) -> auto {
 		std::cout << "Call to " << member.name << " on ";
 		refl::runtime::debug(std::cout, user, true);
 		std::cout << "\n";
@@ -93,16 +128,18 @@ int main() try
 	});
 	auto i = admin_proxy.id();
 	auto b = admin_proxy.first_name();
+}
 
-	assert(TypeInfo<User>::name == "User"s);
+int main() try
+{
+	showcase_runtime_invoke_point();
+	showcase_custom_converter_point();
 
-	// Example usage of refl::runtime::invoke. 
-	auto id = invoke<uint64_t>(admin, "id");
-	auto id_any = invoke<std::any>(admin, "id");
-	assert(id == std::any_cast<uint64_t>(id_any));
+	showcase_custom_converter_user();
+	showcase_custom_serialization_user();
 
-	auto name = invoke<std::string>(admin, "first_name") + " " + invoke<std::string>(admin, "last_name");
-	assert(name == admin.first_name() + " " + admin.last_name());
+	showcase_debug();
+	showcase_proxy();
 	
 	std::cout << "\n\nThe program completed successfully!\nPress any key to continue...\n";
 	std::cin.get();
@@ -112,4 +149,35 @@ catch (const std::exception& e)
 	std::cerr << e.what() << std::endl;
 	std::cout << "\n\nThe program was terminated!\nPress any key to continue...\n";
 	std::cin.get();
+}
+
+
+template <typename T>
+std::string serialize(const T& t)
+{
+	std::stringstream ss;
+	refl::runtime::for_each_property(t, [&](const char* name, auto && invoke, auto)
+		{
+			ss << name << "=" << invoke(t) << ";";
+		});
+	return ss.str();
+}
+
+template <typename TMap, typename TValue, typename TValueCreator>
+TMap to_map(const TValue& t, TValueCreator&& v)
+{
+	TMap map{};
+	refl::runtime::for_each_property(t, [&](auto name, auto && invoke, auto) {
+		map.emplace(name, v(invoke(t)));
+	});
+	refl::runtime::for_each_field(t, [&](auto name, const auto & value, auto) {
+		map.emplace(name, v(value));
+	});
+	return map;
+}
+
+template <typename TMap, typename TValue>
+TMap to_map(const TValue& t)
+{
+	return to_map<TMap>(t, [](auto && x) -> decltype(auto) { return x; });
 }
