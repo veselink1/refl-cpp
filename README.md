@@ -217,6 +217,10 @@ namespace refl::runtime
     // Writes the debug representation of value to the given std::ostream.
     template <typename T>
     void debug(std::ostream& os, const T& value, bool compact = false);
+
+    // Returns the debug representation of value as an std::string.
+    template <typename T>
+    std::string debug_str(const T& value, bool compact = false);
     
     // Executes a function F for each field of value. 
     // F takes an member name, the value of the field, and an index. (in this order).
