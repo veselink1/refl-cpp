@@ -22,10 +22,10 @@ public:
     uint64_t id() const { return id_; }
 
     const std::string& first_name() const { return first_name_; }
-    void first_name(const std::string& value) { first_name_ = value; }
+    void first_name(std::string_view value) { first_name_ = value; }
 
     const std::string& last_name() const { return last_name_; }
-    void last_name(const std::string& value) { last_name_ = value; }
+    void last_name(std::string_view value) { last_name_ = value; }
     
 private:
 
@@ -91,7 +91,12 @@ void showcase_custom_converter_user()
 {
     User admin(123, "Veselin", "Karaganev");
 
-    auto create_value = [](auto&& x) { return refl::runtime::debug_str(x); };
+	auto create_value = [](auto&& x) 
+	{
+		std::stringstream ss;
+		ss << x;
+		return ss.str();
+	};
     auto admin_map = to_map<std::unordered_map<std::string, std::string>>(admin, create_value);
 
     auto admin_map_exp = std::unordered_map<std::string, std::string>{
@@ -120,7 +125,7 @@ void showcase_proxy()
 {
     User admin(123, "Veselin", "Karaganev");
 
-    auto admin_proxy = refl::runtime::make_ref_proxy(admin, [](auto member, auto & user, auto && ... args) -> auto {
+    auto admin_proxy = refl::runtime::make_ref_proxy(admin, [](auto member, auto& user, auto&& ... args) -> auto {
         std::cout << "Call to " << member.name << " on ";
         refl::runtime::debug(std::cout, user, true);
         std::cout << "\n";
@@ -157,9 +162,9 @@ std::string serialize(const T& t)
 {
     std::stringstream ss;
     refl::runtime::for_each_property(t, [&](const char* name, auto && invoke, auto)
-        {
-            ss << name << "=" << invoke(t) << ";";
-        });
+    {
+        ss << name << "=" << invoke(t) << ";";
+    });
     return ss.str();
 }
 

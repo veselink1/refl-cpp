@@ -15,6 +15,8 @@
 #include <tuple>
 #include <type_traits>
 #include <ostream>
+#include <sstream>
+#include <iomanip> // std::quoted
 
 #ifdef _MSC_VER
 // Disable VS warning for "Not enough arguments for macro"
@@ -170,7 +172,7 @@ namespace refl
         /// True if T::pointer is not a member pointer.
         /// </summary>
         template <typename T>
-        static constexpr bool is_static = !std::is_member_pointer_v<decltype(T::pointer)>;
+        constexpr bool is_static = !std::is_member_pointer_v<decltype(T::pointer)>;
 
         /// <summary>
         /// Returns the value of the reflected field `T`.
@@ -183,6 +185,18 @@ namespace refl
         /// </summary>
         template <typename T, typename Self>
         decltype(auto) get_value(Self&& self) { return self.*(T::pointer); }
+
+		/// <summary>
+		/// Returns the value of the reflected field `T`.
+		/// </summary>
+		template <typename T, typename = decltype(T::pointer)>
+		decltype(auto) get_value(T) { return *T::pointer; }
+
+		/// <summary>
+		/// Returns the value of the reflected field `T`.
+		/// </summary>
+		template <typename T, typename Self, typename = decltype(T::pointer)>
+		decltype(auto) get_value(T, Self&& self) { return self.*(T::pointer); }
     }
 
     namespace detail
@@ -232,48 +246,49 @@ namespace refl
         /// A synonym for std::is_invocable_v&lt;F, Args...&gt;.
         /// </summary>
         template <typename F, typename... Args>
-        static constexpr bool can_invoke = std::is_invocable_v<F, Args...>;
+        constexpr bool can_invoke = std::is_invocable_v<F, Args...>;
     }
 
     namespace attr
     {
         namespace usage
         {
-            /// <summary>
-            /// Specifies that an attribute type inheriting from this type can be used 
-            /// with all three of REFL_FUNC, REFL_FIELD, REFL_FUNC.
-            /// </summary>
-            struct Any {};
 
             /// <summary>
             /// Specifies that an attribute type inheriting from this type can only be 
             /// used with REFL_FUNC(...).
             /// </summary>
-            struct Type : public Any {};
-
-            /// <summary>
-            /// Specifies that an attribute type inheriting from this type can only be 
-            /// used with either REFL_FUNC(...) or REFL_FIELD(...).
-            /// </summary>
-            struct Member : public Any {};
+            struct Type {};
 
             /// <summary>
             /// Specifies that an attribute type inheriting from this type can only be 
             /// used with REFL_FUNC(...).
             /// </summary>
-            struct Function : public Member {};
+            struct Function {};
 
             /// <summary>
             /// Specifies that an attribute type inheriting from this type can only be 
             /// used with REFL_FIELD(...).
             /// </summary>
-            struct Field : public Member {};
+            struct Field {};
+
+			/// <summary>
+			/// Specifies that an attribute type inheriting from this type can only be 
+			/// used with either REFL_FUNC(...) or REFL_FIELD(...).
+			/// </summary>
+			struct Member : public Function, public Field {};
+
+			/// <summary>
+			/// Specifies that an attribute type inheriting from this type can be used 
+			/// with all three of REFL_FUNC, REFL_FIELD, REFL_FUNC.
+			/// </summary>
+			struct Any : public Member, public Type {};
         }
 
         namespace detail
         {
             // Used to support a variable number of arguments. 
-            static constexpr struct {
+            constexpr struct {
 
                 template <typename... Args>
                 constexpr std::tuple<Args...> operator()(Args&& ... args) const noexcept
@@ -323,29 +338,20 @@ namespace refl
                 return cond;
             }
 
+			template <typename Req, typename Attr>
+			constexpr bool validate_usage()
+			{
+				return std::is_base_of_v<Req, Attr>;
+			}
+
             template <typename Usage, typename... Ts>
             constexpr bool validate_usage(const std::tuple<Ts...>&)
             {
                 validate_unique(TypeList<Ts...>{});
-                return (... && (!std::is_base_of_v<usage::Any, Ts> || std::is_base_of_v<Usage, Ts>));
+                return (... && validate_usage<Usage, Ts>());
             }
         }
     } // namespace attr
-
-    namespace detail
-    {
-        template <typename Self, typename Return, typename... Args>
-        constexpr auto resolve(Return(*fn)(Args...))
-        {
-            return fn;
-        }
-
-        template <typename Self, typename Return, typename... Args>
-        constexpr auto resolve(Return(Self::*fn)(Args...))
-        {
-            return fn;
-        }
-    }
 
 #define REFL_STRINGIFY(...) #__VA_ARGS__
 #define REFL_EXPAND(...) __VA_ARGS__
@@ -391,11 +397,11 @@ namespace refl
 
 #define REFL_DETAIL_MEMBER_HEADER template<typename Unused__> struct Member<__COUNTER__ - member_index_offset, Unused__>
 
-#define REFL_DETAIL_MEMBER_COMMON(MemberTy, MemberName, Attrs) \
+#define REFL_DETAIL_MEMBER_COMMON(MemberTy, MemberName, ...) \
         typedef ::refl::TypeInfo<Type> DeclaringType; \
         typedef ::refl::member::MemberTy MemberType; \
         static constexpr char name[] = REFL_STRINGIFY(MemberName); \
-        REFL_DETAIL_ATTRIBUTES(MemberTy, (Attrs)) 
+        REFL_DETAIL_ATTRIBUTES(MemberTy, __VA_ARGS__) 
 
 
 /// <summary>
@@ -420,7 +426,7 @@ namespace refl
         template<typename Self, typename... Args> static constexpr auto invoke_impl(Args&&... args) -> decltype(auto) { return Self::FunctionName(::std::forward<Args>(args)...); } \
         template<typename... Args> static constexpr auto invoke_impl(Args&&... args) -> decltype(auto) { return invoke_impl<Type>(::std::forward<Args>(args)...); } \
     public: \
-        static constexpr struct { template<typename... Args> constexpr auto operator()(Args&&... args) const -> decltype(auto) { return invoke_impl(::std::forward<decltype(args)>(args)...); } } invoke {}; \
+        static constexpr struct { template<typename... Args> constexpr decltype(auto) operator()(Args&&... args) const { return invoke_impl(::std::forward<Args>(args)...); } } invoke {}; \
         /* 
             There can be a total of 12 differently qualified member functions with the same name. 
             Providing Remaps for non-const and const-only strikes a balance between compilation time and usability.
@@ -577,14 +583,14 @@ namespace refl
                 template <typename F, typename T>
                 decltype(auto) dispatch_visitor(F&& f, T&& value, size_t idx)
                 {
-                    if constexpr (trait::can_invoke<F, util::Placeholder, size_t>) {
+                    if constexpr (trait::can_invoke<F, T, size_t>) {
                         return f(value, idx);
                     }
-                    else if constexpr (trait::can_invoke<F, util::Placeholder>) {
+                    else if constexpr (trait::can_invoke<F, T>) {
                         return f(value);
                     }
                     else {
-                        static_assert(trait::can_invoke<F, util::Placeholder>, "Invalid function!");
+                        static_assert(trait::can_invoke<F, T>, "Invalid function!");
                     }
                 }
             }
@@ -634,29 +640,41 @@ namespace refl
 
         namespace trait
         {
+			namespace detail
+			{
+				template <typename T>
+				auto member_type_test(int) -> decltype(typename T::MemberType{}, std::true_type{});
+
+				template <typename T>
+				std::false_type member_type_test(...);
+			}
+
+			template <typename T>
+			using IsMember = decltype(detail::member_type_test<T>(0));
+
             /// <summary>
             /// A trait for detecting whether the type 'T' is a field info type.
             /// </summary>
             template <typename T>
-            using IsField = std::is_base_of<typename T::MemberType, member::Field>;
+            using IsField = std::conjunction<IsMember<T>, std::is_base_of<typename T::MemberType, member::Field>>;
 
             /// <summary>
             /// A trait for detecting whether the type 'T' is a function info type.
             /// </summary>
             template <typename T>
-            using IsFunction = std::is_base_of<typename T::MemberType, member::Function>;
+            using IsFunction = std::conjunction<IsMember<T>, std::is_base_of<typename T::MemberType, member::Function>>;
 
             /// <summary>
             /// A trait for detecting whether the type 'T' is a static field info type.
             /// </summary>
             template <typename T>
-            using IsStatic = std::bool_constant<util::is_static<T>>;
+            using IsStaticField = std::conjunction<IsField<T>, std::bool_constant<util::is_static<T>>>;
 
             /// <summary>
             /// A trait for detecting whether the type 'T' is an instance field info type.
             /// </summary>
             template <typename T>
-            using IsInstance = std::bool_constant<!util::is_static<T>>;
+            using IsInstanceField = std::conjunction<IsField<T>, std::bool_constant<!util::is_static<T>>>;
         } // namespace trait
 
         template <typename T>
@@ -680,9 +698,9 @@ namespace refl
             // A TypeList of all reflected fields.
             typedef typelist::Filter<trait::IsField, All> Fields;
             // A TypeList of all reflected instance fields.
-            typedef typelist::Filter<trait::IsInstance, Fields> InstanceFields;
+            typedef typelist::Filter<trait::IsInstanceField, Fields> InstanceFields;
             // A TypeList of all reflected static fields.
-            typedef typelist::Filter<trait::IsStatic, Fields> StaticFields;
+            typedef typelist::Filter<trait::IsStaticField, Fields> StaticFields;
 
             // A TypeList of all reflected functions.
             typedef typelist::Filter<trait::IsFunction, All> Functions;
@@ -703,7 +721,7 @@ namespace refl
             /// True if T is a template specialization.
             /// </summary>
             template <typename T>
-            static constexpr bool is_template = detail::IsTemplate<T>::value;
+            constexpr bool is_template = detail::IsTemplate<T>::value;
 
             namespace detail
             {
@@ -750,7 +768,7 @@ namespace refl
             /// True if the type U is a template specialization of U.
             /// </summary>
             template <template<typename...>typename T, typename U>
-            static constexpr bool is_instance_of = detail::IsInstanceOf<T, U>::value;
+            constexpr bool is_instance_of = detail::IsInstanceOf<T, U>::value;
 
             static_assert(is_template<std::unique_ptr<int>>, "Error!");
             static_assert(is_instance_of<std::unique_ptr, std::unique_ptr<float>>, "Error!");
@@ -912,14 +930,13 @@ namespace refl
             /// Used to specify how a type should be displayed in debugging contexts.
             /// </summary>
             template <typename F>
-            struct Debug : public usage::Type
+            struct Debug : public usage::Any
             {
                 const F write;
 
                 constexpr Debug(F write)
                     : write(write)
                 {
-                    static_assert(std::is_same_v<void, decltype(write(std::declval<std::ostream&>(), util::Placeholder{}))> , "'write' must have a signature of void(std::ostream&, <unspecified>)");
                 }
             };
 
@@ -1043,59 +1060,64 @@ namespace refl
             template <typename T>
             void debug(std::ostream& os, const T& value, bool compact = false)
             {
-                typedef TypeInfo<T> TypeInfo;
-                static_assert(TypeInfo::is_valid || trait::IsContainer<T>::value, "Unsupported type!");
+				typedef TypeInfo<T> TypeInfo;
+				static_assert(TypeInfo::is_valid || trait::IsContainer<T>::value, "Unsupported type!");
 
-                if constexpr (TypeInfo::is_valid) {
-                    if constexpr (util::contains<attr::Debug>(TypeInfo::attributes)) {
-                        auto debug = util::get<attr::Debug>(TypeInfo::attributes);
-                        debug.write(os, value);
-                    }
-                    else if constexpr (std::is_fundamental_v<T>) {
-                        std::ios_base::fmtflags old_flags{ os.flags() };
-                        os << std::boolalpha << value;
-                        os.flags(old_flags);
-                    }
-                    else if constexpr (std::is_pointer_v<T>) {
-                        std::ios_base::fmtflags old_flags{ os.flags() };
-                        os << "0x" << std::hex << value;
-                        os.flags(old_flags);
-                    }
-                    else {
-                        os << "{ ";
-                        if (!compact) os << "\n";
-                        size_t func_count = TypeInfo::Members::Functions::size;
-                        typelist::for_each(typename TypeInfo::Members::Functions{}, [&](auto func, auto idx) -> bool {
-                            typedef decltype(func) func_t;
-                            if constexpr (util::contains<attr::Property>(func_t::attributes)) {
-                                auto&& attr = std::get<attr::Property>(func_t::attributes);
-                                std::string name = attr.friendly_name ? *attr.friendly_name : func_t::name;
+				if constexpr (TypeInfo::is_valid) {
+					if constexpr (util::contains<attr::Debug>(TypeInfo::attributes)) {
+						auto debug = util::get<attr::Debug>(TypeInfo::attributes);
+						debug.write(os, value);
+					}
+					else if constexpr (std::is_fundamental_v<T>) {
+						std::ios_base::fmtflags old_flags{ os.flags() };
+						os << std::boolalpha << value;
+						os.flags(old_flags);
+					}
+					else if constexpr (std::is_pointer_v<T>) {
+						std::ios_base::fmtflags old_flags{ os.flags() };
+						os << "0x" << std::hex << value;
+						os.flags(old_flags);
+					}
+					else {
+						os << "{ ";
+						if (!compact) os << "\n";
+						size_t func_count = TypeInfo::Members::Functions::size;
+						typelist::for_each(typename TypeInfo::Members::Functions{}, [&](auto func, auto idx) -> bool {
+							if constexpr (util::contains<attr::Property>(func.attributes)) {
+								auto&& attr = std::get<attr::Property>(func.attributes);
+								std::string name = attr.friendly_name ? *attr.friendly_name : func.name;
 
-                                if (!compact) os << "  ";
-                                os << name << " = ";
-                                debug(os, func_t::invoke(value), true);
-                                if (idx != func_count - 1) os << ", ";
-                                if (!compact) os << "\n";
-                            }
-                            return true;
-                            });
-                        if (compact) os << " }";
-                        else os << "}";
-                    }
-                }
-                else { // T supports begin() and end()
-                    os << "[";
-                    auto end = value.end();
-                    for (auto it = value.begin(); it != end; ++it)
-                    {
-                        debug(os, *it, true);
-                        if (std::next(it, 1) != end)
-                        {
-                            os << ", ";
-                        }
-                    }
-                    os << "]";  
-                }
+								if (!compact) os << "  ";
+								os << name << " = ";
+								if constexpr (util::contains<attr::Debug>(func.attributes)) {
+									auto&& dbg_attr = util::get<attr::Debug>(func.attributes);
+									dbg_attr.write(os, func.invoke(value));
+								}
+								else {
+									debug(os, func.invoke(value), true);
+								}
+								if (idx != func_count - 1) os << ", ";
+								if (!compact) os << "\n";
+							}
+							return true;
+						});
+						if (compact) os << " }";
+						else os << "}";
+					}
+				}
+				else { // T supports begin() and end()
+					os << "[";
+					auto end = value.end();
+					for (auto it = value.begin(); it != end; ++it)
+					{
+						debug(os, *it, true);
+						if (std::next(it, 1) != end)
+						{
+							os << ", ";
+						}
+					}
+					os << "]";
+				}
             }
 
             template <typename T>
@@ -1114,12 +1136,12 @@ namespace refl
             void for_each_field(T&& value, F&& f, bool include_statics = false) {
                 typedef TypeInfo<std::remove_reference_t<T>> TypeInfo;
                 typelist::for_each(typename TypeInfo::Members::InstanceFields{}, [&](auto field, size_t idx) -> bool {
-                    f(field.name, util::get_value<decltype(field)>(value), idx);
+                    f(field.name, util::get_value(field, value), idx);
                     return true;
                 });
                 if (include_statics) {
                     typelist::for_each(typename TypeInfo::Members::StaticFields{}, [&](auto field, size_t idx) -> bool {
-                        f(field.name, util::get_value<decltype(field)>(), idx);
+                        f(field.name, util::get_value(field), idx);
                         return true;
                     });
                 }
@@ -1160,7 +1182,7 @@ namespace refl
             namespace detail
             {
                 template <typename T, typename U>
-                static constexpr bool is_compatible = std::is_assignable_v<std::add_lvalue_reference_t<U>, T> && std::is_constructible_v<U, T>;
+                constexpr bool is_compatible = std::is_assignable_v<std::add_lvalue_reference_t<U>, T> && std::is_constructible_v<U, T>;
             }
 
             /// <summary>
@@ -1222,6 +1244,55 @@ namespace refl
             }
         } // namespace runtime
 
+		template <typename T, typename Trap>
+		struct Members<runtime::Proxy<T, Trap>>
+		{
+			typedef TypeInfo<runtime::Proxy<T, Trap>> DeclaringType;
+			typedef decltype(enumerate_members(std::make_index_sequence<DeclaringType::member_count>{})) All;
+
+			// A TypeList of all reflected fields.
+			typedef typelist::Filter<trait::IsField, All> Fields;
+			// A TypeList of all reflected instance fields.
+			typedef typelist::Filter<trait::IsInstanceField, Fields> InstanceFields;
+			// A TypeList of all reflected static fields.
+			typedef typelist::Filter<trait::IsStaticField, Fields> StaticFields;
+
+			// A TypeList of all reflected functions.
+			typedef typelist::Filter<trait::IsFunction, All> Functions;
+		};
+
+		namespace display
+		{
+			namespace detail
+			{
+				inline void text(std::ostream& os, std::string_view s)
+				{
+					os << s;
+				}
+
+				inline void quoted(std::ostream& os, const char* s)
+				{
+					os << std::quoted(s);
+				}
+
+				inline void quoted(std::ostream& os, const std::string& s)
+				{
+					os << std::quoted(s);
+				}
+
+				inline void quoted(std::ostream& os, std::string_view s)
+				{
+					// Clang (as of 6.0.0) and GCC (as of 7.3.0) currently do not support std::quoted(std::string_view) (C++17)
+					// This requires an std::string to be created first :/
+					os << std::quoted(std::string(s));
+				}
+			}
+
+			constexpr auto text = [](std::ostream& os, const auto& x) { return detail::text(os, x); };
+			constexpr auto quoted = [](std::ostream& os, const auto& x) { return detail::quoted(os, x); };
+
+		} // namespace display
+
 } // namespace refl
 
 namespace refl::detail
@@ -1233,13 +1304,54 @@ namespace refl::detail
     }
 
     // Dispatches to the appropriate write_impl.
-    static constexpr auto write = [](std::ostream& os, auto&& t) -> void { write_impl(os, t); };
+    constexpr auto write = [](std::ostream& os, auto&& t) -> void 
+	{
+		write_impl(os, t);
+	};
+
+	template <typename T>
+	void write_impl(std::ostream& os, const volatile T* ptr)
+	{
+		auto f(os.flags());
+		os << "(" << TypeInfo<T>::name << "*)" << std::hex << ptr;
+		os.flags(f);
+	}
+
+	inline void write_impl(std::ostream& os, const volatile char* ptr)
+	{
+		os << ptr;
+	}
 
     template <typename Tuple, size_t... Idx>
     void write_impl(std::ostream& os, Tuple&& t, std::index_sequence<Idx...>)
     {
         refl::util::ignore((os << std::get<Idx>(t))...);
     }
+
+	inline void write_impl(std::ostream& os, const std::string& t)
+	{
+		os << std::quoted(t);
+	}
+
+	inline void write_impl(std::ostream& os, const std::wstring& t)
+	{
+#ifdef _MSC_VER
+// Disable the "wcsrtombs is unsafe" warning in VS
+#pragma warning(push)
+#pragma warning(disable:4996)
+#endif
+		std::mbstate_t state = std::mbstate_t();
+		const wchar_t* wsptr = t.c_str();
+		std::size_t len = 1 + std::wcsrtombs(nullptr, &wsptr, 0, &state);
+
+		std::string mbstr(len, '\0');
+		std::wcsrtombs(mbstr.data(), &wsptr, mbstr.size(), &state);
+
+		os << std::quoted(mbstr);
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
+	}
 
     template <typename... Ts>
     void write_impl(std::ostream& os, const std::tuple<Ts...>& t)
@@ -1263,11 +1375,14 @@ namespace refl::detail
 
 #ifndef REFL_NO_STD_SUPPORT
 
+REFL_TYPE(std::exception)
+	REFL_FUNC(what, (attr::Property{ "Message" }, attr::Debug{ display::quoted }))
+REFL_END
+
 REFL_TEMPLATE_TYPE(
     (typename Elem, typename Traits, typename Alloc), 
     REFL_EXPAND(std::basic_string<Elem, Traits, Alloc>), 
     (attr::Debug{ refl::detail::write }))
-
     REFL_FUNC(size, (attr::Property{ }))
     REFL_FUNC(data, (attr::Property{ }))
 REFL_END
