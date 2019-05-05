@@ -1261,39 +1261,21 @@ namespace refl
 			typedef typelist::Filter<trait::IsFunction, All> Functions;
 		};
 
-		namespace display
-		{
-			namespace detail
-			{
-				inline void text(std::ostream& os, std::string_view s)
-				{
-					os << s;
-				}
-
-				inline void quoted(std::ostream& os, const char* s)
-				{
-					os << std::quoted(s);
-				}
-
-				inline void quoted(std::ostream& os, const std::string& s)
-				{
-					os << std::quoted(s);
-				}
-
-				inline void quoted(std::ostream& os, std::string_view s)
-				{
-					// Clang (as of 6.0.0) and GCC (as of 7.3.0) currently do not support std::quoted(std::string_view) (C++17)
-					// This requires an std::string to be created first :/
-					os << std::quoted(std::string(s));
-				}
-			}
-
-			constexpr auto text = [](std::ostream& os, const auto& x) { return detail::text(os, x); };
-			constexpr auto quoted = [](std::ostream& os, const auto& x) { return detail::quoted(os, x); };
-
-		} // namespace display
-
 } // namespace refl
+
+#if defined(__clang__)
+  #if __has_feature(cxx_rtti)
+    #define REFL_RTTI_ENABLED
+  #endif
+#elif defined(__GNUG__)
+  #if defined(__GXX_RTTI)
+    #define REFL_RTTI_ENABLED
+  #endif
+#elif defined(_MSC_VER)
+  #if defined(_CPPRTTI)
+    #define REFL_RTTI_ENABLED
+  #endif
+#endif
 
 namespace refl::detail
 {
@@ -1317,7 +1299,7 @@ namespace refl::detail
 		os.flags(f);
 	}
 
-	inline void write_impl(std::ostream& os, const volatile char* ptr)
+	inline void write_impl(std::ostream& os, const char* ptr)
 	{
 		os << ptr;
 	}
@@ -1327,6 +1309,15 @@ namespace refl::detail
     {
         refl::util::ignore((os << std::get<Idx>(t))...);
     }
+
+	inline void write_impl(std::ostream& os, const std::exception& e)
+	{
+		os << "Exception";
+#ifdef REFL_RTTI_ENABLED
+		os << " (" << typeid(e).name() << ")";
+#endif
+		os << ": `" << e.what() << "`";
+	}
 
 	inline void write_impl(std::ostream& os, const std::string& t)
 	{
@@ -1375,8 +1366,8 @@ namespace refl::detail
 
 #ifndef REFL_NO_STD_SUPPORT
 
-REFL_TYPE(std::exception)
-	REFL_FUNC(what, (attr::Property{ "Message" }, attr::Debug{ display::quoted }))
+REFL_TYPE(std::exception, (attr::Debug{ refl::detail::write }))
+	REFL_FUNC(what, (attr::Property{ }))
 REFL_END
 
 REFL_TEMPLATE_TYPE(
