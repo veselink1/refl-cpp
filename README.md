@@ -40,7 +40,7 @@ That's it! OK. So now what? ReflCpp allows you to request some basic properties 
 ```cpp
     typedef refl::Members<Point>::Fields::Get<0> Field;
     Field::MemberType // -> member::Field (typedef)
-    Field::name // -> const char[2] {"x"}
+    Field::name // -> const util::Ident<2> {"x"}
     Field::pointer // -> float Point::* (support: util::get_value, util::is_static)
 ```
 
@@ -48,8 +48,37 @@ That's it! OK. So now what? ReflCpp allows you to request some basic properties 
 ```cpp
     typedef refl::Members<User>::Functions::Get<0> Function;
     Function::MemberType // -> member::Function (typedef)
-    Function::name // -> const char[3] {"id"}
+    Function::name // -> const util::Ident<3> {"id"}
     Function::invoke // -> variadic function object (support: trait::can_invoke)
+```
+
+## Metadata-generation macros 
+```cpp
+
+// Starts the declaration of Type's metadata.
+// Must be followed by one of: REFL_END, REFL_FIELD, REFL_FUNC.
+// Example: REFL_TYPE(Point)
+REFL_TYPE(Type, (parenthesis-enclosed-list-of-attributes))
+
+// Starts the declaration of Type's metadata.
+// Must be followed by one of: REFL_END, REFL_FIELD, REFL_FUNC.
+// Example: REFL_TEMPLATE_TYPE((typename K, typename V), (std::pair<K, V>))
+REFL_TEMPLATE_TYPE((typename... Ts), (Type<Ts...>)), ...)
+
+// End the declaration of Type's metadata.
+// Does *not* need or an argument list
+REFL_END
+
+// Adds Field's metadata to Type's.
+// Example: REFL_FIELD(first_name)
+REFL_FIELD(Field, (parenthesis-enclosed-list-of-attributes))
+
+// Adds Function's metadata to Type's.
+// Example: REFL_FUNC(first_name, (attr::Property{  }))
+REFL_FUNC(Function, (parenthesis-enclosed-list-of-attributes))
+
+// NOTE: None of the macros above need a terminating semi-colon (;)
+
 ```
 
 ## TypeList 
@@ -248,6 +277,23 @@ namespace refl::runtime
 ```cpp
 namespace refl::util
 {
+    // Represents a constant type or member identifier.
+    template <size_t N>
+    struct Ident
+    {
+        typedef char Buffer[N];
+        Buffer data;
+
+        constexpr Ident(const Buffer& data) noexcept;
+        constexpr operator const Buffer&() const noexcept;
+        constexpr const Buffer& c_str() const noexcept;
+        std::string str() const noexcept;
+    };
+
+    // Concats two identifiers.
+    template <size_t N, size_t M>
+    constexpr Ident<N + M - 1> operator+(const Ident<N>& a, const Ident<M>& b);
+
     // Can serve as a placeholder for any type in unevaluated contexts.
     struct Placeholder
     {

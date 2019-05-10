@@ -151,7 +151,8 @@ int main() try
 }
 catch (const std::exception& e)
 {
-    std::cerr << e.what() << std::endl;
+	std::cerr << '\n';
+	refl::runtime::debug(std::cerr, e);
     std::cout << "\n\nThe program was terminated!\nPress any key to continue...\n";
     std::cin.get();
 }

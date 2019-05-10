@@ -26,6 +26,56 @@
 
 namespace refl
 {
+	namespace util
+	{
+		/// <summary>
+		/// Represents a constant type or member identifier.
+		/// </summary>
+		template <size_t N>
+		struct Ident
+		{
+			typedef char Buffer[N];
+			Buffer data;
+
+			constexpr Ident(const Buffer& data) noexcept
+				: data{}
+			{
+				for (size_t i = 0; i < N; i++)
+					this->data[i] = data[i];
+			}
+
+			constexpr operator const Buffer&() const noexcept
+			{
+				return data;
+			}
+
+			constexpr const Buffer& c_str() const noexcept
+			{
+				return data;
+			}
+
+			std::string str() const noexcept
+			{
+				return data;
+			}
+		};
+
+		/// <summary>
+		/// Concats two identifiers.
+		/// </summary>
+		template <size_t N, size_t M>
+		constexpr Ident<N + M - 1> operator+(const Ident<N>& a, const Ident<M>& b)
+		{
+			char data[N + M - 1] { };
+			for (size_t i = 0; i < N; i++)
+				data[i] = a.data[i];
+			for (size_t i = 0; i < N; i++)
+				data[N - 1 + i] = b.data[i];
+			return data;
+		}
+
+	} // namespace util
+
     template <typename T>
     struct Members;
 
@@ -64,7 +114,7 @@ namespace refl
         /// <summary>
         /// The declaration name of the reflected type.
         /// </summary>
-        static constexpr char name[] = "?";
+		static constexpr util::Ident name{ "?" };
 
         /// <summary>
         /// The number of reflectable members of 'T'.
@@ -353,8 +403,9 @@ namespace refl
         }
     } // namespace attr
 
-#define REFL_STRINGIFY(...) #__VA_ARGS__
-#define REFL_EXPAND(...) __VA_ARGS__
+#define REFL_STRINGIFY_IMPL(...) #__VA_ARGS__
+#define REFL_STRINGIFY(...) REFL_STRINGIFY_IMPL(__VA_ARGS__)
+#define REFL_GROUP(...) __VA_ARGS__
 #define REFL_EXPAND_FIRST(A, ...) A
 #define REFL_EXPAND_SECOND(A, B, ...) B 
 
@@ -367,13 +418,13 @@ namespace refl
     public: \
 
 #define REFL_DETAIL_TYPE_BODY(TypeName, ...) \
-        friend struct ::refl::Members<TypeName>; \
-        typedef ::refl::Members<TypeName> Members; \
-        typedef TypeName Type; \
+        friend struct ::refl::Members<REFL_GROUP TypeName>; \
+        typedef ::refl::Members<REFL_GROUP TypeName> Members; \
+        typedef REFL_GROUP TypeName Type; \
         static constexpr bool is_valid = true; \
         REFL_DETAIL_ATTRIBUTES(Type, REFL_EXPAND_FIRST(__VA_ARGS__)) \
     public: \
-        static constexpr char name[] = REFL_STRINGIFY(TypeName); \
+        static constexpr ::refl::util::Ident name{ REFL_STRINGIFY(REFL_GROUP TypeName) }; \
     private: \
         static constexpr size_t member_index_offset = __COUNTER__ + 1; \
         template <size_t N, typename = void> \
@@ -384,23 +435,23 @@ namespace refl
 /// </summary>
 #define REFL_TYPE(TypeName, ...) \
     namespace refl { template<> struct TypeInfo<TypeName> { \
-        REFL_DETAIL_TYPE_BODY(REFL_EXPAND(TypeName), __VA_ARGS__)
+        REFL_DETAIL_TYPE_BODY((TypeName), __VA_ARGS__)
 
 #define REFL_TEMPLATE_TYPE(TemplateDeclaration, TypeName, ...) \
-    namespace refl { template <REFL_EXPAND TemplateDeclaration> struct TypeInfo<TypeName> { \
-        REFL_DETAIL_TYPE_BODY(REFL_EXPAND(TypeName), __VA_ARGS__)
+    namespace refl { template <REFL_GROUP TemplateDeclaration> struct TypeInfo<REFL_GROUP TypeName> { \
+        REFL_DETAIL_TYPE_BODY(TypeName, __VA_ARGS__)
 
 #define REFL_END \
         static constexpr size_t member_count = __COUNTER__ - member_index_offset; \
     }; }
-
+	
 
 #define REFL_DETAIL_MEMBER_HEADER template<typename Unused__> struct Member<__COUNTER__ - member_index_offset, Unused__>
 
 #define REFL_DETAIL_MEMBER_COMMON(MemberTy, MemberName, ...) \
         typedef ::refl::TypeInfo<Type> DeclaringType; \
         typedef ::refl::member::MemberTy MemberType; \
-        static constexpr char name[] = REFL_STRINGIFY(MemberName); \
+        static constexpr ::refl::util::Ident name{ REFL_STRINGIFY(MemberName) }; \
         REFL_DETAIL_ATTRIBUTES(MemberTy, __VA_ARGS__) 
 
 
@@ -493,7 +544,7 @@ namespace refl
             typedef ::refl::Members<T*> Members; \
             static constexpr bool is_valid = true; \
             static constexpr ::std::tuple<> attributes = {}; \
-            static constexpr char name[] = #Ptr; \
+            static constexpr auto name{ ::refl::util::Ident{ #Ptr } + TypeInfo<T>::name }; \
             static constexpr size_t member_count = 0; \
         }
 
@@ -1003,8 +1054,7 @@ namespace refl
                 {
                 }
 
-                template <typename = std::enable_if_t<!std::is_reference_v<T>>>
-                Proxy(T&& value, Trap&& trap)
+                Proxy(std::remove_reference_t<T>&& value, Trap&& trap)
                     : value_(std::move(value))
                     , trap_(std::move(trap))
                 {
@@ -1178,6 +1228,9 @@ namespace refl
                     return true;
                 });
             }
+			
+			// ADL
+			// functions(members(type_info<T>()))
 
             namespace detail
             {
@@ -1238,7 +1291,7 @@ namespace refl
                 }
                 else {
                     throw std::runtime_error(std::string("The member ")
-                        + TypeInfo::name + "::" + name
+                        + TypeInfo::name.str() + "::" + name
                         + " is not compatible with the provided parameters or return type, is not reflected or does not exist!");
                 }
             }
@@ -1284,12 +1337,6 @@ namespace refl::detail
     {
         os << t;
     }
-
-    // Dispatches to the appropriate write_impl.
-    constexpr auto write = [](std::ostream& os, auto&& t) -> void 
-	{
-		write_impl(os, t);
-	};
 
 	template <typename T>
 	void write_impl(std::ostream& os, const volatile T* ptr)
@@ -1350,6 +1397,15 @@ namespace refl::detail
         write_impl(os, t, std::make_index_sequence<sizeof...(Ts)>{});
     }
 
+	template <typename K, typename V>
+	void write_impl(std::ostream& os, const std::pair<K, V>& t);
+
+	// Dispatches to the appropriate write_impl.
+	constexpr auto write = [](std::ostream & os, auto && t) -> void
+	{
+		write_impl(os, t);
+	};
+
     template <typename K, typename V>
     void write_impl(std::ostream& os, const std::pair<K, V>& t)
     {
@@ -1372,7 +1428,7 @@ REFL_END
 
 REFL_TEMPLATE_TYPE(
     (typename Elem, typename Traits, typename Alloc), 
-    REFL_EXPAND(std::basic_string<Elem, Traits, Alloc>), 
+    (std::basic_string<Elem, Traits, Alloc>), 
     (attr::Debug{ refl::detail::write }))
     REFL_FUNC(size, (attr::Property{ }))
     REFL_FUNC(data, (attr::Property{ }))
@@ -1380,13 +1436,13 @@ REFL_END
 
 REFL_TEMPLATE_TYPE(
     (typename... Ts),
-    REFL_EXPAND(std::tuple<Ts...>),
+    (std::tuple<Ts...>),
     (attr::Debug{ refl::detail::write }))
 REFL_END
 
 REFL_TEMPLATE_TYPE(
     (typename K, typename V),
-    REFL_EXPAND(std::pair<K, V>),
+    (std::pair<K, V>),
     (attr::Debug{ refl::detail::write }))
 REFL_END
 
