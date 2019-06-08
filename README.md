@@ -56,11 +56,11 @@ REFL_TEMPLATE_TYPE((typename... Ts), (Type<Ts...>)), Attributes...)
 REFL_END
 
 // Describes a field.
-// Example: REFL_FIELD(first_name)
+// Example: REFL_FIELD(first_name, property{ "Value" })
 REFL_FIELD(Field, Attributes...)
 
 // Describes a function.
-// Example: REFL_FUNC(first_name, (attr::Property{  }))
+// Example: REFL_FUNC(first_name, property{ "Size" })
 REFL_FUNC(Function, Attribute...)
 
 // NOTE: None of the macros above need a terminating semi-colon (;)
