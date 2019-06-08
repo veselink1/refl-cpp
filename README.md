@@ -1,4 +1,4 @@
-# refl-cpp (v0.1.0-beta) ([Documentation](https://veselink1.github.io/refl-cpp/))
+# refl-cpp (v0.1.0-beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
 A static reflection library for modern C++ 🔯🔥
 
 ## Synopsis
