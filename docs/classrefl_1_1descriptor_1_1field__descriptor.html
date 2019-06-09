@@ -146,8 +146,10 @@ Static Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
-<tr class="memitem:a955e6c913b0427ccfaf99716d22b4f5b"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html#a955e6c913b0427ccfaf99716d22b4f5b">is_static</a> = !std::is_member_pointer_v&lt;decltype(member::pointer)&gt;</td></tr>
+<tr class="memitem:a955e6c913b0427ccfaf99716d22b4f5b"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html#a955e6c913b0427ccfaf99716d22b4f5b">is_static</a> { !std::is_member_pointer_v&lt;decltype(member::pointer)&gt; }</td></tr>
 <tr class="separator:a955e6c913b0427ccfaf99716d22b4f5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5a2424645cac6591a1e9cdd66a4a994"><td class="memItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html#ad5a2424645cac6591a1e9cdd66a4a994">pointer</a> { member::pointer }</td></tr>
+<tr class="separator:ad5a2424645cac6591a1e9cdd66a4a994"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_static_attribs_classrefl_1_1descriptor_1_1member__descriptor__base"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classrefl_1_1descriptor_1_1member__descriptor__base')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html">refl::descriptor::member_descriptor_base&lt; T, N &gt;</a></td></tr>
 <tr class="memitem:a80719a0106e9f454c29c8363c0e694e4 inherit pub_static_attribs_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="classrefl_1_1descriptor_1_1type__descriptor.html">type_descriptor</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#a80719a0106e9f454c29c8363c0e694e4">declarator</a> { }</td></tr>
 <tr class="memdesc:a80719a0106e9f454c29c8363c0e694e4 inherit pub_static_attribs_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classrefl_1_1descriptor_1_1type__descriptor.html" title="Represents a reflected type.">type_descriptor</a> of the declaring type.  <a href="classrefl_1_1descriptor_1_1member__descriptor__base.html#a80719a0106e9f454c29c8363c0e694e4">More...</a><br /></td></tr>
@@ -325,7 +327,31 @@ template&lt;typename T , size_t N&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr bool <a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html">refl::descriptor::field_descriptor</a>&lt; T, N &gt;::is_static = !std::is_member_pointer_v&lt;decltype(member::pointer)&gt;</td>
+          <td class="memname">constexpr bool <a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html">refl::descriptor::field_descriptor</a>&lt; T, N &gt;::is_static { !std::is_member_pointer_v&lt;decltype(member::pointer)&gt; }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad5a2424645cac6591a1e9cdd66a4a994"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5a2424645cac6591a1e9cdd66a4a994">&#9670;&nbsp;</a></span>pointer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , size_t N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto <a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html">refl::descriptor::field_descriptor</a>&lt; T, N &gt;::pointer { member::pointer }</td>
         </tr>
       </table>
   </td>
@@ -346,7 +372,7 @@ template&lt;typename T , size_t N&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacerefl.html">refl</a></li><li class="navelem"><a class="el" href="namespacerefl_1_1descriptor.html">descriptor</a></li><li class="navelem"><a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html">field_descriptor</a></li>
-    <li class="footer">Generated on Sun Jun 9 2019 19:26:55 for refl-cpp by
+    <li class="footer">Generated on Sun Jun 9 2019 19:29:27 for refl-cpp by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>

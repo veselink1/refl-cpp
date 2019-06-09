@@ -865,7 +865,9 @@ namespace refl {
                 /// </summary>
                 typedef typename member::value_type value_type;
                 
-                static constexpr bool is_static = !std::is_member_pointer_v<decltype(member::pointer)>;
+                static constexpr bool is_static{ !std::is_member_pointer_v<decltype(member::pointer)> };
+                
+                static constexpr auto pointer{ member::pointer };
 
                 /// <summary>
                 /// Returns the value of the field. (for static fields).
