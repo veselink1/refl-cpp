@@ -401,6 +401,31 @@ namespace refl {
             }
         }
     } // namespace attr
+    
+    namespace detail
+    {
+        template <typename R, typename... Args>
+        auto resolve(R(*fn)(Args...), Args&&... args) -> decltype(fn);
+
+        #define REFL_DEFINE_QUALIFIED_RESOLVE(...) \
+            template <typename R, typename T, typename... Args> \
+            auto resolve(R(trait::remove_qualifiers_t<T>::*fn)(Args...) __VA_ARGS__, T&& target, Args&&... args) -> decltype(fn)
+            
+        REFL_DEFINE_QUALIFIED_RESOLVE();
+        REFL_DEFINE_QUALIFIED_RESOLVE(const);
+        REFL_DEFINE_QUALIFIED_RESOLVE(volatile);
+        REFL_DEFINE_QUALIFIED_RESOLVE(const volatile);
+        REFL_DEFINE_QUALIFIED_RESOLVE(&);
+        REFL_DEFINE_QUALIFIED_RESOLVE(const&);
+        REFL_DEFINE_QUALIFIED_RESOLVE(volatile&);
+        REFL_DEFINE_QUALIFIED_RESOLVE(const volatile&);
+        REFL_DEFINE_QUALIFIED_RESOLVE(&&);
+        REFL_DEFINE_QUALIFIED_RESOLVE(const&&);
+        REFL_DEFINE_QUALIFIED_RESOLVE(volatile&&);
+        REFL_DEFINE_QUALIFIED_RESOLVE(const volatile&&);
+
+        #undef REFL_DEFINE_QUALIFIED_RESOLVE
+    }
 
 #define REFL_STRINGIFY_IMPL(...) #__VA_ARGS__
 #define REFL_STRINGIFY(...) REFL_STRINGIFY_IMPL(__VA_ARGS__)
@@ -462,12 +487,8 @@ namespace refl {
     REFL_DETAIL_MEMBER_HEADER { \
         REFL_DETAIL_MEMBER_COMMON(function, functionName, __VA_ARGS__) \
     public: \
-        template <typename... Args> static constexpr decltype(auto) invoke(Args&&... args) { \
-            return ::refl::trait::get<0, type, Args...>::functionName(::std::forward<decltype(args)>(args)...); \
-        } \
-        template <typename This, typename... Args> static constexpr decltype(auto) invoke(This&& target, Args&&... args) { \
-            return target.functionName(::std::forward<decltype(args)>(args)...); \
-        } \
+        template <typename... Args> \
+        static constexpr decltype(::refl::detail::resolve(&type::functionName, std::declval<Args>()...)) pointer{ &type::functionName }; \
         /* 
             There can be a total of 12 differently qualified member functions with the same name. 
             Providing remaps for non-const and const-only strikes a balance between compilation time and usability.
@@ -889,8 +910,21 @@ namespace refl {
             class function_descriptor : public member_descriptor_base<T, N>
             {
                 using typename member_descriptor_base<T, N>::member;
+                
+                template <typename Fn, typename Self, typename... Args>
+                static constexpr decltype(auto) invoke_impl(Fn trait::remove_qualifiers_t<Self>::* pointer, Self&& target, Args&&... args) 
+                {
+                    return (target.*pointer)(std::forward<Args>(args)...);
+                }
 
             public:
+
+                /// <summary>
+                /// Gets a pointer to the function, deduced by the provided Args... template parameters. 
+                /// For member functions the first type must be the target type. (possibly reference- or cv-qualified)
+                /// </summary>
+                template <typename... Args>
+                static constexpr auto pointer{ member::template pointer<Args...> };
 
                 /// <summary>
                 /// Invokes the function with the given arguments. 
@@ -900,7 +934,13 @@ namespace refl {
                 template <typename... Args>
                 static constexpr decltype(auto) invoke(Args&&... args)
                 {
-                    return member::invoke(std::forward<Args>(args)...);   
+                    constexpr auto pointer = member::template pointer<Args...>;
+                    if constexpr (std::is_member_function_pointer_v<decltype(pointer)>) {
+                        return invoke_impl(pointer, std::forward<Args>(args)...);
+                    } 
+                    else {
+                        return (*pointer)(std::forward<Args>(args)...);
+                    }
                 }
                 
                 /// <summary>

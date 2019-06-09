@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['value_5ftype',['value_type',['../classrefl_1_1descriptor_1_1field__descriptor.html#afcc7c5c7e2ee1a67cab3a6b526d092d2',1,'refl::descriptor::field_descriptor']]]
+  ['type',['type',['../structrefl_1_1trait_1_1remove__qualifiers.html#a39800dbc8004ea52c246cdda69f4d409',1,'refl::trait::remove_qualifiers']]]
 ];
