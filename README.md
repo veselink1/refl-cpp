@@ -48,8 +48,8 @@ REFL_TYPE(Type, Attributes...)
 
 // Starts the declaration of Type's metadata.
 // Must be followed by one of: REFL_END, REFL_FIELD, REFL_FUNC.
-// Example: REFL_TEMPLATE_TYPE((typename K, typename V), (std::pair<K, V>))
-REFL_TEMPLATE_TYPE((typename... Ts), (Type<Ts...>)), Attributes...)
+// Example: REFL_TEMPLATE((typename K, typename V), (std::pair<K, V>))
+REFL_TEMPLATE((typename... Ts), (Type<Ts...>)), Attributes...)
 
 // End the declaration of Type's metadata.
 // Does not have an argument list
