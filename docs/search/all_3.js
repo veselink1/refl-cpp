@@ -1,7 +1,9 @@
 var searchData=
 [
-  ['data',['data',['../structrefl_1_1util_1_1const__string.html#a8ee1a2f4b8fd6d71b7556661f379426a',1,'refl::util::const_string']]],
-  ['debug',['debug',['../structrefl_1_1attr_1_1debug.html',1,'refl::attr::debug&lt; F &gt;'],['../structrefl_1_1attr_1_1debug.html#a728cae0e89dc7148a607ffa66b12bbb3',1,'refl::attr::debug::debug()']]],
-  ['declarator',['declarator',['../classrefl_1_1descriptor_1_1member__descriptor__base.html#a80719a0106e9f454c29c8363c0e694e4',1,'refl::descriptor::member_descriptor_base']]],
-  ['declaring_5ftype',['declaring_type',['../classrefl_1_1descriptor_1_1member__descriptor__base.html#af70beb1e0da54d076535cd8fb3dd5381',1,'refl::descriptor::member_descriptor_base']]]
+  ['c_5fstr',['c_str',['../structrefl_1_1util_1_1const__string.html#a465086c5ae8e245358ce44ed8154c986',1,'refl::util::const_string']]],
+  ['const_5fstring',['const_string',['../structrefl_1_1util_1_1const__string.html',1,'refl::util::const_string&lt; N &gt;'],['../structrefl_1_1util_1_1const__string.html#a52a7f4767a02b2c2a90f72fa1dde166e',1,'refl::util::const_string::const_string() noexcept=default'],['../structrefl_1_1util_1_1const__string.html#abd5ad22466e3c3513257bde29683e0e4',1,'refl::util::const_string::const_string(const char(&amp;data)[N+1]) noexcept']]],
+  ['contains',['contains',['../structrefl_1_1trait_1_1contains.html',1,'refl::trait']]],
+  ['contains_5fbase',['contains_base',['../structrefl_1_1trait_1_1contains__base.html',1,'refl::trait']]],
+  ['contains_5finstance',['contains_instance',['../structrefl_1_1trait_1_1contains__instance.html',1,'refl::trait']]],
+  ['count_5fif',['count_if',['../namespacerefl_1_1util.html#aea0417f0fd0129f2cf1ee5fa055d9c20',1,'refl::util']]]
 ];

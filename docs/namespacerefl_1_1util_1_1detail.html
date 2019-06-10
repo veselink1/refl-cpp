@@ -119,6 +119,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a3602c8ba225ebe11eb59ca6020fcfeaa"><td class="memTemplParams" colspan="2">template&lt;typename F , typename T , typename... Ts, size_t I, size_t... Idx, typename... Carry&gt; </td></tr>
 <tr class="memitem:a3602c8ba225ebe11eb59ca6020fcfeaa"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util_1_1detail.html#a3602c8ba225ebe11eb59ca6020fcfeaa">eval_in_order_to_tuple</a> (<a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt; T, Ts... &gt;, std::index_sequence&lt; I, Idx... &gt;, F &amp;&amp;f, Carry &amp;&amp;... carry)</td></tr>
 <tr class="separator:a3602c8ba225ebe11eb59ca6020fcfeaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ed35b5bf134a29ef087b889926f8899"><td class="memTemplParams" colspan="2">template&lt;typename F , typename... Carry&gt; </td></tr>
+<tr class="memitem:a0ed35b5bf134a29ef087b889926f8899"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util_1_1detail.html#a0ed35b5bf134a29ef087b889926f8899">filter</a> (F &amp;&amp;f, <a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt;&gt; list, <a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt; Carry... &gt; carry)</td></tr>
+<tr class="separator:a0ed35b5bf134a29ef087b889926f8899"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a3b5eb5919dc27eee11574e5cbe4587"><td class="memTemplParams" colspan="2">template&lt;typename F , typename T , typename... Ts, typename... Carry&gt; </td></tr>
+<tr class="memitem:a0a3b5eb5919dc27eee11574e5cbe4587"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util_1_1detail.html#a0a3b5eb5919dc27eee11574e5cbe4587">filter</a> (F &amp;&amp;f, <a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt; T, Ts... &gt; list, <a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt; Carry... &gt; carry)</td></tr>
+<tr class="separator:a0a3b5eb5919dc27eee11574e5cbe4587"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a070bd6525f6d30f067aabdb71df74a9d"><td class="memTemplParams" colspan="2">template&lt;template&lt; typename... &gt; typename T, ptrdiff_t N, typename... Ts&gt; </td></tr>
 <tr class="memitem:a070bd6525f6d30f067aabdb71df74a9d"><td class="memTemplItemLeft" align="right" valign="top">constexpr ptrdiff_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util_1_1detail.html#a070bd6525f6d30f067aabdb71df74a9d">index_of_template</a> ()</td></tr>
 <tr class="separator:a070bd6525f6d30f067aabdb71df74a9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -211,6 +217,78 @@ template&lt;typename F , typename T , typename... Ts, size_t I, size_t... Idx, t
 
 </div>
 </div>
+<a id="a0ed35b5bf134a29ef087b889926f8899"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ed35b5bf134a29ef087b889926f8899">&#9670;&nbsp;</a></span>filter() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename F , typename... Carry&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto refl::util::detail::filter </td>
+          <td>(</td>
+          <td class="paramtype">F &amp;&amp;&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt;&gt;&#160;</td>
+          <td class="paramname"><em>list</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt; Carry... &gt;&#160;</td>
+          <td class="paramname"><em>carry</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0a3b5eb5919dc27eee11574e5cbe4587"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a3b5eb5919dc27eee11574e5cbe4587">&#9670;&nbsp;</a></span>filter() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename F , typename T , typename... Ts, typename... Carry&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto refl::util::detail::filter </td>
+          <td>(</td>
+          <td class="paramtype">F &amp;&amp;&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt; T, Ts... &gt;&#160;</td>
+          <td class="paramname"><em>list</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt; Carry... &gt;&#160;</td>
+          <td class="paramname"><em>carry</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a070bd6525f6d30f067aabdb71df74a9d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a070bd6525f6d30f067aabdb71df74a9d">&#9670;&nbsp;</a></span>index_of_template() <span class="overload">[1/2]</span></h2>
 
@@ -275,7 +353,7 @@ template&lt;typename T , size_t... Idx&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacerefl.html">refl</a></li><li class="navelem"><a class="el" href="namespacerefl_1_1util.html">util</a></li><li class="navelem"><a class="el" href="namespacerefl_1_1util_1_1detail.html">detail</a></li>
-    <li class="footer">Generated on Sun Jun 9 2019 19:29:28 for refl-cpp by
+    <li class="footer">Generated on Mon Jun 10 2019 11:22:06 for refl-cpp by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>

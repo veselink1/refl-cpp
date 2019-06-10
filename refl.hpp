@@ -95,11 +95,35 @@ namespace refl
             return data;
         }
         
+        template <size_t N, size_t M>
+        constexpr bool operator==(const const_string<N>& a, const const_string<M>& b)
+        {
+            if constexpr (N != M) {
+                return false;
+            }
+            else {
+                for (size_t i = 0; i < M; i++) {
+                    if (a[i] != b[i]) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }
+
+        template <size_t N, size_t M>
+        constexpr bool operator!=(const const_string<N>& a, const const_string<M>& b)
+        {
+            return !(a == b);
+        }
+        
     } // namespace util
 
     using util::const_string;
     using util::make_const_string;
     using util::operator+;
+    using util::operator==;
+    using util::operator!=;
 
     namespace detail::macro_exports
     {
@@ -257,6 +281,12 @@ namespace refl {
             template <size_t N, typename... Ts>
             struct get;
 
+            template <size_t N>
+            struct get<N>
+            {
+                static_assert(N > 0, "Missing arguments list for get<N, Ts...>!");
+            };
+
             template <size_t N, typename T, typename... Ts>
             struct get<N, T, Ts...> : public get<N - 1, Ts...>
             {
@@ -267,9 +297,6 @@ namespace refl {
             {
                 typedef T type;
             };
-
-            template <size_t N, typename... Ts>
-            struct get<N, type_list<Ts...>> : get<N, Ts...> {};
 
             static_assert(std::is_same_v<get<0, int>::type, int>, "Error!");
             static_assert(std::is_same_v<get<1, int, float>::type, float>, "Error!");
@@ -287,9 +314,6 @@ namespace refl {
             {
                 typedef type_list<Ts...> type;
             };
-
-            template <size_t N, typename... Ts>
-            struct skip<N, type_list<Ts...>> : skip<N, Ts...> {};
         }
 
         /// <summary>
@@ -297,6 +321,11 @@ namespace refl {
         /// </summary>
         template <size_t N, typename... Ts>
         struct get : detail::get<N, Ts...>
+        {
+        };
+        
+        template <size_t N, typename... Ts>
+        struct get<N, type_list<Ts...>> : detail::get<N, Ts...>
         {
         };
 
@@ -311,6 +340,11 @@ namespace refl {
         /// </summary>
         template <size_t N, typename... Ts>
         struct skip : detail::skip<N, Ts...>
+        {
+        };
+
+        template <size_t N, typename... Ts>
+        struct skip<N, type_list<Ts...>> : detail::skip<N, Ts...> 
         {
         };
 
@@ -763,6 +797,56 @@ namespace refl {
                         current += 1;
                     }
                 }, 0);
+            }
+
+            namespace detail
+            {
+                template <typename F, typename... Carry>
+                constexpr auto filter(F&& f, type_list<> list, type_list<Carry...> carry) 
+                {
+                    return carry;
+                }
+
+                template <typename F, typename T, typename... Ts, typename... Carry>
+                constexpr auto filter(F&& f, type_list<T, Ts...> list, type_list<Carry...> carry) 
+                {
+                    if constexpr (f(T{})) {
+                        return filter(std::forward<F>(f), type_list<Ts...>{}, type_list<T, Carry...>{});
+                    } 
+                    else {
+                        return filter(std::forward<F>(f), type_list<Ts...>{}, type_list<Carry...>{});
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Filters the list according to a predicate.
+            /// </summary>
+            template <typename F, typename... Ts>
+            constexpr auto filter(type_list<Ts...> list, F&& f) 
+            {
+                return detail::filter(std::forward<F>(f), list, type_list<>{});
+            }
+            
+            /// <summary>
+            /// Returns the first instance that matches the predicate. 
+            /// </summary>
+            template <typename F, typename... Ts>
+            constexpr auto find_first(type_list<Ts...> list, F&& f) 
+            {
+                using result_list = decltype(detail::filter(std::forward<F>(f), list, type_list<>{}));
+                return trait::get_t<0, result_list>{};
+            }
+
+            /// <summary>
+            /// Returns the only instance that matches the predicate. If there is no match or multiple matches, fails with static_assert. 
+            /// </summary>
+            template <typename F, typename... Ts>
+            constexpr auto find_one(type_list<Ts...> list, F&& f) 
+            {
+                using result_list = decltype(detail::filter(std::forward<F>(f), list, type_list<>{}));
+                static_assert(result_list::size == 1, "Cannot resolve multiple matches in find_one!");
+                return trait::get_t<0, result_list>{};
             }
 
         } // namespace util

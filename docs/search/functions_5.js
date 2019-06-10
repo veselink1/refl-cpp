@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['get',['get',['../classrefl_1_1descriptor_1_1field__descriptor.html#abf44acc47d2654ec3244dc215a650e17',1,'refl::descriptor::field_descriptor::get()'],['../classrefl_1_1descriptor_1_1field__descriptor.html#a3b40c5a754228099e49e1a258e8dbf94',1,'refl::descriptor::field_descriptor::get(U &amp;&amp;target)'],['../namespacerefl_1_1util.html#ab9c08ee39999c1bb662bd8c5443e4e35',1,'refl::util::get()']]],
-  ['get_5finstance',['get_instance',['../namespacerefl_1_1util.html#ab87e007f30db07518ae9d5a145643b91',1,'refl::util']]]
+  ['filter',['filter',['../namespacerefl_1_1util_1_1detail.html#a0ed35b5bf134a29ef087b889926f8899',1,'refl::util::detail::filter(F &amp;&amp;f, type_list&lt;&gt; list, type_list&lt; Carry... &gt; carry)'],['../namespacerefl_1_1util_1_1detail.html#a0a3b5eb5919dc27eee11574e5cbe4587',1,'refl::util::detail::filter(F &amp;&amp;f, type_list&lt; T, Ts... &gt; list, type_list&lt; Carry... &gt; carry)'],['../namespacerefl_1_1util.html#a097549e41bac7745db61442f94135c41',1,'refl::util::filter()']]],
+  ['find_5ffirst',['find_first',['../namespacerefl_1_1util.html#ad1d30e9de0766352287491f18da067c0',1,'refl::util']]],
+  ['find_5fone',['find_one',['../namespacerefl_1_1util.html#a6685e65aeb830a5e27dc8e4f2085ce27',1,'refl::util']]],
+  ['for_5feach',['for_each',['../namespacerefl_1_1util.html#a19919596cdd45c858d891c91a7826b22',1,'refl::util']]]
 ];

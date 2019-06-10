@@ -1,6 +1,10 @@
 var searchData=
 [
-  ['operator_20const_20char_20_2a',['operator const char *',['../structrefl_1_1util_1_1const__string.html#a8f8b7b47319025b4007367b285849fbd',1,'refl::util::const_string']]],
-  ['operator_28_29',['operator()',['../classrefl_1_1descriptor_1_1field__descriptor.html#a505dabe4b89d4494c6f5c1074d6db8e4',1,'refl::descriptor::field_descriptor::operator()() const'],['../classrefl_1_1descriptor_1_1field__descriptor.html#a6e9774764c1b44126648f6476a1d5c2f',1,'refl::descriptor::field_descriptor::operator()(U &amp;&amp;target) const'],['../classrefl_1_1descriptor_1_1function__descriptor.html#a9be3a1ccef3ea4fbee27dabf3bc5244d',1,'refl::descriptor::function_descriptor::operator()()']]],
-  ['operator_2b',['operator+',['../namespacerefl_1_1util.html#af5bf071fdadd80ec2f20fba9ad3f0a58',1,'refl::util']]]
+  ['magnitude',['magnitude',['../struct_point.html#a7385cdd9413f013f86b9ca8dfa93a41a',1,'Point']]],
+  ['main',['main',['../test_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'test.cpp']]],
+  ['make_5fattributes',['make_attributes',['../namespacerefl_1_1attr_1_1detail.html#aa8d40ec280748b8c5c8236fad22c5f94',1,'refl::attr::detail']]],
+  ['make_5fconst_5fstring',['make_const_string',['../namespacerefl_1_1util.html#ae95791abc4a76bd9b5c04bfca8393a23',1,'refl::util']]],
+  ['map_5fto_5farray',['map_to_array',['../namespacerefl_1_1util.html#af69ca2ba2b0353b7d3433f6a77b62902',1,'refl::util']]],
+  ['map_5fto_5ftuple',['map_to_tuple',['../namespacerefl_1_1util.html#adb5bb478ef1cc5966e9df7c9b10b5dd3',1,'refl::util']]],
+  ['member_5ftype_5ftest',['member_type_test',['../namespacerefl_1_1trait_1_1detail.html#a318c105142de1c9e6d8aa0a9a93ddcef',1,'refl::trait::detail::member_type_test(int) -&gt; decltype(typename T::member_type'],['../namespacerefl_1_1trait_1_1detail.html#a3b88ce0fc918543377c8f3de598a8ae9',1,'refl::trait::detail::member_type_test(...)']]]
 ];

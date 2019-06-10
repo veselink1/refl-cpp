@@ -39,7 +39,8 @@ var hierarchy =
       [ "refl::attr::usage::member", "structrefl_1_1attr_1_1usage_1_1member.html", null ]
     ] ],
     [ "refl::trait::detail::get< N, Ts... >", null, [
-      [ "refl::trait::get< N, Ts >", "structrefl_1_1trait_1_1get.html", null ]
+      [ "refl::trait::get< N, Ts >", "structrefl_1_1trait_1_1get.html", null ],
+      [ "refl::trait::get< N, type_list< Ts... > >", "structrefl_1_1trait_1_1get_3_01_n_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html", null ]
     ] ],
     [ "is_container_test", null, [
       [ "refl::trait::is_container< T >", "structrefl_1_1trait_1_1is__container.html", null ]
@@ -54,9 +55,11 @@ var hierarchy =
     [ "member_type_test", null, [
       [ "refl::trait::is_member< T >", "structrefl_1_1trait_1_1is__member.html", null ]
     ] ],
+    [ "Point", "struct_point.html", null ],
     [ "refl::trait::remove_qualifiers< T >", "structrefl_1_1trait_1_1remove__qualifiers.html", null ],
     [ "refl::trait::detail::skip< N, Ts... >", null, [
-      [ "refl::trait::skip< N, Ts >", "structrefl_1_1trait_1_1skip.html", null ]
+      [ "refl::trait::skip< N, Ts >", "structrefl_1_1trait_1_1skip.html", null ],
+      [ "refl::trait::skip< N, type_list< Ts... > >", "structrefl_1_1trait_1_1skip_3_01_n_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html", null ]
     ] ],
     [ "refl::attr::usage::type", "structrefl_1_1attr_1_1usage_1_1type.html", [
       [ "refl::attr::base_types< Ts >", "structrefl_1_1attr_1_1base__types.html", null ],
