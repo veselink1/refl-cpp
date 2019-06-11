@@ -802,19 +802,19 @@ namespace refl {
             namespace detail
             {
                 template <typename F, typename... Carry>
-                constexpr auto filter(F&& f, type_list<> list, type_list<Carry...> carry) 
+                constexpr auto filter(F f, type_list<> list, type_list<Carry...> carry) 
                 {
                     return carry;
                 }
 
                 template <typename F, typename T, typename... Ts, typename... Carry>
-                constexpr auto filter(F&& f, type_list<T, Ts...> list, type_list<Carry...> carry) 
+                constexpr auto filter(F f, type_list<T, Ts...> list, type_list<Carry...> carry) 
                 {
                     if constexpr (f(T{})) {
-                        return filter(std::forward<F>(f), type_list<Ts...>{}, type_list<T, Carry...>{});
+                        return filter(f, type_list<Ts...>{}, type_list<T, Carry...>{});
                     } 
                     else {
-                        return filter(std::forward<F>(f), type_list<Ts...>{}, type_list<Carry...>{});
+                        return filter(f, type_list<Ts...>{}, type_list<Carry...>{});
                     }
                 }
             }
@@ -823,18 +823,18 @@ namespace refl {
             /// Filters the list according to a predicate.
             /// </summary>
             template <typename F, typename... Ts>
-            constexpr auto filter(type_list<Ts...> list, F&& f) 
+            constexpr auto filter(type_list<Ts...> list, F f) 
             {
-                return detail::filter(std::forward<F>(f), list, type_list<>{});
+                return detail::filter(f, list, type_list<>{});
             }
             
             /// <summary>
             /// Returns the first instance that matches the predicate. 
             /// </summary>
             template <typename F, typename... Ts>
-            constexpr auto find_first(type_list<Ts...> list, F&& f) 
+            constexpr auto find_first(type_list<Ts...> list, F f) 
             {
-                using result_list = decltype(detail::filter(std::forward<F>(f), list, type_list<>{}));
+                using result_list = decltype(detail::filter(f, list, type_list<>{}));
                 return trait::get_t<0, result_list>{};
             }
 
@@ -842,9 +842,9 @@ namespace refl {
             /// Returns the only instance that matches the predicate. If there is no match or multiple matches, fails with static_assert. 
             /// </summary>
             template <typename F, typename... Ts>
-            constexpr auto find_one(type_list<Ts...> list, F&& f) 
+            constexpr auto find_one(type_list<Ts...> list, F f) 
             {
-                using result_list = decltype(detail::filter(std::forward<F>(f), list, type_list<>{}));
+                using result_list = decltype(detail::filter(f, list, type_list<>{}));
                 static_assert(result_list::size == 1, "Cannot resolve multiple matches in find_one!");
                 return trait::get_t<0, result_list>{};
             }
