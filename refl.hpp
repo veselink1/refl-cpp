@@ -6,6 +6,9 @@
 #ifndef REFL_INCLUDE_HPP
 #define REFL_INCLUDE_HPP
 
+#define REFL_UNSTABLE(...) [[deprecated("(unstable) " __VA_ARGS__)]]
+#define REFL_DEPRECATED(...) [[deprecated(__VA_ARGS__)]]
+
 #include <stddef.h> // size_t
 #include <cstring>
 #include <array>
@@ -868,6 +871,36 @@ namespace refl {
                 static_assert(result_list::size == 1, "Cannot resolve multiple matches in find_one!");
                 return trait::get_t<0, result_list>{};
             }
+        
+            /// <summary>
+            /// Returns the member that has the specified name. Fails with static_assert if not such member exists.
+            /// </summary>
+            template <size_t N, typename... Ts>
+            constexpr auto find_one(type_list<Ts...> list, const const_string<N>& name) 
+            {
+                return find_one(list, [&](auto member) { return member.name == name; });
+            }
+            
+            /// <summary>
+            /// Returns true if any item in the list matches the predicate.
+            /// </summary>
+            template <typename F, typename... Ts>
+            constexpr auto contains(type_list<Ts...> list, F f) 
+            {
+                using result_list = decltype(detail::filter(f, list, type_list<>{}));
+                return result_list::size > 0;
+            }
+
+            /// <summary>
+            /// Returns true if any item in the list matches the predicate.
+            /// </summary>
+            template <size_t N, typename... Ts>
+            constexpr auto contains(type_list<Ts...> list, const const_string<N>& name)
+            {
+                constexpr auto f = [&](auto member) { return member.name == name; };
+                using result_list = decltype(detail::filter(f, list, type_list<>{}));
+                return result_list::size > 0;
+            }
 
         } // namespace util
 
@@ -1394,16 +1427,6 @@ namespace refl {
                 {
                 }
             };
-            
-            static constexpr bool is_readable(const property& p) 
-            {
-                return static_cast<unsigned>(p.access) & static_cast<unsigned>(access_type::read);
-            }
-
-            static constexpr bool is_writable(const property& p) 
-            {
-                return static_cast<unsigned>(p.access) & static_cast<unsigned>(access_type::write);
-            }
 
             /// <summary>
             /// Used to specify how a type should be displayed in debugging contexts.
@@ -1555,7 +1578,14 @@ namespace refl {
             template <typename T>
             constexpr bool is_readable(T&& t)
             {
-                return attr::is_readable(get_property_info(t));
+                static_assert(is_field(t) || is_property(t));
+                if constexpr (is_property(t)) {
+                    return static_cast<unsigned>(get_property_info(t).access) 
+                        & static_cast<unsigned>(attr::access_type::read);
+                }
+                else {
+                    return true;
+                }
             }
             
             /// <summary>
@@ -1565,7 +1595,14 @@ namespace refl {
             template <typename T>
             constexpr bool is_writable(T&& t)
             {
-                return attr::is_writable(get_property_info(t));
+                static_assert(is_field(t) || is_property(t));
+                if constexpr (is_property(t)) {
+                    return static_cast<unsigned>(get_property_info(t).access) 
+                        & static_cast<unsigned>(attr::access_type::write);
+                }
+                else {
+                    return !std::is_const_v<typename T::value_type>;
+                }
             }
 
             /// <summary>
@@ -1777,7 +1814,7 @@ namespace refl {
 						if (!compact) os << "\n";
                         constexpr size_t count = count_if(type_descriptor::members, [](auto member) { return is_field(member) || is_property(member); });
 						for_each(type_descriptor::members, [&](auto member, auto index) {
-							if constexpr (is_field(member) || is_property(member)) {
+							if constexpr (is_field(member) || (is_property(member) && is_writable(member))) {
 								std::string name{ get_display_name(member) };
 
 								if (!compact) os << "  ";
@@ -1820,11 +1857,17 @@ namespace refl {
 				}
             }
 
+            /// <summary>
+            /// Writes the (compact) debug representation of the provided values to the given std::ostream.
+            /// </summary>
             template <typename... Ts>
             void debug_all(std::ostream& os, const Ts&... values) {
                 refl::runtime::debug(os, std::forward_as_tuple(static_cast<const Ts&>(values)...), true);
             }
 
+            /// <summary>
+            /// Writes the (compact) debug representation of the provided value to an std::string and returns it.
+            /// </summary>
             template <typename T>
             std::string debug_str(const T& value, bool compact = false)
             {
@@ -1833,6 +1876,9 @@ namespace refl {
                 return ss.str();
             }
             
+            /// <summary>
+            /// Writes the (compact) debug representation of the provided values to an std::string and returns it.
+            /// </summary>
             template <typename... Ts>
             std::string debug_all_str(const Ts&... values) {
                 return refl::runtime::debug_str(std::forward_as_tuple(static_cast<const Ts&>(values)...), true);
