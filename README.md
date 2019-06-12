@@ -1,4 +1,4 @@
-# refl-cpp (v0.1.2-beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
+# refl-cpp (v0.2.0 beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
 A static reflection library for modern C++ 🔯🔥
 
 ## Synopsis
@@ -64,3 +64,17 @@ REFL_FIELD(Field, Attributes...)
 REFL_FUNC(Function, Attribute...)
 
 // NOTE: None of the macros above need a terminating semi-colon (;)
+
+```
+
+# Changelog
+
+## v0.2.0
+  - added refl::util::contains(type_list<...>, [predicate]), refl::util::contains(type_list<...>, const_string<N>)
+  - removed refl::attr::is_readable/is_writable (use refl::descriptor::is_readable/is_writable instead; reason: lack of support for fields that lack a property attribute)
+  
+## v0.1.2
+  - refl::runtime::proxy<Derived, Target> can now delegate field 'invocations'. (Methods with names matching those of the reflected fields are created.)
+  - refl::attr::property now can take an optional refl::attr::access_type (values: read, write, read_write) to specify whether the property is considered readable or writable (or both). 
+  - added refl::descriptor::is_readable/is_writable
+  - added refl::attr::is_readable/is_writable

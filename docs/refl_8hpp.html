@@ -253,6 +253,10 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
+<tr class="memitem:a4f9037b540dce80f720b25fd8e0dbe2a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="refl_8hpp.html#a4f9037b540dce80f720b25fd8e0dbe2a">REFL_UNSTABLE</a>(...)&#160;&#160;&#160;[[deprecated(&quot;(unstable) &quot; __VA_ARGS__)]]</td></tr>
+<tr class="separator:a4f9037b540dce80f720b25fd8e0dbe2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23008815d6c2753876c4cfd2b177480a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="refl_8hpp.html#a23008815d6c2753876c4cfd2b177480a">REFL_DEPRECATED</a>(...)&#160;&#160;&#160;[[deprecated(__VA_ARGS__)]]</td></tr>
+<tr class="separator:a23008815d6c2753876c4cfd2b177480a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad22f8cb448b74a26343599064d4e76d1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="refl_8hpp.html#ad22f8cb448b74a26343599064d4e76d1">REFL_DEFINE_QUALIFIED_RESOLVE</a>(...)</td></tr>
 <tr class="separator:ad22f8cb448b74a26343599064d4e76d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e07a0473ace90d83916ccc0d1e96617"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="refl_8hpp.html#a3e07a0473ace90d83916ccc0d1e96617">REFL_STRINGIFY_IMPL</a>(...)&#160;&#160;&#160;#__VA_ARGS__</td></tr>
@@ -454,6 +458,18 @@ Functions</h2></td></tr>
 <tr class="memitem:a879e3a3cebc3fdd3a9581fba663cabdf"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#a879e3a3cebc3fdd3a9581fba663cabdf">refl::util::find_one</a> (type_list&lt; Ts... &gt; list, F f)</td></tr>
 <tr class="memdesc:a879e3a3cebc3fdd3a9581fba663cabdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the only instance that matches the predicate. If there is no match or multiple matches, fails with static_assert.  <a href="namespacerefl_1_1util.html#a879e3a3cebc3fdd3a9581fba663cabdf">More...</a><br /></td></tr>
 <tr class="separator:a879e3a3cebc3fdd3a9581fba663cabdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a019b3322cffd29fd129b6378ef499668"><td class="memTemplParams" colspan="2">template&lt;size_t N, typename... Ts&gt; </td></tr>
+<tr class="memitem:a019b3322cffd29fd129b6378ef499668"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#a019b3322cffd29fd129b6378ef499668">refl::util::find_one</a> (type_list&lt; Ts... &gt; list, const const_string&lt; N &gt; &amp;name)</td></tr>
+<tr class="memdesc:a019b3322cffd29fd129b6378ef499668"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the member that has the specified name. Fails with static_assert if not such member exists.  <a href="namespacerefl_1_1util.html#a019b3322cffd29fd129b6378ef499668">More...</a><br /></td></tr>
+<tr class="separator:a019b3322cffd29fd129b6378ef499668"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23e1a75f8e8615ca9dfebf9b3cd61198"><td class="memTemplParams" colspan="2">template&lt;typename F , typename... Ts&gt; </td></tr>
+<tr class="memitem:a23e1a75f8e8615ca9dfebf9b3cd61198"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#a23e1a75f8e8615ca9dfebf9b3cd61198">refl::util::contains</a> (type_list&lt; Ts... &gt; list, F f)</td></tr>
+<tr class="memdesc:a23e1a75f8e8615ca9dfebf9b3cd61198"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if any item in the list matches the predicate.  <a href="namespacerefl_1_1util.html#a23e1a75f8e8615ca9dfebf9b3cd61198">More...</a><br /></td></tr>
+<tr class="separator:a23e1a75f8e8615ca9dfebf9b3cd61198"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c6a2cc90e4da4ea186e28ed0c2de7a3"><td class="memTemplParams" colspan="2">template&lt;size_t N, typename... Ts&gt; </td></tr>
+<tr class="memitem:a3c6a2cc90e4da4ea186e28ed0c2de7a3"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#a3c6a2cc90e4da4ea186e28ed0c2de7a3">refl::util::contains</a> (type_list&lt; Ts... &gt; list, const const_string&lt; N &gt; &amp;name)</td></tr>
+<tr class="memdesc:a3c6a2cc90e4da4ea186e28ed0c2de7a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if any item in the list matches the predicate.  <a href="namespacerefl_1_1util.html#a3c6a2cc90e4da4ea186e28ed0c2de7a3">More...</a><br /></td></tr>
+<tr class="separator:a3c6a2cc90e4da4ea186e28ed0c2de7a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a318c105142de1c9e6d8aa0a9a93ddcef"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a318c105142de1c9e6d8aa0a9a93ddcef"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1trait_1_1detail.html#a318c105142de1c9e6d8aa0a9a93ddcef">refl::trait::detail::member_type_test</a> (int) -&gt; decltype(typename T::member_type</td></tr>
 <tr class="separator:a318c105142de1c9e6d8aa0a9a93ddcef"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -569,7 +585,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><a class="code" href="refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71">REFL_TYPE</a>(TypeName) \</div><div class="line">    REFL_END</div><div class="ttc" id="refl_8hpp_html_a2d90ffbabd9fc8cc17579fc33d919d71"><div class="ttname"><a href="refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71">REFL_TYPE</a></div><div class="ttdeci">#define REFL_TYPE(TypeName,...)</div><div class="ttdoc">Creates reflection information for a specified type. Takes an optional attribute list.</div><div class="ttdef"><b>Definition:</b> refl.hpp:485</div></div>
+<b>Value:</b><div class="fragment"><div class="line"><a class="code" href="refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71">REFL_TYPE</a>(TypeName) \</div><div class="line">    REFL_END</div><div class="ttc" id="refl_8hpp_html_a2d90ffbabd9fc8cc17579fc33d919d71"><div class="ttname"><a href="refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71">REFL_TYPE</a></div><div class="ttdeci">#define REFL_TYPE(TypeName,...)</div><div class="ttdoc">Creates reflection information for a specified type. Takes an optional attribute list.</div><div class="ttdef"><b>Definition:</b> refl.hpp:488</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -590,6 +606,24 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> R, <span class="keyword">typename</span> T, <span class="keyword">typename</span>... Args&gt; \</div><div class="line">            auto <a class="code" href="namespacerefl_1_1detail.html#ad4f221fc499dd0a5ad8af2f0ca578ec9">resolve</a>(R(trait::remove_qualifiers_t&lt;T&gt;::*fn)(Args...) __VA_ARGS__, T&amp;&amp; target, Args&amp;&amp;... args) -&gt; decltype(fn)</div><div class="ttc" id="namespacerefl_1_1detail_html_ad4f221fc499dd0a5ad8af2f0ca578ec9"><div class="ttname"><a href="namespacerefl_1_1detail.html#ad4f221fc499dd0a5ad8af2f0ca578ec9">refl::detail::resolve</a></div><div class="ttdeci">auto resolve(R(*fn)(Args...), Args &amp;&amp;... args) -&gt; decltype(fn)</div></div>
 </div><!-- fragment -->
+</div>
+</div>
+<a id="a23008815d6c2753876c4cfd2b177480a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23008815d6c2753876c4cfd2b177480a">&#9670;&nbsp;</a></span>REFL_DEPRECATED</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define REFL_DEPRECATED</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;[[deprecated(__VA_ARGS__)]]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
 </div>
 </div>
 <a id="ad77fb25bb894a5f1f091a4a94fa67b3f"></a>
@@ -665,8 +699,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">typedef</span> type declaring_type; \</div><div class="line">        typedef ::refl::member::memberTy member_type; \</div><div class="line">        static <span class="keyword">inline</span> constexpr <span class="keyword">auto</span> name{ <a class="code" href="namespacerefl_1_1util.html#ae95791abc4a76bd9b5c04bfca8393a23">::refl::util::make_const_string</a>(<a class="code" href="refl_8hpp.html#a2c380b52ea5a553aed04a79db336c4e2">REFL_STRINGIFY</a>(memberName)) }; \</div><div class="line">        REFL_DETAIL_ATTRIBUTES(memberTy, __VA_ARGS__)</div><div class="ttc" id="namespacerefl_1_1util_html_ae95791abc4a76bd9b5c04bfca8393a23"><div class="ttname"><a href="namespacerefl_1_1util.html#ae95791abc4a76bd9b5c04bfca8393a23">refl::util::make_const_string</a></div><div class="ttdeci">constexpr const_string&lt; N - 1 &gt; make_const_string(const char(&amp;str)[N])</div><div class="ttdoc">Creates a compile-time string.</div><div class="ttdef"><b>Definition:</b> refl.hpp:79</div></div>
-<div class="ttc" id="refl_8hpp_html_a2c380b52ea5a553aed04a79db336c4e2"><div class="ttname"><a href="refl_8hpp.html#a2c380b52ea5a553aed04a79db336c4e2">REFL_STRINGIFY</a></div><div class="ttdeci">#define REFL_STRINGIFY(...)</div><div class="ttdef"><b>Definition:</b> refl.hpp:465</div></div>
+<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">typedef</span> type declaring_type; \</div><div class="line">        typedef ::refl::member::memberTy member_type; \</div><div class="line">        static <span class="keyword">inline</span> constexpr <span class="keyword">auto</span> name{ <a class="code" href="namespacerefl_1_1util.html#ae95791abc4a76bd9b5c04bfca8393a23">::refl::util::make_const_string</a>(<a class="code" href="refl_8hpp.html#a2c380b52ea5a553aed04a79db336c4e2">REFL_STRINGIFY</a>(memberName)) }; \</div><div class="line">        REFL_DETAIL_ATTRIBUTES(memberTy, __VA_ARGS__)</div><div class="ttc" id="namespacerefl_1_1util_html_ae95791abc4a76bd9b5c04bfca8393a23"><div class="ttname"><a href="namespacerefl_1_1util.html#ae95791abc4a76bd9b5c04bfca8393a23">refl::util::make_const_string</a></div><div class="ttdeci">constexpr const_string&lt; N - 1 &gt; make_const_string(const char(&amp;str)[N])</div><div class="ttdoc">Creates a compile-time string.</div><div class="ttdef"><b>Definition:</b> refl.hpp:82</div></div>
+<div class="ttc" id="refl_8hpp_html_a2c380b52ea5a553aed04a79db336c4e2"><div class="ttname"><a href="refl_8hpp.html#a2c380b52ea5a553aed04a79db336c4e2">REFL_STRINGIFY</a></div><div class="ttdeci">#define REFL_STRINGIFY(...)</div><div class="ttdef"><b>Definition:</b> refl.hpp:468</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -727,9 +761,9 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">typedef</span> <a class="code" href="refl_8hpp.html#a79e21149459febbf19242c9a2abd83ff">REFL_GROUP</a> TypeName type; \</div><div class="line">        REFL_DETAIL_ATTRIBUTES(type, __VA_ARGS__) \</div><div class="line">    public: \</div><div class="line">        static <span class="keyword">inline</span> constexpr <span class="keyword">auto</span> name{ <a class="code" href="namespacerefl_1_1util.html#ae95791abc4a76bd9b5c04bfca8393a23">::refl::util::make_const_string</a>(<a class="code" href="refl_8hpp.html#a2c380b52ea5a553aed04a79db336c4e2">REFL_STRINGIFY</a>(<a class="code" href="refl_8hpp.html#a79e21149459febbf19242c9a2abd83ff">REFL_GROUP</a> TypeName)) }; \</div><div class="line">        static <span class="keyword">inline</span> constexpr <span class="keywordtype">size_t</span> member_index_offset = __COUNTER__ + 1; \</div><div class="line">        template &lt;size_t N, typename = void&gt; \</div><div class="line">        struct member {};</div><div class="ttc" id="namespacerefl_1_1util_html_ae95791abc4a76bd9b5c04bfca8393a23"><div class="ttname"><a href="namespacerefl_1_1util.html#ae95791abc4a76bd9b5c04bfca8393a23">refl::util::make_const_string</a></div><div class="ttdeci">constexpr const_string&lt; N - 1 &gt; make_const_string(const char(&amp;str)[N])</div><div class="ttdoc">Creates a compile-time string.</div><div class="ttdef"><b>Definition:</b> refl.hpp:79</div></div>
-<div class="ttc" id="refl_8hpp_html_a2c380b52ea5a553aed04a79db336c4e2"><div class="ttname"><a href="refl_8hpp.html#a2c380b52ea5a553aed04a79db336c4e2">REFL_STRINGIFY</a></div><div class="ttdeci">#define REFL_STRINGIFY(...)</div><div class="ttdef"><b>Definition:</b> refl.hpp:465</div></div>
-<div class="ttc" id="refl_8hpp_html_a79e21149459febbf19242c9a2abd83ff"><div class="ttname"><a href="refl_8hpp.html#a79e21149459febbf19242c9a2abd83ff">REFL_GROUP</a></div><div class="ttdeci">#define REFL_GROUP(...)</div><div class="ttdef"><b>Definition:</b> refl.hpp:466</div></div>
+<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">typedef</span> <a class="code" href="refl_8hpp.html#a79e21149459febbf19242c9a2abd83ff">REFL_GROUP</a> TypeName type; \</div><div class="line">        REFL_DETAIL_ATTRIBUTES(type, __VA_ARGS__) \</div><div class="line">    public: \</div><div class="line">        static <span class="keyword">inline</span> constexpr <span class="keyword">auto</span> name{ <a class="code" href="namespacerefl_1_1util.html#ae95791abc4a76bd9b5c04bfca8393a23">::refl::util::make_const_string</a>(<a class="code" href="refl_8hpp.html#a2c380b52ea5a553aed04a79db336c4e2">REFL_STRINGIFY</a>(<a class="code" href="refl_8hpp.html#a79e21149459febbf19242c9a2abd83ff">REFL_GROUP</a> TypeName)) }; \</div><div class="line">        static <span class="keyword">inline</span> constexpr <span class="keywordtype">size_t</span> member_index_offset = __COUNTER__ + 1; \</div><div class="line">        template &lt;size_t N, typename = void&gt; \</div><div class="line">        struct member {};</div><div class="ttc" id="namespacerefl_1_1util_html_ae95791abc4a76bd9b5c04bfca8393a23"><div class="ttname"><a href="namespacerefl_1_1util.html#ae95791abc4a76bd9b5c04bfca8393a23">refl::util::make_const_string</a></div><div class="ttdeci">constexpr const_string&lt; N - 1 &gt; make_const_string(const char(&amp;str)[N])</div><div class="ttdoc">Creates a compile-time string.</div><div class="ttdef"><b>Definition:</b> refl.hpp:82</div></div>
+<div class="ttc" id="refl_8hpp_html_a2c380b52ea5a553aed04a79db336c4e2"><div class="ttname"><a href="refl_8hpp.html#a2c380b52ea5a553aed04a79db336c4e2">REFL_STRINGIFY</a></div><div class="ttdeci">#define REFL_STRINGIFY(...)</div><div class="ttdef"><b>Definition:</b> refl.hpp:468</div></div>
+<div class="ttc" id="refl_8hpp_html_a79e21149459febbf19242c9a2abd83ff"><div class="ttname"><a href="refl_8hpp.html#a79e21149459febbf19242c9a2abd83ff">REFL_GROUP</a></div><div class="ttdeci">#define REFL_GROUP(...)</div><div class="ttdef"><b>Definition:</b> refl.hpp:469</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -834,7 +868,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><a class="code" href="refl_8hpp.html#a5ceddfd98acf50f564817cd81522ea26">REFL_DETAIL_MEMBER_HEADER</a> { \</div><div class="line">        REFL_DETAIL_MEMBER_COMMON(field, fieldName, __VA_ARGS__) \</div><div class="line">    public: \</div><div class="line">        typedef decltype(type::fieldName) value_type; \</div><div class="line">        static <span class="keyword">inline</span> constexpr <span class="keyword">auto</span> pointer{ &amp;type::fieldName }; \</div><div class="line">        REFL_DETAIL_MEMBER_PROXY(fieldName); \</div><div class="line">    };</div><div class="ttc" id="refl_8hpp_html_a5ceddfd98acf50f564817cd81522ea26"><div class="ttname"><a href="refl_8hpp.html#a5ceddfd98acf50f564817cd81522ea26">REFL_DETAIL_MEMBER_HEADER</a></div><div class="ttdeci">#define REFL_DETAIL_MEMBER_HEADER</div><div class="ttdef"><b>Definition:</b> refl.hpp:498</div></div>
+<b>Value:</b><div class="fragment"><div class="line"><a class="code" href="refl_8hpp.html#a5ceddfd98acf50f564817cd81522ea26">REFL_DETAIL_MEMBER_HEADER</a> { \</div><div class="line">        REFL_DETAIL_MEMBER_COMMON(field, fieldName, __VA_ARGS__) \</div><div class="line">    public: \</div><div class="line">        typedef decltype(type::fieldName) value_type; \</div><div class="line">        static <span class="keyword">inline</span> constexpr <span class="keyword">auto</span> pointer{ &amp;type::fieldName }; \</div><div class="line">        REFL_DETAIL_MEMBER_PROXY(fieldName); \</div><div class="line">    };</div><div class="ttc" id="refl_8hpp_html_a5ceddfd98acf50f564817cd81522ea26"><div class="ttname"><a href="refl_8hpp.html#a5ceddfd98acf50f564817cd81522ea26">REFL_DETAIL_MEMBER_HEADER</a></div><div class="ttdeci">#define REFL_DETAIL_MEMBER_HEADER</div><div class="ttdef"><b>Definition:</b> refl.hpp:501</div></div>
 </div><!-- fragment -->
 <p>Creates reflection information for a public field. Takes an optional attribute list. </p>
 
@@ -865,7 +899,7 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><a class="code" href="refl_8hpp.html#a5ceddfd98acf50f564817cd81522ea26">REFL_DETAIL_MEMBER_HEADER</a> { \</div><div class="line">        REFL_DETAIL_MEMBER_COMMON(<span class="keyword">function</span>, functionName, __VA_ARGS__) \</div><div class="line">    public: \</div><div class="line">        template &lt;<span class="keyword">typename</span>... Args&gt; \</div><div class="line">        static constexpr decltype(::<a class="code" href="namespacerefl_1_1detail.html#ad4f221fc499dd0a5ad8af2f0ca578ec9">refl::detail::resolve</a>(&amp;type::functionName, std::declval&lt;Args&gt;()...)) pointer{ &amp;type::functionName }; \</div><div class="line">        REFL_DETAIL_MEMBER_PROXY(functionName); \</div><div class="line">    };</div><div class="ttc" id="refl_8hpp_html_a5ceddfd98acf50f564817cd81522ea26"><div class="ttname"><a href="refl_8hpp.html#a5ceddfd98acf50f564817cd81522ea26">REFL_DETAIL_MEMBER_HEADER</a></div><div class="ttdeci">#define REFL_DETAIL_MEMBER_HEADER</div><div class="ttdef"><b>Definition:</b> refl.hpp:498</div></div>
+<b>Value:</b><div class="fragment"><div class="line"><a class="code" href="refl_8hpp.html#a5ceddfd98acf50f564817cd81522ea26">REFL_DETAIL_MEMBER_HEADER</a> { \</div><div class="line">        REFL_DETAIL_MEMBER_COMMON(<span class="keyword">function</span>, functionName, __VA_ARGS__) \</div><div class="line">    public: \</div><div class="line">        template &lt;<span class="keyword">typename</span>... Args&gt; \</div><div class="line">        static constexpr decltype(::<a class="code" href="namespacerefl_1_1detail.html#ad4f221fc499dd0a5ad8af2f0ca578ec9">refl::detail::resolve</a>(&amp;type::functionName, std::declval&lt;Args&gt;()...)) pointer{ &amp;type::functionName }; \</div><div class="line">        REFL_DETAIL_MEMBER_PROXY(functionName); \</div><div class="line">    };</div><div class="ttc" id="refl_8hpp_html_a5ceddfd98acf50f564817cd81522ea26"><div class="ttname"><a href="refl_8hpp.html#a5ceddfd98acf50f564817cd81522ea26">REFL_DETAIL_MEMBER_HEADER</a></div><div class="ttdeci">#define REFL_DETAIL_MEMBER_HEADER</div><div class="ttdef"><b>Definition:</b> refl.hpp:501</div></div>
 <div class="ttc" id="namespacerefl_1_1detail_html_ad4f221fc499dd0a5ad8af2f0ca578ec9"><div class="ttname"><a href="namespacerefl_1_1detail.html#ad4f221fc499dd0a5ad8af2f0ca578ec9">refl::detail::resolve</a></div><div class="ttdeci">auto resolve(R(*fn)(Args...), Args &amp;&amp;... args) -&gt; decltype(fn)</div></div>
 </div><!-- fragment -->
 <p>Creates reflection information for a public function. Takes an optional <em>brace-enclosed</em> attribute list. </p>
@@ -957,8 +991,8 @@ Variables</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">namespace </span>refl_impl::metadata { <span class="keyword">template</span> &lt;REFL_GROUP TemplateDeclaration&gt; <span class="keyword">struct </span>type_info__&lt;<a class="code" href="refl_8hpp.html#a79e21149459febbf19242c9a2abd83ff">REFL_GROUP</a> TypeName&gt; { \</div><div class="line">        public: <a class="code" href="refl_8hpp.html#ac7f8b46b069c2311101168d841a71b37">REFL_DETAIL_TYPE_BODY</a>(TypeName, __VA_ARGS__)</div><div class="ttc" id="refl_8hpp_html_ac7f8b46b069c2311101168d841a71b37"><div class="ttname"><a href="refl_8hpp.html#ac7f8b46b069c2311101168d841a71b37">REFL_DETAIL_TYPE_BODY</a></div><div class="ttdeci">#define REFL_DETAIL_TYPE_BODY(TypeName,...)</div><div class="ttdef"><b>Definition:</b> refl.hpp:473</div></div>
-<div class="ttc" id="refl_8hpp_html_a79e21149459febbf19242c9a2abd83ff"><div class="ttname"><a href="refl_8hpp.html#a79e21149459febbf19242c9a2abd83ff">REFL_GROUP</a></div><div class="ttdeci">#define REFL_GROUP(...)</div><div class="ttdef"><b>Definition:</b> refl.hpp:466</div></div>
+<b>Value:</b><div class="fragment"><div class="line"><span class="keyword">namespace </span>refl_impl::metadata { <span class="keyword">template</span> &lt;REFL_GROUP TemplateDeclaration&gt; <span class="keyword">struct </span>type_info__&lt;<a class="code" href="refl_8hpp.html#a79e21149459febbf19242c9a2abd83ff">REFL_GROUP</a> TypeName&gt; { \</div><div class="line">        public: <a class="code" href="refl_8hpp.html#ac7f8b46b069c2311101168d841a71b37">REFL_DETAIL_TYPE_BODY</a>(TypeName, __VA_ARGS__)</div><div class="ttc" id="refl_8hpp_html_ac7f8b46b069c2311101168d841a71b37"><div class="ttname"><a href="refl_8hpp.html#ac7f8b46b069c2311101168d841a71b37">REFL_DETAIL_TYPE_BODY</a></div><div class="ttdeci">#define REFL_DETAIL_TYPE_BODY(TypeName,...)</div><div class="ttdef"><b>Definition:</b> refl.hpp:476</div></div>
+<div class="ttc" id="refl_8hpp_html_a79e21149459febbf19242c9a2abd83ff"><div class="ttname"><a href="refl_8hpp.html#a79e21149459febbf19242c9a2abd83ff">REFL_GROUP</a></div><div class="ttdeci">#define REFL_GROUP(...)</div><div class="ttdef"><b>Definition:</b> refl.hpp:469</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -989,6 +1023,25 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 <b>Value:</b><div class="fragment"><div class="line"><span class="keyword">namespace </span>refl_impl::metadata { <span class="keyword">template</span>&lt;&gt; <span class="keyword">struct </span>type_info__&lt;TypeName&gt; { \</div><div class="line">        REFL_DETAIL_TYPE_BODY((TypeName), __VA_ARGS__)</div></div><!-- fragment -->
 <p>Creates reflection information for a specified type. Takes an optional attribute list. </p>
+
+</div>
+</div>
+<a id="a4f9037b540dce80f720b25fd8e0dbe2a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f9037b540dce80f720b25fd8e0dbe2a">&#9670;&nbsp;</a></span>REFL_UNSTABLE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define REFL_UNSTABLE</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td>&#160;&#160;&#160;[[deprecated(&quot;(unstable) &quot; __VA_ARGS__)]]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Created by veselink1. Released under the MIT license. </p>
 
 </div>
 </div>
@@ -1341,7 +1394,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="refl_8hpp.html">refl.hpp</a></li>
-    <li class="footer">Generated on Wed Jun 12 2019 08:57:19 for refl-cpp by
+    <li class="footer">Generated on Wed Jun 12 2019 10:43:39 for refl-cpp by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>
