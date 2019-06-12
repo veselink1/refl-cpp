@@ -134,6 +134,19 @@ Functions</h2></td></tr>
 <tr class="memitem:ad32ecf85a2f738e6a201b47e8766a91f"><td class="memTemplParams" colspan="2">template&lt;size_t N, size_t M&gt; </td></tr>
 <tr class="memitem:ad32ecf85a2f738e6a201b47e8766a91f"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#ad32ecf85a2f738e6a201b47e8766a91f">operator!=</a> (const <a class="el" href="structrefl_1_1util_1_1const__string.html">const_string</a>&lt; N &gt; &amp;a, const <a class="el" href="structrefl_1_1util_1_1const__string.html">const_string</a>&lt; M &gt; &amp;b)</td></tr>
 <tr class="separator:ad32ecf85a2f738e6a201b47e8766a91f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ddab8c6121c2ff87a0694fe48e62914"><td class="memTemplParams" colspan="2">template&lt;typename T  = int, typename... Ts&gt; </td></tr>
+<tr class="memitem:a9ddab8c6121c2ff87a0694fe48e62914"><td class="memTemplItemLeft" align="right" valign="top">constexpr int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#a9ddab8c6121c2ff87a0694fe48e62914">ignore</a> (Ts &amp;&amp;...) noexcept</td></tr>
+<tr class="memdesc:a9ddab8c6121c2ff87a0694fe48e62914"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ignores all arguments.  <a href="#a9ddab8c6121c2ff87a0694fe48e62914">More...</a><br /></td></tr>
+<tr class="separator:a9ddab8c6121c2ff87a0694fe48e62914"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade7c97a21da83d823632fbbe65a2d722"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ade7c97a21da83d823632fbbe65a2d722"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#ade7c97a21da83d823632fbbe65a2d722">identity</a> (T &amp;&amp;t) noexcept</td></tr>
+<tr class="separator:ade7c97a21da83d823632fbbe65a2d722"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4aede0c6902e6d743bd834cd66ee6452"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a4aede0c6902e6d743bd834cd66ee6452"><td class="memTemplItemLeft" align="right" valign="top">constexpr const T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#a4aede0c6902e6d743bd834cd66ee6452">make_const</a> (const T &amp;value)</td></tr>
+<tr class="separator:a4aede0c6902e6d743bd834cd66ee6452"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa24711d271744864e9678788b526141b"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:aa24711d271744864e9678788b526141b"><td class="memTemplItemLeft" align="right" valign="top">constexpr const T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#aa24711d271744864e9678788b526141b">make_const</a> (T &amp;value)</td></tr>
+<tr class="separator:aa24711d271744864e9678788b526141b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abeb37f8d9fec4a2559b17897a7a4abb8"><td class="memTemplParams" colspan="2">template&lt;typename T , typename... Ts&gt; </td></tr>
 <tr class="memitem:abeb37f8d9fec4a2559b17897a7a4abb8"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::array&lt; T, sizeof...(Ts)&gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#abeb37f8d9fec4a2559b17897a7a4abb8">to_array</a> (const std::tuple&lt; Ts... &gt; &amp;tuple)</td></tr>
 <tr class="memdesc:abeb37f8d9fec4a2559b17897a7a4abb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an array of type 'T' from the provided tuple. The common type T needs to be specified, in order to prevent any errors when using the overload taking an empty std::tuple (as there is no common type then).  <a href="#abeb37f8d9fec4a2559b17897a7a4abb8">More...</a><br /></td></tr>
@@ -166,18 +179,18 @@ Functions</h2></td></tr>
 <tr class="memitem:aea0417f0fd0129f2cf1ee5fa055d9c20"><td class="memTemplItemLeft" align="right" valign="top">constexpr size_t&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#aea0417f0fd0129f2cf1ee5fa055d9c20">count_if</a> (<a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt; Ts... &gt; list, F &amp;&amp;f)</td></tr>
 <tr class="memdesc:aea0417f0fd0129f2cf1ee5fa055d9c20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies an accumulation function F to each type in the <a class="el" href="structrefl_1_1util_1_1type__list.html" title="Represents a list of static types (implemented as variadic template parameters).">type_list</a>. F can optionally take an index of type size_t.  <a href="#aea0417f0fd0129f2cf1ee5fa055d9c20">More...</a><br /></td></tr>
 <tr class="separator:aea0417f0fd0129f2cf1ee5fa055d9c20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a097549e41bac7745db61442f94135c41"><td class="memTemplParams" colspan="2">template&lt;typename F , typename... Ts&gt; </td></tr>
-<tr class="memitem:a097549e41bac7745db61442f94135c41"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#a097549e41bac7745db61442f94135c41">filter</a> (<a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt; Ts... &gt; list, F &amp;&amp;f)</td></tr>
-<tr class="memdesc:a097549e41bac7745db61442f94135c41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Filters the list according to a predicate.  <a href="#a097549e41bac7745db61442f94135c41">More...</a><br /></td></tr>
-<tr class="separator:a097549e41bac7745db61442f94135c41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1d30e9de0766352287491f18da067c0"><td class="memTemplParams" colspan="2">template&lt;typename F , typename... Ts&gt; </td></tr>
-<tr class="memitem:ad1d30e9de0766352287491f18da067c0"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#ad1d30e9de0766352287491f18da067c0">find_first</a> (<a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt; Ts... &gt; list, F &amp;&amp;f)</td></tr>
-<tr class="memdesc:ad1d30e9de0766352287491f18da067c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first instance that matches the predicate.  <a href="#ad1d30e9de0766352287491f18da067c0">More...</a><br /></td></tr>
-<tr class="separator:ad1d30e9de0766352287491f18da067c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6685e65aeb830a5e27dc8e4f2085ce27"><td class="memTemplParams" colspan="2">template&lt;typename F , typename... Ts&gt; </td></tr>
-<tr class="memitem:a6685e65aeb830a5e27dc8e4f2085ce27"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#a6685e65aeb830a5e27dc8e4f2085ce27">find_one</a> (<a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt; Ts... &gt; list, F &amp;&amp;f)</td></tr>
-<tr class="memdesc:a6685e65aeb830a5e27dc8e4f2085ce27"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the only instance that matches the predicate. If there is no match or multiple matches, fails with static_assert.  <a href="#a6685e65aeb830a5e27dc8e4f2085ce27">More...</a><br /></td></tr>
-<tr class="separator:a6685e65aeb830a5e27dc8e4f2085ce27"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6073149190b624aed7eb8bbab508c14"><td class="memTemplParams" colspan="2">template&lt;typename F , typename... Ts&gt; </td></tr>
+<tr class="memitem:ab6073149190b624aed7eb8bbab508c14"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#ab6073149190b624aed7eb8bbab508c14">filter</a> (<a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt; Ts... &gt; list, F f)</td></tr>
+<tr class="memdesc:ab6073149190b624aed7eb8bbab508c14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Filters the list according to a predicate.  <a href="#ab6073149190b624aed7eb8bbab508c14">More...</a><br /></td></tr>
+<tr class="separator:ab6073149190b624aed7eb8bbab508c14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a973676ecef8d9efe0e3557d0e8353a20"><td class="memTemplParams" colspan="2">template&lt;typename F , typename... Ts&gt; </td></tr>
+<tr class="memitem:a973676ecef8d9efe0e3557d0e8353a20"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#a973676ecef8d9efe0e3557d0e8353a20">find_first</a> (<a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt; Ts... &gt; list, F f)</td></tr>
+<tr class="memdesc:a973676ecef8d9efe0e3557d0e8353a20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the first instance that matches the predicate.  <a href="#a973676ecef8d9efe0e3557d0e8353a20">More...</a><br /></td></tr>
+<tr class="separator:a973676ecef8d9efe0e3557d0e8353a20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a879e3a3cebc3fdd3a9581fba663cabdf"><td class="memTemplParams" colspan="2">template&lt;typename F , typename... Ts&gt; </td></tr>
+<tr class="memitem:a879e3a3cebc3fdd3a9581fba663cabdf"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#a879e3a3cebc3fdd3a9581fba663cabdf">find_one</a> (<a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt; Ts... &gt; list, F f)</td></tr>
+<tr class="memdesc:a879e3a3cebc3fdd3a9581fba663cabdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the only instance that matches the predicate. If there is no match or multiple matches, fails with static_assert.  <a href="#a879e3a3cebc3fdd3a9581fba663cabdf">More...</a><br /></td></tr>
+<tr class="separator:a879e3a3cebc3fdd3a9581fba663cabdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9c08ee39999c1bb662bd8c5443e4e35"><td class="memTemplParams" colspan="2">template&lt;typename T , typename... Ts&gt; </td></tr>
 <tr class="memitem:ab9c08ee39999c1bb662bd8c5443e4e35"><td class="memTemplItemLeft" align="right" valign="top">constexpr const auto &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#ab9c08ee39999c1bb662bd8c5443e4e35">get</a> (const std::tuple&lt; Ts... &gt; &amp;ts)</td></tr>
 <tr class="memdesc:ab9c08ee39999c1bb662bd8c5443e4e35"><td class="mdescLeft">&#160;</td><td class="mdescRight">A synonym for std::get&lt;T&gt;(tuple).  <a href="#ab9c08ee39999c1bb662bd8c5443e4e35">More...</a><br /></td></tr>
@@ -258,8 +271,8 @@ template&lt;typename F , typename... Ts&gt; </div>
 
 </div>
 </div>
-<a id="a097549e41bac7745db61442f94135c41"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a097549e41bac7745db61442f94135c41">&#9670;&nbsp;</a></span>filter()</h2>
+<a id="ab6073149190b624aed7eb8bbab508c14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6073149190b624aed7eb8bbab508c14">&#9670;&nbsp;</a></span>filter()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -275,7 +288,7 @@ template&lt;typename F , typename... Ts&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">F &amp;&amp;&#160;</td>
+          <td class="paramtype">F&#160;</td>
           <td class="paramname"><em>f</em>&#160;</td>
         </tr>
         <tr>
@@ -290,8 +303,8 @@ template&lt;typename F , typename... Ts&gt; </div>
 
 </div>
 </div>
-<a id="ad1d30e9de0766352287491f18da067c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad1d30e9de0766352287491f18da067c0">&#9670;&nbsp;</a></span>find_first()</h2>
+<a id="a973676ecef8d9efe0e3557d0e8353a20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a973676ecef8d9efe0e3557d0e8353a20">&#9670;&nbsp;</a></span>find_first()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -307,7 +320,7 @@ template&lt;typename F , typename... Ts&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">F &amp;&amp;&#160;</td>
+          <td class="paramtype">F&#160;</td>
           <td class="paramname"><em>f</em>&#160;</td>
         </tr>
         <tr>
@@ -322,8 +335,8 @@ template&lt;typename F , typename... Ts&gt; </div>
 
 </div>
 </div>
-<a id="a6685e65aeb830a5e27dc8e4f2085ce27"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6685e65aeb830a5e27dc8e4f2085ce27">&#9670;&nbsp;</a></span>find_one()</h2>
+<a id="a879e3a3cebc3fdd3a9581fba663cabdf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a879e3a3cebc3fdd3a9581fba663cabdf">&#9670;&nbsp;</a></span>find_one()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -339,7 +352,7 @@ template&lt;typename F , typename... Ts&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">F &amp;&amp;&#160;</td>
+          <td class="paramtype">F&#160;</td>
           <td class="paramname"><em>f</em>&#160;</td>
         </tr>
         <tr>
@@ -427,6 +440,104 @@ template&lt;template&lt; typename... &gt; typename T, typename... Ts&gt; </div>
 </div><div class="memdoc">
 
 <p>Returns the value of type U, where U is a template instance of T. </p>
+
+</div>
+</div>
+<a id="ade7c97a21da83d823632fbbe65a2d722"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade7c97a21da83d823632fbbe65a2d722">&#9670;&nbsp;</a></span>identity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">decltype(auto) constexpr refl::util::identity </td>
+          <td>(</td>
+          <td class="paramtype">T &amp;&amp;&#160;</td>
+          <td class="paramname"><em>t</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9ddab8c6121c2ff87a0694fe48e62914"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ddab8c6121c2ff87a0694fe48e62914">&#9670;&nbsp;</a></span>ignore()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T  = int, typename... Ts&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr int refl::util::ignore </td>
+          <td>(</td>
+          <td class="paramtype">Ts &amp;&amp;&#160;</td>
+          <td class="paramname"><em>...</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Ignores all arguments. </p>
+
+</div>
+</div>
+<a id="a4aede0c6902e6d743bd834cd66ee6452"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4aede0c6902e6d743bd834cd66ee6452">&#9670;&nbsp;</a></span>make_const() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const T&amp; refl::util::make_const </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa24711d271744864e9678788b526141b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa24711d271744864e9678788b526141b">&#9670;&nbsp;</a></span>make_const() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const T&amp; refl::util::make_const </td>
+          <td>(</td>
+          <td class="paramtype">T &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -680,7 +791,7 @@ template&lt;typename T , size_t N&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacerefl.html">refl</a></li><li class="navelem"><a class="el" href="namespacerefl_1_1util.html">util</a></li>
-    <li class="footer">Generated on Mon Jun 10 2019 11:22:05 for refl-cpp by
+    <li class="footer">Generated on Wed Jun 12 2019 08:57:20 for refl-cpp by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>

@@ -24,14 +24,15 @@ for the JavaScript code in this file
 var NAVTREE =
 [
   [ "refl-cpp", "index.html", [
-    [ "refl-cpp (v0.1.0-beta) (<a href=\"https://veselink1.github.io/refl-cpp/namespacerefl.html\">Documentation</a>)", "md__r_e_a_d_m_e.html", null ],
+    [ "refl-cpp (v0.1.2-beta) (<a href=\"https://veselink1.github.io/refl-cpp/namespacerefl.html\">Documentation</a>)", "md__r_e_a_d_m_e.html", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
         [ "All", "namespacemembers.html", null ],
         [ "Functions", "namespacemembers_func.html", null ],
         [ "Variables", "namespacemembers_vars.html", null ],
-        [ "Typedefs", "namespacemembers_type.html", null ]
+        [ "Typedefs", "namespacemembers_type.html", null ],
+        [ "Enumerations", "namespacemembers_enum.html", null ]
       ] ]
     ] ],
     [ "Classes", "annotated.html", [

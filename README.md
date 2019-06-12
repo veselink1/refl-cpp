@@ -1,4 +1,4 @@
-# refl-cpp (v0.1.1-beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
+# refl-cpp (v0.1.2-beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
 A static reflection library for modern C++ 🔯🔥
 
 ## Synopsis
@@ -8,7 +8,7 @@ Macro-based code-gen has been minimized as must as is possible to support all ba
 
 Minimum language standard: C++17
 
-See example.cpp for more usage examples.
+See examples/ for more usage examples.
 
 Example metadata declaration:
 ```cpp

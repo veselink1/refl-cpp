@@ -497,11 +497,27 @@ namespace refl {
 
 #define REFL_DETAIL_MEMBER_HEADER template<typename Unused__> struct member<__COUNTER__ - member_index_offset, Unused__>
 
-#define REFL_DETAIL_MEMBER_COMMON(MemberTy, MemberName, ...) \
+#define REFL_DETAIL_MEMBER_COMMON(memberTy, memberName, ...) \
         typedef type declaring_type; \
-        typedef ::refl::member::MemberTy member_type; \
-        static inline constexpr auto name{ ::refl::util::make_const_string(REFL_STRINGIFY(MemberName)) }; \
-        REFL_DETAIL_ATTRIBUTES(MemberTy, __VA_ARGS__) 
+        typedef ::refl::member::memberTy member_type; \
+        static inline constexpr auto name{ ::refl::util::make_const_string(REFL_STRINGIFY(memberName)) }; \
+        REFL_DETAIL_ATTRIBUTES(memberTy, __VA_ARGS__) 
+
+#define REFL_DETAIL_MEMBER_PROXY(memberName) \
+        /* 
+            There can be a total of 12 differently qualified member functions with the same name. 
+            Providing remaps for non-const and const-only strikes a balance between compilation time and usability.
+            And even though there are many other remap implementation possibilities (like virtual, field variants),
+            adding them is considered to be non-efficient for the compiler.
+        */ \
+        template <typename Proxy> struct remap { \
+            template <typename... Args> decltype(auto) memberName(Args&&... args) { \
+                return Proxy::invoke_impl(static_cast<Proxy&>(*this), ::std::forward<Args>(args)...); \
+            } \
+            template <typename... Args> decltype(auto) memberName(Args&&... args) const { \
+                return Proxy::invoke_impl(static_cast<const Proxy&>(*this), ::std::forward<Args>(args)...); \
+            } \
+        } \
 
 /// <summary>
 /// Creates reflection information for a public field. Takes an optional attribute list. 
@@ -512,7 +528,8 @@ namespace refl {
     public: \
         typedef decltype(type::fieldName) value_type; \
         static inline constexpr auto pointer{ &type::fieldName }; \
-    };
+        REFL_DETAIL_MEMBER_PROXY(fieldName); \
+    }; 
 
 /// <summary>
 /// Creates reflection information for a public function. Takes an optional *brace-enclosed* attribute list. 
@@ -523,33 +540,36 @@ namespace refl {
     public: \
         template <typename... Args> \
         static constexpr decltype(::refl::detail::resolve(&type::functionName, std::declval<Args>()...)) pointer{ &type::functionName }; \
-        /* 
-            There can be a total of 12 differently qualified member functions with the same name. 
-            Providing remaps for non-const and const-only strikes a balance between compilation time and usability.
-            And even though there are many other remap implementation possibilities (like virtual, field variants),
-            adding them is considered to be non-efficient for the compiler.
-        */ \
-        template <typename Proxy> struct remap { \
-            template <typename... Args> decltype(auto) functionName(Args&&... args) { \
-                return (static_cast<Proxy*>(this))->call_impl(::std::forward<Args>(args)...); \
-            } \
-            template <typename... Args> decltype(auto) functionName(Args&&... args) const { \
-                return (static_cast<const Proxy*>(this))->call_impl(::std::forward<Args>(args)...); \
-            } \
-        }; \
+        REFL_DETAIL_MEMBER_PROXY(functionName); \
     };
 
-        namespace detail
+        namespace util
         {
             /// <summary>
             /// Ignores all arguments.
             /// </summary>
-            template <typename T = int>
-            constexpr int ignore(...) noexcept 
+            template <typename T = int, typename... Ts>
+            constexpr int ignore(Ts&&...) noexcept 
             {
                 return {};
             }
-        }
+
+            template <typename T>
+            constexpr decltype(auto) identity(T&& t) noexcept
+            {
+                return t;
+            }
+            
+            template <typename T>
+            constexpr const T& make_const(const T& value) {
+                return value;
+            }
+            
+            template <typename T>
+            constexpr const T& make_const(T& value) {
+                return value;
+            }
+        } // namespace util
 
         namespace trait
         {
@@ -1334,21 +1354,56 @@ namespace refl {
 
         namespace attr
         {
+            enum class access_type 
+            {
+                read = 0b1,
+                write = 0b10,
+                read_write = read | write,
+            };
+
+            static constexpr auto read_only = access_type::read;
+            static constexpr auto write_only = access_type::write;
+            static constexpr auto read_write = access_type::read_write;
+
             /// <summary>
             /// Used to decorate a member that serves as a property. 
             /// Takes an optional friendly name.
             /// </summary>
             struct property : public usage::field, public usage::function
             {
+                const access_type access{ access_type::read_write };
                 const std::optional<const char*> friendly_name{};
 
                 constexpr property() = default;
+                
+                constexpr property(access_type access)
+                    : access(access)
+                    , friendly_name()
+                {
+                }
 
                 constexpr property(const char* friendly_name)
-                    : friendly_name(friendly_name)
+                    : access(access_type::read_write)
+                    , friendly_name(friendly_name)
+                {
+                }
+                
+                constexpr property(access_type access, const char* friendly_name)
+                    : access(access)
+                    , friendly_name(friendly_name)
                 {
                 }
             };
+            
+            static constexpr bool is_readable(const property& p) 
+            {
+                return static_cast<unsigned>(p.access) & static_cast<unsigned>(access_type::read);
+            }
+
+            static constexpr bool is_writable(const property& p) 
+            {
+                return static_cast<unsigned>(p.access) & static_cast<unsigned>(access_type::write);
+            }
 
             /// <summary>
             /// Used to specify how a type should be displayed in debugging contexts.
@@ -1384,6 +1439,9 @@ namespace refl {
 
         namespace detail::macro_exports
         {
+            using attr::read_only;
+            using attr::write_only;
+            using attr::read_write;
             using attr::property;
             using attr::debug;
             using attr::bases;
@@ -1479,6 +1537,36 @@ namespace refl {
             {
                 return util::get_instance<A>(t.attributes);
             }
+            
+            /// <summary>
+            /// Gets the property attribute.
+            /// (Tip: Take advantage ADL-lookup whenever possible.)
+            /// </summary>
+            template <typename T>
+            constexpr attr::property get_property_info(T&& t)
+            {
+                return get_attribute<attr::property>(t);
+            }
+            
+            /// <summary>
+            /// Checks if the property T is readable.
+            /// (Tip: Take advantage ADL-lookup whenever possible.)
+            /// </summary>
+            template <typename T>
+            constexpr bool is_readable(T&& t)
+            {
+                return attr::is_readable(get_property_info(t));
+            }
+            
+            /// <summary>
+            /// Checks if the property T is writable.
+            /// (Tip: Take advantage ADL-lookup whenever possible.)
+            /// </summary>
+            template <typename T>
+            constexpr bool is_writable(T&& t)
+            {
+                return attr::is_writable(get_property_info(t));
+            }
 
             /// <summary>
             /// Returns the debug name of T. (In the form of 'declaring_type::member_name').
@@ -1549,6 +1637,16 @@ namespace refl {
                     using type = typename refl_impl::metadata::type_info__<T>::template member<N>;
                 };
 
+                template <typename T, typename U>
+                constexpr T& static_ref_cast(U& value) {
+                    return static_cast<T&>(value);
+                }
+
+                template <typename T, typename U>
+                constexpr const T& static_ref_cast(const U& value) {
+                    return static_cast<const T&>(value);
+                }
+
                 /// <summary>
                 /// Implements a proxy for a reflected function.
                 /// </summary>
@@ -1559,16 +1657,10 @@ namespace refl {
                     {
                     }
 
-                    template <typename... Args>
-                    decltype(auto) call_impl(Args&& ... args)
+                    template <typename Self, typename... Args>
+                    static constexpr decltype(auto) invoke_impl(Self&& self, Args&& ... args)
                     {
-                        return static_cast<Derived*>(this)->template call_impl<Func>(std::forward<Args>(args)...);
-                    }
-                    
-                    template <typename... Args>
-                    decltype(auto) call_impl(Args&& ... args) const
-                    {
-                        return static_cast<const Derived*>(this)->template call_impl<Func>(std::forward<Args>(args)...);
+                        return Derived::template invoke_impl<Func>(static_ref_cast<Derived>(self), std::forward<Args>(args)...);
                     }
 
                 };
@@ -1583,18 +1675,53 @@ namespace refl {
                 struct REFL_DETAIL_FORCE_EBO function_proxies<Derived, type_list<Members...>> : public function_proxy<Derived, Members>...
                 {
                 };
+                
+                /// <summary>
+                /// Implements a proxy for a reflected field.
+                /// </summary>
+                template <typename Derived, typename Field>
+                struct REFL_DETAIL_FORCE_EBO field_proxy : public get_member_info<Field>::type::template remap<field_proxy<Derived, Field>>
+                {
+                    field_proxy()
+                    {
+                    }
+
+                    template <typename Self, typename... Args>
+                    static constexpr decltype(auto) invoke_impl(Self&& self, Args&& ... args)
+                    {
+                        return Derived::template invoke_impl<Field>(static_ref_cast<Derived>(self), std::forward<Args>(args)...);
+                    }
+
+                };
+                
+
+                template <typename, typename>
+                struct REFL_DETAIL_FORCE_EBO field_proxies;
+
+                /// <summary>
+                /// Implements a proxy for all reflected functions.
+                /// </summary>
+                template <typename Derived, typename... Members>
+                struct REFL_DETAIL_FORCE_EBO field_proxies<Derived, type_list<Members...>> : public field_proxy<Derived, Members>...
+                {
+                };
 
 				template <typename T>
 				using functions = trait::filter<trait::is_function, member_list<std::remove_reference_t<T>>>;
+                
+				template <typename T>
+				using fields = trait::filter<trait::is_field, member_list<std::remove_reference_t<T>>>;
 
             } // namespace detail
             
             /// <summary>
-            /// A proxy object that has a static interface identical to the reflected functions of type T.
-            /// Users should inherit from this class and specify a call_impl(Member member, Args&&... args) function.
+            /// A proxy object that has a static interface identical to the reflected functions and fields of type T.
+            /// Users should inherit from this class and specify a invoke_impl(Member member, Args&&... args) function.
             /// </summary>
             template <typename Derived, typename Target>
-            struct REFL_DETAIL_FORCE_EBO proxy : public detail::function_proxies<proxy<Derived, Target>, detail::functions<Target>>
+            struct REFL_DETAIL_FORCE_EBO proxy 
+                : public detail::function_proxies<proxy<Derived, Target>, detail::functions<Target>>
+                , public detail::field_proxies<proxy<Derived, Target>, detail::fields<Target>>
             {
                 static_assert(
                     sizeof(detail::function_proxies<proxy<Derived, Target>, detail::functions<Target>>) == 1,
@@ -1608,21 +1735,15 @@ namespace refl {
 
                 template <typename P, typename F>
                 friend struct detail::function_proxy;
+                
+                template <typename P, typename F>
+                friend struct detail::field_proxy;
 
-                // Called by one of the function_proxy bases.
-                template <typename Member, typename... Args>
-                decltype(auto) call_impl(Args&&... args)
+                // Called by one of the function_proxy/field_proxy bases.
+                template <typename Member, typename Self, typename... Args>
+                static constexpr decltype(auto) invoke_impl(Self&& self, Args&& ... args)
                 {
-                    static_assert(std::is_base_of_v<proxy, Derived>);
-                    static_cast<Derived*>(this)->call_impl(Member{}, std::forward<Args>(args)...);
-                }
-
-                // Called by one of the function_proxy bases.
-                template <typename Member, typename... Args>
-                decltype(auto) call_impl(Args&&... args) const
-                {
-                    static_assert(std::is_base_of_v<proxy, Derived>);
-                    static_cast<const Derived*>(this)->call_impl(Member{}, std::forward<Args>(args)...);
+                    return Derived::template invoke_impl<Member>(detail::static_ref_cast<Derived>(self), std::forward<Args>(args)...);
                 }
 
             };
@@ -1699,12 +1820,22 @@ namespace refl {
 				}
             }
 
+            template <typename... Ts>
+            void debug_all(std::ostream& os, const Ts&... values) {
+                refl::runtime::debug(os, std::forward_as_tuple(static_cast<const Ts&>(values)...), true);
+            }
+
             template <typename T>
             std::string debug_str(const T& value, bool compact = false)
             {
                 std::stringstream ss;
                 debug(ss, value, compact);
                 return ss.str();
+            }
+            
+            template <typename... Ts>
+            std::string debug_all_str(const Ts&... values) {
+                return refl::runtime::debug_str(std::forward_as_tuple(static_cast<const Ts&>(values)...), true);
             }
 
             /// <summary>
@@ -1746,6 +1877,13 @@ namespace refl {
             }
 
         } // namespace runtime
+
+        namespace prelude 
+        {
+            using namespace descriptor;
+            using namespace util;
+            using namespace runtime;
+        } // namespace prelude
 
 } // namespace refl
 
@@ -1846,12 +1984,6 @@ namespace refl::detail
 		os << ptr;
 	}
 
-    template <typename Tuple, size_t... Idx>
-    void write_impl(std::ostream& os, Tuple&& t, std::index_sequence<Idx...>)
-    {
-        ignore((os << std::get<Idx>(t))...);
-    }
-
 	inline void write_impl(std::ostream& os, const std::exception& e)
 	{
 		os << "Exception";
@@ -1886,6 +2018,14 @@ namespace refl::detail
 #endif
 	}
 
+    template <typename Tuple, size_t... Idx>
+    void write_impl(std::ostream& os, Tuple&& t, std::index_sequence<Idx...>)
+    {
+        os << "(";
+        refl::util::ignore((os << std::get<Idx>(t))...);
+        os << ")";
+    }
+
     template <typename... Ts>
     void write_impl(std::ostream& os, const std::tuple<Ts...>& t)
     {
@@ -1894,12 +2034,6 @@ namespace refl::detail
 
 	template <typename K, typename V>
 	void write_impl(std::ostream& os, const std::pair<K, V>& t);
-
-	// Dispatches to the appropriate write_impl.
-	constexpr auto write = [](std::ostream & os, auto && t) -> void
-	{
-		write_impl(os, t);
-	};
 
     template <typename K, typename V>
     void write_impl(std::ostream& os, const std::pair<K, V>& t)
@@ -1910,6 +2044,12 @@ namespace refl::detail
         write(os, t.second);
         os << ")";
     }
+
+	// Dispatches to the appropriate write_impl.
+	constexpr auto write = [](std::ostream & os, auto&& t) -> void
+	{
+		write_impl(os, t);
+	};
 } // namespace refl::detail
 
 // Custom reflection information for 

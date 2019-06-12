@@ -55,7 +55,6 @@ var hierarchy =
     [ "member_type_test", null, [
       [ "refl::trait::is_member< T >", "structrefl_1_1trait_1_1is__member.html", null ]
     ] ],
-    [ "Point", "struct_point.html", null ],
     [ "refl::trait::remove_qualifiers< T >", "structrefl_1_1trait_1_1remove__qualifiers.html", null ],
     [ "refl::trait::detail::skip< N, Ts... >", null, [
       [ "refl::trait::skip< N, Ts >", "structrefl_1_1trait_1_1skip.html", null ],
