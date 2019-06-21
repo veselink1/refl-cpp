@@ -1,4 +1,4 @@
-# refl-cpp (v0.2.0 beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
+# refl-cpp (v0.2.1 beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
 A static reflection library for modern C++ 🔯🔥
 
 ## Synopsis
@@ -68,6 +68,9 @@ REFL_FUNC(Function, Attribute...)
 ```
 
 # Changelog
+
+## v0.2.1
+  - added support for [refl-ht](https://github.com/veselink1/refl-ht) (the refl-cpp header tool)
 
 ## v0.2.0
   - added refl::util::contains(type_list<...>, [predicate]), refl::util::contains(type_list<...>, const_string<N>)
