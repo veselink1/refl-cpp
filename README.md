@@ -6,7 +6,7 @@ A static reflection library for modern C++ 🔯🔥
 
 - Macro-based code-gen has been minimized as must as is possible to support all basic requirements. All higher-level operations are implemented as free types and function in one of the utility namespaces.
 
-- Support for **autogeneration of reflection metadata** through a **non-intrusive interface** is commit soon (currently WIP) in the form of [refl-ht](https://github.com/veselink1/refl-ht).
+- Support for **autogeneration of reflection metadata** through a **non-intrusive interface** is ~~comming soon~~ *now available* in the form of [refl-ht](https://github.com/veselink1/refl-ht).
 
 - Minimum language standard: C++17
 
