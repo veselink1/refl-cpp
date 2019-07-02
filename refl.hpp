@@ -13,14 +13,14 @@
 #define REFL(...)
 #endif 
 
+#ifdef REFL_USE_NONSTD_MACRO
+#define $refl(...) REFL(__VA_ARGS__)
+#endif
+
 #ifndef REFL_PREPROCESSOR
 
 #define REFL_UNSTABLE(...) [[deprecated("(unstable) " __VA_ARGS__)]]
 #define REFL_DEPRECATED(...) [[deprecated(__VA_ARGS__)]]
-
-#ifdef REFL_USE_NONSTD_MACRO
-#define $refl(...) REFL(__VA_ARGS__)
-#endif
 
 #include <stddef.h> // size_t
 #include <cstring>
