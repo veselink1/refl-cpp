@@ -1,4 +1,4 @@
-# refl-cpp (v0.3.0 beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
+# refl-cpp (v0.3.1 beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔯🔥
 
 ## Synopsis
