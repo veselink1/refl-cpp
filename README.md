@@ -21,6 +21,14 @@ See [contributors.md](https://github.com/veselink1/refl-cpp/blob/master/contribu
 
 ## Examples
 
+### Example metadata declaration (with [refl-ht](https://github.com/veselink1/refl-ht) - a lightweight, portable preprocessor):
+```cpp
+struct Point {
+  REFL(/* attributes */) float x;
+  REFL() float y;
+};
+```
+
 ### Example metadata declaration (without [refl-ht](https://github.com/veselink1/refl-ht)):
 ```cpp
 struct Point {
@@ -33,13 +41,6 @@ REFL_TYPE(Point)
   REFL_FIELD(y)
 REFL_END
 
-```
-### Example metadata declaration (with [refl-ht](https://github.com/veselink1/refl-ht)):
-```cpp
-struct Point {
-  REFL(/* attributes */) float x;
-  REFL() float y;
-};
 ```
 
 ### Basic usage example:
