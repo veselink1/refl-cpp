@@ -1,4 +1,4 @@
-# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.3.1 beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
+# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.3.1-dev) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔯🔥
 
 ## Synopsis
@@ -21,7 +21,7 @@ See [contributors.md](https://github.com/veselink1/refl-cpp/blob/master/contribu
 
 ## Examples
 
-### Example metadata declaration (with [refl-ht](https://github.com/veselink1/refl-ht) - a lightweight, portable preprocessor):
+### Example metadata declaration (with [refl-ht](https://github.com/veselink1/refl-ht) - a lightweight, portable preprocessor)
 ```cpp
 struct Point {
   REFL(/* attributes */) float x;
@@ -29,7 +29,7 @@ struct Point {
 };
 ```
 
-### Example metadata declaration (without [refl-ht](https://github.com/veselink1/refl-ht)):
+### Example metadata declaration (without [refl-ht](https://github.com/veselink1/refl-ht))
 ```cpp
 struct Point {
   float x;
@@ -43,7 +43,7 @@ REFL_END
 
 ```
 
-### Basic usage example:
+### Basic usage example
 ```cpp
   // Printing an object's properties: 
   Point pt{};
@@ -60,10 +60,10 @@ REFL_END
 
 ```
 
-### More examples
+## More examples
 - See [examples/](https://github.com/veselink1/refl-cpp/tree/master/examples) for more usage examples.
 
-### Metadata-generation macros 
+## Metadata-generation macros 
 ```cpp
 
 // Starts the declaration of Type's metadata.
