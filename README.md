@@ -1,4 +1,4 @@
-# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.3.1-dev) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
+# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.3.2-dev) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔯🔥
 
 ## Synopsis
@@ -94,6 +94,11 @@ REFL_FUNC(Function, Attribute...)
 
 ## Changelog
 *Releases follow the MAJOR.MINOR.PATCH versioning scheme*
+
+### v0.3.2
+  - `refl::runtime::debug` now captures values of member invocations by universal references (previous implementations required a copy of the value)
+  - `refl::runtime::debug` now does not require the members of composites to be reflectable. (members that cannot be printed get replaced with `<?>`).
+  - `refl::trait::is_reflectable` now discards cv-qualifiers -> all cv-qualified types are now also reflectable.  
 
 ### v0.3.1
   - `refl::descriptor::is_writable` now correctly supports field descriptors

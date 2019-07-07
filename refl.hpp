@@ -14,13 +14,23 @@
 #endif 
 
 #ifdef REFL_USE_NONSTD_MACRO
+// The $refl(...) macro is now considered deprecated due to possible 
+// problems with compilers (not the case with GCC, Clang, MSVC), but 
+// also because it is non-standard.
 #define $refl(...) REFL(__VA_ARGS__)
 #endif
 
-#ifndef REFL_PREPROCESSOR
-
+#ifdef REFL_USE_DEPRECATION_MACROS
+// Ironically, these macros are now deprecated in favor of the
+// bare [[deprecated]] attribute and the #warning macro directive.
 #define REFL_UNSTABLE(...) [[deprecated("(unstable) " __VA_ARGS__)]]
 #define REFL_DEPRECATED(...) [[deprecated(__VA_ARGS__)]]
+#else
+#define REFL_UNSTABLE(...) [[deprecated("REFL_UNSTABLE is now deprecated. To use it anyways define REFL_USE_DEPRECATION_MACROS.")]]
+#define REFL_DEPRECATED(...) [[deprecated("REFL_DEPRECATED is now deprecated. To use it anyways define REFL_USE_DEPRECATION_MACROS.")]]
+#endif
+
+#ifndef REFL_PREPROCESSOR
 
 #include <stddef.h> // size_t
 #include <cstring>
@@ -38,6 +48,20 @@
 // Disable VS warning for "Not enough arguments for macro"
 // (emitted when a REFL_ macro is not provided any attributes)
 #pragma warning( disable : 4003 )
+#endif
+
+#if defined(__clang__)
+  #if __has_feature(cxx_rtti)
+    #define REFL_RTTI_ENABLED
+  #endif
+#elif defined(__GNUG__)
+  #if defined(__GXX_RTTI)
+    #define REFL_RTTI_ENABLED
+  #endif
+#elif defined(_MSC_VER)
+  #if defined(_CPPRTTI)
+    #define REFL_RTTI_ENABLED
+  #endif
 #endif
 
 /// <summary>
@@ -111,6 +135,9 @@ namespace refl
             return data;
         }
         
+        /// <summary>
+        /// Compares two const_strings.
+        /// </summary>
         template <size_t N, size_t M>
         constexpr bool operator==(const const_string<N>& a, const const_string<M>& b) noexcept
         {
@@ -127,6 +154,9 @@ namespace refl
             }
         }
 
+        /// <summary>
+        /// Compares two const_strings.
+        /// </summary>
         template <size_t N, size_t M>
         constexpr bool operator!=(const const_string<N>& a, const const_string<M>& b) noexcept
         {
@@ -212,7 +242,7 @@ namespace refl {
         namespace detail
         {
             template <typename T>
-            decltype(typename refl_impl::metadata::type_info__<T>::invalid_marker{}, std::false_type{}) is_reflectable_test(int);
+            decltype(typename refl_impl::metadata::type_info__<remove_qualifiers_t<T>>::invalid_marker{}, std::false_type{}) is_reflectable_test(int);
                 
             template <typename T>
             std::true_type is_reflectable_test(...);
@@ -480,8 +510,6 @@ namespace refl {
 #define REFL_STRINGIFY_IMPL(...) #__VA_ARGS__
 #define REFL_STRINGIFY(...) REFL_STRINGIFY_IMPL(__VA_ARGS__)
 #define REFL_GROUP(...) __VA_ARGS__
-#define REFL_EXPAND_FIRST(A, ...) A
-#define REFL_EXPAND_SECOND(A, B, ...) B 
 
 #define REFL_DETAIL_ATTRIBUTES(DeclType, ...) \
         static constexpr auto attributes = ::refl::attr::detail::make_attributes<::refl::attr::usage:: DeclType>(__VA_ARGS__); \
@@ -524,7 +552,7 @@ namespace refl {
             There can be a total of 12 differently qualified member functions with the same name. 
             Providing remaps for non-const and const-only strikes a balance between compilation time and usability.
             And even though there are many other remap implementation possibilities (like virtual, field variants),
-            adding them is considered to be non-efficient for the compiler.
+            adding them was considered to not be efficient from a compilation-time point of view.
         */ \
         template <typename Proxy> struct remap { \
             template <typename... Args> decltype(auto) memberName(Args&&... args) { \
@@ -1193,7 +1221,7 @@ namespace refl {
         template <typename T>
         constexpr bool is_reflectable(T&& t) noexcept
         {
-            return trait::is_reflectable_v<std::remove_reference_t<T>>;
+            return trait::is_reflectable_v<trait::remove_qualifiers_t<T>>;
         }
 
         /// <summary>
@@ -1841,11 +1869,57 @@ namespace refl {
 
         namespace runtime
         {
+            template <typename T>
+            void debug(std::ostream& os, const T& value);
+
+            template <typename T>
+            void debug(std::ostream& os, const T& value, bool compact);
+
+            namespace detail
+            {
+                template <typename T, typename Member>
+                void debug_member(std::ostream& os, const T& value, Member member, bool compact)
+                {
+                    static_assert(is_readable(member));
+                    std::string name{ get_display_name(member) };
+
+                    if (!compact) os << "  ";
+                    os << name << " = ";
+
+                    if constexpr (trait::contains_instance_v<attr::debug, decltype(member.attributes)>) {
+                        auto&& dbg_attr = util::get_instance<attr::debug>(member.attributes);
+                        auto&& prop_value = member(value);
+                        
+                        if constexpr (is_reflectable<trait::remove_qualifiers_t<decltype(prop_value)>>()) {
+                            if (!compact) {
+                                os << "(" << reflect(prop_value).name << ")";
+                            }
+                            else {
+                                os << "(<?>)";
+                            }
+                        }
+                        dbg_attr.write(os, prop_value);
+                    }
+                    else {
+                        auto&& prop_value = member(value);
+                        if constexpr (is_reflectable<trait::remove_qualifiers_t<decltype(prop_value)>>()) {
+                            if (!compact) {
+                                os << "(" << reflect(prop_value).name << ")";
+                            }
+                            debug(os, prop_value, true);
+                        }
+                        else {
+                            os << "<?>";
+                        }
+                    }
+                }
+            }
+
             /// <summary>
             /// Writes the debug representation of value to the given std::ostream.
             /// </summary>
             template <typename T>
-            void debug(std::ostream& os, const T& value, bool compact = false)
+            void debug(std::ostream& os, const T& value, bool compact)
             {
 				static_assert(trait::is_reflectable_v<T> || trait::is_container_v<T>, 
                     "Type is neither reflectable nor a container of reflectable types!");
@@ -1876,29 +1950,14 @@ namespace refl {
 					else {
 						os << "{ ";
 						if (!compact) os << "\n";
-                        constexpr size_t count = count_if(type_descriptor::members, [](auto member) { return is_field(member) || is_property(member); });
+                        constexpr size_t count = count_if(type_descriptor::members, [](auto member) { return is_readable(member); });
 						for_each(type_descriptor::members, [&](auto member, auto index) {
-							if constexpr (is_field(member) || (is_property(member) && is_writable(member))) {
-								std::string name{ get_display_name(member) };
-
-								if (!compact) os << "  ";
-								os << name << " = ";
-
-								if constexpr (trait::contains_instance_v<attr::debug, decltype(member.attributes)>) {
-									auto&& dbg_attr = util::get_instance<attr::debug>(member.attributes);
-                                    auto prop_value = member(value);
-                                    if (!compact) os << "(" << reflect(prop_value).name << ")";
-									dbg_attr.write(os, prop_value);
-								}
-								else {
-                                    auto prop_value = member(value);
-                                    if (!compact) os << "(" << reflect(prop_value).name << ")";
-									debug(os, prop_value, true);
-								}
+							if constexpr (is_readable(member)) {
+								detail::debug_member(os, value, member, compact);
                                 if (index + 1 != count) {
-								    os << ", ";
+                                    os << ", ";
                                 }
-								if (!compact) os << "\n";
+                                if (!compact) os << "\n";
 							}
 						});
 
@@ -1919,6 +1978,12 @@ namespace refl {
 					}
 					os << "]";
 				}
+            }
+            
+            template <typename T>
+            void debug(std::ostream& os, const T& value)
+            {
+                debug(os, value, false);
             }
 
             /// <summary>
@@ -2035,6 +2100,8 @@ namespace refl {
     REFL_TYPE(void)
     REFL_END
 
+#undef REFL_DEFINE_PRIMITIVE
+
 #define REFL_DEFINE_POINTER(Ptr) \
         template<typename T> \
         struct type_info__<T Ptr> { \
@@ -2059,20 +2126,6 @@ namespace refl {
     static_assert(refl::trait::is_reflectable_v<int*>, "Static assertion failed!");
     static_assert(refl::trait::is_reflectable_v<int&>, "Static assertion failed!");
     static_assert(refl::trait::is_reflectable_v<int&&>, "Static assertion failed!");
-
-#if defined(__clang__)
-  #if __has_feature(cxx_rtti)
-    #define REFL_RTTI_ENABLED
-  #endif
-#elif defined(__GNUG__)
-  #if defined(__GXX_RTTI)
-    #define REFL_RTTI_ENABLED
-  #endif
-#elif defined(_MSC_VER)
-  #if defined(_CPPRTTI)
-    #define REFL_RTTI_ENABLED
-  #endif
-#endif
 
 namespace refl::detail
 {
