@@ -10,6 +10,7 @@ A compile-time reflection library for modern C++ with support for templates, att
 
 ## Related Articles
 Introductory post - [Compile-time reflection in C++ 17](https://medium.com/@vesko.karaganev/compile-time-reflection-in-c-17-55c14ee8106b)
+
 In-depth post - [refl-cpp — A deep dive](https://medium.com/@vesko.karaganev/refl-cpp-deep-dive-86b185f68678)
 
 ## Requirements
