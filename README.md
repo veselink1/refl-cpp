@@ -65,8 +65,22 @@ REFL_AUTO(
 
 ```
 
+### Object transformations with member operations
+<details>
+  <summary>Show</summary>
+
+  ![Screenshot](https://miro.medium.com/max/700/1*U-moh2EpPntprUBiugSuBQ.png)
+</details>
+
+### Type transformations with proxies
+<details>
+  <summary>Show</summary>
+
+  ![Screenshot](https://miro.medium.com/max/700/1*U-moh2EpPntprUBiugSuBQ.png)
+</details>
+
 ## More examples
-- See [examples/](https://github.com/veselink1/refl-cpp/tree/master/examples) for more usage examples.
+- See [examples/](https://github.com/veselink1/refl-cpp/blob/master/refl.hpp) for more usage examples.
 
 ## Metadata-generation macros 
 ```cpp
