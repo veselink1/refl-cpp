@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['enumerate_5fmembers',['enumerate_members',['../namespacerefl_1_1detail.html#aa4c6c0aad91e3da88bbf182a37217f57',1,'refl::detail']]]
+  ['friendly_5fname',['friendly_name',['../structrefl_1_1attr_1_1property.html#a8c45f77ef5159115250f2294bd37d296',1,'refl::attr::property']]]
 ];

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['validate_5funique',['validate_unique',['../namespacerefl_1_1attr_1_1detail.html#a460da16ef1b33c2fe3d9d3f54fb854be',1,'refl::attr::detail::validate_unique(type_list&lt;&gt;)'],['../namespacerefl_1_1attr_1_1detail.html#a1bfe94a491197d7d1e4b863f9d472a9a',1,'refl::attr::detail::validate_unique(type_list&lt; T, Ts... &gt;)']]],
-  ['validate_5fusage',['validate_usage',['../namespacerefl_1_1attr_1_1detail.html#a49cf1562709f10598760ad33821d8c81',1,'refl::attr::detail']]]
+  ['validate_5funique',['validate_unique',['../namespacerefl_1_1attr_1_1detail.html#a27f6bb1fc0367b3a036d5daf2f3e86d5',1,'refl::attr::detail::validate_unique(type_list&lt;&gt;) noexcept'],['../namespacerefl_1_1attr_1_1detail.html#a832a3a4c7184488a094d999c5a7d2d6b',1,'refl::attr::detail::validate_unique(type_list&lt; T, Ts... &gt;) noexcept']]],
+  ['validate_5fusage',['validate_usage',['../namespacerefl_1_1attr_1_1detail.html#a02b9823fa6f99dd9264efbf35ed3190a',1,'refl::attr::detail']]]
 ];

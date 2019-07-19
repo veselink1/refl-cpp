@@ -1,7 +1,14 @@
 var searchData=
 [
-  ['get',['get',['../structrefl_1_1trait_1_1get.html',1,'refl::trait::get&lt; N, Ts &gt;'],['../classrefl_1_1descriptor_1_1field__descriptor.html#abf44acc47d2654ec3244dc215a650e17',1,'refl::descriptor::field_descriptor::get()'],['../classrefl_1_1descriptor_1_1field__descriptor.html#a3b40c5a754228099e49e1a258e8dbf94',1,'refl::descriptor::field_descriptor::get(U &amp;&amp;target)'],['../namespacerefl_1_1util.html#ab9c08ee39999c1bb662bd8c5443e4e35',1,'refl::util::get()']]],
-  ['get_3c_20n_2c_20type_5flist_3c_20ts_2e_2e_2e_20_3e_20_3e',['get&lt; N, type_list&lt; Ts... &gt; &gt;',['../structrefl_1_1trait_1_1get_3_01_n_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html',1,'refl::trait']]],
-  ['get_5finstance',['get_instance',['../namespacerefl_1_1util.html#ab87e007f30db07518ae9d5a145643b91',1,'refl::util']]],
-  ['get_5ft',['get_t',['../namespacerefl_1_1trait.html#acc58f744b3792c915db088d1deee058c',1,'refl::trait']]]
+  ['identity',['identity',['../namespacerefl_1_1util.html#ade7c97a21da83d823632fbbe65a2d722',1,'refl::util']]],
+  ['ignore',['ignore',['../namespacerefl_1_1util.html#a9ddab8c6121c2ff87a0694fe48e62914',1,'refl::util']]],
+  ['invoke',['invoke',['../classrefl_1_1descriptor_1_1function__descriptor.html#a92fcb426136332bdac0be5c34fdcf33b',1,'refl::descriptor::function_descriptor']]],
+  ['is_5fcontainer',['is_container',['../structrefl_1_1trait_1_1is__container.html',1,'refl::trait']]],
+  ['is_5ffield',['is_field',['../structrefl_1_1trait_1_1is__field.html',1,'refl::trait']]],
+  ['is_5ffunction',['is_function',['../structrefl_1_1trait_1_1is__function.html',1,'refl::trait']]],
+  ['is_5finstance',['is_instance',['../structrefl_1_1trait_1_1is__instance.html',1,'refl::trait']]],
+  ['is_5finstance_5fof',['is_instance_of',['../structrefl_1_1trait_1_1is__instance__of.html',1,'refl::trait']]],
+  ['is_5fmember',['is_member',['../structrefl_1_1trait_1_1is__member.html',1,'refl::trait']]],
+  ['is_5freflectable',['is_reflectable',['../structrefl_1_1trait_1_1is__reflectable.html',1,'refl::trait::is_reflectable&lt; T &gt;'],['../namespacerefl.html#a12e0f11daf60216683e454102d247300',1,'refl::is_reflectable() noexcept'],['../namespacerefl.html#a378dd3e54e596094bf3d24abb26467f1',1,'refl::is_reflectable(T &amp;&amp;t) noexcept']]],
+  ['is_5fstatic',['is_static',['../classrefl_1_1descriptor_1_1field__descriptor.html#a955e6c913b0427ccfaf99716d22b4f5b',1,'refl::descriptor::field_descriptor']]]
 ];

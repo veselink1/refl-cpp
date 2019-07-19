@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['friendly_5fname',['friendly_name',['../structrefl_1_1attr_1_1property.html#a8c45f77ef5159115250f2294bd37d296',1,'refl::attr::property']]]
+  ['is_5fstatic',['is_static',['../classrefl_1_1descriptor_1_1field__descriptor.html#a955e6c913b0427ccfaf99716d22b4f5b',1,'refl::descriptor::field_descriptor']]]
 ];

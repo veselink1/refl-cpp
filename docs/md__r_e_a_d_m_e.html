@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>refl-cpp: refl-cpp (v0.2.0 beta) (&lt;a href=&quot;https://veselink1.github.io/refl-cpp/namespacerefl.html&quot;&gt;Documentation&lt;/a&gt;)</title>
+<title>refl-cpp: &lt;a href=&quot;https://github.com/veselink1/refl-cpp&quot;&gt;refl-cpp&lt;/a&gt; (v0.3.4-dev) (&lt;a href=&quot;https://veselink1.github.io/refl-cpp/namespacerefl.html&quot;&gt;Documentation&lt;/a&gt;)</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -96,27 +96,74 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 
 <div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">refl-cpp (v0.2.0 beta) (<a href="https://veselink1.github.io/refl-cpp/namespacerefl.html">Documentation</a>) </div>  </div>
+<div class="title"><a href="https://github.com/veselink1/refl-cpp">refl-cpp</a> (v0.3.4-dev) (<a href="https://veselink1.github.io/refl-cpp/namespacerefl.html">Documentation</a>) </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>A static reflection library for modern C++ 🔯🔥</p>
+<div class="textblock"><p>A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔯🔥</p>
 <h2>Synopsis</h2>
-<p>ReflCpp allows static reflection and inspection of types in C++ with full support for <em>templated types and functions</em>! The metadata required for this is specified through the use of macros (but wait!). The macros require the user to only specify the type that is being reflected and only the names of the members that are of interest. ReflCpp has a small and well-organised API surface.</p>
-<p>Macro-based code-gen has been minimized as must as is possible to support all basic requirements. All higher-level operations are implemented as free types and function in one of the utility namespaces.</p>
-<p>Minimum language standard: C++17</p>
-<p>See examples/ for more usage examples.</p>
-<p>Example metadata declaration: </p><div class="fragment"><div class="line"><span class="keyword">struct </span>Point {</div><div class="line">  <span class="keywordtype">float</span> x, y;</div><div class="line">};</div><div class="line"></div><div class="line"><a class="code" href="refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71">REFL_TYPE</a>(Point)</div><div class="line">  <a class="code" href="refl_8hpp.html#a6da27e0bb2cfdfbfcd163a002be74d23">REFL_FIELD</a>(x)</div><div class="line">  <a class="code" href="refl_8hpp.html#a6da27e0bb2cfdfbfcd163a002be74d23">REFL_FIELD</a>(y)</div><div class="line"><a class="code" href="refl_8hpp.html#aa9ce1f68751badf6abb86207e986d28a">REFL_END</a></div></div><!-- fragment --><p> Basic usage example: </p><div class="fragment"><div class="line"><span class="comment">// Printing an object&#39;s properties: </span></div><div class="line">Point pt{};</div><div class="line"><a class="code" href="namespacerefl_1_1util.html#a19919596cdd45c858d891c91a7826b22">for_each</a>(<a class="code" href="namespacerefl.html#ad691dd01325d41f40b117dd6fc109f36">refl::reflect</a>(pt).members, [&amp;](<span class="keyword">auto</span> member) {</div><div class="line">    std::cout &lt;&lt; member.name &lt;&lt; <span class="stringliteral">&quot;=&quot;</span> &lt;&lt; member(pt) &lt;&lt; <span class="stringliteral">&quot;;&quot;</span>;</div><div class="line">}</div><div class="line"><span class="comment">// Result: prints x=0;y=0;</span></div><div class="line"></div><div class="line"><span class="comment">// Converting to an std::tuple: (Note the constexpr!)</span></div><div class="line">constexpr <span class="keyword">auto</span> values = <a class="code" href="namespacerefl_1_1util.html#adb5bb478ef1cc5966e9df7c9b10b5dd3">map_to_tuple</a>(<a class="code" href="namespacerefl.html#ad691dd01325d41f40b117dd6fc109f36">refl::reflect</a>(pt).members, [&amp;](<span class="keyword">auto</span> member) {</div><div class="line">    <span class="keywordflow">return</span> member(pt);</div><div class="line">}</div><div class="line"><span class="comment">// Result: values == std::tuple&lt;int, int&gt;{ 0, 0 };</span></div></div><!-- fragment --><p>## Metadata-generation macros </p><div class="fragment"><div class="line"><span class="comment">// Starts the declaration of Type&#39;s metadata.</span></div><div class="line"><span class="comment">// Must be followed by one of: REFL_END, REFL_FIELD, REFL_FUNC.</span></div><div class="line"><span class="comment">// Example: REFL_TYPE(Dog, bases&lt;Animal&gt;)</span></div><div class="line"><a class="code" href="refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71">REFL_TYPE</a>(Type, Attributes...)</div><div class="line"></div><div class="line"><span class="comment">// Starts the declaration of Type&#39;s metadata.</span></div><div class="line"><span class="comment">// Must be followed by one of: REFL_END, REFL_FIELD, REFL_FUNC.</span></div><div class="line"><span class="comment">// Example: REFL_TEMPLATE((typename K, typename V), (std::pair&lt;K, V&gt;))</span></div><div class="line"><a class="code" href="refl_8hpp.html#a832b795bfa32d4130b04e9e33635c507">REFL_TEMPLATE</a>((typename... Ts), (Type&lt;Ts...&gt;)), Attributes...)</div><div class="line"></div><div class="line"><span class="comment">// End the declaration of Type&#39;s metadata.</span></div><div class="line"><span class="comment">// Does not have an argument list</span></div><div class="line"><a class="code" href="refl_8hpp.html#aa9ce1f68751badf6abb86207e986d28a">REFL_END</a></div><div class="line"></div><div class="line"><span class="comment">// Describes a field.</span></div><div class="line"><span class="comment">// Example: REFL_FIELD(first_name, property{ &quot;Value&quot; })</span></div><div class="line"><a class="code" href="refl_8hpp.html#a6da27e0bb2cfdfbfcd163a002be74d23">REFL_FIELD</a>(Field, Attributes...)</div><div class="line"></div><div class="line"><span class="comment">// Describes a function.</span></div><div class="line"><span class="comment">// Example: REFL_FUNC(first_name, property{ &quot;Size&quot; })</span></div><div class="line"><a class="code" href="refl_8hpp.html#ab3906812c5c66e91260e9611c255c18b">REFL_FUNC</a>(Function, Attribute...)</div><div class="line"></div><div class="line"><span class="comment">// NOTE: None of the macros above need a terminating semi-colon (;)</span></div></div><!-- fragment --><h1>Changelog</h1>
-<h2>v0.2.0</h2>
+<p><b><a href="https://github.com/veselink1/refl-cpp">refl-cpp</a> allows static reflection and inspection of types in C++ with full support for <em>templated types and functions</em>!</b> The metadata required for this is specified through the use of macros (but wait!). The macros require the user to only specify the type that is being reflected and only the names of the members that are of interest. ReflCpp has a small and <b>well-organised API surface</b>.</p>
 <ul>
-<li>added refl::util::contains(type_list&lt;...&gt;, [predicate]), refl::util::contains(type_list&lt;...&gt;, const_string&lt;N&gt;)</li>
-<li>removed refl::attr::is_readable/is_writable (use refl::descriptor::is_readable/is_writable instead; reason: lack of support for fields that lack a property attribute)</li>
+<li>Macro-based code-gen has been minimized as must as is possible to support all basic requirements. All higher-level operations are implemented as free types and function in one of the utility namespaces.</li>
+<li>Support for <b>autogeneration of reflection metadata</b> through a <b>non-intrusive interface</b> is <strike>coming soon</strike> <em>now available</em> in the form of <a href="https://github.com/veselink1/refl-ht">refl-ht</a>.</li>
 </ul>
-<h2>v0.1.2</h2>
+<h2>Requirements</h2>
 <ul>
-<li>refl::runtime::proxy&lt;Derived, Target&gt; can now delegate field 'invocations'. (Methods with names matching those of the reflected fields are created.)</li>
-<li><a class="el" href="structrefl_1_1attr_1_1property.html" title="Used to decorate a member that serves as a property. Takes an optional friendly name.">refl::attr::property</a> now can take an optional <a class="el" href="namespacerefl_1_1attr.html#a80eadd75031641ed7c8578d5e5f94f4e">refl::attr::access_type</a> (values: read, write, read_write) to specify whether the property is considered readable or writable (or both).</li>
-<li>added refl::descriptor::is_readable/is_writable</li>
-<li>added refl::attr::is_readable/is_writable </li>
+<li>Minimum language standard: C++17</li>
+</ul>
+<h2>License</h2>
+<ul>
+<li>MIT License (for more details, see the <a href="https://github.com/veselink1/refl-cpp/blob/master/LICENSE">license file</a>)</li>
+</ul>
+<h2>Contributing</h2>
+<p>See contributors.md</p>
+<p><a href="https://github.com/veselink1/refl-cpp">refl-cpp</a> is publicly open for any contribution. Bugfixes and new features are welcome. Extra modules are too (as long as the single-header usability is preserved and the functionality is not overly specific to particular use case).</p>
+<h2>Examples</h2>
+<p>### Example metadata declaration (with <a href="https://github.com/veselink1/refl-ht">refl-ht</a> - a lightweight, portable preprocessor) </p><div class="fragment"><div class="line"><span class="keyword">struct </span>Point {</div><div class="line">  <a class="code" href="refl_8hpp.html#a3f8c7841ef8896c48746f951cdd0029c">REFL</a>(<span class="comment">/* attributes */</span>) float x;</div><div class="line">  <a class="code" href="refl_8hpp.html#a3f8c7841ef8896c48746f951cdd0029c">REFL</a>() <span class="keywordtype">float</span> y;</div><div class="line">};</div></div><!-- fragment --><p>### Example metadata declaration (without <a href="https://github.com/veselink1/refl-ht">refl-ht</a>) </p><div class="fragment"><div class="line"><span class="keyword">struct </span>Point {</div><div class="line">  <span class="keywordtype">float</span> x;</div><div class="line">  <span class="keywordtype">float</span> y;</div><div class="line">};</div><div class="line"></div><div class="line"><a class="code" href="refl_8hpp.html#a3685b766e27941b558bff3cd5ee5db93">REFL_AUTO</a>(</div><div class="line">  type(Point),</div><div class="line">  field(x, <span class="comment">/* attributes */</span>),</div><div class="line">  field(y)</div><div class="line">)</div></div><!-- fragment --><p>### Basic usage example </p><div class="fragment"><div class="line"><span class="comment">// Printing an object&#39;s properties: </span></div><div class="line">Point pt{};</div><div class="line"><a class="code" href="namespacerefl_1_1util.html#a19919596cdd45c858d891c91a7826b22">for_each</a>(<a class="code" href="namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e">refl::reflect</a>(pt).members, [&amp;](<span class="keyword">auto</span> member) {</div><div class="line">    std::cout &lt;&lt; member.name &lt;&lt; <span class="stringliteral">&quot;=&quot;</span> &lt;&lt; member(pt) &lt;&lt; <span class="stringliteral">&quot;;&quot;</span>;</div><div class="line">}</div><div class="line"><span class="comment">// Result: prints x=0;y=0;</span></div><div class="line"></div><div class="line"><span class="comment">// Converting to an std::tuple: (Note the constexpr!)</span></div><div class="line">constexpr <span class="keyword">auto</span> values = <a class="code" href="namespacerefl_1_1util.html#adb5bb478ef1cc5966e9df7c9b10b5dd3">map_to_tuple</a>(<a class="code" href="namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e">refl::reflect</a>(pt).members, [&amp;](<span class="keyword">auto</span> member) {</div><div class="line">    <span class="keywordflow">return</span> member(pt);</div><div class="line">}</div><div class="line"><span class="comment">// Result: values == std::tuple&lt;int, int&gt;{ 0, 0 };</span></div></div><!-- fragment --><h2>More examples</h2>
+<ul>
+<li>See <a href="https://github.com/veselink1/refl-cpp/tree/master/examples">examples/</a> for more usage examples.</li>
+</ul>
+<p>## Metadata-generation macros </p><div class="fragment"><div class="line"><span class="comment">// Describes a type and all of its members (experimental)</span></div><div class="line"><a class="code" href="refl_8hpp.html#a3685b766e27941b558bff3cd5ee5db93">REFL_AUTO</a>(</div><div class="line">  type(Name, Attribute...),</div><div class="line">  field(Name, Attribute...),</div><div class="line">  func(Name, Attribute...)</div><div class="line">)</div><div class="line"></div><div class="line"><span class="comment">// Starts the declaration of Type&#39;s metadata.</span></div><div class="line"><span class="comment">// Must be followed by one of: REFL_END, REFL_FIELD, REFL_FUNC.</span></div><div class="line"><span class="comment">// Example: REFL_TYPE(Dog, bases&lt;Animal&gt;)</span></div><div class="line"><a class="code" href="refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71">REFL_TYPE</a>(Type, Attributes...)</div><div class="line"></div><div class="line"><span class="comment">// Starts the declaration of Type&#39;s metadata.</span></div><div class="line"><span class="comment">// Must be followed by one of: REFL_END, REFL_FIELD, REFL_FUNC.</span></div><div class="line"><span class="comment">// Example: REFL_TEMPLATE((typename K, typename V), (std::pair&lt;K, V&gt;))</span></div><div class="line"><a class="code" href="refl_8hpp.html#a832b795bfa32d4130b04e9e33635c507">REFL_TEMPLATE</a>((typename... Ts), (Type&lt;Ts...&gt;)), Attributes...)</div><div class="line"></div><div class="line"><span class="comment">// End the declaration of Type&#39;s metadata.</span></div><div class="line"><span class="comment">// Does not have an argument list</span></div><div class="line"><a class="code" href="refl_8hpp.html#aa9ce1f68751badf6abb86207e986d28a">REFL_END</a></div><div class="line"></div><div class="line"><span class="comment">// Describes a field.</span></div><div class="line"><span class="comment">// Example: REFL_FIELD(first_name, property{ &quot;Value&quot; })</span></div><div class="line"><a class="code" href="refl_8hpp.html#a9445b6ff9c03731fc9834a28f53b390a">REFL_FIELD</a>(Field, Attributes...)</div><div class="line"></div><div class="line"><span class="comment">// Describes a function.</span></div><div class="line"><span class="comment">// Example: REFL_FUNC(first_name, property{ &quot;Size&quot; })</span></div><div class="line"><a class="code" href="refl_8hpp.html#a5887eb0edf772b0c606d2b5e81f788d9">REFL_FUNC</a>(Function, Attribute...)</div><div class="line"></div><div class="line"><span class="comment">// NOTE: None of the macros above need a terminating semi-colon (;)</span></div></div><!-- fragment --><h2>Changelog</h2>
+<p><em>Releases follow the MAJOR.MINOR.PATCH versioning scheme</em></p>
+<h3>v.3.4</h3>
+<ul>
+<li>added new experimental syntax for metadata declaration that makes use of variadic macro expansion (can be disabled with <code>REFL_NO_VARIADICS</code>) <div class="fragment"><div class="line"><a class="code" href="refl_8hpp.html#a3685b766e27941b558bff3cd5ee5db93">REFL_AUTO</a> <span class="comment">/* experimental */</span></div><div class="line">(</div><div class="line">    type(User), <span class="comment">// expands to REFL_TYPE(User)</span></div><div class="line">    field(<span class="keywordtype">id</span>, property(read_only)), <span class="comment">// expands to REFL_FIELD(id, property(read_only))</span></div><div class="line">    field(email),</div><div class="line">    field(first_name, property(<span class="stringliteral">&quot;firstName&quot;</span>)),</div><div class="line">    field(last_name, property(<span class="stringliteral">&quot;lastName&quot;</span>))</div><div class="line">    func(save_to_db) <span class="comment">// expands to REFL_FUNC(save_to_db)</span></div><div class="line">) <span class="comment">// REFL_END appended automatically</span></div></div><!-- fragment --></li>
+</ul>
+<h3>v0.3.3</h3>
+<ul>
+<li><code><a class="el" href="structrefl_1_1util_1_1const__string.html" title="Represents a compile-time string.">refl::util::const_string</a>&lt;N&gt;</code> can now be directly compared for equality with <code>char[M]</code></li>
+<li><code><a class="el" href="structrefl_1_1util_1_1const__string.html" title="Represents a compile-time string.">refl::util::const_string</a>&lt;N&gt;</code> can now be concatenated with <code>char[M]</code></li>
+</ul>
+<h3>v0.3.2</h3>
+<ul>
+<li><code>refl::runtime::debug</code> now captures values of member invocations by universal references (previous implementations required a copy of the value)</li>
+<li><code>refl::runtime::debug</code> now does not require the members of composites to be reflectable. (members that cannot be printed get replaced with <code>&lt;?&gt;</code>).</li>
+<li><code><a class="el" href="structrefl_1_1trait_1_1is__reflectable.html" title="Checks whether the type T can be reflected.">refl::trait::is_reflectable</a></code> now discards cv-qualifiers -&gt; all cv-qualified types are now also reflectable.</li>
+</ul>
+<h3>v0.3.1</h3>
+<ul>
+<li><code>refl::descriptor::is_writable</code> now correctly supports field descriptors</li>
+<li>most of <code><a class="el" href="refl_8hpp.html">refl.hpp</a></code> is now not included when <code>REFL_PREPROCESSOR</code> is defined (optimization for refl-ht)</li>
+</ul>
+<h3>v0.3.0</h3>
+<ul>
+<li>added new <code><a class="el" href="refl_8hpp.html#a3f8c7841ef8896c48746f951cdd0029c">REFL(...)</a></code> macro for annotation of reflectable members (replaces <code>$refl(...)</code>)</li>
+<li><code>$refl(...)</code> macro usage now deprecated</li>
+</ul>
+<h3>v0.2.1</h3>
+<ul>
+<li>added support for <a href="https://github.com/veselink1/refl-ht">refl-ht</a> (the refl-cpp header tool)</li>
+</ul>
+<h3>v0.2.0</h3>
+<ul>
+<li>added <code><a class="el" href="namespacerefl_1_1util.html#a23e1a75f8e8615ca9dfebf9b3cd61198" title="Returns true if any item in the list matches the predicate.">refl::util::contains</a>(type_list&lt;...&gt;, [predicate]), <a class="el" href="namespacerefl_1_1util.html#a23e1a75f8e8615ca9dfebf9b3cd61198" title="Returns true if any item in the list matches the predicate.">refl::util::contains</a>(type_list&lt;...&gt;, const_string&lt;N&gt;)</code></li>
+<li>removed <code>refl::attr::is_readable/is_writable</code> (use <code>refl::descriptor::is_readable/is_writable</code> instead; reason: lack of support for fields that lack a property attribute)</li>
+</ul>
+<h3>v0.1.2</h3>
+<ul>
+<li><code>refl::runtime::proxy&lt;Derived, Target&gt;</code> can now delegate field 'invocations'. (Methods with names matching those of the reflected fields are created.)</li>
+<li><code><a class="el" href="structrefl_1_1attr_1_1property.html" title="Used to decorate a member that serves as a property. Takes an optional friendly name.">refl::attr::property</a></code> now can take an optional <code><a class="el" href="namespacerefl_1_1attr.html#a80eadd75031641ed7c8578d5e5f94f4e">refl::attr::access_type</a></code> (values: <code>read_only</code>, <code>write_only</code>, <code>read_write</code>) to specify whether the property is considered readable or writable (or both).</li>
+<li>added <code>refl::descriptor::is_readable/is_writable</code></li>
+<li>added <code>refl::attr::is_readable/is_writable</code> </li>
 </ul>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
@@ -124,7 +171,7 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Wed Jun 12 2019 10:43:39 for refl-cpp by
+    <li class="footer">Generated on Fri Jul 19 2019 23:07:21 for refl-cpp by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>

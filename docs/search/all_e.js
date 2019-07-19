@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['size',['size',['../structrefl_1_1util_1_1const__string.html#a426d87f33a7778a82e1169bd9de752e0',1,'refl::util::const_string::size()'],['../structrefl_1_1util_1_1type__list.html#ac0814fc38f041e46d2ab9258213910f3',1,'refl::util::type_list::size()']]],
-  ['skip',['skip',['../structrefl_1_1trait_1_1skip.html',1,'refl::trait']]],
-  ['skip_3c_20n_2c_20type_5flist_3c_20ts_2e_2e_2e_20_3e_20_3e',['skip&lt; N, type_list&lt; Ts... &gt; &gt;',['../structrefl_1_1trait_1_1skip_3_01_n_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html',1,'refl::trait']]],
-  ['skip_5ft',['skip_t',['../namespacerefl_1_1trait.html#a4564a607d593fab7826ae867003b51ea',1,'refl::trait']]],
-  ['str',['str',['../structrefl_1_1util_1_1const__string.html#a25bdf3f17b20a34f25f4bd7b624c6aa7',1,'refl::util::const_string']]]
+  ['to_5farray',['to_array',['../namespacerefl_1_1util.html#a6ebcdc8886ed6cf62bd914eb9566882a',1,'refl::util::to_array(const std::tuple&lt; Ts... &gt; &amp;tuple) noexcept'],['../namespacerefl_1_1util.html#a18d9033f789825c78562fbed063c93c5',1,'refl::util::to_array(const std::tuple&lt;&gt; &amp;tuple) noexcept']]],
+  ['to_5ftuple',['to_tuple',['../namespacerefl_1_1util.html#af7db9918de2fd9e0d34caf4b6a5c1f77',1,'refl::util']]],
+  ['type',['type',['../structrefl_1_1attr_1_1usage_1_1type.html',1,'refl::attr::usage::type'],['../structrefl_1_1trait_1_1remove__qualifiers.html#a39800dbc8004ea52c246cdda69f4d409',1,'refl::trait::remove_qualifiers::type()']]],
+  ['type_5fdescriptor',['type_descriptor',['../classrefl_1_1descriptor_1_1type__descriptor.html',1,'refl::descriptor']]],
+  ['type_5flist',['type_list',['../structrefl_1_1util_1_1type__list.html',1,'refl::util']]]
 ];

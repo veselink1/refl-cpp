@@ -1,4 +1,4 @@
-# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.3.2-dev) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
+# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.3.4-dev) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔯🔥
 
 ## Synopsis
@@ -36,11 +36,11 @@ struct Point {
   float y;
 };
 
-REFL_TYPE(Point)
-  REFL_FIELD(x, /* attributes */)
-  REFL_FIELD(y)
-REFL_END
-
+REFL_AUTO(
+  type(Point),
+  field(x, /* attributes */),
+  field(y)
+)
 ```
 
 ### Basic usage example
@@ -65,6 +65,12 @@ REFL_END
 
 ## Metadata-generation macros 
 ```cpp
+// Describes a type and all of its members (experimental)
+REFL_AUTO(
+  type(Name, Attribute...),
+  field(Name, Attribute...),
+  func(Name, Attribute...)
+)
 
 // Starts the declaration of Type's metadata.
 // Must be followed by one of: REFL_END, REFL_FIELD, REFL_FUNC.
@@ -94,6 +100,24 @@ REFL_FUNC(Function, Attribute...)
 
 ## Changelog
 *Releases follow the MAJOR.MINOR.PATCH versioning scheme*
+
+### v.3.4
+  - added new experimental syntax for metadata declaration that makes use of variadic macro expansion (can be disabled with `REFL_NO_VARIADICS`)
+```cpp
+REFL_AUTO /* experimental */
+(
+    type(User), // expands to REFL_TYPE(User)
+    field(id, property(read_only)), // expands to REFL_FIELD(id, property(read_only))
+    field(email),
+    field(first_name, property("firstName")),
+    field(last_name, property("lastName"))
+    func(save_to_db) // expands to REFL_FUNC(save_to_db)
+) // REFL_END appended automatically
+```
+
+### v0.3.3
+  - `refl::util::const_string<N>` can now be directly compared for equality with `char[M]`
+  - `refl::util::const_string<N>` can now be concatenated with `char[M]`
 
 ### v0.3.2
   - `refl::runtime::debug` now captures values of member invocations by universal references (previous implementations required a copy of the value)
