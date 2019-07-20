@@ -65,20 +65,6 @@ REFL_END
 
 ```
 
-### Object transformations with member operations
-<details>
-  <summary>Show</summary>
-
-  ![Screenshot](https://raw.githubusercontent.com/veselink1/refl-cpp/master/screenshots/introspection.png)
-</details>
-
-### Type transformations with proxies
-<details>
-  <summary>Show</summary>
-
-  ![Screenshot](https://raw.githubusercontent.com/veselink1/refl-cpp/master/screenshots/builders.png)
-</details>
-
 ## More examples
 - See [examples/](https://github.com/veselink1/refl-cpp/blob/master/refl.hpp) for more usage examples.
 
