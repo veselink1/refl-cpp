@@ -41,11 +41,11 @@ struct Point {
   float y;
 };
 
-REFL_AUTO(
-  type(Point),
-  field(x, /* attributes */),
-  field(y)
-)
+REFL_TYPE(Point)
+  REFL_FIELD(x, /* attributes */)
+  REFL_FIELD(y)
+REFL_END
+
 ```
 
 ### Basic usage example
