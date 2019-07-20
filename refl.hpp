@@ -520,24 +520,24 @@ namespace refl {
         template <typename R, typename... Args>
         auto resolve(R(*fn)(Args...), Args&&... args) -> decltype(fn);
 
-        #define REFL_DEFINE_QUALIFIED_RESOLVE(...) \
+        #define REFL_DETAIL_QUALIFIED_RESOLVE(...) \
             template <typename R, typename T, typename... Args> \
             auto resolve(R(trait::remove_qualifiers_t<T>::*fn)(Args...) __VA_ARGS__, T&& target, Args&&... args) -> decltype(fn)
             
-        REFL_DEFINE_QUALIFIED_RESOLVE();
-        REFL_DEFINE_QUALIFIED_RESOLVE(const);
-        REFL_DEFINE_QUALIFIED_RESOLVE(volatile);
-        REFL_DEFINE_QUALIFIED_RESOLVE(const volatile);
-        REFL_DEFINE_QUALIFIED_RESOLVE(&);
-        REFL_DEFINE_QUALIFIED_RESOLVE(const&);
-        REFL_DEFINE_QUALIFIED_RESOLVE(volatile&);
-        REFL_DEFINE_QUALIFIED_RESOLVE(const volatile&);
-        REFL_DEFINE_QUALIFIED_RESOLVE(&&);
-        REFL_DEFINE_QUALIFIED_RESOLVE(const&&);
-        REFL_DEFINE_QUALIFIED_RESOLVE(volatile&&);
-        REFL_DEFINE_QUALIFIED_RESOLVE(const volatile&&);
+        REFL_DETAIL_QUALIFIED_RESOLVE();
+        REFL_DETAIL_QUALIFIED_RESOLVE(const);
+        REFL_DETAIL_QUALIFIED_RESOLVE(volatile);
+        REFL_DETAIL_QUALIFIED_RESOLVE(const volatile);
+        REFL_DETAIL_QUALIFIED_RESOLVE(&);
+        REFL_DETAIL_QUALIFIED_RESOLVE(const&);
+        REFL_DETAIL_QUALIFIED_RESOLVE(volatile&);
+        REFL_DETAIL_QUALIFIED_RESOLVE(const volatile&);
+        REFL_DETAIL_QUALIFIED_RESOLVE(&&);
+        REFL_DETAIL_QUALIFIED_RESOLVE(const&&);
+        REFL_DETAIL_QUALIFIED_RESOLVE(volatile&&);
+        REFL_DETAIL_QUALIFIED_RESOLVE(const volatile&&);
 
-        #undef REFL_DEFINE_QUALIFIED_RESOLVE
+        #undef REFL_DETAIL_QUALIFIED_RESOLVE
     }
 
 #define REFL_DETAIL_STR_IMPL(...) #__VA_ARGS__
@@ -551,8 +551,8 @@ namespace refl {
         typedef REFL_DETAIL_GROUP TypeName type; \
         REFL_DETAIL_ATTRIBUTES(type, __VA_ARGS__) \
     public: \
-        static inline constexpr auto name{ ::refl::util::make_const_string(REFL_DETAIL_STR(REFL_DETAIL_GROUP TypeName)) }; \
-        static inline constexpr size_t member_index_offset = __COUNTER__ + 1; \
+        static constexpr auto name{ ::refl::util::make_const_string(REFL_DETAIL_STR(REFL_DETAIL_GROUP TypeName)) }; \
+        static constexpr size_t member_index_offset = __COUNTER__ + 1; \
         template <size_t N, typename = void> \
         struct member {}; 
 
@@ -568,7 +568,7 @@ namespace refl {
         public: REFL_DETAIL_TYPE_BODY(TypeName, __VA_ARGS__)
 
 #define REFL_END \
-        static constexpr size_t member_count = __COUNTER__ - member_index_offset; \
+        static constexpr size_t member_count{ __COUNTER__ - member_index_offset }; \
     }; }
 	
 
@@ -577,7 +577,7 @@ namespace refl {
 #define REFL_DETAIL_MEMBER_COMMON(MemberType_, MemberName_, ...) \
         typedef type declaring_type; \
         typedef ::refl::member::MemberType_ member_type; \
-        static inline constexpr auto name{ ::refl::util::make_const_string(REFL_DETAIL_STR(MemberName_)) }; \
+        static constexpr auto name{ ::refl::util::make_const_string(REFL_DETAIL_STR(MemberName_)) }; \
         REFL_DETAIL_ATTRIBUTES(MemberType_, __VA_ARGS__) 
 
 #define REFL_DETAIL_MEMBER_PROXY(MemberName_) \
@@ -604,7 +604,7 @@ namespace refl {
         REFL_DETAIL_MEMBER_COMMON(field, FieldName_, __VA_ARGS__) \
     public: \
         typedef decltype(type::FieldName_) value_type; \
-        static inline constexpr auto pointer{ &type::FieldName_ }; \
+        static constexpr auto pointer{ &type::FieldName_ }; \
         REFL_DETAIL_MEMBER_PROXY(FieldName_); \
     }; 
 
@@ -1663,8 +1663,9 @@ namespace refl {
             template <typename T>
             constexpr bool is_readable(T&& t) noexcept
             {
-                static_assert(is_field(t) || is_property(t));
-                if constexpr (is_property(t)) {
+                using no_ref_t = std::remove_reference_t<T>;
+                static_assert(trait::is_field_v<no_ref_t> || trait::is_property_v<no_ref_t>);
+                if constexpr (trait::is_property_v<no_ref_t>) {
                     return static_cast<unsigned>(get_property_info(t).access) 
                         & static_cast<unsigned>(attr::access_type::read);
                 }
@@ -1680,8 +1681,9 @@ namespace refl {
             template <typename T>
             constexpr bool is_writable(T&& t) noexcept
             {
-                static_assert(is_field(t) || is_property(t));
-                if constexpr (is_property(t)) {
+                using no_ref_t = std::remove_reference_t<T>;
+                static_assert(trait::is_field_v<no_ref_t> || trait::is_property_v<no_ref_t>);
+                if constexpr (trait::is_property_v<no_ref_t>) {
                     return static_cast<unsigned>(get_property_info(t).access) 
                         & static_cast<unsigned>(attr::access_type::write);
                 }
@@ -1923,7 +1925,7 @@ namespace refl {
                         auto&& dbg_attr = util::get_instance<attr::debug>(member.attributes);
                         auto&& prop_value = member(value);
                         
-                        if constexpr (is_reflectable<trait::remove_qualifiers_t<decltype(prop_value)>>()) {
+                        if constexpr (trait::is_reflectable_v<trait::remove_qualifiers_t<decltype(prop_value)>>()) {
                             if (!compact) {
                                 os << "(" << reflect(prop_value).name << ")";
                             }
@@ -1935,7 +1937,7 @@ namespace refl {
                     }
                     else {
                         auto&& prop_value = member(value);
-                        if constexpr (is_reflectable<trait::remove_qualifiers_t<decltype(prop_value)>>()) {
+                        if constexpr (trait::is_reflectable_v<trait::remove_qualifiers_t<decltype(prop_value)>>()) {
                             if (!compact) {
                                 os << "(" << reflect(prop_value).name << ")";
                             }
@@ -2098,65 +2100,65 @@ namespace refl {
 
 } // namespace refl
 
-#define REFL_DEFINE_PRIMITIVE(TypeName) \
+#define REFL_DETAIL_PRIMITIVE(TypeName) \
     REFL_TYPE(TypeName) \
     REFL_END
 
     // Char types.
-    REFL_DEFINE_PRIMITIVE(char);
-    REFL_DEFINE_PRIMITIVE(wchar_t);
-    REFL_DEFINE_PRIMITIVE(char16_t);
-    REFL_DEFINE_PRIMITIVE(char32_t);
+    REFL_DETAIL_PRIMITIVE(char);
+    REFL_DETAIL_PRIMITIVE(wchar_t);
+    REFL_DETAIL_PRIMITIVE(char16_t);
+    REFL_DETAIL_PRIMITIVE(char32_t);
 #ifdef __cpp_lib_char8_t
-    REFL_DEFINE_PRIMITIVE(char8_t);
+    REFL_DETAIL_PRIMITIVE(char8_t);
 #endif 
 
     // Integral types.
-    REFL_DEFINE_PRIMITIVE(bool);
-    REFL_DEFINE_PRIMITIVE(signed char);
-    REFL_DEFINE_PRIMITIVE(unsigned char);
-    REFL_DEFINE_PRIMITIVE(signed short);
-    REFL_DEFINE_PRIMITIVE(unsigned short);
-    REFL_DEFINE_PRIMITIVE(signed int);
-    REFL_DEFINE_PRIMITIVE(unsigned int);
-    REFL_DEFINE_PRIMITIVE(signed long);
-    REFL_DEFINE_PRIMITIVE(unsigned long);
-    REFL_DEFINE_PRIMITIVE(signed long long);
-    REFL_DEFINE_PRIMITIVE(unsigned long long);
+    REFL_DETAIL_PRIMITIVE(bool);
+    REFL_DETAIL_PRIMITIVE(signed char);
+    REFL_DETAIL_PRIMITIVE(unsigned char);
+    REFL_DETAIL_PRIMITIVE(signed short);
+    REFL_DETAIL_PRIMITIVE(unsigned short);
+    REFL_DETAIL_PRIMITIVE(signed int);
+    REFL_DETAIL_PRIMITIVE(unsigned int);
+    REFL_DETAIL_PRIMITIVE(signed long);
+    REFL_DETAIL_PRIMITIVE(unsigned long);
+    REFL_DETAIL_PRIMITIVE(signed long long);
+    REFL_DETAIL_PRIMITIVE(unsigned long long);
     
     // Floating point types.
-    REFL_DEFINE_PRIMITIVE(float);
-    REFL_DEFINE_PRIMITIVE(double);
-    REFL_DEFINE_PRIMITIVE(long double);
+    REFL_DETAIL_PRIMITIVE(float);
+    REFL_DETAIL_PRIMITIVE(double);
+    REFL_DETAIL_PRIMITIVE(long double);
 
     // Other types.
-    REFL_DEFINE_PRIMITIVE(decltype(nullptr));
+    REFL_DETAIL_PRIMITIVE(decltype(nullptr));
 
     // Void type.
     REFL_TYPE(void)
     REFL_END
 
-#undef REFL_DEFINE_PRIMITIVE
+#undef REFL_DETAIL_PRIMITIVE
 
-#define REFL_DEFINE_POINTER(Ptr) \
+#define REFL_DETAIL_POINTER(Ptr) \
         template<typename T> \
         struct type_info__<T Ptr> { \
             typedef T Ptr type; \
             template <size_t N> \
             struct member {}; \
-            static constexpr char name[] { #Ptr }; \
+            static constexpr auto name{ ::refl::util::make_const_string(#Ptr) }; \
             static constexpr ::std::tuple<> attributes{ }; \
-            static constexpr size_t member_count = 0; \
+            static constexpr size_t member_count{ 0 }; \
         }
 
     namespace refl_impl::metadata
     {
-        REFL_DEFINE_POINTER(*);
-        REFL_DEFINE_POINTER(&);
-        REFL_DEFINE_POINTER(&&);
+        REFL_DETAIL_POINTER(*);
+        REFL_DETAIL_POINTER(&);
+        REFL_DETAIL_POINTER(&&);
     }
 
-#undef REFL_DEFINE_POINTER
+#undef REFL_DETAIL_POINTER
 
     static_assert(refl::trait::is_reflectable_v<void>, "Static assertion failed!");
     static_assert(refl::trait::is_reflectable_v<int*>, "Static assertion failed!");
@@ -2323,7 +2325,13 @@ REFL_END
 
 #ifndef REFL_NO_VARIADICS
 
+#ifdef __GNUC__
 #warning "refl-cpp variadics extensions are currently experimental"
+#endif
+
+#ifdef _MSC_VER
+#pragma message ( "warning: refl-cpp variadics extensions are currently experimental" )
+#endif
 
 #define REFL_DETAIL_EXPAND(x) x
 #define REFL_DETAIL_FOR_EACH_0(...)
