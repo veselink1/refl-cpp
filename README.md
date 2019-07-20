@@ -1,4 +1,4 @@
-# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.3.4-dev) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
+# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.3.5-dev) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔯🔥
 
 ## Synopsis
@@ -69,14 +69,14 @@ REFL_AUTO(
 <details>
   <summary>Show</summary>
 
-  ![Screenshot](https://miro.medium.com/max/700/1*U-moh2EpPntprUBiugSuBQ.png)
+  ![Screenshot](https://raw.githubusercontent.com/veselink1/refl-cpp/master/screenshots/introspection.png)
 </details>
 
 ### Type transformations with proxies
 <details>
   <summary>Show</summary>
 
-  ![Screenshot](https://miro.medium.com/max/700/1*U-moh2EpPntprUBiugSuBQ.png)
+  ![Screenshot](https://raw.githubusercontent.com/veselink1/refl-cpp/master/screenshots/builders.png)
 </details>
 
 ## More examples
@@ -120,7 +120,10 @@ REFL_FUNC(Function, Attribute...)
 ## Changelog
 *Releases follow the MAJOR.MINOR.PATCH versioning scheme*
 
-### v.3.4
+### v0.3.5
+  - Bugfix: `type_info__<T*>` has name defined as `char[N]` instead of `const_string<N>`
+
+### v0.3.4
   - added new experimental syntax for metadata declaration that makes use of variadic macro expansion (can be disabled with `REFL_NO_VARIADICS`)
 ```cpp
 REFL_AUTO /* experimental */
