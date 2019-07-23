@@ -2,9 +2,6 @@ var searchData=
 [
   ['refl',['REFL',['../refl_8hpp.html#a3f8c7841ef8896c48746f951cdd0029c',1,'refl.hpp']]],
   ['refl_5fauto',['REFL_AUTO',['../refl_8hpp.html#a3685b766e27941b558bff3cd5ee5db93',1,'refl.hpp']]],
-  ['refl_5fdefine_5fpointer',['REFL_DEFINE_POINTER',['../refl_8hpp.html#a046b89b967d00ba5804e51de3c269d47',1,'refl.hpp']]],
-  ['refl_5fdefine_5fprimitive',['REFL_DEFINE_PRIMITIVE',['../refl_8hpp.html#a450058a8f1778d2875163ecfdd9f6d9b',1,'refl.hpp']]],
-  ['refl_5fdefine_5fqualified_5fresolve',['REFL_DEFINE_QUALIFIED_RESOLVE',['../refl_8hpp.html#ad22f8cb448b74a26343599064d4e76d1',1,'refl.hpp']]],
   ['refl_5fdeprecated',['REFL_DEPRECATED',['../refl_8hpp.html#a23008815d6c2753876c4cfd2b177480a',1,'refl.hpp']]],
   ['refl_5fdetail_5fattributes',['REFL_DETAIL_ATTRIBUTES',['../refl_8hpp.html#ad77fb25bb894a5f1f091a4a94fa67b3f',1,'refl.hpp']]],
   ['refl_5fdetail_5fconcatenate',['REFL_DETAIL_CONCATENATE',['../refl_8hpp.html#a45e99e5240fc151ed5f2dc544f661ef2',1,'refl.hpp']]],
@@ -125,6 +122,8 @@ var searchData=
   ['refl_5fdetail_5fmember_5fcommon',['REFL_DETAIL_MEMBER_COMMON',['../refl_8hpp.html#ae0d9795bbebdc54d820cebad32dd87cc',1,'refl.hpp']]],
   ['refl_5fdetail_5fmember_5fheader',['REFL_DETAIL_MEMBER_HEADER',['../refl_8hpp.html#a5ceddfd98acf50f564817cd81522ea26',1,'refl.hpp']]],
   ['refl_5fdetail_5fmember_5fproxy',['REFL_DETAIL_MEMBER_PROXY',['../refl_8hpp.html#a3f4d89884773818c7f47936657816d86',1,'refl.hpp']]],
+  ['refl_5fdetail_5fpointer',['REFL_DETAIL_POINTER',['../refl_8hpp.html#ae315f18fa29214a0b14d0a9228d6dbfe',1,'refl.hpp']]],
+  ['refl_5fdetail_5fprimitive',['REFL_DETAIL_PRIMITIVE',['../refl_8hpp.html#ad667841b00a5d6d9982f1f01111a0c46',1,'refl.hpp']]],
   ['refl_5fdetail_5fstr',['REFL_DETAIL_STR',['../refl_8hpp.html#ac16abdfd738e4366eb239e904b90e930',1,'refl.hpp']]],
   ['refl_5fdetail_5fstr_5fimpl',['REFL_DETAIL_STR_IMPL',['../refl_8hpp.html#a3eb9f0fdea25c64045020adb97393613',1,'refl.hpp']]],
   ['refl_5fdetail_5ftype_5fbody',['REFL_DETAIL_TYPE_BODY',['../refl_8hpp.html#ac7f8b46b069c2311101168d841a71b37',1,'refl.hpp']]],

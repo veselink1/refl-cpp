@@ -25,7 +25,7 @@ var NAVTREE =
 [
   [ "refl-cpp", "index.html", [
     [ "Contributors", "md_contributors.html", null ],
-    [ "<a href=\"https://github.com/veselink1/refl-cpp\">refl-cpp</a> (v0.3.4-dev) (<a href=\"https://veselink1.github.io/refl-cpp/namespacerefl.html\">Documentation</a>)", "md__r_e_a_d_m_e.html", null ],
+    [ "<a href=\"https://github.com/veselink1/refl-cpp\">refl-cpp</a> (v0.4.0-beta) (<a href=\"https://veselink1.github.io/refl-cpp/namespacerefl.html\">Documentation</a>)", "md__r_e_a_d_m_e.html", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -60,7 +60,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"structrefl_1_1attr_1_1property.html"
+"refl_8hpp_source.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

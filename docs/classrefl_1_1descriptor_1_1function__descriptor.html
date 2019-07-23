@@ -96,9 +96,9 @@ $(document).ready(function(){initNavTree('classrefl_1_1descriptor_1_1function__d
 
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
-<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classrefl_1_1descriptor_1_1function__descriptor-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">refl::descriptor::function_descriptor&lt; T, N &gt; Class Template Reference</div>  </div>
@@ -110,26 +110,39 @@ $(document).ready(function(){initNavTree('classrefl_1_1descriptor_1_1function__d
 
 <p><code>#include &lt;<a class="el" href="refl_8hpp_source.html">refl.hpp</a>&gt;</code></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a7f6f665c1d51087c1aa253eaf3edbeae"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:a7f6f665c1d51087c1aa253eaf3edbeae"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a7f6f665c1d51087c1aa253eaf3edbeae">return_type</a> = decltype(member::invoke(std::declval&lt; Args &gt;()...))</td></tr>
+<tr class="memdesc:a7f6f665c1d51087c1aa253eaf3edbeae"><td class="mdescLeft">&#160;</td><td class="mdescRight">The return type of an invocation of this member with Args... (as if by invoke(...)).  <a href="#a7f6f665c1d51087c1aa253eaf3edbeae">More...</a><br /></td></tr>
+<tr class="separator:a7f6f665c1d51087c1aa253eaf3edbeae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classrefl_1_1descriptor_1_1member__descriptor__base')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html">refl::descriptor::member_descriptor_base&lt; T, N &gt;</a></td></tr>
+<tr class="memitem:af70beb1e0da54d076535cd8fb3dd5381 inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memItemLeft" align="right" valign="top">typedef T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#af70beb1e0da54d076535cd8fb3dd5381">declaring_type</a></td></tr>
+<tr class="memdesc:af70beb1e0da54d076535cd8fb3dd5381 inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="mdescLeft">&#160;</td><td class="mdescRight">An alias for the declaring type of the reflected member.  <a href="classrefl_1_1descriptor_1_1member__descriptor__base.html#af70beb1e0da54d076535cd8fb3dd5381">More...</a><br /></td></tr>
+<tr class="separator:af70beb1e0da54d076535cd8fb3dd5381 inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a098cba21d2e91ee593b59573295b04d4 inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memItemLeft" align="right" valign="top">typedef member::member_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#a098cba21d2e91ee593b59573295b04d4">member_type</a></td></tr>
+<tr class="memdesc:a098cba21d2e91ee593b59573295b04d4 inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="mdescLeft">&#160;</td><td class="mdescRight">An alias, specifying the exact type of member.  <a href="classrefl_1_1descriptor_1_1member__descriptor__base.html#a098cba21d2e91ee593b59573295b04d4">More...</a><br /></td></tr>
+<tr class="separator:a098cba21d2e91ee593b59573295b04d4 inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8eb41df4e6d17f6e223f8ed5abe581d inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="namespacerefl_1_1trait.html#ae2279db43338368acb8af9ade961a504">trait::as_type_list_t</a>&lt; std::remove_cv_t&lt; decltype(member::attributes)&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#ae8eb41df4e6d17f6e223f8ed5abe581d">attribute_types</a></td></tr>
+<tr class="memdesc:ae8eb41df4e6d17f6e223f8ed5abe581d inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of the attributes tuple.  <a href="classrefl_1_1descriptor_1_1member__descriptor__base.html#ae8eb41df4e6d17f6e223f8ed5abe581d">More...</a><br /></td></tr>
+<tr class="separator:ae8eb41df4e6d17f6e223f8ed5abe581d inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9be3a1ccef3ea4fbee27dabf3bc5244d"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
-<tr class="memitem:a9be3a1ccef3ea4fbee27dabf3bc5244d"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a9be3a1ccef3ea4fbee27dabf3bc5244d">operator()</a> (Args &amp;&amp;... args) const</td></tr>
-<tr class="memdesc:a9be3a1ccef3ea4fbee27dabf3bc5244d"><td class="mdescLeft">&#160;</td><td class="mdescRight">A synonym for invoke(args...).  <a href="#a9be3a1ccef3ea4fbee27dabf3bc5244d">More...</a><br /></td></tr>
-<tr class="separator:a9be3a1ccef3ea4fbee27dabf3bc5244d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b9b03211b3a7c0f0fcd1c760579008e"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:a2b9b03211b3a7c0f0fcd1c760579008e"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a2b9b03211b3a7c0f0fcd1c760579008e">operator()</a> (Args &amp;&amp;... args) const -&gt; decltype(<a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a5f6c4091c03a8fb9d5f6459c686ea655">invoke</a>(std::declval&lt; Args &gt;()...))</td></tr>
+<tr class="memdesc:a2b9b03211b3a7c0f0fcd1c760579008e"><td class="mdescLeft">&#160;</td><td class="mdescRight">A synonym for invoke(args...).  <a href="#a2b9b03211b3a7c0f0fcd1c760579008e">More...</a><br /></td></tr>
+<tr class="separator:a2b9b03211b3a7c0f0fcd1c760579008e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a92fcb426136332bdac0be5c34fdcf33b"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
-<tr class="memitem:a92fcb426136332bdac0be5c34fdcf33b"><td class="memTemplItemLeft" align="right" valign="top">static decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a92fcb426136332bdac0be5c34fdcf33b">invoke</a> (Args &amp;&amp;... args)</td></tr>
-<tr class="memdesc:a92fcb426136332bdac0be5c34fdcf33b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Invokes the function with the given arguments. If the function is an instance function, a reference to the instance is provided as first argument.  <a href="#a92fcb426136332bdac0be5c34fdcf33b">More...</a><br /></td></tr>
-<tr class="separator:a92fcb426136332bdac0be5c34fdcf33b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f6c4091c03a8fb9d5f6459c686ea655"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
+<tr class="memitem:a5f6c4091c03a8fb9d5f6459c686ea655"><td class="memTemplItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a5f6c4091c03a8fb9d5f6459c686ea655">invoke</a> (Args &amp;&amp;... args) -&gt; decltype(member::invoke(std::declval&lt; Args &gt;()...))</td></tr>
+<tr class="memdesc:a5f6c4091c03a8fb9d5f6459c686ea655"><td class="mdescLeft">&#160;</td><td class="mdescRight">Invokes the function with the given arguments. If the function is an instance function, a reference to the instance is provided as first argument.  <a href="#a5f6c4091c03a8fb9d5f6459c686ea655">More...</a><br /></td></tr>
+<tr class="separator:a5f6c4091c03a8fb9d5f6459c686ea655"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
-Static Public Attributes</h2></td></tr>
-<tr class="memitem:ab06344b86615c5c380c7b30919e7c416"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
-<tr class="memitem:ab06344b86615c5c380c7b30919e7c416"><td class="memTemplItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#ab06344b86615c5c380c7b30919e7c416">pointer</a> { member::template pointer&lt;Args...&gt; }</td></tr>
-<tr class="memdesc:ab06344b86615c5c380c7b30919e7c416"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a pointer to the function, deduced by the provided Args... template parameters. For member functions the first type must be the target type. (possibly reference- or cv-qualified)  <a href="#ab06344b86615c5c380c7b30919e7c416">More...</a><br /></td></tr>
-<tr class="separator:ab06344b86615c5c380c7b30919e7c416"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_static_attribs_classrefl_1_1descriptor_1_1member__descriptor__base"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classrefl_1_1descriptor_1_1member__descriptor__base')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html">refl::descriptor::member_descriptor_base&lt; T, N &gt;</a></td></tr>
 <tr class="memitem:a80719a0106e9f454c29c8363c0e694e4 inherit pub_static_attribs_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="classrefl_1_1descriptor_1_1type__descriptor.html">type_descriptor</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#a80719a0106e9f454c29c8363c0e694e4">declarator</a> { }</td></tr>
 <tr class="memdesc:a80719a0106e9f454c29c8363c0e694e4 inherit pub_static_attribs_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classrefl_1_1descriptor_1_1type__descriptor.html" title="Represents a reflected type.">type_descriptor</a> of the declaring type.  <a href="classrefl_1_1descriptor_1_1member__descriptor__base.html#a80719a0106e9f454c29c8363c0e694e4">More...</a><br /></td></tr>
@@ -140,16 +153,6 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:a410121cb42388625a57cfb910d31cdb7 inherit pub_static_attribs_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#a410121cb42388625a57cfb910d31cdb7">attributes</a> { member::attributes }</td></tr>
 <tr class="memdesc:a410121cb42388625a57cfb910d31cdb7 inherit pub_static_attribs_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="mdescLeft">&#160;</td><td class="mdescRight">The attributes of the reflected member.  <a href="classrefl_1_1descriptor_1_1member__descriptor__base.html#a410121cb42388625a57cfb910d31cdb7">More...</a><br /></td></tr>
 <tr class="separator:a410121cb42388625a57cfb910d31cdb7 inherit pub_static_attribs_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classrefl_1_1descriptor_1_1member__descriptor__base')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html">refl::descriptor::member_descriptor_base&lt; T, N &gt;</a></td></tr>
-<tr class="memitem:af70beb1e0da54d076535cd8fb3dd5381 inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memItemLeft" align="right" valign="top">typedef T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#af70beb1e0da54d076535cd8fb3dd5381">declaring_type</a></td></tr>
-<tr class="memdesc:af70beb1e0da54d076535cd8fb3dd5381 inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="mdescLeft">&#160;</td><td class="mdescRight">An alias for the declaring type of the reflected member.  <a href="classrefl_1_1descriptor_1_1member__descriptor__base.html#af70beb1e0da54d076535cd8fb3dd5381">More...</a><br /></td></tr>
-<tr class="separator:af70beb1e0da54d076535cd8fb3dd5381 inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a098cba21d2e91ee593b59573295b04d4 inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memItemLeft" align="right" valign="top">typedef member::member_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#a098cba21d2e91ee593b59573295b04d4">member_type</a></td></tr>
-<tr class="memdesc:a098cba21d2e91ee593b59573295b04d4 inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="mdescLeft">&#160;</td><td class="mdescRight">An alias, specifying the exact type of member.  <a href="classrefl_1_1descriptor_1_1member__descriptor__base.html#a098cba21d2e91ee593b59573295b04d4">More...</a><br /></td></tr>
-<tr class="separator:a098cba21d2e91ee593b59573295b04d4 inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td colspan="2" onclick="javascript:toggleInherit('pro_types_classrefl_1_1descriptor_1_1member__descriptor__base')"><img src="closed.png" alt="-"/>&#160;Protected Types inherited from <a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html">refl::descriptor::member_descriptor_base&lt; T, N &gt;</a></td></tr>
 <tr class="memitem:aba0ce93d521472d8a29789df8eb70c7c inherit pro_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memItemLeft" align="right" valign="top">typedef refl_impl::metadata::type_info__&lt; T &gt;::template <a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#aba0ce93d521472d8a29789df8eb70c7c">member</a>&lt; N &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#aba0ce93d521472d8a29789df8eb70c7c">member</a></td></tr>
 <tr class="separator:aba0ce93d521472d8a29789df8eb70c7c inherit pro_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,9 +162,30 @@ Additional Inherited Members</h2></td></tr>
 class refl::descriptor::function_descriptor&lt; T, N &gt;</h3>
 
 <p>Represents a reflected function. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a92fcb426136332bdac0be5c34fdcf33b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a92fcb426136332bdac0be5c34fdcf33b">&#9670;&nbsp;</a></span>invoke()</h2>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a7f6f665c1d51087c1aa253eaf3edbeae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f6f665c1d51087c1aa253eaf3edbeae">&#9670;&nbsp;</a></span>return_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , size_t N&gt; </div>
+<div class="memtemplate">
+template&lt;typename... Args&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html">refl::descriptor::function_descriptor</a>&lt; T, N &gt;::<a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a7f6f665c1d51087c1aa253eaf3edbeae">return_type</a> =  decltype(member::invoke(std::declval&lt;Args&gt;()...))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The return type of an invocation of this member with Args... (as if by invoke(...)). </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a5f6c4091c03a8fb9d5f6459c686ea655"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f6c4091c03a8fb9d5f6459c686ea655">&#9670;&nbsp;</a></span>invoke()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -174,11 +198,12 @@ template&lt;typename... Args&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static decltype(auto) constexpr <a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html">refl::descriptor::function_descriptor</a>&lt; T, N &gt;::invoke </td>
+          <td class="memname">static constexpr auto <a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html">refl::descriptor::function_descriptor</a>&lt; T, N &gt;::invoke </td>
           <td>(</td>
           <td class="paramtype">Args &amp;&amp;...&#160;</td>
           <td class="paramname"><em>args</em></td><td>)</td>
-          <td></td>
+          <td> -&gt; decltype(member::invoke(std::declval&lt;Args&gt;()...))
+                </td>
         </tr>
       </table>
   </td>
@@ -192,8 +217,8 @@ template&lt;typename... Args&gt; </div>
 
 </div>
 </div>
-<a id="a9be3a1ccef3ea4fbee27dabf3bc5244d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9be3a1ccef3ea4fbee27dabf3bc5244d">&#9670;&nbsp;</a></span>operator()()</h2>
+<a id="a2b9b03211b3a7c0f0fcd1c760579008e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b9b03211b3a7c0f0fcd1c760579008e">&#9670;&nbsp;</a></span>operator()()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -206,11 +231,12 @@ template&lt;typename... Args&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">decltype(auto) constexpr <a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html">refl::descriptor::function_descriptor</a>&lt; T, N &gt;::operator() </td>
+          <td class="memname">constexpr auto <a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html">refl::descriptor::function_descriptor</a>&lt; T, N &gt;::operator() </td>
           <td>(</td>
           <td class="paramtype">Args &amp;&amp;...&#160;</td>
           <td class="paramname"><em>args</em></td><td>)</td>
-          <td> const</td>
+          <td> const -&gt; decltype(<a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a5f6c4091c03a8fb9d5f6459c686ea655">invoke</a>(std::declval&lt;Args&gt;()...))
+                </td>
         </tr>
       </table>
   </td>
@@ -224,35 +250,6 @@ template&lt;typename... Args&gt; </div>
 
 </div>
 </div>
-<h2 class="groupheader">Member Data Documentation</h2>
-<a id="ab06344b86615c5c380c7b30919e7c416"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab06344b86615c5c380c7b30919e7c416">&#9670;&nbsp;</a></span>pointer</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T , size_t N&gt; </div>
-<div class="memtemplate">
-template&lt;typename... Args&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr auto <a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html">refl::descriptor::function_descriptor</a>&lt; T, N &gt;::pointer { member::template pointer&lt;Args...&gt; }</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Gets a pointer to the function, deduced by the provided Args... template parameters. For member functions the first type must be the target type. (possibly reference- or cv-qualified) </p>
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="refl_8hpp_source.html">refl.hpp</a></li>
 </ul>
@@ -262,7 +259,7 @@ template&lt;typename... Args&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacerefl.html">refl</a></li><li class="navelem"><a class="el" href="namespacerefl_1_1descriptor.html">descriptor</a></li><li class="navelem"><a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html">function_descriptor</a></li>
-    <li class="footer">Generated on Fri Jul 19 2019 23:07:22 for refl-cpp by
+    <li class="footer">Generated on Tue Jul 23 2019 19:27:53 for refl-cpp by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>

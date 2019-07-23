@@ -1,7 +1,4 @@
 var searchData=
 [
-  ['map',['map',['../namespacerefl_1_1trait.html#aec64e38a31b8b7d66e60f9bd8acceb22',1,'refl::trait']]],
-  ['member',['member',['../classrefl_1_1descriptor_1_1member__descriptor__base.html#aba0ce93d521472d8a29789df8eb70c7c',1,'refl::descriptor::member_descriptor_base']]],
-  ['member_5flist',['member_list',['../namespacerefl.html#abd6e1d866e696d2f1173fd2d3cd30875',1,'refl']]],
-  ['member_5ftype',['member_type',['../classrefl_1_1descriptor_1_1member__descriptor__base.html#a098cba21d2e91ee593b59573295b04d4',1,'refl::descriptor::member_descriptor_base']]]
+  ['list_5ftype',['list_type',['../structrefl_1_1attr_1_1base__types.html#a5bf13a7cf1300a7fec27ea0918a86adc',1,'refl::attr::base_types']]]
 ];

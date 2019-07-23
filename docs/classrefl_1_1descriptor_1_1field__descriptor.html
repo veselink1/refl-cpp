@@ -123,26 +123,31 @@ Public Types</h2></td></tr>
 <tr class="memitem:a098cba21d2e91ee593b59573295b04d4 inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memItemLeft" align="right" valign="top">typedef member::member_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#a098cba21d2e91ee593b59573295b04d4">member_type</a></td></tr>
 <tr class="memdesc:a098cba21d2e91ee593b59573295b04d4 inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="mdescLeft">&#160;</td><td class="mdescRight">An alias, specifying the exact type of member.  <a href="classrefl_1_1descriptor_1_1member__descriptor__base.html#a098cba21d2e91ee593b59573295b04d4">More...</a><br /></td></tr>
 <tr class="separator:a098cba21d2e91ee593b59573295b04d4 inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8eb41df4e6d17f6e223f8ed5abe581d inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="namespacerefl_1_1trait.html#ae2279db43338368acb8af9ade961a504">trait::as_type_list_t</a>&lt; std::remove_cv_t&lt; decltype(member::attributes)&gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#ae8eb41df4e6d17f6e223f8ed5abe581d">attribute_types</a></td></tr>
+<tr class="memdesc:ae8eb41df4e6d17f6e223f8ed5abe581d inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of the attributes tuple.  <a href="classrefl_1_1descriptor_1_1member__descriptor__base.html#ae8eb41df4e6d17f6e223f8ed5abe581d">More...</a><br /></td></tr>
+<tr class="separator:ae8eb41df4e6d17f6e223f8ed5abe581d inherit pub_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:adcf4dea6feabb40c31444a689db5b0eb"><td class="memItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html#adcf4dea6feabb40c31444a689db5b0eb">operator()</a> () const noexcept</td></tr>
-<tr class="memdesc:adcf4dea6feabb40c31444a689db5b0eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">A synonym for <a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html#a4625b77cc9787347970a2ae90ae2874a" title="Returns the value of the field. (for static fields).">get()</a>.  <a href="#adcf4dea6feabb40c31444a689db5b0eb">More...</a><br /></td></tr>
-<tr class="separator:adcf4dea6feabb40c31444a689db5b0eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a227c2d6e48aac4fb4f46a0134b0678e0"><td class="memTemplParams" colspan="2">template&lt;typename U &gt; </td></tr>
-<tr class="memitem:a227c2d6e48aac4fb4f46a0134b0678e0"><td class="memTemplItemLeft" align="right" valign="top">decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html#a227c2d6e48aac4fb4f46a0134b0678e0">operator()</a> (U &amp;&amp;target) const noexcept</td></tr>
-<tr class="memdesc:a227c2d6e48aac4fb4f46a0134b0678e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">A synonym for get(target).  <a href="#a227c2d6e48aac4fb4f46a0134b0678e0">More...</a><br /></td></tr>
-<tr class="separator:a227c2d6e48aac4fb4f46a0134b0678e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a291b6487148ca09beb69734a4f97a8ab"><td class="memTemplParams" colspan="2">template&lt;typename Dummy  = void&gt; </td></tr>
+<tr class="memitem:a291b6487148ca09beb69734a4f97a8ab"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html#a291b6487148ca09beb69734a4f97a8ab">operator()</a> () const noexcept -&gt; decltype(detail::get_impl&lt; <a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#aba0ce93d521472d8a29789df8eb70c7c">member</a>, Dummy &gt;())</td></tr>
+<tr class="memdesc:a291b6487148ca09beb69734a4f97a8ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">A synonym for <a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html#ab0440072dec8177afcb33ed1dea8ba99" title="Returns the value of the field. (for static fields).">get()</a>.  <a href="#a291b6487148ca09beb69734a4f97a8ab">More...</a><br /></td></tr>
+<tr class="separator:a291b6487148ca09beb69734a4f97a8ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfbc76db87004508f1a124066e7e9844"><td class="memTemplParams" colspan="2">template&lt;typename U &gt; </td></tr>
+<tr class="memitem:adfbc76db87004508f1a124066e7e9844"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html#adfbc76db87004508f1a124066e7e9844">operator()</a> (U &amp;&amp;target) const noexcept -&gt; decltype(detail::get_impl&lt; <a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#aba0ce93d521472d8a29789df8eb70c7c">member</a> &gt;(target))</td></tr>
+<tr class="memdesc:adfbc76db87004508f1a124066e7e9844"><td class="mdescLeft">&#160;</td><td class="mdescRight">A synonym for get(target).  <a href="#adfbc76db87004508f1a124066e7e9844">More...</a><br /></td></tr>
+<tr class="separator:adfbc76db87004508f1a124066e7e9844"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a4625b77cc9787347970a2ae90ae2874a"><td class="memItemLeft" align="right" valign="top">static decltype(auto) constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html#a4625b77cc9787347970a2ae90ae2874a">get</a> () noexcept</td></tr>
-<tr class="memdesc:a4625b77cc9787347970a2ae90ae2874a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the value of the field. (for static fields).  <a href="#a4625b77cc9787347970a2ae90ae2874a">More...</a><br /></td></tr>
-<tr class="separator:a4625b77cc9787347970a2ae90ae2874a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a7ca636e0dea5431786a2dac4f149c4"><td class="memTemplParams" colspan="2">template&lt;typename U &gt; </td></tr>
-<tr class="memitem:a5a7ca636e0dea5431786a2dac4f149c4"><td class="memTemplItemLeft" align="right" valign="top">static decltype(auto) constexpr&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html#a5a7ca636e0dea5431786a2dac4f149c4">get</a> (U &amp;&amp;target) noexcept</td></tr>
-<tr class="memdesc:a5a7ca636e0dea5431786a2dac4f149c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the value of the field. (for instance fields).  <a href="#a5a7ca636e0dea5431786a2dac4f149c4">More...</a><br /></td></tr>
-<tr class="separator:a5a7ca636e0dea5431786a2dac4f149c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0440072dec8177afcb33ed1dea8ba99"><td class="memTemplParams" colspan="2">template&lt;typename Dummy  = void&gt; </td></tr>
+<tr class="memitem:ab0440072dec8177afcb33ed1dea8ba99"><td class="memTemplItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html#ab0440072dec8177afcb33ed1dea8ba99">get</a> () noexcept -&gt; decltype(detail::get_impl&lt; <a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#aba0ce93d521472d8a29789df8eb70c7c">member</a>, Dummy &gt;())</td></tr>
+<tr class="memdesc:ab0440072dec8177afcb33ed1dea8ba99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the value of the field. (for static fields).  <a href="#ab0440072dec8177afcb33ed1dea8ba99">More...</a><br /></td></tr>
+<tr class="separator:ab0440072dec8177afcb33ed1dea8ba99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a859e8dc52b322d9ba157b267c1959a96"><td class="memTemplParams" colspan="2">template&lt;typename U &gt; </td></tr>
+<tr class="memitem:a859e8dc52b322d9ba157b267c1959a96"><td class="memTemplItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html#a859e8dc52b322d9ba157b267c1959a96">get</a> (U &amp;&amp;target) noexcept -&gt; decltype(detail::get_impl&lt; <a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#aba0ce93d521472d8a29789df8eb70c7c">member</a> &gt;(target))</td></tr>
+<tr class="memdesc:a859e8dc52b322d9ba157b267c1959a96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the value of the field. (for instance fields).  <a href="#a859e8dc52b322d9ba157b267c1959a96">More...</a><br /></td></tr>
+<tr class="separator:a859e8dc52b322d9ba157b267c1959a96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -192,22 +197,25 @@ template&lt;typename T , size_t N&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a4625b77cc9787347970a2ae90ae2874a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4625b77cc9787347970a2ae90ae2874a">&#9670;&nbsp;</a></span>get() <span class="overload">[1/2]</span></h2>
+<a id="ab0440072dec8177afcb33ed1dea8ba99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0440072dec8177afcb33ed1dea8ba99">&#9670;&nbsp;</a></span>get() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename T , size_t N&gt; </div>
+<div class="memtemplate">
+template&lt;typename Dummy  = void&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static decltype(auto) constexpr <a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html">refl::descriptor::field_descriptor</a>&lt; T, N &gt;::get </td>
+          <td class="memname">static constexpr auto <a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html">refl::descriptor::field_descriptor</a>&lt; T, N &gt;::get </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> -&gt; decltype(detail::get_impl&lt;<a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#aba0ce93d521472d8a29789df8eb70c7c">member</a>, Dummy&gt;())
+                </td>
         </tr>
       </table>
   </td>
@@ -221,8 +229,8 @@ template&lt;typename T , size_t N&gt; </div>
 
 </div>
 </div>
-<a id="a5a7ca636e0dea5431786a2dac4f149c4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5a7ca636e0dea5431786a2dac4f149c4">&#9670;&nbsp;</a></span>get() <span class="overload">[2/2]</span></h2>
+<a id="a859e8dc52b322d9ba157b267c1959a96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a859e8dc52b322d9ba157b267c1959a96">&#9670;&nbsp;</a></span>get() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -235,11 +243,12 @@ template&lt;typename U &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static decltype(auto) constexpr <a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html">refl::descriptor::field_descriptor</a>&lt; T, N &gt;::get </td>
+          <td class="memname">static constexpr auto <a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html">refl::descriptor::field_descriptor</a>&lt; T, N &gt;::get </td>
           <td>(</td>
           <td class="paramtype">U &amp;&amp;&#160;</td>
           <td class="paramname"><em>target</em></td><td>)</td>
-          <td></td>
+          <td> -&gt; decltype(detail::get_impl&lt;<a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#aba0ce93d521472d8a29789df8eb70c7c">member</a>&gt;(target))
+                </td>
         </tr>
       </table>
   </td>
@@ -253,22 +262,25 @@ template&lt;typename U &gt; </div>
 
 </div>
 </div>
-<a id="adcf4dea6feabb40c31444a689db5b0eb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adcf4dea6feabb40c31444a689db5b0eb">&#9670;&nbsp;</a></span>operator()() <span class="overload">[1/2]</span></h2>
+<a id="a291b6487148ca09beb69734a4f97a8ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a291b6487148ca09beb69734a4f97a8ab">&#9670;&nbsp;</a></span>operator()() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;typename T , size_t N&gt; </div>
+<div class="memtemplate">
+template&lt;typename Dummy  = void&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">decltype(auto) constexpr <a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html">refl::descriptor::field_descriptor</a>&lt; T, N &gt;::operator() </td>
+          <td class="memname">constexpr auto <a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html">refl::descriptor::field_descriptor</a>&lt; T, N &gt;::operator() </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td> const -&gt; decltype(detail::get_impl&lt;<a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#aba0ce93d521472d8a29789df8eb70c7c">member</a>, Dummy&gt;())
+                </td>
         </tr>
       </table>
   </td>
@@ -278,12 +290,12 @@ template&lt;typename T , size_t N&gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>A synonym for <a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html#a4625b77cc9787347970a2ae90ae2874a" title="Returns the value of the field. (for static fields).">get()</a>. </p>
+<p>A synonym for <a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html#ab0440072dec8177afcb33ed1dea8ba99" title="Returns the value of the field. (for static fields).">get()</a>. </p>
 
 </div>
 </div>
-<a id="a227c2d6e48aac4fb4f46a0134b0678e0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a227c2d6e48aac4fb4f46a0134b0678e0">&#9670;&nbsp;</a></span>operator()() <span class="overload">[2/2]</span></h2>
+<a id="adfbc76db87004508f1a124066e7e9844"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfbc76db87004508f1a124066e7e9844">&#9670;&nbsp;</a></span>operator()() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -296,11 +308,12 @@ template&lt;typename U &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">decltype(auto) constexpr <a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html">refl::descriptor::field_descriptor</a>&lt; T, N &gt;::operator() </td>
+          <td class="memname">constexpr auto <a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html">refl::descriptor::field_descriptor</a>&lt; T, N &gt;::operator() </td>
           <td>(</td>
           <td class="paramtype">U &amp;&amp;&#160;</td>
           <td class="paramname"><em>target</em></td><td>)</td>
-          <td> const</td>
+          <td> const -&gt; decltype(detail::get_impl&lt;<a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#aba0ce93d521472d8a29789df8eb70c7c">member</a>&gt;(target))
+                </td>
         </tr>
       </table>
   </td>
@@ -372,7 +385,7 @@ template&lt;typename T , size_t N&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacerefl.html">refl</a></li><li class="navelem"><a class="el" href="namespacerefl_1_1descriptor.html">descriptor</a></li><li class="navelem"><a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html">field_descriptor</a></li>
-    <li class="footer">Generated on Fri Jul 19 2019 23:07:21 for refl-cpp by
+    <li class="footer">Generated on Tue Jul 23 2019 19:27:53 for refl-cpp by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>

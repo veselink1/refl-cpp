@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['skip_5ft',['skip_t',['../namespacerefl_1_1trait.html#a4564a607d593fab7826ae867003b51ea',1,'refl::trait']]]
+  ['remove_5fqualifiers_5ft',['remove_qualifiers_t',['../namespacerefl_1_1trait.html#a281a1cb4e19fe3ff645e48867aa8daf1',1,'refl::trait']]],
+  ['return_5ftype',['return_type',['../classrefl_1_1descriptor_1_1function__descriptor.html#a7f6f665c1d51087c1aa253eaf3edbeae',1,'refl::descriptor::function_descriptor']]]
 ];

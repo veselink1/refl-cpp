@@ -1,4 +1,4 @@
-# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.3.5-dev) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
+# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.4.0-dev) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔯🔥
 
 ## Synopsis
@@ -105,6 +105,15 @@ REFL_FUNC(Function, Attribute...)
 
 ## Changelog
 *Releases follow the MAJOR.MINOR.PATCH versioning scheme*
+
+### v0.4.0
+  - Renamed: `trait::filter` to `trait::filter_t`, replaced by `struct trait::filter { typedef ... type; }` to follow preset convention
+  - Renamed: `trait::map` to `trait::map_t`, replaced by `struct trait::map { typedef ... type; }` to follow preset convention
+  - Breaking change: `function_descriptor<...>::pointer` now no longer exists. (Reason: Replacing with forwarding function allows for more flexibility when using  `refl::runtime::proxy<>`. Migrate by taking a pointer to `function_descriptor<...>::invoke()`)
+  - Breaking change: trait::contains/base/instance now no longer work implicitly with `std::tuple<...>` or support variadic arguments. Use `type_list<>` or `trait::as_type_list_t` to migrate working code. (Reason: Specializations found to be causative to many recently discovered bugs and are error-prone.)
+  - Bugfix: faulty implementation of `trait::skip<N>`
+  - Bugfix: faulty implementation of `util::to_tuple`
+  - Bugfix: `trait::contains_base` was working the other way around (checking for presense of base of a specified type, instead of checking for a derived type with a specified base)
 
 ### v0.3.5
   - Bugfix: `type_info__<T*>` has name defined as `char[N]` instead of `const_string<N>`
