@@ -1,23 +1,26 @@
-# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.4.0-dev) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
+# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.4.0-beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔯🔥
 
 ## Synopsis
 **[refl-cpp](https://github.com/veselink1/refl-cpp) allows static reflection and inspection of types in C++ with full support for *templated types and functions*!** The metadata required for this is specified through the use of macros (but wait!). The macros require the user to only specify the type that is being reflected and only the names of the members that are of interest. ReflCpp has a small and **well-organised API surface**. 
 
-- Macro-based code-gen has been minimized as must as is possible to support all basic requirements. All higher-level operations are implemented as free types and function in one of the utility namespaces.
+- Macro-based code-gen has been minimized as much as is possible to support all basic requirements. All higher-level operations are implemented as free types and function in one of the utility namespaces.
 
 - Support for **autogeneration of reflection metadata** through a **non-intrusive interface** is ~~coming soon~~ *now available* in the form of [refl-ht](https://github.com/veselink1/refl-ht).
+
+## Requirements
+- Minimum language standard: C++17
+
+## Usage
+- refl-cpp is packaged as a header-only library! Simply `#include "refl.hpp"` just like any other header.
+
+## License
+- MIT License (for more details, see the [license file](https://github.com/veselink1/refl-cpp/blob/master/LICENSE))
 
 ## Related Articles
 - Introductory post - [Compile-time reflection in C++ 17](https://medium.com/@vesko.karaganev/compile-time-reflection-in-c-17-55c14ee8106b)
 
 - In-depth post - [refl-cpp — A deep dive](https://medium.com/@vesko.karaganev/refl-cpp-deep-dive-86b185f68678)
-
-## Requirements
-- Minimum language standard: C++17
-
-## License
-- MIT License (for more details, see the [license file](https://github.com/veselink1/refl-cpp/blob/master/LICENSE))
 
 ## Contributing
 See [contributors.md](https://github.com/veselink1/refl-cpp/blob/master/contributors.md)
