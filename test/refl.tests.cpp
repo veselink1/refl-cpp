@@ -209,6 +209,9 @@ void tests()
         assert(strcmp(get_display_name(y_member), "Y") == 0);
         static_assert(make_invoker(y_member)(A{}) == 0);
         static_assert(std::is_same_v<trait::get_t<3, member_list<A>>::return_type<A, int>, void>);
+
+        auto invoker = make_invoker(trait::get_t<0, member_list<A>>{});
+        static_assert(std::is_invocable_v<decltype(invoker), A, int>);
     }
 
     /* runtime::* */

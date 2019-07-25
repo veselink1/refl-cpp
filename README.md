@@ -1,4 +1,4 @@
-# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.4.0-beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
+# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.4.1-beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔯🔥
 
 ## Synopsis
@@ -48,7 +48,6 @@ REFL_TYPE(Point)
   REFL_FIELD(x, /* attributes */)
   REFL_FIELD(y)
 REFL_END
-
 ```
 
 ### Basic usage example
@@ -65,7 +64,6 @@ REFL_END
       return member(pt);
   }
   // Result: values == std::tuple<int, int>{ 0, 0 };
-
 ```
 
 ## More examples
@@ -103,11 +101,15 @@ REFL_FIELD(Field, Attributes...)
 REFL_FUNC(Function, Attribute...)
 
 // NOTE: None of the macros above need a terminating semi-colon (;)
-
 ```
 
 ## Changelog
 *Releases follow the MAJOR.MINOR.PATCH versioning scheme*
+
+### v0.4.1
+  - `trait::as_type_list` now supports reference type in place of `T<Ts...>` (e.g. `std::tuple<Ts...>&` -> `type_list<Ts...>`). 
+  - `refl::attr::access_type::{read, write}` now deprecated, replaced by `{read_only, write_only}` (Note: implicitly-usable `read_only`, `write_only` constants in attribute (in `REFL_...` macros) context remain unchanged)
+  - `refl::descriptor::field_descriptor::operator()` now supports acting as a setter. `refl::descriptor::make_invoker` is now no longer needed and marked as deprecated.
 
 ### v0.4.0
   - Renamed: `trait::filter` to `trait::filter_t`, replaced by `struct trait::filter { typedef ... type; }` to follow preset convention

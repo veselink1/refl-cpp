@@ -1113,20 +1113,45 @@ namespace refl {
                 static constexpr auto attributes{ member::attributes };
 
             };
-            
+
             namespace detail
             {
-                template <typename Member, typename>
-                static constexpr auto get_impl() -> decltype(*Member::pointer)
+                template <typename Member>
+                struct static_field_invoker
                 {
-                    return *Member::pointer;
-                }
+                    static constexpr auto invoke() -> decltype(*Member::pointer)
+                    {
+                        return *Member::pointer;
+                    }
+                    
+                    template <typename U, typename M = Member, std::enable_if_t<M::is_writable, int> = 0>
+                    static constexpr auto invoke(U&& value) -> decltype(*Member::pointer = std::forward<U>(value))
+                    {
+                        return *Member::pointer = std::forward<U>(value);
+                    }
+                };
+
+                template <typename Member>
+                struct instance_field_invoker
+                {
+                    template <typename T>
+                    static constexpr auto invoke(T&& target) -> decltype(target.*(Member::pointer))
+                    {
+                        return target.*(Member::pointer);
+                    }
+                    
+                    template <typename T, typename U, typename M = Member, std::enable_if_t<M::is_writable, int> = 0>
+                    static constexpr auto invoke(T&& target, U&& value) -> decltype(target.*(Member::pointer) = std::forward<U>(value))
+                    {
+                        return target.*(Member::pointer) = std::forward<U>(value);
+                    }
+                };
+
+                template <typename Member>
+                static_field_invoker<Member> field_type_switch(std::true_type);
                 
-                template <typename Member, typename U>
-                static constexpr auto get_impl(U&& target) -> decltype(target.*(Member::pointer))
-                {
-                    return target.*(Member::pointer);
-                }
+                template <typename Member>
+                instance_field_invoker<Member> field_type_switch(std::false_type);
             }
 
             /// <summary>
@@ -1145,44 +1170,52 @@ namespace refl {
                 /// </summary>
                 typedef typename member::value_type value_type;
                 
-                static constexpr bool is_static{ !std::is_member_pointer_v<decltype(member::pointer)> };
+                /// <summary>
+                /// Whether the field is static or not.
+                /// </summary>
+                static constexpr bool is_static{ !std::is_member_object_pointer_v<decltype(member::pointer)> };
+
+                /// <summary>
+                /// Whether the field is non-const or not.
+                /// </summary>
+                static constexpr bool is_writable{ !std::is_const_v<value_type> };
                 
+                /// <summary>
+                /// A member pointer of the appropriate type.
+                /// </summary>
                 static constexpr auto pointer{ member::pointer };
+
+            private:
+                
+                using invoker = decltype(detail::field_type_switch<field_descriptor>(std::bool_constant<is_static>{}));
+
+            public:
 
                 /// <summary>
                 /// Returns the value of the field. (for static fields).
                 /// </summary>
-                template <typename Dummy = void>
-                static constexpr auto get() noexcept -> decltype(detail::get_impl<member, Dummy>())
+                template <decltype(nullptr) = nullptr>
+                static constexpr decltype(auto) get() noexcept
                 {
-                    return detail::get_impl<member>();
-                }
-                
-                /// <summary>
-                /// A synonym for get().
-                /// </summary>
-                template <typename Dummy = void>
-                constexpr auto operator()() const noexcept -> decltype(detail::get_impl<member, Dummy>())
-                {
-                    return detail::get_impl<member>();
+                    return *member::pointer;
                 }
 
                 /// <summary>
                 /// Returns the value of the field. (for instance fields).
                 /// </summary>
                 template <typename U>
-                static constexpr auto get(U&& target) noexcept -> decltype(detail::get_impl<member>(target))
+                static constexpr decltype(auto) get(U&& target) noexcept
                 {
-                    return detail::get_impl<member>(target);
+                    return target.*(member::pointer);
                 }
                 
                 /// <summary>
-                /// A synonym for get(target).
+                /// A synonym for get().
                 /// </summary>
-                template <typename U>
-                constexpr auto operator()(U&& target) const noexcept -> decltype(detail::get_impl<member>(target))
+                template <typename... Args>
+                constexpr auto operator()(Args&&... args) const noexcept -> decltype(invoker::invoke(std::forward<Args>(args)...))
                 {
-                    return detail::get_impl<member>(target);
+                    return invoker::invoke(std::forward<Args>(args)...);
                 }
 
             };
@@ -1529,13 +1562,15 @@ namespace refl {
         {
             enum class access_type 
             {
-                read = 0b1,
-                write = 0b10,
-                read_write = read | write,
+                read [[deprecated]] = 0b1,
+				read_only = 0b1,
+                write [[deprecated]] = 0b10,
+				write_only = 0b10,
+                read_write = read_only| write_only,
             };
 
-            static constexpr auto read_only = access_type::read;
-            static constexpr auto write_only = access_type::write;
+            static constexpr auto read_only = access_type::read_only;
+            static constexpr auto write_only = access_type::write_only;
             static constexpr auto read_write = access_type::read_write;
 
             /// <summary>
@@ -1720,7 +1755,7 @@ namespace refl {
             {
                 if constexpr (trait::is_property_v<T>) {
                     return static_cast<unsigned>(get_property_info(t).access) 
-                        & static_cast<unsigned>(attr::access_type::read);
+                        & static_cast<unsigned>(attr::access_type::read_only);
                 }
                 else {
                     return trait::is_field_v<T>;
@@ -1736,7 +1771,7 @@ namespace refl {
             {
                 if constexpr (trait::is_property_v<T>) {
                     return static_cast<unsigned>(get_property_info(t).access) 
-                        & static_cast<unsigned>(attr::access_type::write);
+                        & static_cast<unsigned>(attr::access_type::write_only);
                 }
                 else if constexpr (trait::is_field_v<T>) {
                     return !std::is_const_v<typename trait::remove_qualifiers_t<T>::value_type>;
@@ -1772,19 +1807,6 @@ namespace refl {
 				return t.name;
 			}
 
-            namespace detail
-            {
-                template <typename Member>
-                struct invoker 
-                {
-                    template <typename... Args>
-                    constexpr auto operator()(Args&&... args) -> decltype(Member{}(std::forward<Args>(args)...))
-                    {
-                        return Member{}(std::forward<Args>(args)...);
-                    }
-                };
-            }
-
             /// <summary>
             /// Creates a function object that dispatches to the approprite invocation function of T.
             /// </summary>
@@ -1793,7 +1815,7 @@ namespace refl {
 			{
 				using descriptor_type = trait::remove_qualifiers_t<T>;
                 static_assert(is_field(descriptor_type{}) || is_function(descriptor_type{}), "Invalid field or function descriptor!");
-				return detail::invoker<T>();
+				return t;
 			}
 
         } // namespace descriptor
@@ -2129,13 +2151,13 @@ namespace refl {
                 
                 std::optional<U> result;
 
+                // TODO: add exception catching 
 				bool found{ false };
 				for_each(type_descriptor::members, [&](auto member) {
                     using member_t = decltype(member);
 					if (found) return;
 
-                    constexpr auto invoker = make_invoker(member);
-                    if constexpr (std::is_invocable_r_v<U, decltype(invoker), T, Args...>) {
+                    if constexpr (std::is_invocable_r_v<U, decltype(member), T, Args...>) {
                         if constexpr (trait::is_field_v<member_t>) {
                             if (std::strcmp(member.name, name) == 0) {
                                 result.emplace(member(target, std::forward<Args>(args)...));
