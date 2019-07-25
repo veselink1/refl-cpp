@@ -459,6 +459,16 @@ namespace refl {
         };
 
         template <typename T>
+        struct as_type_list<T&> : public as_type_list<T>
+        {
+        };
+        
+        template <typename T>
+        struct as_type_list<T&&> : public as_type_list<T>
+        {
+        };
+
+        template <typename T>
         using as_type_list_t = typename as_type_list<T>::type;
 
     } // namespace trait
