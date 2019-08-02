@@ -168,10 +168,9 @@ void tests()
         static_assert(!field_descriptor<A, 0>::is_static);
         
         static_assert(function_descriptor<A, 3>::name == "f");
-        using invoker_t = decltype(make_invoker(function_descriptor<A, 3>()));
-        static_assert(std::is_invocable_v<invoker_t, A>);
-        static_assert(std::is_invocable_v<invoker_t, A, int>);
-        static_assert(!std::is_invocable_v<invoker_t, A, std::string>);
+        static_assert(std::is_invocable_v<function_descriptor<A, 3>, A>);
+        static_assert(std::is_invocable_v<function_descriptor<A, 3>, A, int>);
+        static_assert(!std::is_invocable_v<function_descriptor<A, 3>, A, std::string>);
         
         static_assert(is_reflectable<int>());
         struct dummy {};
@@ -207,11 +206,9 @@ void tests()
         static_assert(is_property(y_member));
         assert(strcmp(get_debug_name(y_member), "A::y") == 0);
         assert(strcmp(get_display_name(y_member), "Y") == 0);
-        static_assert(make_invoker(y_member)(A{}) == 0);
+        static_assert(y_member(A{}) == 0);
         static_assert(std::is_same_v<trait::get_t<3, member_list<A>>::return_type<A, int>, void>);
-
-        auto invoker = make_invoker(trait::get_t<0, member_list<A>>{});
-        static_assert(std::is_invocable_v<decltype(invoker), A, int>);
+        static_assert(std::is_invocable_v<trait::get_t<0, member_list<A>>, A, int>);
     }
 
     /* runtime::* */

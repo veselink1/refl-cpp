@@ -1,12 +1,10 @@
 var hierarchy =
 [
-    [ "refl::trait::as_type_list< typename >", "structrefl_1_1trait_1_1as__type__list.html", null ],
-    [ "refl::trait::as_type_list< T >", "structrefl_1_1trait_1_1as__type__list.html", [
-      [ "refl::trait::as_type_list< const T >", "structrefl_1_1trait_1_1as__type__list_3_01const_01_t_01_4.html", null ],
-      [ "refl::trait::as_type_list< const volatile T >", "structrefl_1_1trait_1_1as__type__list_3_01const_01volatile_01_t_01_4.html", null ],
-      [ "refl::trait::as_type_list< volatile T >", "structrefl_1_1trait_1_1as__type__list_3_01volatile_01_t_01_4.html", null ]
-    ] ],
+    [ "refl::trait::as_type_list< T >", "structrefl_1_1trait_1_1as__type__list.html", null ],
     [ "refl::trait::as_type_list< T< Ts... > >", "structrefl_1_1trait_1_1as__type__list_3_01_t_3_01_ts_8_8_8_01_4_01_4.html", null ],
+    [ "bool_constant", null, [
+      [ "refl::trait::is_property< T >", "structrefl_1_1trait_1_1is__property.html", null ]
+    ] ],
     [ "conjunction", null, [
       [ "refl::trait::is_field< T >", "structrefl_1_1trait_1_1is__field.html", null ],
       [ "refl::trait::is_function< T >", "structrefl_1_1trait_1_1is__function.html", null ]
@@ -22,6 +20,11 @@ var hierarchy =
       [ "refl::trait::contains_instance< T, TypeList >", "structrefl_1_1trait_1_1contains__instance.html", null ]
     ] ],
     [ "false_type", null, [
+      [ "refl::trait::detail::is_instance_of< type_descriptor, T >", null, [
+        [ "refl::trait::is_instance_of< type_descriptor, T >", "structrefl_1_1trait_1_1is__instance__of.html", [
+          [ "refl::trait::is_type< T >", "structrefl_1_1trait_1_1is__type.html", null ]
+        ] ]
+      ] ],
       [ "refl::trait::detail::is_instance< T >", null, [
         [ "refl::trait::is_instance< T >", "structrefl_1_1trait_1_1is__instance.html", null ]
       ] ],
@@ -29,6 +32,7 @@ var hierarchy =
         [ "refl::trait::is_instance_of< T, U >", "structrefl_1_1trait_1_1is__instance__of.html", null ]
       ] ]
     ] ],
+    [ "refl::member::field", "structrefl_1_1member_1_1field.html", null ],
     [ "refl::attr::usage::field", "structrefl_1_1attr_1_1usage_1_1field.html", [
       [ "refl::attr::property", "structrefl_1_1attr_1_1property.html", null ],
       [ "refl::attr::usage::member", "structrefl_1_1attr_1_1usage_1_1member.html", [
@@ -37,13 +41,18 @@ var hierarchy =
         ] ]
       ] ]
     ] ],
-    [ "refl::member::field", "structrefl_1_1member_1_1field.html", null ],
+    [ "field_proxies", null, [
+      [ "refl::runtime::proxy< Derived, Target >", "structrefl_1_1runtime_1_1proxy.html", null ]
+    ] ],
     [ "refl::trait::filter< Predicate, Ts >", "structrefl_1_1trait_1_1filter.html", null ],
+    [ "refl::member::function", "structrefl_1_1member_1_1function.html", null ],
     [ "refl::attr::usage::function", "structrefl_1_1attr_1_1usage_1_1function.html", [
       [ "refl::attr::property", "structrefl_1_1attr_1_1property.html", null ],
       [ "refl::attr::usage::member", "structrefl_1_1attr_1_1usage_1_1member.html", null ]
     ] ],
-    [ "refl::member::function", "structrefl_1_1member_1_1function.html", null ],
+    [ "function_proxies", null, [
+      [ "refl::runtime::proxy< Derived, Target >", "structrefl_1_1runtime_1_1proxy.html", null ]
+    ] ],
     [ "refl::trait::get< size_t, typename >", "structrefl_1_1trait_1_1get.html", null ],
     [ "refl::trait::detail::get< N, Ts... >", null, [
       [ "refl::trait::get< N, type_list< Ts... > >", "structrefl_1_1trait_1_1get_3_01_n_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html", null ]
@@ -51,6 +60,7 @@ var hierarchy =
     [ "is_container_test", null, [
       [ "refl::trait::is_container< T >", "structrefl_1_1trait_1_1is__container.html", null ]
     ] ],
+    [ "refl::trait::is_proxy< T >", "structrefl_1_1trait_1_1is__proxy.html", null ],
     [ "is_reflectable_test", null, [
       [ "refl::trait::is_reflectable< T >", "structrefl_1_1trait_1_1is__reflectable.html", null ]
     ] ],

@@ -1,4 +1,4 @@
-# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.4.1-beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
+# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.5.0-beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔯🔥
 
 ## Synopsis
@@ -105,6 +105,17 @@ REFL_FUNC(Function, Attribute...)
 
 ## Changelog
 *Releases follow the MAJOR.MINOR.PATCH versioning scheme*
+
+### v0.5.0
+  - Removed deprecated macros `$refl(...)`, `REFL_UNSTABLE(...)`, `REFL_DEPRECATED(...)`
+  - Removed deprecated `refl::attr::access_type::read, write` constants. Replaced by read_only, write_only for consistency.
+  - Removed deprecated `refl::attr::read_only, read_write, write_only` constants. Use the enum-qualified values. The constants are still available unqualified in macro context.
+  - Removed refl::descriptor::make_invoker (which was not deprecated but is now obsolete.) Simply replace make_invoker(x) with x.
+  - The defaulted constructor for `refl::util::const_string<N>` was replaced by a user-declared default constructor which now always zero-initializes the string buffer.
+
+
+### v0.4.2
+  - Added: `trait::is_type[_v]`, `descriptor::is_type(const T&)` for checking whether a type is a type_descriptor<T> instance.
 
 ### v0.4.1
   - `trait::as_type_list` now supports reference type in place of `T<Ts...>` (e.g. `std::tuple<Ts...>&` -> `type_list<Ts...>`). 
