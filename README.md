@@ -1,4 +1,6 @@
-# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.5.0-beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
+# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.5.0-beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html)) 
+[![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/oatpp/oatpp.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/oatpp/oatpp/context:cpp) [![Gitter](https://badges.gitter.im/refl-cpp/community.svg)](https://gitter.im/refl-cpp/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔯🔥
 
 ## Synopsis
