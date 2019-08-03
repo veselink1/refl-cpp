@@ -1,4 +1,4 @@
-# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.5.0-beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html)) 
+# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.5.1-beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html)) 
 [![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/oatpp/oatpp.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/oatpp/oatpp/context:cpp) [![Gitter](https://badges.gitter.im/refl-cpp/community.svg)](https://gitter.im/refl-cpp/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔯🔥
@@ -46,6 +46,14 @@ struct Point {
   float y;
 };
 
+/* New style */
+REFL_AUTO(
+  type(Point),
+  field(x, /* attributes */),
+  field(y)
+)
+
+/* Old style */
 REFL_TYPE(Point)
   REFL_FIELD(x, /* attributes */)
   REFL_FIELD(y)
@@ -73,7 +81,7 @@ REFL_END
 
 ## Metadata-generation macros 
 ```cpp
-// Describes a type and all of its members (experimental)
+// Describes a type and all of its members
 REFL_AUTO(
   type(Name, Attribute...),
   field(Name, Attribute...),
@@ -108,6 +116,10 @@ REFL_FUNC(Function, Attribute...)
 ## Changelog
 *Releases follow the MAJOR.MINOR.PATCH versioning scheme*
 
+### v0.5.1
+  - Bugfix: The REFL_AUTO macro was not working properly in MSVC and led to Internal compiler errors
+  - Changed: As a result of the related bugfix, the REFL_AUTO macro has been stabilized and its use is now recommended 
+
 ### v0.5.0
   - Removed deprecated macros `$refl(...)`, `REFL_UNSTABLE(...)`, `REFL_DEPRECATED(...)`
   - Removed deprecated `refl::attr::access_type::read, write` constants. Replaced by read_only, write_only for consistency.
@@ -139,7 +151,7 @@ REFL_FUNC(Function, Attribute...)
 ### v0.3.4
   - added new experimental syntax for metadata declaration that makes use of variadic macro expansion (can be disabled with `REFL_NO_VARIADICS`)
 ```cpp
-REFL_AUTO /* experimental */
+REFL_AUTO
 (
     type(User), // expands to REFL_TYPE(User)
     field(id, property(read_only)), // expands to REFL_FIELD(id, property(read_only))
