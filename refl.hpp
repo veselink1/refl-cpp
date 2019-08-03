@@ -2288,7 +2288,6 @@ namespace refl::detail
 #define REFL_DETAIL_TYPE_BODY(TypeName, ...) \
         typedef REFL_DETAIL_GROUP TypeName type; \
         REFL_DETAIL_ATTRIBUTES(type, __VA_ARGS__) \
-    public: \
         static constexpr auto name{ ::refl::util::make_const_string(REFL_DETAIL_STR(REFL_DETAIL_GROUP TypeName)) }; \
         static constexpr size_t member_index_offset = __COUNTER__ + 1; \
         template <size_t N, typename = void> \
@@ -2324,7 +2323,7 @@ namespace refl::detail
  */
 #define REFL_TEMPLATE(TemplateDeclaration, TypeName, ...) \
     namespace refl_impl::metadata { template <REFL_DETAIL_GROUP TemplateDeclaration> struct type_info__<REFL_DETAIL_GROUP TypeName> { \
-        public: REFL_DETAIL_TYPE_BODY(TypeName, __VA_ARGS__)
+        REFL_DETAIL_TYPE_BODY(TypeName, __VA_ARGS__)
 
 /**
  * Terminated the declaration of reflection metadata for a particular type.
@@ -2735,14 +2734,16 @@ REFL_END
 #ifdef __INTELLISENSE__
 
 #define REFL_DETAIL_EX_1_type(X, ...) REFL_TYPE(X)
+#define REFL_DETAIL_EX_1_template(X, Y, ...) REFL_TEMPLATE(X, Y)
 #define REFL_DETAIL_EX_1_field(X, ...) REFL_FIELD(X)
 #define REFL_DETAIL_EX_1_func(X, ...) REFL_FUNC(X)
 
 #else // !defined(__INTELLISENSE__)
 
-#define REFL_DETAIL_EX_1_type(...) REFL_TYPE(__VA_ARGS__)
-#define REFL_DETAIL_EX_1_field(...) REFL_FIELD(__VA_ARGS__)
-#define REFL_DETAIL_EX_1_func(...) REFL_FUNC(__VA_ARGS__)
+#define REFL_DETAIL_EX_1_type(...) REFL_DETAIL_EX_EXPAND(REFL_DETAIL_EX_DEFER(REFL_TYPE)(__VA_ARGS__))
+#define REFL_DETAIL_EX_1_template(...) REFL_DETAIL_EX_EXPAND(REFL_DETAIL_EX_DEFER(REFL_TEMPLATE)(__VA_ARGS__))
+#define REFL_DETAIL_EX_1_field(...) REFL_DETAIL_EX_EXPAND(REFL_DETAIL_EX_DEFER(REFL_FIELD)(__VA_ARGS__))
+#define REFL_DETAIL_EX_1_func(...) REFL_DETAIL_EX_EXPAND(REFL_DETAIL_EX_DEFER(REFL_FUNC)(__VA_ARGS__))
 
 #endif // __INTELLISENSE__
 

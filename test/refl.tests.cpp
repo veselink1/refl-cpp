@@ -22,6 +22,17 @@ REFL_TYPE(A)
 REFL_END
 
 template <typename T>
+struct Box {
+    using type = std::true_type;
+    T value;
+};
+
+REFL_AUTO(
+    template((typename T), (Box<T>)),
+    field(value)
+)
+
+template <typename T>
 struct dummy_proxy : refl::runtime::proxy<dummy_proxy<T>, T>
 {
     constexpr dummy_proxy() {}
