@@ -16,6 +16,11 @@ struct value_proxy : refl::runtime::proxy<value_proxy<T>, T>
         : target(target)
     {
     }
+    
+    constexpr value_proxy(T&& target)
+        : target(std::move(target))
+    {
+    }
 
     template <typename... Args>
     constexpr value_proxy(Args&&... args)
@@ -92,6 +97,9 @@ int main()
     assert(user.email().empty());
     user.email("john@example.com");
     assert(user.email() == "john@example.com");
+
+    refl::runtime::debug(std::cout, &user.target);
+    std::cout << std::endl;
 
     static_assert(std::is_same_v<decltype(user.email()), const std::string&>);
     static_assert(std::is_same_v<decltype(user.email("")), void>);
