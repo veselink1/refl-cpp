@@ -1,7 +1,7 @@
 # [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.5.1-beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html)) 
 [![Gitter](https://badges.gitter.im/refl-cpp/community.svg)](https://gitter.im/refl-cpp/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔯🔥
+A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔥
 
 ## Synopsis
 **[refl-cpp](https://github.com/veselink1/refl-cpp) allows static reflection and inspection of types in C++ with full support for *templated types and functions*!** The metadata required for this is specified through the use of macros (but wait!). The macros require the user to only specify the type that is being reflected and only the names of the members that are of interest. ReflCpp has a small and **well-organised API surface**. 
