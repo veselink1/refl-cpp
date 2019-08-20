@@ -1257,7 +1257,19 @@ namespace refl {
             template <typename Member>
             constexpr auto get_function_pointer(int) -> decltype(Member::pointer())
             {
-                return Member::pointer();
+                return Member::template pointer<>;
+            }
+
+            template <typename Member, typename Pointer>
+            constexpr decltype(nullptr) resolve_function_pointer(...)
+            {
+                return nullptr;
+            }
+            
+            template <typename Member, typename Pointer>
+            constexpr auto resolve_function_pointer(int) -> decltype(Member::template resolve<Pointer>())
+            {
+                return Member::template resolve<Pointer>();
             }
         }
         
@@ -1305,14 +1317,23 @@ namespace refl {
              */
             static constexpr bool is_resolved{ !std::is_same_v<decltype(pointer), const decltype(nullptr)> };
 
+            /**
+             * Whether the pointer can be resolved as with the specified type.
+             */
+            template <typename Pointer>
+            static constexpr bool can_resolve() 
+            {
+                return !std::is_same_v<decltype(resolve<Pointer>()), decltype(nullptr)>;
+            }
+
             /** 
              * Resolves the function pointer as being of type Ptr. 
              * Required when taking a pointer to an overloaded function.
              */
             template <typename Pointer>
-            static constexpr Pointer resolve() 
+            static constexpr auto resolve()
             {
-                return member::template resolve<Pointer>();
+                return detail::resolve_function_pointer<member, Pointer>(0);
             }
 
         };
@@ -1640,39 +1661,18 @@ namespace refl {
 
     namespace attr
     {
-        enum class access_type 
-        {
-            read_only = 0b1,
-            write_only = 0b10,
-            read_write = read_only| write_only,
-        };
-
         /**
-         * Used to decorate a member that serves as a property. 
+         * Used to decorate a function that serves as a property. 
          * Takes an optional friendly name.
          */
-        struct property : public usage::field, public usage::function
+        struct property : public usage::function
         {
-            const access_type access{ access_type::read_write };
-            const std::optional<const char*> friendly_name{};
+            std::optional<const char*> const friendly_name;
 
             constexpr property() noexcept = default;
-            
-            constexpr property(access_type access) noexcept
-                : access(access)
-                , friendly_name()
-            {
-            }
 
             constexpr property(const char* friendly_name) noexcept
-                : access(access_type::read_write)
-                , friendly_name(friendly_name)
-            {
-            }
-            
-            constexpr property(access_type access, const char* friendly_name) noexcept
-                : access(access)
-                , friendly_name(friendly_name)
+                : friendly_name(friendly_name)
             {
             }
         };
@@ -1716,10 +1716,6 @@ namespace refl {
     {            
         namespace macro_exports
         {
-            static constexpr auto read_only = attr::access_type::read_only;
-            static constexpr auto write_only = attr::access_type::write_only;
-            static constexpr auto read_write = attr::access_type::read_write;
-
             using attr::property;
             using attr::debug;
             using attr::bases;
@@ -1731,8 +1727,7 @@ namespace refl {
         /** Checks whether T is marked as a property. */
         template <typename T>
         struct is_property : std::bool_constant<
-            (trait::is_field_v<T> || trait::is_function_v<T>) 
-                && trait::contains_v<attr::property, typename T::attribute_types>> 
+            trait::is_function_v<T> && trait::contains_v<attr::property, typename T::attribute_types>> 
         {
         };
 
@@ -1828,6 +1823,15 @@ namespace refl {
         {
             return get_attribute<attr::property>(t);
         }
+
+        namespace detail
+        {
+            struct placeholder
+            {
+                template <typename T>
+                operator T() const;
+            };
+        } // namespace detail
         
         /**
          * Checks if T is a readable property or a field.
@@ -1837,8 +1841,13 @@ namespace refl {
         constexpr bool is_readable(const T& t) noexcept
         {
             if constexpr (trait::is_property_v<T>) {
-                return static_cast<unsigned>(get_property_info(t).access) 
-                    & static_cast<unsigned>(attr::access_type::read_only);
+                if constexpr (std::is_invocable_v<T, const typename T::declaring_type&>) {
+                    using return_type = typename T::template return_type<const typename T::declaring_type&>;
+                    return !std::is_void_v<return_type>;
+                }
+                else {
+                    return false;
+                }
             }
             else {
                 return trait::is_field_v<T>;
@@ -1853,8 +1862,7 @@ namespace refl {
         constexpr bool is_writable(const T& t) noexcept
         {
             if constexpr (trait::is_property_v<T>) {
-                return static_cast<unsigned>(get_property_info(t).access) 
-                    & static_cast<unsigned>(attr::access_type::write_only);
+                return std::is_invocable_v<T, typename T::declaring_type&, detail::placeholder>;
             }
             else if constexpr (trait::is_field_v<T>) {
                 return !std::is_const_v<typename trait::remove_qualifiers_t<T>::value_type>;
@@ -2445,13 +2453,7 @@ namespace refl::detail
             return ::refl::detail::head_t<type, Args...>::FunctionName_(::std::forward<Args>(args)...); \
         } \
         template <typename Dummy = void> \
-        static constexpr auto pointer() -> decltype(&::refl::detail::head_t<type, Dummy>::FunctionName_) { \
-            return &::refl::detail::head_t<type, Dummy>::FunctionName_; \
-        }; \
-        template <typename Pointer> \
-        static constexpr Pointer resolve() { \
-            return static_cast<Pointer>(&type::FunctionName_); \
-        } \
+        static constexpr decltype(&::refl::detail::head_t<type, Dummy>::FunctionName_) pointer{ &::refl::detail::head_t<type, Dummy>::FunctionName_ }; \
         REFL_DETAIL_MEMBER_PROXY(FunctionName_); \
     };
 
