@@ -1,4 +1,4 @@
-# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.5.1-beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html)) 
+# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.5.2) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html)) 
 [![Gitter](https://badges.gitter.im/refl-cpp/community.svg)](https://gitter.im/refl-cpp/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔯🔥
@@ -115,6 +115,14 @@ REFL_FUNC(Function, Attribute...)
 
 ## Changelog
 *Releases follow the MAJOR.MINOR.PATCH versioning scheme*
+
+### v0.5.2
+  - Added: `type_descriptor<T>::type` as an alias for `T`.
+  - Added: `function_descriptor<T, N>::pointer` which points to the target function, if the pointer can be resolved and to nullptr otherwise.
+  - Added: `function_descriptor<T, N>::is_resolved` for checking whether the pointer to the function has been resolved successfully.
+  - Added: `function_descriptor<T, N>::resolve<Pointer>` for explicitly resolving the function pointer as a value of the specified type. 
+  - Added: `util::get<size_t N>(type_list<Ts...>&&)` which zero-initializes and returns the type at the N-th position.
+  - Added: `util::get<size_t N>(Tuple&&)` as an alias for `std::get<N>`.
 
 ### v0.5.1
   - Bugfix: The REFL_AUTO macro was not working properly in MSVC and led to Internal compiler errors

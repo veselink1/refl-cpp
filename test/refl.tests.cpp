@@ -220,6 +220,14 @@ void tests()
         static_assert(y_member(A{}) == 0);
         static_assert(std::is_same_v<trait::get_t<3, member_list<A>>::return_type<A, int>, void>);
         static_assert(std::is_invocable_v<trait::get_t<0, member_list<A>>, A, int>);
+
+        using f_td = trait::get_t<3, member_list<A>>;
+        static_assert(!f_td::is_resolved);
+        auto f_ptr = f_td::resolve<void(A::*)()>;
+
+        using g_td = trait::get_t<4, member_list<A>>;
+        static_assert(g_td::is_resolved);
+        auto g_ptr = g_td::pointer;
     }
 
     /* runtime::* */

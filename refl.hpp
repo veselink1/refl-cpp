@@ -959,6 +959,7 @@ namespace refl {
             template <typename F, typename T, typename... Ts, typename... Carry>
             constexpr auto filter(F f, type_list<T, Ts...> list, type_list<Carry...> carry) 
             {
+                static_assert(std::is_trivial_v<T>, "Cannot synthesize a value of type T while iterating type_list<T, ...>!");
                 if constexpr (f(T{})) {
                     return filter(f, type_list<Ts...>{}, type_list<T, Carry...>{});
                 } 
@@ -1247,8 +1248,17 @@ namespace refl {
 
         namespace detail
         {
-            template <typename R, typename... Args>
-            auto resolve(R(*fn)(Args...), Args&&...) -> decltype(fn);
+            template <typename Member>
+            constexpr decltype(nullptr) get_function_pointer(...)
+            {
+                return nullptr;
+            }
+
+            template <typename Member>
+            constexpr auto get_function_pointer(int) -> decltype(Member::pointer())
+            {
+                return Member::pointer();
+            }
         }
         
         /**
@@ -1282,6 +1292,27 @@ namespace refl {
             constexpr auto operator()(Args&&... args) const -> decltype(invoke(std::declval<Args>()...))
             {
                 return invoke(std::forward<Args>(args)...); 
+            }
+
+            /** 
+             * Returns a pointer to a non-overloaded function. 
+             */
+            static constexpr auto pointer{ detail::get_function_pointer<member>(0) };
+
+            /**
+             * Whether the pointer member was correctly resolved to a concrete implementation.
+             * If this field is false, resolve() would need to be called instead.
+             */
+            static constexpr bool is_resolved{ !std::is_same_v<decltype(pointer), const decltype(nullptr)> };
+
+            /** 
+             * Resolves the function pointer as being of type Ptr. 
+             * Required when taking a pointer to an overloaded function.
+             */
+            template <typename Pointer>
+            static constexpr Pointer resolve() 
+            {
+                return member::template resolve<Pointer>();
             }
 
         };
@@ -1322,6 +1353,9 @@ namespace refl {
             typedef refl_impl::metadata::type_info__<T> type_info;
             
         public:
+
+            /** The reflected type T. */
+            typedef T type;
 
             /** A synonym for refl::member_list<T>. */
             typedef refl::member_list<T> member_types;
@@ -1545,6 +1579,29 @@ namespace refl {
                 if (!(... || trait::is_instance_of_v<T, Ts>)) return -1;
                 return index_of_template<T, 0, Ts...>();
             }
+        }
+        
+        /** Returns a zero-initialized instance of the type at position N. */
+        template <size_t N, typename... Ts>
+        constexpr auto get(const type_list<Ts...>& ts) noexcept
+        {
+            using Type = trait::get_t<N, type_list<Ts...>>;
+            static_assert(std::is_trivial_v<Type>, "Cannot synthesize a value of the required type in get<N>(type_list<...>)!");
+            return Type{};
+        }
+
+        /** A synonym for std::get<N>(tuple). */
+        template <size_t N, typename... Ts>
+        constexpr auto& get(std::tuple<Ts...>& ts) noexcept
+        {
+            return std::get<N>(ts);
+        }
+
+        /** A synonym for std::get<N>(tuple). */
+        template <size_t N, typename... Ts>
+        constexpr const auto& get(const std::tuple<Ts...>& ts) noexcept
+        {
+            return std::get<N>(ts);
         }
 
         /** A synonym for std::get<T>(tuple). */
@@ -2280,7 +2337,7 @@ namespace refl::detail
  * __VA_ARGS__ is the list of attributes.
  */
 #define REFL_DETAIL_ATTRIBUTES(DeclType, ...) \
-        static constexpr auto attributes = ::refl::detail::make_attributes<::refl::attr::usage:: DeclType>(__VA_ARGS__); \
+        static constexpr auto attributes{ ::refl::detail::make_attributes<::refl::attr::usage:: DeclType>(__VA_ARGS__) }; \
 
 /** 
  * Expands to the body of a type_info__ specialization.
@@ -2386,6 +2443,14 @@ namespace refl::detail
         } \
         template<typename... Args> static constexpr auto invoke(Args&&... args) -> decltype(::refl::detail::head_t<type, Args...>::FunctionName_(::std::declval<Args>()...)) { \
             return ::refl::detail::head_t<type, Args...>::FunctionName_(::std::forward<Args>(args)...); \
+        } \
+        template <typename Dummy = void> \
+        static constexpr auto pointer() -> decltype(&::refl::detail::head_t<type, Dummy>::FunctionName_) { \
+            return &::refl::detail::head_t<type, Dummy>::FunctionName_; \
+        }; \
+        template <typename Pointer> \
+        static constexpr Pointer resolve() { \
+            return static_cast<Pointer>(&type::FunctionName_); \
         } \
         REFL_DETAIL_MEMBER_PROXY(FunctionName_); \
     };
