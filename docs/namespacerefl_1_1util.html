@@ -195,6 +195,15 @@ Functions</h2></td></tr>
 <tr class="memitem:a6367f903b43361551dbed76926cfd551"><td class="memTemplParams" colspan="2">template&lt;typename... Ts, typename F &gt; </td></tr>
 <tr class="memitem:a6367f903b43361551dbed76926cfd551"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#a6367f903b43361551dbed76926cfd551">apply</a> (<a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt; Ts... &gt; list, F &amp;&amp;f)</td></tr>
 <tr class="separator:a6367f903b43361551dbed76926cfd551"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8def5d2fd1c1d527ffdbf9b12de12d06"><td class="memTemplParams" colspan="2">template&lt;size_t N, typename... Ts&gt; </td></tr>
+<tr class="memitem:a8def5d2fd1c1d527ffdbf9b12de12d06"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#a8def5d2fd1c1d527ffdbf9b12de12d06">get</a> (const <a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt; Ts... &gt; &amp;ts) noexcept</td></tr>
+<tr class="separator:a8def5d2fd1c1d527ffdbf9b12de12d06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac73523bc0ad4428a1330ffa0d9b44cd8"><td class="memTemplParams" colspan="2">template&lt;size_t N, typename... Ts&gt; </td></tr>
+<tr class="memitem:ac73523bc0ad4428a1330ffa0d9b44cd8"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#ac73523bc0ad4428a1330ffa0d9b44cd8">get</a> (std::tuple&lt; Ts... &gt; &amp;ts) noexcept</td></tr>
+<tr class="separator:ac73523bc0ad4428a1330ffa0d9b44cd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbb5a84668172acdffcf557ec14061a9"><td class="memTemplParams" colspan="2">template&lt;size_t N, typename... Ts&gt; </td></tr>
+<tr class="memitem:abbb5a84668172acdffcf557ec14061a9"><td class="memTemplItemLeft" align="right" valign="top">constexpr const auto &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#abbb5a84668172acdffcf557ec14061a9">get</a> (const std::tuple&lt; Ts... &gt; &amp;ts) noexcept</td></tr>
+<tr class="separator:abbb5a84668172acdffcf557ec14061a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6fe94106718ac7824623d4dc7a19411c"><td class="memTemplParams" colspan="2">template&lt;typename T , typename... Ts&gt; </td></tr>
 <tr class="memitem:a6fe94106718ac7824623d4dc7a19411c"><td class="memTemplItemLeft" align="right" valign="top">constexpr T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#a6fe94106718ac7824623d4dc7a19411c">get</a> (std::tuple&lt; Ts... &gt; &amp;ts) noexcept</td></tr>
 <tr class="separator:a6fe94106718ac7824623d4dc7a19411c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -526,8 +535,95 @@ template&lt;typename F , typename... Ts&gt; </div>
 
 </div>
 </div>
+<a id="a8def5d2fd1c1d527ffdbf9b12de12d06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8def5d2fd1c1d527ffdbf9b12de12d06">&#9670;&nbsp;</a></span>get() <span class="overload">[1/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;size_t N, typename... Ts&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto refl::util::get </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt; Ts... &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ts</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns a zero-initialized instance of the type at position N. </p>
+
+</div>
+</div>
+<a id="ac73523bc0ad4428a1330ffa0d9b44cd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac73523bc0ad4428a1330ffa0d9b44cd8">&#9670;&nbsp;</a></span>get() <span class="overload">[2/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;size_t N, typename... Ts&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto&amp; refl::util::get </td>
+          <td>(</td>
+          <td class="paramtype">std::tuple&lt; Ts... &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ts</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>A synonym for std::get&lt;N&gt;(tuple). </p>
+
+</div>
+</div>
+<a id="abbb5a84668172acdffcf557ec14061a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbb5a84668172acdffcf557ec14061a9">&#9670;&nbsp;</a></span>get() <span class="overload">[3/5]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;size_t N, typename... Ts&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr const auto&amp; refl::util::get </td>
+          <td>(</td>
+          <td class="paramtype">const std::tuple&lt; Ts... &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ts</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>A synonym for std::get&lt;N&gt;(tuple). </p>
+
+</div>
+</div>
 <a id="a6fe94106718ac7824623d4dc7a19411c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6fe94106718ac7824623d4dc7a19411c">&#9670;&nbsp;</a></span>get() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a6fe94106718ac7824623d4dc7a19411c">&#9670;&nbsp;</a></span>get() <span class="overload">[4/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -556,7 +652,7 @@ template&lt;typename T , typename... Ts&gt; </div>
 </div>
 </div>
 <a id="a794423ed7e0729c701fc4fe32ff65f75"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a794423ed7e0729c701fc4fe32ff65f75">&#9670;&nbsp;</a></span>get() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a794423ed7e0729c701fc4fe32ff65f75">&#9670;&nbsp;</a></span>get() <span class="overload">[5/5]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1293,7 +1389,7 @@ template&lt;typename T , size_t N&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacerefl.html">refl</a></li><li class="navelem"><a class="el" href="namespacerefl_1_1util.html">util</a></li>
-    <li class="footer">Generated on Fri Aug 2 2019 22:28:42 for refl-cpp by
+    <li class="footer">Generated on Tue Sep 3 2019 21:09:18 for refl-cpp by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

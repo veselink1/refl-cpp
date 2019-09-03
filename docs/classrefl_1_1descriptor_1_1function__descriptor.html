@@ -92,6 +92,7 @@ $(document).ready(function(){initNavTree('classrefl_1_1descriptor_1_1function__d
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pub-static-attribs">Static Public Attributes</a> &#124;
 <a href="classrefl_1_1descriptor_1_1function__descriptor-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">refl::descriptor::function_descriptor&lt; T, N &gt; Class Template Reference</div>  </div>
@@ -127,9 +128,16 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a5f6c4091c03a8fb9d5f6459c686ea655"><td class="memTemplParams" colspan="2">template&lt;typename... Args&gt; </td></tr>
 <tr class="memitem:a5f6c4091c03a8fb9d5f6459c686ea655"><td class="memTemplItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a5f6c4091c03a8fb9d5f6459c686ea655">invoke</a> (Args &amp;&amp;... args) -&gt; decltype(member::invoke(std::declval&lt; Args &gt;()...))</td></tr>
 <tr class="separator:a5f6c4091c03a8fb9d5f6459c686ea655"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63542f8e9afcb017c3b61695acbfa26a"><td class="memTemplParams" colspan="2">template&lt;typename Pointer &gt; </td></tr>
+<tr class="memitem:a63542f8e9afcb017c3b61695acbfa26a"><td class="memTemplItemLeft" align="right" valign="top">static constexpr Pointer&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a63542f8e9afcb017c3b61695acbfa26a">resolve</a> ()</td></tr>
+<tr class="separator:a63542f8e9afcb017c3b61695acbfa26a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:a6e18ad19be31eb26acfe1e84fd320c36"><td class="memItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a6e18ad19be31eb26acfe1e84fd320c36">pointer</a> { detail::get_function_pointer&lt;<a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#aba0ce93d521472d8a29789df8eb70c7c">member</a>&gt;(0) }</td></tr>
+<tr class="separator:a6e18ad19be31eb26acfe1e84fd320c36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a338ea7515da170e4f31c77b2c6857b45"><td class="memItemLeft" align="right" valign="top">static constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a338ea7515da170e4f31c77b2c6857b45">is_resolved</a> { !std::is_same_v&lt;decltype(<a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a6e18ad19be31eb26acfe1e84fd320c36">pointer</a>), const decltype(nullptr)&gt; }</td></tr>
+<tr class="separator:a338ea7515da170e4f31c77b2c6857b45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_static_attribs_classrefl_1_1descriptor_1_1member__descriptor__base"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classrefl_1_1descriptor_1_1member__descriptor__base')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html">refl::descriptor::member_descriptor_base&lt; T, N &gt;</a></td></tr>
 <tr class="memitem:a80719a0106e9f454c29c8363c0e694e4 inherit pub_static_attribs_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="classrefl_1_1descriptor_1_1type__descriptor.html">type_descriptor</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#a80719a0106e9f454c29c8363c0e694e4">declarator</a> { }</td></tr>
 <tr class="separator:a80719a0106e9f454c29c8363c0e694e4 inherit pub_static_attribs_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -137,6 +145,9 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a5d009e0abbaad1707d6cdb5cf743f18b inherit pub_static_attribs_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a410121cb42388625a57cfb910d31cdb7 inherit pub_static_attribs_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memItemLeft" align="right" valign="top">static constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#a410121cb42388625a57cfb910d31cdb7">attributes</a> { member::attributes }</td></tr>
 <tr class="separator:a410121cb42388625a57cfb910d31cdb7 inherit pub_static_attribs_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td colspan="2" onclick="javascript:toggleInherit('pro_types_classrefl_1_1descriptor_1_1member__descriptor__base')"><img src="closed.png" alt="-"/>&#160;Protected Types inherited from <a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html">refl::descriptor::member_descriptor_base&lt; T, N &gt;</a></td></tr>
 <tr class="memitem:aba0ce93d521472d8a29789df8eb70c7c inherit pro_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memItemLeft" align="right" valign="top">typedef refl_impl::metadata::type_info__&lt; T &gt;::template <a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#aba0ce93d521472d8a29789df8eb70c7c">member</a>&lt; N &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#aba0ce93d521472d8a29789df8eb70c7c">member</a></td></tr>
 <tr class="separator:aba0ce93d521472d8a29789df8eb70c7c inherit pro_types_classrefl_1_1descriptor_1_1member__descriptor__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -231,6 +242,87 @@ template&lt;typename... Args&gt; </div>
 
 </div>
 </div>
+<a id="a63542f8e9afcb017c3b61695acbfa26a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63542f8e9afcb017c3b61695acbfa26a">&#9670;&nbsp;</a></span>resolve()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , size_t N&gt; </div>
+<div class="memtemplate">
+template&lt;typename Pointer &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static constexpr Pointer <a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html">refl::descriptor::function_descriptor</a>&lt; T, N &gt;::resolve </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Resolves the function pointer as being of type Ptr. Required when taking a pointer to an overloaded function. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a338ea7515da170e4f31c77b2c6857b45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a338ea7515da170e4f31c77b2c6857b45">&#9670;&nbsp;</a></span>is_resolved</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , size_t N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr bool <a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html">refl::descriptor::function_descriptor</a>&lt; T, N &gt;::is_resolved { !std::is_same_v&lt;decltype(<a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a6e18ad19be31eb26acfe1e84fd320c36">pointer</a>), const decltype(nullptr)&gt; }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Whether the pointer member was correctly resolved to a concrete implementation. If this field is false, <a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a63542f8e9afcb017c3b61695acbfa26a">resolve()</a> would need to be called instead. </p>
+
+</div>
+</div>
+<a id="a6e18ad19be31eb26acfe1e84fd320c36"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e18ad19be31eb26acfe1e84fd320c36">&#9670;&nbsp;</a></span>pointer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , size_t N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto <a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html">refl::descriptor::function_descriptor</a>&lt; T, N &gt;::pointer { detail::get_function_pointer&lt;<a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#aba0ce93d521472d8a29789df8eb70c7c">member</a>&gt;(0) }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns a pointer to a non-overloaded function. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="refl_8hpp_source.html">refl.hpp</a></li>
 </ul>
@@ -240,7 +332,7 @@ template&lt;typename... Args&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacerefl.html">refl</a></li><li class="navelem"><a class="el" href="namespacerefl_1_1descriptor.html">descriptor</a></li><li class="navelem"><a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html">function_descriptor</a></li>
-    <li class="footer">Generated on Fri Aug 2 2019 22:28:39 for refl-cpp by
+    <li class="footer">Generated on Tue Sep 3 2019 21:09:16 for refl-cpp by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

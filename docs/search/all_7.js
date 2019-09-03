@@ -14,6 +14,7 @@ var searchData=
   ['is_5fproxy',['is_proxy',['../structrefl_1_1trait_1_1is__proxy.html',1,'refl::trait']]],
   ['is_5freadable',['is_readable',['../namespacerefl_1_1descriptor.html#a9de228dfab2429210084f1c0e447def4',1,'refl::descriptor']]],
   ['is_5freflectable',['is_reflectable',['../structrefl_1_1trait_1_1is__reflectable.html',1,'refl::trait::is_reflectable&lt; T &gt;'],['../namespacerefl.html#a12e0f11daf60216683e454102d247300',1,'refl::is_reflectable() noexcept'],['../namespacerefl.html#a378dd3e54e596094bf3d24abb26467f1',1,'refl::is_reflectable(T &amp;&amp;t) noexcept']]],
+  ['is_5fresolved',['is_resolved',['../classrefl_1_1descriptor_1_1function__descriptor.html#a338ea7515da170e4f31c77b2c6857b45',1,'refl::descriptor::function_descriptor']]],
   ['is_5fstatic',['is_static',['../classrefl_1_1descriptor_1_1field__descriptor.html#a955e6c913b0427ccfaf99716d22b4f5b',1,'refl::descriptor::field_descriptor']]],
   ['is_5ftype',['is_type',['../structrefl_1_1trait_1_1is__type.html',1,'refl::trait::is_type&lt; T &gt;'],['../namespacerefl_1_1descriptor.html#aceb96aebea30ee78df18c50c2e9cc558',1,'refl::descriptor::is_type()']]],
   ['is_5ftype_5fv',['is_type_v',['../namespacerefl_1_1trait.html#a9c31605a5aef99561286104c9a3da628',1,'refl::trait']]],
