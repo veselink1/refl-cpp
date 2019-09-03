@@ -117,9 +117,9 @@ namespace refl
             }
 
             /**
-             * Implicitly converts to const char*.
+             * Explicitly converts to const char*.
              */
-            constexpr operator const char*() const noexcept
+            explicit constexpr operator const char*() const noexcept
             {
                 return data;
             }
@@ -970,7 +970,7 @@ namespace refl {
         }
 
         /**
-         * Filters the list according to a predicate.
+         * Filters the list according to a *constexpr* predicate.
          */
         template <typename F, typename... Ts>
         constexpr auto filter(type_list<Ts...> list, F f) 
@@ -979,7 +979,7 @@ namespace refl {
         }
         
         /**
-         * Returns the first instance that matches the predicate. 
+         * Returns the first instance that matches the *constexpr* predicate. 
          */
         template <typename F, typename... Ts>
         constexpr auto find_first(type_list<Ts...> list, F f) 
@@ -989,7 +989,7 @@ namespace refl {
         }
 
         /**
-         * Returns the only instance that matches the predicate. If there is no match or multiple matches, fails with static_assert. 
+         * Returns the only instance that matches the *constexpr* predicate. If there is no match or multiple matches, fails with static_assert. 
          */
         template <typename F, typename... Ts>
         constexpr auto find_one(type_list<Ts...> list, F f) 
@@ -1000,7 +1000,7 @@ namespace refl {
         }
     
         /**
-         * Returns the member that has the specified name. Fails with static_assert if not such member exists.
+         * Returns the member that has the specified name. Fails with static_assert if no such member exists.
          */
         template <size_t N, typename... Ts>
         constexpr auto find_one(type_list<Ts...> list, const const_string<N>& name) 
