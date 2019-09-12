@@ -77,7 +77,7 @@ REFL_END
 ```
 
 ## More examples
-- See [examples/](https://github.com/veselink1/refl-cpp/blob/master/refl.hpp) for more usage examples.
+- See [examples/](https://github.com/veselink1/refl-cpp/tree/master/examples) for more usage examples.
 
 ## Metadata-generation macros 
 ```cpp
