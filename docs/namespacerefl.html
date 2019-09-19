@@ -132,15 +132,15 @@ Functions</h2></td></tr>
 <tr class="memitem:a12e0f11daf60216683e454102d247300"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a12e0f11daf60216683e454102d247300"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl.html#a12e0f11daf60216683e454102d247300">is_reflectable</a> () noexcept</td></tr>
 <tr class="separator:a12e0f11daf60216683e454102d247300"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a378dd3e54e596094bf3d24abb26467f1"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a378dd3e54e596094bf3d24abb26467f1"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl.html#a378dd3e54e596094bf3d24abb26467f1">is_reflectable</a> (T &amp;&amp;t) noexcept</td></tr>
-<tr class="separator:a378dd3e54e596094bf3d24abb26467f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a988e607c536b5e75698d9f086909246c"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a988e607c536b5e75698d9f086909246c"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl.html#a988e607c536b5e75698d9f086909246c">is_reflectable</a> (const T &amp;) noexcept</td></tr>
+<tr class="separator:a988e607c536b5e75698d9f086909246c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae95fbc2d63a7db5ce4d8a4dcca3d637e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:ae95fbc2d63a7db5ce4d8a4dcca3d637e"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="classrefl_1_1descriptor_1_1type__descriptor.html">type_descriptor</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e">reflect</a> () noexcept</td></tr>
 <tr class="separator:ae95fbc2d63a7db5ce4d8a4dcca3d637e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4471015d02b6bf2943465e1902256d1a"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a4471015d02b6bf2943465e1902256d1a"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="classrefl_1_1descriptor_1_1type__descriptor.html">type_descriptor</a>&lt; std::remove_reference_t&lt; T &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl.html#a4471015d02b6bf2943465e1902256d1a">reflect</a> (T &amp;&amp;t) noexcept</td></tr>
-<tr class="separator:a4471015d02b6bf2943465e1902256d1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a387afdc94a15d4079a60e8458d7cd4c6"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a387afdc94a15d4079a60e8458d7cd4c6"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="classrefl_1_1descriptor_1_1type__descriptor.html">type_descriptor</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl.html#a387afdc94a15d4079a60e8458d7cd4c6">reflect</a> (const T &amp;t) noexcept</td></tr>
+<tr class="separator:a387afdc94a15d4079a60e8458d7cd4c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The top-level refl-cpp namespace. </p>
@@ -198,8 +198,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a378dd3e54e596094bf3d24abb26467f1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a378dd3e54e596094bf3d24abb26467f1">&#9670;&nbsp;</a></span>is_reflectable() <span class="overload">[2/2]</span></h2>
+<a id="a988e607c536b5e75698d9f086909246c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a988e607c536b5e75698d9f086909246c">&#9670;&nbsp;</a></span>is_reflectable() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -212,8 +212,8 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">constexpr bool refl::is_reflectable </td>
           <td>(</td>
-          <td class="paramtype">T &amp;&amp;&#160;</td>
-          <td class="paramname"><em>t</em></td><td>)</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -255,8 +255,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a4471015d02b6bf2943465e1902256d1a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4471015d02b6bf2943465e1902256d1a">&#9670;&nbsp;</a></span>reflect() <span class="overload">[2/2]</span></h2>
+<a id="a387afdc94a15d4079a60e8458d7cd4c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a387afdc94a15d4079a60e8458d7cd4c6">&#9670;&nbsp;</a></span>reflect() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -267,9 +267,9 @@ template&lt;typename T &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">constexpr <a class="el" href="classrefl_1_1descriptor_1_1type__descriptor.html">type_descriptor</a>&lt;std::remove_reference_t&lt;T&gt; &gt; refl::reflect </td>
+          <td class="memname">constexpr <a class="el" href="classrefl_1_1descriptor_1_1type__descriptor.html">type_descriptor</a>&lt;T&gt; refl::reflect </td>
           <td>(</td>
-          <td class="paramtype">T &amp;&amp;&#160;</td>
+          <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>t</em></td><td>)</td>
           <td></td>
         </tr>
@@ -290,7 +290,7 @@ template&lt;typename T &gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacerefl.html">refl</a></li>
-    <li class="footer">Generated on Fri Aug 2 2019 22:28:38 for refl-cpp by
+    <li class="footer">Generated on Thu Sep 19 2019 20:09:43 for refl-cpp by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

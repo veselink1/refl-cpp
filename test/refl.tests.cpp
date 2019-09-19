@@ -14,7 +14,7 @@ struct A {
 
 REFL_TYPE(A)
     REFL_FIELD(x)
-    REFL_FIELD(y, property(read_only, "Y"))
+    REFL_FIELD(y)
     REFL_FIELD(z)
     
     REFL_FUNC(f)
@@ -214,9 +214,8 @@ void tests()
 
         static_assert(is_field(y_member));
         static_assert(!is_function(y_member));
-        static_assert(is_property(y_member));
+        assert(strcmp(get_display_name(y_member), "y") == 0);
         assert(strcmp(get_debug_name(y_member), "A::y") == 0);
-        assert(strcmp(get_display_name(y_member), "Y") == 0);
         static_assert(y_member(A{}) == 0);
         static_assert(std::is_same_v<trait::get_t<3, member_list<A>>::return_type<A, int>, void>);
         static_assert(std::is_invocable_v<trait::get_t<0, member_list<A>>, A, int>);
@@ -241,7 +240,7 @@ void tests()
         static_assert(!trait::is_proxy_v<int>);
 
         assert(runtime::debug_str(A{}).find("x = ") != std::string::npos);
-        assert(runtime::debug_str(A{}).find("Y = ") != std::string::npos);
+        assert(runtime::debug_str(A{}).find("y = ") != std::string::npos);
 
         assert(runtime::invoke<int>(A{}, "x", 1) == 1);
     }

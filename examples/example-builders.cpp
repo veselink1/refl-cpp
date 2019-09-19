@@ -47,10 +47,10 @@ struct User
 REFL_AUTO // New experimental syntax
 (
     type(User),
-    field(id, property(read_only)),
+    field(id),
     field(email),
-    field(first_name, property("firstName")),
-    field(last_name, property("lastName"))
+    field(first_name),
+    field(last_name)
 )
 
 // Metadata available at compile-time (erased at runtime)

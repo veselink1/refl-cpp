@@ -34,7 +34,6 @@ var hierarchy =
     ] ],
     [ "refl::member::field", "structrefl_1_1member_1_1field.html", null ],
     [ "refl::attr::usage::field", "structrefl_1_1attr_1_1usage_1_1field.html", [
-      [ "refl::attr::property", "structrefl_1_1attr_1_1property.html", null ],
       [ "refl::attr::usage::member", "structrefl_1_1attr_1_1usage_1_1member.html", [
         [ "refl::attr::usage::any", "structrefl_1_1attr_1_1usage_1_1any.html", [
           [ "refl::attr::debug< F >", "structrefl_1_1attr_1_1debug.html", null ]

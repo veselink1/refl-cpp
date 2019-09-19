@@ -1,4 +1,4 @@
-# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.5.2) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html)) 
+# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.6.0) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html)) 
 [![Gitter](https://badges.gitter.im/refl-cpp/community.svg)](https://gitter.im/refl-cpp/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔥
@@ -115,6 +115,10 @@ REFL_FUNC(Function, Attribute...)
 
 ## Changelog
 *Releases follow the MAJOR.MINOR.PATCH versioning scheme*
+
+### v0.6.0
+  - Changed: property() is now only usable on function members / use contract based checks for functions and fields (is_readable/writable)
+  - Removed: read_only, write_only, read_write access modifiers for property() attributes (rw-detection now based on contract). 
 
 ### v0.5.2
   - Added: `type_descriptor<T>::type` as an alias for `T`.

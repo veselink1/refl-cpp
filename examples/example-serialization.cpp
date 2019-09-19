@@ -18,7 +18,7 @@ void serialize(std::ostream& os, T&& value)
 {
     for_each(refl::reflect(value).members, [&](auto member)
     {
-        if constexpr (is_property(member) && refl::descriptor::has_attribute<serializable>(member))
+        if constexpr (is_readable(member) && refl::descriptor::has_attribute<serializable>(member))
         {
             os << get_display_name(member) << "=" << member(value) << ";";
         }
@@ -42,8 +42,8 @@ void debug_point(std::ostream& os, const Point& pt)
 }
 
 REFL_TYPE(Point, debug(debug_point), bases<>)
-    REFL_FIELD(x, property("X"), serializable())
-    REFL_FIELD(y, property("Y"), serializable())
+    REFL_FIELD(x, serializable())
+    REFL_FIELD(y, serializable())
     REFL_FUNC(magnitude)
 REFL_END
 

@@ -108,6 +108,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:abd5ad22466e3c3513257bde29683e0e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f8b7b47319025b4007367b285849fbd"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#a8f8b7b47319025b4007367b285849fbd">operator const char *</a> () const noexcept</td></tr>
 <tr class="separator:a8f8b7b47319025b4007367b285849fbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95cad4975549d265ea27c48234450937"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#a95cad4975549d265ea27c48234450937">operator std::string</a> () const noexcept</td></tr>
+<tr class="separator:a95cad4975549d265ea27c48234450937"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a465086c5ae8e245358ce44ed8154c986"><td class="memItemLeft" align="right" valign="top">constexpr const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#a465086c5ae8e245358ce44ed8154c986">c_str</a> () const noexcept</td></tr>
 <tr class="separator:a465086c5ae8e245358ce44ed8154c986"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25bdf3f17b20a34f25f4bd7b624c6aa7"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#a25bdf3f17b20a34f25f4bd7b624c6aa7">str</a> () const noexcept</td></tr>
@@ -241,11 +243,39 @@ template&lt;size_t N&gt; </div>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span><span class="mlabel">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Implicitly converts to const char*. </p>
+<p>Explicitly converts to const char*. </p>
+
+</div>
+</div>
+<a id="a95cad4975549d265ea27c48234450937"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95cad4975549d265ea27c48234450937">&#9670;&nbsp;</a></span>operator std::string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;size_t N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="structrefl_1_1util_1_1const__string.html">refl::util::const_string</a>&lt; N &gt;::operator std::string </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Explicitly converts to std::string. </p>
 
 </div>
 </div>
@@ -329,7 +359,7 @@ template&lt;size_t N&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacerefl.html">refl</a></li><li class="navelem"><a class="el" href="namespacerefl_1_1util.html">util</a></li><li class="navelem"><a class="el" href="structrefl_1_1util_1_1const__string.html">const_string</a></li>
-    <li class="footer">Generated on Fri Aug 2 2019 22:28:42 for refl-cpp by
+    <li class="footer">Generated on Thu Sep 19 2019 20:09:44 for refl-cpp by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

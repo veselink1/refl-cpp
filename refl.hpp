@@ -123,6 +123,14 @@ namespace refl
             {
                 return data;
             }
+            
+            /**
+             * Explicitly converts to std::string.
+             */
+            explicit constexpr operator std::string() const noexcept
+            {
+                return data;
+            }
 
             /**
              * Returns a pointer to the contained zero-terminated string.
@@ -194,7 +202,7 @@ namespace refl
             }
             else {
                 for (size_t i = 0; i < M; i++) {
-                    if (a[i] != b[i]) {
+                    if (a.data[i] != b.data[i]) {
                         return false;
                     }
                 }
@@ -245,6 +253,12 @@ namespace refl
         constexpr bool operator!=(const char(&a)[N], const const_string<M>& b) noexcept
         {
             return make_const_string(a) != b;
+        }
+
+        template <size_t N>
+        constexpr std::ostream& operator<<(std::ostream& os, const const_string<N>& str) noexcept
+        {
+            return os << str.c_str();
         }
         
     } // namespace util
@@ -599,8 +613,8 @@ namespace refl {
      * # Examples
      * ```
      * REFL_TYPE(Point, debug(custom_printer))
-     *     REFL_FIELD(x, property())
-     *     REFL_FIELD(y, property())
+     *     REFL_FIELD(x)
+     *     REFL_FIELD(y)
      * REFL_END
      * ```
      */
@@ -1255,7 +1269,7 @@ namespace refl {
             }
 
             template <typename Member>
-            constexpr auto get_function_pointer(int) -> decltype(Member::pointer())
+            constexpr auto get_function_pointer(int) -> decltype(Member::template pointer<>)
             {
                 return Member::template pointer<>;
             }
@@ -1327,7 +1341,7 @@ namespace refl {
             }
 
             /** 
-             * Resolves the function pointer as being of type Ptr. 
+             * Resolves the function pointer as being of type Pointer. 
              * Required when taking a pointer to an overloaded function.
              */
             template <typename Pointer>
@@ -1407,9 +1421,9 @@ namespace refl {
     
     /** Returns true if the non-qualified type T is reflectable.*/
     template <typename T>
-    constexpr bool is_reflectable(T&& t) noexcept
+    constexpr bool is_reflectable(const T&) noexcept
     {
-        return trait::is_reflectable_v<trait::remove_qualifiers_t<T>>;
+        return trait::is_reflectable_v<T>;
     }
 
     /** Returns the type descriptor for the type T. */
@@ -1421,7 +1435,7 @@ namespace refl {
 
     /** Returns the type descriptor for the non-qualified type T. */
     template<typename T>
-    constexpr type_descriptor<std::remove_reference_t<T>> reflect(T&& t) noexcept
+    constexpr type_descriptor<T> reflect(const T& t) noexcept
     {
         return {};
     }
@@ -1743,7 +1757,7 @@ namespace refl {
          * (Tip: Take advantage ADL-lookup whenever possible.)
          */
         template <typename T>
-        constexpr bool is_field(const T& t) noexcept
+        constexpr bool is_field(const T&) noexcept
         {
             return trait::is_field_v<T>;
         }
@@ -1753,7 +1767,7 @@ namespace refl {
          * (Tip: Take advantage ADL-lookup whenever possible.)
          */
         template <typename T>
-        constexpr bool is_function(const T& t) noexcept
+        constexpr bool is_function(const T&) noexcept
         {
             return trait::is_function_v<T>;
         }
@@ -1763,7 +1777,7 @@ namespace refl {
          * (Tip: Take advantage ADL-lookup whenever possible.)
          */
         template <typename T>
-        constexpr bool is_type(const T& t) noexcept
+        constexpr bool is_type(const T&) noexcept
         {
             return trait::is_type_v<T>;
         }
@@ -1772,7 +1786,7 @@ namespace refl {
          * Checks whether T has an attribute of type A. 
          */
         template <typename A, typename T>
-        constexpr bool has_attribute(const T& t) noexcept
+        constexpr bool has_attribute(const T&) noexcept
         {
             return trait::contains_base_v<A, typename T::attribute_types>;
         }
@@ -1781,7 +1795,7 @@ namespace refl {
          * Checks whether T has an attribute of that is a template instance of A. 
          */
         template <template<typename...> typename A, typename T>
-        constexpr bool has_attribute(const T& t) noexcept
+        constexpr bool has_attribute(const T&) noexcept
         {
             return trait::contains_instance_v<A, trait::as_type_list_t<typename T::attribute_types>>;
         }
@@ -1838,7 +1852,7 @@ namespace refl {
          * (Tip: Take advantage ADL-lookup whenever possible.)
          */
         template <typename T>
-        constexpr bool is_readable(const T& t) noexcept
+        constexpr bool is_readable(const T&) noexcept
         {
             if constexpr (trait::is_property_v<T>) {
                 if constexpr (std::is_invocable_v<T, const typename T::declaring_type&>) {
@@ -1859,7 +1873,7 @@ namespace refl {
          * (Tip: Take advantage ADL-lookup whenever possible.)
          */
         template <typename T>
-        constexpr bool is_writable(const T& t) noexcept
+        constexpr bool is_writable(const T&) noexcept
         {
             if constexpr (trait::is_property_v<T>) {
                 return std::is_invocable_v<T, typename T::declaring_type&, detail::placeholder>;
@@ -1895,7 +1909,7 @@ namespace refl {
                 auto&& friendly_name = util::get<attr::property>(t.attributes).friendly_name;
                 return friendly_name ? *friendly_name : t.name;
             }
-            return t.name;
+            return t.name.c_str();
         }
 
     } // namespace descriptor
@@ -2247,13 +2261,13 @@ namespace refl {
 
                 if constexpr (std::is_invocable_r_v<U, decltype(member), T, Args...>) {
                     if constexpr (trait::is_field_v<member_t>) {
-                        if (std::strcmp(member.name, name) == 0) {
+                        if (std::strcmp(member.name.c_str(), name) == 0) {
                             result.emplace(member(target, std::forward<Args>(args)...));
                             found = true;
                         }
                     }
                     else if constexpr (trait::is_function_v<member_t>) {
-                        if (std::strcmp(member.name, name) == 0) {
+                        if (std::strcmp(member.name.c_str(), name) == 0) {
                             result.emplace(member(target, std::forward<Args>(args)...));
                             found = true;
                         }

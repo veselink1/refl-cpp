@@ -91,9 +91,6 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <div class="textblock">Here is a list of all class members with links to the classes they belong to:</div>
 
 <h3><a id="index_a"></a>- a -</h3><ul>
-<li>access
-: <a class="el" href="structrefl_1_1attr_1_1property.html#a1bd7a31934bc02d9074279c4ce6e8b66">refl::attr::property</a>
-</li>
 <li>attribute_types
 : <a class="el" href="classrefl_1_1descriptor_1_1member__descriptor__base.html#ae8eb41df4e6d17f6e223f8ed5abe581d">refl::descriptor::member_descriptor_base&lt; T, N &gt;</a>
 , <a class="el" href="classrefl_1_1descriptor_1_1type__descriptor.html#a5c8eefceec1c9eba0543acd3336f498e">refl::descriptor::type_descriptor&lt; T &gt;</a>
@@ -108,6 +105,9 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <h3><a id="index_c"></a>- c -</h3><ul>
 <li>c_str()
 : <a class="el" href="structrefl_1_1util_1_1const__string.html#a465086c5ae8e245358ce44ed8154c986">refl::util::const_string&lt; N &gt;</a>
+</li>
+<li>can_resolve()
+: <a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a892b6413e06e59040945548bc45cc29c">refl::descriptor::function_descriptor&lt; T, N &gt;</a>
 </li>
 <li>const_string()
 : <a class="el" href="structrefl_1_1util_1_1const__string.html#ac378ca52c38cc6ccc04cab0b73b1f805">refl::util::const_string&lt; N &gt;</a>
@@ -133,7 +133,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 <h3><a id="index_f"></a>- f -</h3><ul>
 <li>friendly_name
-: <a class="el" href="structrefl_1_1attr_1_1property.html#a8c45f77ef5159115250f2294bd37d296">refl::attr::property</a>
+: <a class="el" href="structrefl_1_1attr_1_1property.html#a842afcc725a80e01fd734da817ea5162">refl::attr::property</a>
 </li>
 </ul>
 
@@ -148,6 +148,9 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <h3><a id="index_i"></a>- i -</h3><ul>
 <li>invoke()
 : <a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a5f6c4091c03a8fb9d5f6459c686ea655">refl::descriptor::function_descriptor&lt; T, N &gt;</a>
+</li>
+<li>is_resolved
+: <a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a338ea7515da170e4f31c77b2c6857b45">refl::descriptor::function_descriptor&lt; T, N &gt;</a>
 </li>
 <li>is_static
 : <a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html#a955e6c913b0427ccfaf99716d22b4f5b">refl::descriptor::field_descriptor&lt; T, N &gt;</a>
@@ -196,6 +199,9 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <li>operator const char *()
 : <a class="el" href="structrefl_1_1util_1_1const__string.html#a8f8b7b47319025b4007367b285849fbd">refl::util::const_string&lt; N &gt;</a>
 </li>
+<li>operator std::string()
+: <a class="el" href="structrefl_1_1util_1_1const__string.html#a95cad4975549d265ea27c48234450937">refl::util::const_string&lt; N &gt;</a>
+</li>
 <li>operator()()
 : <a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html#af003db500839f3ca03b9408bcf76b009">refl::descriptor::field_descriptor&lt; T, N &gt;</a>
 , <a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a2b9b03211b3a7c0f0fcd1c760579008e">refl::descriptor::function_descriptor&lt; T, N &gt;</a>
@@ -206,6 +212,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <h3><a id="index_p"></a>- p -</h3><ul>
 <li>pointer
 : <a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html#ad5a2424645cac6591a1e9cdd66a4a994">refl::descriptor::field_descriptor&lt; T, N &gt;</a>
+, <a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a6e18ad19be31eb26acfe1e84fd320c36">refl::descriptor::function_descriptor&lt; T, N &gt;</a>
 </li>
 <li>property()
 : <a class="el" href="structrefl_1_1attr_1_1property.html#a51b2327509b2f3c02660bed345883087">refl::attr::property</a>
@@ -217,6 +224,9 @@ $(document).ready(function(){initNavTree('functions.html','');});
 
 
 <h3><a id="index_r"></a>- r -</h3><ul>
+<li>resolve()
+: <a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a7f8b63e35466c3c2887f601272d9f0a0">refl::descriptor::function_descriptor&lt; T, N &gt;</a>
+</li>
 <li>return_type
 : <a class="el" href="classrefl_1_1descriptor_1_1function__descriptor.html#a7f6f665c1d51087c1aa253eaf3edbeae">refl::descriptor::function_descriptor&lt; T, N &gt;</a>
 </li>
@@ -239,7 +249,8 @@ $(document).ready(function(){initNavTree('functions.html','');});
 : <a class="el" href="structrefl_1_1runtime_1_1proxy.html#a81d8bc1490cfcbfc4ac3cbbcbb299393">refl::runtime::proxy&lt; Derived, Target &gt;</a>
 </li>
 <li>type
-: <a class="el" href="structrefl_1_1trait_1_1as__type__list_3_01_t_3_01_ts_8_8_8_01_4_01_4.html#a83bf2f383c12d5294c40d3f91400f118">refl::trait::as_type_list&lt; T&lt; Ts... &gt; &gt;</a>
+: <a class="el" href="classrefl_1_1descriptor_1_1type__descriptor.html#a38599f7e777bda08453cdc4387c03708">refl::descriptor::type_descriptor&lt; T &gt;</a>
+, <a class="el" href="structrefl_1_1trait_1_1as__type__list_3_01_t_3_01_ts_8_8_8_01_4_01_4.html#a83bf2f383c12d5294c40d3f91400f118">refl::trait::as_type_list&lt; T&lt; Ts... &gt; &gt;</a>
 , <a class="el" href="structrefl_1_1trait_1_1filter.html#a29a9f26db8cf86e7c9b8ea44221498ef">refl::trait::filter&lt; Predicate, Ts &gt;</a>
 , <a class="el" href="structrefl_1_1trait_1_1map.html#a4858762218944b7bc82fc1ad20bd0590">refl::trait::map&lt; Mapper, Ts &gt;</a>
 , <a class="el" href="structrefl_1_1trait_1_1remove__qualifiers.html#a39800dbc8004ea52c246cdda69f4d409">refl::trait::remove_qualifiers&lt; T &gt;</a>
@@ -267,7 +278,7 @@ $(document).ready(function(){initNavTree('functions.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Aug 2 2019 22:28:44 for refl-cpp by
+    <li class="footer">Generated on Thu Sep 19 2019 20:09:45 for refl-cpp by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

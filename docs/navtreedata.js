@@ -2,15 +2,15 @@ var NAVTREE =
 [
   [ "refl-cpp", "index.html", [
     [ "Contributors", "md_contributors.html", null ],
-    [ "[refl-cpp](https://github.com/veselink1/refl-cpp) (v0.5.0-beta) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))", "md__r_e_a_d_m_e.html", null ],
+    [ "[refl-cpp](https://github.com/veselink1/refl-cpp) (v0.6.0) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))", "md__r_e_a_d_m_e.html", null ],
+    [ "Learn by Example", "md__starter_guide.html", null ],
     [ "Namespaces", null, [
       [ "Namespace List", "namespaces.html", "namespaces" ],
       [ "Namespace Members", "namespacemembers.html", [
         [ "All", "namespacemembers.html", null ],
         [ "Functions", "namespacemembers_func.html", null ],
         [ "Variables", "namespacemembers_vars.html", null ],
-        [ "Typedefs", "namespacemembers_type.html", null ],
-        [ "Enumerations", "namespacemembers_enum.html", null ]
+        [ "Typedefs", "namespacemembers_type.html", null ]
       ] ]
     ] ],
     [ "Classes", "annotated.html", [

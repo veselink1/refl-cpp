@@ -72,14 +72,14 @@ namespace model
 {
     struct User
     {
-        long id;
+        const long id;
         std::string email;
     };
 }
 
 REFL_TYPE(model::User)
-    REFL_FIELD(id, property(read_only))
-    REFL_FIELD(email, property())
+    REFL_FIELD(id)
+    REFL_FIELD(email)
 REFL_END
 
 // User will now have the interface { auto id(args...); auto email(args...); }
