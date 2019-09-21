@@ -42,8 +42,7 @@ struct value_proxy : refl::runtime::proxy<value_proxy<T>, T>
         refl::runtime::debug_all(std::cout, args...);
         std::cout << '\n';
             
-        // If the user is calling a member marked with the property() attribute
-        if constexpr (is_property(member)) {
+        if constexpr (is_readable(member) || is_writable(member)) {
             static_assert(sizeof...(Args) <= 1, "Invalid number of arguments provided for property!");
             // One argument means that this is a setter-style method.
             if constexpr (sizeof...(Args) == 1) {
