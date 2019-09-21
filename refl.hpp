@@ -127,7 +127,7 @@ namespace refl
             /**
              * Explicitly converts to std::string.
              */
-            explicit constexpr operator std::string() const noexcept
+            explicit operator std::string() const noexcept
             {
                 return data;
             }
