@@ -1681,9 +1681,12 @@ namespace refl {
          */
         struct property : public usage::function
         {
-            std::optional<const char*> const friendly_name;
+            const std::optional<const char*> friendly_name;
 
-            constexpr property() noexcept = default;
+            constexpr property() noexcept
+                : friendly_name{}
+            {
+            }
 
             constexpr property(const char* friendly_name) noexcept
                 : friendly_name(friendly_name)
