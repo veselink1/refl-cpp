@@ -1,4 +1,4 @@
-# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.6.1) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html)) 
+# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.6.2) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html)) 
 [![Gitter](https://badges.gitter.im/refl-cpp/community.svg)](https://gitter.im/refl-cpp/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔥
@@ -115,6 +115,9 @@ REFL_FUNC(Function, Attribute...)
 
 ## Changelog
 *Releases follow the MAJOR.MINOR.PATCH versioning scheme*
+
+### v0.6.2
+  - Bugfix: Compiler error in clang: refl::attr::property's implicitly-declared default constructor is deleted due to N3797 §8.5/7 [#9](https://github.com/veselink1/refl-cpp/issues/9)
 
 ### v0.6.1
   - Bugfix: const_string::operator std::string() was incorrectly marked as constexpr which caused compilation failure in non-C++20-compliant compilers
