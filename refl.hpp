@@ -1269,9 +1269,9 @@ namespace refl {
             }
 
             template <typename Member>
-            constexpr auto get_function_pointer(int) -> decltype(Member::template pointer<>)
+            constexpr auto get_function_pointer(int) -> decltype(Member::pointer())
             {
-                return Member::template pointer<>;
+                return Member::pointer();
             }
 
             template <typename Member, typename Pointer>
@@ -2470,7 +2470,7 @@ namespace refl::detail
             return ::refl::detail::head_t<type, Args...>::FunctionName_(::std::forward<Args>(args)...); \
         } \
         template <typename Dummy = void> \
-        static constexpr decltype(&::refl::detail::head_t<type, Dummy>::FunctionName_) pointer{ &::refl::detail::head_t<type, Dummy>::FunctionName_ }; \
+        static constexpr auto pointer() -> decltype(&::refl::detail::head_t<type, Dummy>::FunctionName_) { return &::refl::detail::head_t<type, Dummy>::FunctionName_; }; \
         REFL_DETAIL_MEMBER_PROXY(FunctionName_); \
     };
 
