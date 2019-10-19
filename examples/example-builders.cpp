@@ -9,7 +9,12 @@
 template <typename T>
 class builder : public refl::runtime::proxy<builder<T>, T> {
 public:
-    builder() = default;
+
+    template <typename... Args>
+    builder(Args&&... args) 
+        : value_(std::forward<Args>(args)...)
+    {   
+    }
 
     // Intercepts calls to T's members with
     // a mutable *this and a single argument 
@@ -38,10 +43,18 @@ private:
 
 struct User
 {
-    long id;
+    const long id;
     std::string email;
     std::string first_name;
     std::string last_name;
+
+    User(long id)
+        : id{id}
+        , email{}
+        , first_name{}
+        , last_name{}
+    {
+    }
 };
 
 REFL_AUTO // New experimental syntax
@@ -60,8 +73,8 @@ static_assert(refl::reflect<User>().members.size == 4);
 int main()
 {
     // User-defined builder-style factories for any reflectable type! 🔥 
-    const User user = builder<User>{}
-        .id(42) // Fails at compile-time (is_writable == false)
+    const User user = builder<User>(10)
+        // .id(42) <- Fails at compile-time (is_writable == false)
         .email("jdoe@example.com")
         .first_name("John")
         .last_name("Doe")
