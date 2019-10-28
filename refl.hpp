@@ -168,7 +168,7 @@ namespace refl
             char data[N + M + 1] { };
             for (size_t i = 0; i < N; i++)
                 data[i] = a.data[i];
-            for (size_t i = 0; i < N; i++)
+            for (size_t i = 0; i < M; i++)
                 data[N + i] = b.data[i];
             return data;
         }
