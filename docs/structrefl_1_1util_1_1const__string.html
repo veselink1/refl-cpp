@@ -111,6 +111,8 @@ $(document).ready(function(){initNavTree('structrefl_1_1util_1_1const__string.ht
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac378ca52c38cc6ccc04cab0b73b1f805"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#ac378ca52c38cc6ccc04cab0b73b1f805">const_string</a> () noexcept</td></tr>
 <tr class="separator:ac378ca52c38cc6ccc04cab0b73b1f805"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ae4b17a4b57f0542f63ae01734f1d86"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#a5ae4b17a4b57f0542f63ae01734f1d86">const_string</a> (const <a class="el" href="structrefl_1_1util_1_1const__string.html">const_string</a>&lt; N &gt; &amp;other) noexcept</td></tr>
+<tr class="separator:a5ae4b17a4b57f0542f63ae01734f1d86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd5ad22466e3c3513257bde29683e0e4"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#abd5ad22466e3c3513257bde29683e0e4">const_string</a> (const char(&amp;<a class="el" href="structrefl_1_1util_1_1const__string.html#a8ee1a2f4b8fd6d71b7556661f379426a">data</a>)[N+1]) noexcept</td></tr>
 <tr class="separator:abd5ad22466e3c3513257bde29683e0e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f8b7b47319025b4007367b285849fbd"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#a8f8b7b47319025b4007367b285849fbd">operator const char *</a> () const noexcept</td></tr>
@@ -150,7 +152,7 @@ struct refl::util::const_string&lt; N &gt;</h3>
 </dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac378ca52c38cc6ccc04cab0b73b1f805"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac378ca52c38cc6ccc04cab0b73b1f805">&#9670;&nbsp;</a></span>const_string() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac378ca52c38cc6ccc04cab0b73b1f805">&#9670;&nbsp;</a></span>const_string() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -177,8 +179,37 @@ template&lt;size_t N&gt; </div>
 
 </div>
 </div>
+<a id="a5ae4b17a4b57f0542f63ae01734f1d86"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ae4b17a4b57f0542f63ae01734f1d86">&#9670;&nbsp;</a></span>const_string() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;size_t N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="structrefl_1_1util_1_1const__string.html">refl::util::const_string</a>&lt; N &gt;::<a class="el" href="structrefl_1_1util_1_1const__string.html">const_string</a> </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="structrefl_1_1util_1_1const__string.html">const_string</a>&lt; N &gt; &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Creates a copy of a <a class="el" href="structrefl_1_1util_1_1const__string.html">const_string</a>. </p>
+
+</div>
+</div>
 <a id="abd5ad22466e3c3513257bde29683e0e4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abd5ad22466e3c3513257bde29683e0e4">&#9670;&nbsp;</a></span>const_string() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#abd5ad22466e3c3513257bde29683e0e4">&#9670;&nbsp;</a></span>const_string() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -426,7 +457,7 @@ template&lt;size_t N&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacerefl.html">refl</a></li><li class="navelem"><a class="el" href="namespacerefl_1_1util.html">util</a></li><li class="navelem"><a class="el" href="structrefl_1_1util_1_1const__string.html">const_string</a></li>
-    <li class="footer">Generated on Tue Oct 29 2019 22:23:07 for refl-cpp by
+    <li class="footer">Generated on Tue Oct 29 2019 22:54:13 for refl-cpp by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>
