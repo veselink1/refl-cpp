@@ -252,7 +252,7 @@ Macros</h2></td></tr>
 <tr class="separator:ac16abdfd738e4366eb239e904b90e930"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e6ab98a732ec684223ddfd0734f260f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="refl_8hpp.html#a4e6ab98a732ec684223ddfd0734f260f">REFL_DETAIL_GROUP</a>(...)&#160;&#160;&#160;__VA_ARGS__</td></tr>
 <tr class="separator:a4e6ab98a732ec684223ddfd0734f260f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad77fb25bb894a5f1f091a4a94fa67b3f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="refl_8hpp.html#ad77fb25bb894a5f1f091a4a94fa67b3f">REFL_DETAIL_ATTRIBUTES</a>(DeclType, ...)&#160;&#160;&#160;static constexpr auto attributes{ ::refl::detail::make_attributes&lt;::refl::attr::usage:: DeclType&gt;(__VA_ARGS__) }; \</td></tr>
+<tr class="memitem:ad77fb25bb894a5f1f091a4a94fa67b3f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="refl_8hpp.html#ad77fb25bb894a5f1f091a4a94fa67b3f">REFL_DETAIL_ATTRIBUTES</a>(DeclType, ...)&#160;&#160;&#160;[[maybe_unused]] static constexpr auto attributes{ ::refl::detail::make_attributes&lt;::refl::attr::usage:: DeclType&gt;(__VA_ARGS__) }; \</td></tr>
 <tr class="separator:ad77fb25bb894a5f1f091a4a94fa67b3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7f8b46b069c2311101168d841a71b37"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="refl_8hpp.html#ac7f8b46b069c2311101168d841a71b37">REFL_DETAIL_TYPE_BODY</a>(TypeName, ...)</td></tr>
 <tr class="separator:ac7f8b46b069c2311101168d841a71b37"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -335,9 +335,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a6ebcdc8886ed6cf62bd914eb9566882a"><td class="memTemplParams" colspan="2">template&lt;typename T , typename... Ts&gt; </td></tr>
 <tr class="memitem:a6ebcdc8886ed6cf62bd914eb9566882a"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::array&lt; T, sizeof...(Ts)&gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#a6ebcdc8886ed6cf62bd914eb9566882a">refl::util::to_array</a> (const std::tuple&lt; Ts... &gt; &amp;tuple) noexcept</td></tr>
 <tr class="separator:a6ebcdc8886ed6cf62bd914eb9566882a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18d9033f789825c78562fbed063c93c5"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a18d9033f789825c78562fbed063c93c5"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::array&lt; T, 0 &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#a18d9033f789825c78562fbed063c93c5">refl::util::to_array</a> (const std::tuple&lt;&gt; &amp;tuple) noexcept</td></tr>
-<tr class="separator:a18d9033f789825c78562fbed063c93c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a351543d8dafe7ff4ffc8a2ee8f8b596f"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a351543d8dafe7ff4ffc8a2ee8f8b596f"><td class="memTemplItemLeft" align="right" valign="top">constexpr std::array&lt; T, 0 &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#a351543d8dafe7ff4ffc8a2ee8f8b596f">refl::util::to_array</a> (const std::tuple&lt;&gt; &amp;) noexcept</td></tr>
+<tr class="separator:a351543d8dafe7ff4ffc8a2ee8f8b596f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7db9918de2fd9e0d34caf4b6a5c1f77"><td class="memTemplParams" colspan="2">template&lt;typename T , size_t N&gt; </td></tr>
 <tr class="memitem:af7db9918de2fd9e0d34caf4b6a5c1f77"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#af7db9918de2fd9e0d34caf4b6a5c1f77">refl::util::to_tuple</a> (const std::array&lt; T, N &gt; &amp;array) noexcept</td></tr>
 <tr class="separator:af7db9918de2fd9e0d34caf4b6a5c1f77"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -374,9 +374,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a3c6a2cc90e4da4ea186e28ed0c2de7a3"><td class="memTemplParams" colspan="2">template&lt;size_t N, typename... Ts&gt; </td></tr>
 <tr class="memitem:a3c6a2cc90e4da4ea186e28ed0c2de7a3"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#a3c6a2cc90e4da4ea186e28ed0c2de7a3">refl::util::contains</a> (type_list&lt; Ts... &gt; list, const const_string&lt; N &gt; &amp;name)</td></tr>
 <tr class="separator:a3c6a2cc90e4da4ea186e28ed0c2de7a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6367f903b43361551dbed76926cfd551"><td class="memTemplParams" colspan="2">template&lt;typename... Ts, typename F &gt; </td></tr>
-<tr class="memitem:a6367f903b43361551dbed76926cfd551"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#a6367f903b43361551dbed76926cfd551">refl::util::apply</a> (type_list&lt; Ts... &gt; list, F &amp;&amp;f)</td></tr>
-<tr class="separator:a6367f903b43361551dbed76926cfd551"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5d05c1c63f4794ce67cbdd71f322ae6"><td class="memTemplParams" colspan="2">template&lt;typename... Ts, typename F &gt; </td></tr>
+<tr class="memitem:ab5d05c1c63f4794ce67cbdd71f322ae6"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#ab5d05c1c63f4794ce67cbdd71f322ae6">refl::util::apply</a> (type_list&lt; Ts... &gt;, F &amp;&amp;f)</td></tr>
+<tr class="separator:ab5d05c1c63f4794ce67cbdd71f322ae6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12e0f11daf60216683e454102d247300"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a12e0f11daf60216683e454102d247300"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl.html#a12e0f11daf60216683e454102d247300">refl::is_reflectable</a> () noexcept</td></tr>
 <tr class="separator:a12e0f11daf60216683e454102d247300"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -386,12 +386,12 @@ Functions</h2></td></tr>
 <tr class="memitem:ae95fbc2d63a7db5ce4d8a4dcca3d637e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:ae95fbc2d63a7db5ce4d8a4dcca3d637e"><td class="memTemplItemLeft" align="right" valign="top">constexpr type_descriptor&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e">refl::reflect</a> () noexcept</td></tr>
 <tr class="separator:ae95fbc2d63a7db5ce4d8a4dcca3d637e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a387afdc94a15d4079a60e8458d7cd4c6"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a387afdc94a15d4079a60e8458d7cd4c6"><td class="memTemplItemLeft" align="right" valign="top">constexpr type_descriptor&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl.html#a387afdc94a15d4079a60e8458d7cd4c6">refl::reflect</a> (const T &amp;t) noexcept</td></tr>
-<tr class="separator:a387afdc94a15d4079a60e8458d7cd4c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8def5d2fd1c1d527ffdbf9b12de12d06"><td class="memTemplParams" colspan="2">template&lt;size_t N, typename... Ts&gt; </td></tr>
-<tr class="memitem:a8def5d2fd1c1d527ffdbf9b12de12d06"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#a8def5d2fd1c1d527ffdbf9b12de12d06">refl::util::get</a> (const type_list&lt; Ts... &gt; &amp;ts) noexcept</td></tr>
-<tr class="separator:a8def5d2fd1c1d527ffdbf9b12de12d06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a70ee908d690769979f0aa9f57eb3e9"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a5a70ee908d690769979f0aa9f57eb3e9"><td class="memTemplItemLeft" align="right" valign="top">constexpr type_descriptor&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl.html#a5a70ee908d690769979f0aa9f57eb3e9">refl::reflect</a> (const T &amp;) noexcept</td></tr>
+<tr class="separator:a5a70ee908d690769979f0aa9f57eb3e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab767e611d7ad97b713f605d32366fff2"><td class="memTemplParams" colspan="2">template&lt;size_t N, typename... Ts&gt; </td></tr>
+<tr class="memitem:ab767e611d7ad97b713f605d32366fff2"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#ab767e611d7ad97b713f605d32366fff2">refl::util::get</a> (const type_list&lt; Ts... &gt; &amp;) noexcept</td></tr>
+<tr class="separator:ab767e611d7ad97b713f605d32366fff2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac73523bc0ad4428a1330ffa0d9b44cd8"><td class="memTemplParams" colspan="2">template&lt;size_t N, typename... Ts&gt; </td></tr>
 <tr class="memitem:ac73523bc0ad4428a1330ffa0d9b44cd8"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1util.html#ac73523bc0ad4428a1330ffa0d9b44cd8">refl::util::get</a> (std::tuple&lt; Ts... &gt; &amp;ts) noexcept</td></tr>
 <tr class="separator:ac73523bc0ad4428a1330ffa0d9b44cd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -511,7 +511,7 @@ Variables</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;static constexpr auto attributes{ ::refl::detail::make_attributes&lt;::refl::attr::usage:: DeclType&gt;(__VA_ARGS__) }; \</td>
+          <td></td><td>&#160;&#160;&#160;[[maybe_unused]] static constexpr auto attributes{ ::refl::detail::make_attributes&lt;::refl::attr::usage:: DeclType&gt;(__VA_ARGS__) }; \</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -692,7 +692,7 @@ Variables</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="refl_8hpp.html">refl.hpp</a></li>
-    <li class="footer">Generated on Mon Oct 28 2019 15:11:17 for refl-cpp by
+    <li class="footer">Generated on Tue Oct 29 2019 11:28:32 for refl-cpp by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>

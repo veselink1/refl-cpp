@@ -1,4 +1,4 @@
-# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.6.4) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html)) 
+# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.6.5) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html)) 
 [![Gitter](https://badges.gitter.im/refl-cpp/community.svg)](https://gitter.im/refl-cpp/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔥
@@ -116,8 +116,11 @@ REFL_FUNC(Function, Attribute...)
 ## Changelog
 *Releases follow the MAJOR.MINOR.PATCH versioning scheme*
 
+### v0.6.5
+  - Fixed multiple unused X warnings (fixed by [Siapran](https://github.com/Siapran)) #12
+
 ### v0.6.4
-  - Bugfix: usage of incorrect bound in `operator+(const_string<N>, const_string<M>)` (fixed by [Siapran](https://github.com/Siapran))
+  - Bugfix: usage of incorrect bound in `operator+(const_string<N>, const_string<M>)` (fixed by [Siapran](https://github.com/Siapran)) #11
 
 ### v0.6.3
   - Bugfix: clang errors during compilation of reflected overloaded member functions (since 0.6.0)
