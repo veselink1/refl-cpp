@@ -123,7 +123,7 @@ REFL_FUNC(Function, Attribute...)
   - Breaking change: `trait::map` and `trait::filter` now no longer accept variadic template parameters. Wrap variadic parameters in a type_list. (Allowing both `type_list<Ts...>` and `Ts...` is problematic due to cryptic errors when e.g. `const type_list<Ts...>` is provided.)
   - Breaking change: `util::accumulate` now mimics the behaviour of `std::accumulate` more closely. It relies on the return value of the functor instead of mutating the accumulator argument. The new implementation now allows for the types of `initial_value` and the return type to differ (thanks to [Siapran](https://github.com/Siapran)).
   - Removed: `util::get<N>(const type_list<Ts...>&)`. Use `trait::get_t<N, type_list<Ts...>>` instead. This is part of a move towards minimizing the duplication between the `trait::` and `util::` namespaces.
-  - Added two new examples: [example-binding.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-dbo.cpp) and [example-dbo.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-dbo.cpp) to present some of the new things introduced in this release. (example-dbo.cpp based on work by [Siapran](https://github.com/Siapran))
+  - Added two new examples: [example-binding.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-binding.cpp) and [example-dbo.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-dbo.cpp) to present some of the new things introduced in this release. (example-dbo.cpp based on work by [Siapran](https://github.com/Siapran))
 
 ### v0.6.5
   - Fixed multiple unused X warnings (fixed by [Siapran](https://github.com/Siapran)) #12
