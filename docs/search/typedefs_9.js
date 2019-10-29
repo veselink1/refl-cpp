@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['value_5ftype',['value_type',['../classrefl_1_1descriptor_1_1field__descriptor.html#afcc7c5c7e2ee1a67cab3a6b526d092d2',1,'refl::descriptor::field_descriptor']]]
+  ['remove_5fqualifiers_5ft',['remove_qualifiers_t',['../namespacerefl_1_1trait.html#a281a1cb4e19fe3ff645e48867aa8daf1',1,'refl::trait']]],
+  ['return_5ftype',['return_type',['../classrefl_1_1descriptor_1_1function__descriptor.html#a7f6f665c1d51087c1aa253eaf3edbeae',1,'refl::descriptor::function_descriptor']]],
+  ['reverse_5ft',['reverse_t',['../namespacerefl_1_1trait.html#a07f78f44c53134d640b52d34ca1d9031',1,'refl::trait']]]
 ];

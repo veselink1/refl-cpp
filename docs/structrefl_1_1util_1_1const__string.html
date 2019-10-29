@@ -121,6 +121,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a465086c5ae8e245358ce44ed8154c986"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25bdf3f17b20a34f25f4bd7b624c6aa7"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#a25bdf3f17b20a34f25f4bd7b624c6aa7">str</a> () const noexcept</td></tr>
 <tr class="separator:a25bdf3f17b20a34f25f4bd7b624c6aa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac43d0430fdf61b1fb9fe62bb61457d68"><td class="memTemplParams" colspan="2">template&lt;size_t Pos, size_t Count = npos&gt; </td></tr>
+<tr class="memitem:ac43d0430fdf61b1fb9fe62bb61457d68"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#ac43d0430fdf61b1fb9fe62bb61457d68">substr</a> () const noexcept</td></tr>
+<tr class="separator:ac43d0430fdf61b1fb9fe62bb61457d68"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -129,6 +132,8 @@ Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
+<tr class="memitem:abad5b68a7c03fcccc05acb4468edb0e6"><td class="memItemLeft" align="right" valign="top">static constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#abad5b68a7c03fcccc05acb4468edb0e6">npos</a> = static_cast&lt;size_t&gt;(-1)</td></tr>
+<tr class="separator:abad5b68a7c03fcccc05acb4468edb0e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a426d87f33a7778a82e1169bd9de752e0"><td class="memItemLeft" align="right" valign="top">static constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#a426d87f33a7778a82e1169bd9de752e0">size</a> = N</td></tr>
 <tr class="separator:a426d87f33a7778a82e1169bd9de752e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -314,6 +319,36 @@ template&lt;size_t N&gt; </div>
 
 </div>
 </div>
+<a id="ac43d0430fdf61b1fb9fe62bb61457d68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac43d0430fdf61b1fb9fe62bb61457d68">&#9670;&nbsp;</a></span>substr()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;size_t N&gt; </div>
+<div class="memtemplate">
+template&lt;size_t Pos, size_t Count = npos&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto <a class="el" href="structrefl_1_1util_1_1const__string.html">refl::util::const_string</a>&lt; N &gt;::substr </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>A constexpr version of std::string::substr. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a8ee1a2f4b8fd6d71b7556661f379426a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8ee1a2f4b8fd6d71b7556661f379426a">&#9670;&nbsp;</a></span>data</h2>
@@ -329,6 +364,31 @@ template&lt;size_t N&gt; </div>
       </table>
 </div><div class="memdoc">
 <p>The statically-sized character buffer used for storing the string. </p>
+
+</div>
+</div>
+<a id="abad5b68a7c03fcccc05acb4468edb0e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abad5b68a7c03fcccc05acb4468edb0e6">&#9670;&nbsp;</a></span>npos</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;size_t N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr size_t <a class="el" href="structrefl_1_1util_1_1const__string.html">refl::util::const_string</a>&lt; N &gt;::npos = static_cast&lt;size_t&gt;(-1)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The largest positive value size_t can hold. </p>
 
 </div>
 </div>
@@ -366,7 +426,7 @@ template&lt;size_t N&gt; </div>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="namespacerefl.html">refl</a></li><li class="navelem"><a class="el" href="namespacerefl_1_1util.html">util</a></li><li class="navelem"><a class="el" href="structrefl_1_1util_1_1const__string.html">const_string</a></li>
-    <li class="footer">Generated on Tue Oct 29 2019 11:28:32 for refl-cpp by
+    <li class="footer">Generated on Tue Oct 29 2019 22:23:07 for refl-cpp by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>

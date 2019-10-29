@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['filter_5ft',['filter_t',['../namespacerefl_1_1trait.html#a8f0d745cf17e7a9fec1594e7fe287b2a',1,'refl::trait']]]
+  ['declaring_5ftype',['declaring_type',['../classrefl_1_1descriptor_1_1member__descriptor__base.html#af70beb1e0da54d076535cd8fb3dd5381',1,'refl::descriptor::member_descriptor_base']]]
 ];

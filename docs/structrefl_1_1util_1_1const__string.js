@@ -6,5 +6,6 @@ var structrefl_1_1util_1_1const__string =
     [ "operator const char *", "structrefl_1_1util_1_1const__string.html#a8f8b7b47319025b4007367b285849fbd", null ],
     [ "operator std::string", "structrefl_1_1util_1_1const__string.html#a824c47b1e7641a471b30a519d0a99f74", null ],
     [ "str", "structrefl_1_1util_1_1const__string.html#a25bdf3f17b20a34f25f4bd7b624c6aa7", null ],
+    [ "substr", "structrefl_1_1util_1_1const__string.html#ac43d0430fdf61b1fb9fe62bb61457d68", null ],
     [ "data", "structrefl_1_1util_1_1const__string.html#a8ee1a2f4b8fd6d71b7556661f379426a", null ]
 ];

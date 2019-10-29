@@ -1,6 +1,7 @@
 #include "../refl.hpp"
 #include <cassert>
 #include <vector>
+#include <functional>
 
 struct A {
     int x;
@@ -49,10 +50,16 @@ void tests()
     using namespace refl;
 
     /* const_string */
+    static_assert(make_const_string() == "");
     static_assert(const_string<0>() == "");
     static_assert(const_string<1>("A") == "A");
     static_assert("AB" == const_string<2>("AB"));
     static_assert(const_string<2>("AB") == const_string<1>("A") + const_string<1>("B"));
+    static_assert(make_const_string().template substr<0>() == "");
+    static_assert(make_const_string().template substr<0, 0>() == "");
+    static_assert(make_const_string().template substr<0, 50>() == "");
+    static_assert(make_const_string("Hello").template substr<1>() == "ello");
+    static_assert(make_const_string("Hello").template substr<1, 3>() == "ell");
 
     /* type_list */
     static_assert(type_list<>::size == 0);
@@ -67,6 +74,19 @@ void tests()
 
     static_assert(trait::is_container_v<std::vector<int>>);
     static_assert(!trait::is_container_v<custom>);
+
+    static_assert(std::is_same_v<trait::first_t<type_list<int, float>>, int>);
+    static_assert(std::is_same_v<trait::last_t<type_list<int, float>>, float>);
+
+    static_assert(std::is_same_v<trait::tail_t<type_list<int, float, double>>, type_list<float, double>>);
+    static_assert(std::is_same_v<trait::init_t<type_list<int, float, double>>, type_list<int, float>>);
+
+    static_assert(std::is_same_v<trait::append_t<int, type_list<float>>, type_list<float, int>>);
+    static_assert(std::is_same_v<trait::prepend_t<int, type_list<float>>, type_list<int, float>>);
+
+    static_assert(std::is_same_v<trait::reverse_t<type_list<int, float, double>>, type_list<double, float, int>>);
+
+    static_assert(std::is_same_v<trait::concat_t<type_list<int, float>, type_list<float, int>>, type_list<int, float, float, int>>);
 
     static_assert(std::is_same_v<trait::get_t<0, type_list<int, float>>, int>);
     static_assert(std::is_same_v<trait::get_t<1, type_list<int, float>>, float>);
@@ -129,22 +149,15 @@ void tests()
         });
 
         std::array<int, 2> fe{};
-        util::for_each(type_list<int, int>{}, [&](auto x, size_t i) {
+        util::for_each(type_list<int, int>{}, [&](auto, size_t i) {
             fe[i] = i;
         });
 
         assert(fe[0] == 0);
         assert(fe[1] == 1);
 
-        constexpr int acc = util::accumulate(type_list<int, int>{}, [](auto& sum, auto x) {
-            sum += x;
-        }, 5);
+        constexpr int acc = util::accumulate(type_list<int, int>{}, std::plus<int>(), 5);
         static_assert(acc == 5);
-        
-        constexpr int acc2 = util::accumulate(type_list<int, int>{}, [](auto& sum, auto, size_t i) {
-            sum += i;
-        }, 5);
-        static_assert(acc2 == 6);
         
         constexpr int cnt = util::count_if(type_list<int, float>{}, [](auto x) {
             return std::is_integral_v<decltype(x)>;
@@ -222,11 +235,11 @@ void tests()
 
         using f_td = trait::get_t<3, member_list<A>>;
         static_assert(!f_td::is_resolved);
-        auto f_ptr = f_td::resolve<void(A::*)()>;
+        [[maybe_unused]] auto f_ptr = f_td::resolve<void(A::*)()>;
 
         using g_td = trait::get_t<4, member_list<A>>;
         static_assert(g_td::is_resolved);
-        auto g_ptr = g_td::pointer;
+        [[maybe_unused]] auto g_ptr = g_td::pointer;
     }
 
     /* runtime::* */

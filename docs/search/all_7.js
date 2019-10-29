@@ -2,6 +2,8 @@ var searchData=
 [
   ['identity',['identity',['../namespacerefl_1_1util.html#ade7c97a21da83d823632fbbe65a2d722',1,'refl::util']]],
   ['ignore',['ignore',['../namespacerefl_1_1util.html#a9ddab8c6121c2ff87a0694fe48e62914',1,'refl::util']]],
+  ['init',['init',['../structrefl_1_1trait_1_1init.html',1,'refl::trait']]],
+  ['init_5ft',['init_t',['../namespacerefl_1_1trait.html#a73d3d356c430a7247749d0fb7fb037af',1,'refl::trait']]],
   ['invoke',['invoke',['../classrefl_1_1descriptor_1_1function__descriptor.html#a5f6c4091c03a8fb9d5f6459c686ea655',1,'refl::descriptor::function_descriptor::invoke()'],['../namespacerefl_1_1runtime.html#a0831da0114fa506579224ce219d0ab50',1,'refl::runtime::invoke()']]],
   ['is_5fcontainer',['is_container',['../structrefl_1_1trait_1_1is__container.html',1,'refl::trait']]],
   ['is_5ffield',['is_field',['../structrefl_1_1trait_1_1is__field.html',1,'refl::trait::is_field&lt; T &gt;'],['../namespacerefl_1_1descriptor.html#af87dc4210a71232923d4c1223b097126',1,'refl::descriptor::is_field()']]],

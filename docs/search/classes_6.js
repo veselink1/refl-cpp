@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['init',['init',['../structrefl_1_1trait_1_1init.html',1,'refl::trait']]],
   ['is_5fcontainer',['is_container',['../structrefl_1_1trait_1_1is__container.html',1,'refl::trait']]],
   ['is_5ffield',['is_field',['../structrefl_1_1trait_1_1is__field.html',1,'refl::trait']]],
   ['is_5ffunction',['is_function',['../structrefl_1_1trait_1_1is__function.html',1,'refl::trait']]],

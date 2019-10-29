@@ -90,6 +90,9 @@ namespace refl
         template <size_t N>
         struct const_string
         {
+            /** The largest positive value size_t can hold. */
+            static constexpr size_t npos = static_cast<size_t>(-1); 
+
             /** The length of the string excluding the terminating '\0' character. */
             static constexpr size_t size = N; 
 
@@ -104,6 +107,16 @@ namespace refl
             constexpr const_string() noexcept 
                 : data{} 
             {
+            }
+
+            /**
+             * Creates a copy of a const_string. 
+             */
+            constexpr const_string(const const_string<N>& other) noexcept 
+                : data{} 
+            {
+                for (size_t i = 0; i < N; i++)
+                    data[i] = other.data[i];
             }
 
             /**
@@ -147,8 +160,33 @@ namespace refl
             {
                 return data;
             }
+
+            /**
+             * A constexpr version of std::string::substr.
+             */
+            template <size_t Pos, size_t Count = npos>
+            constexpr auto substr() const noexcept
+            {
+                static_assert(Pos <= N);
+                constexpr size_t NewSize = std::min(Count, N - Pos);
+
+                char buf[NewSize + 1]{};
+                for (size_t i = 0; i < NewSize; i++) {
+                    buf[i] = data[Pos + i];
+                }
+
+                return const_string<NewSize>(buf);
+            }
             
         };
+        
+        /**
+         * Creates an empty instance of const_string<N>
+         */
+        constexpr const_string<0> make_const_string() noexcept
+        {
+            return {};
+        }
 
         /**
          * Creates an instance of const_string<N>
@@ -700,42 +738,210 @@ namespace refl {
         {
             return value;
         }
+
     } // namespace util
 
     namespace trait
     {
+        template <typename>
+        struct first;
+
+        /**
+         * Accesses first type in the list.
+         */
+        template <typename T, typename... Ts>
+        struct first<type_list<T, Ts...>>
+        {
+            using type = T;
+        };
+
+        /**
+         * Accesses last type in the list.
+         * @see last
+         */
+        template <typename TypeList>
+        using first_t = typename first<TypeList>::type;
+
+        template <typename>
+        struct last;
+
+        /**
+         * Accesses last type in the list.
+         */
+        template <typename T, typename... Ts>
+        struct last<type_list<T, Ts...>>
+        {
+            using type = get_t<sizeof...(Ts), type_list<T, Ts...>>;
+        };
+
+        /**
+         * Accesses last type in the list.
+         * @see last
+         */
+        template <typename TypeList>
+        using last_t = typename last<TypeList>::type;
+
+        template <typename>
+        struct tail;
+
+        /**
+         * Returns all but the first element of the list.
+         */
+        template <typename T, typename... Ts>
+        struct tail<type_list<T, Ts...>>
+        {
+            using type = type_list<Ts...>;
+        };
+
+        /**
+         * Returns all but the first element of the list.
+         * @see tail
+         */
+        template <typename TypeList>
+        using tail_t = typename tail<TypeList>::type;
+
         namespace detail
         {
             template <typename, typename>
-            struct cons;
+            struct init;
 
-            template <typename T, typename... Args>
-            struct cons<T, type_list<Args...>>
+            template <typename... Us, typename T>
+            struct init<type_list<Us...>, type_list<T>>
             {
-                using type = type_list<T, Args...>;
+                using type = type_list<Us...>;
             };
 
-            template <template<typename> typename, typename...>
+            template <typename... Us, typename T, typename... Ts>
+            struct init<type_list<Us...>, type_list<T, Ts...>>
+            {
+                using type = typename init<type_list<Us..., T>, type_list<Ts...>>::type;
+            };
+        };
+
+        /**
+         * Returns all but the last element of the list.
+         */
+        template <typename TypeList>
+        struct init : detail::init<type_list<>, TypeList>
+        {
+        };
+
+        /**
+         * Returns all but the last element of the list.
+         * @see tail
+         */
+        template <typename TypeList>
+        using init_t = typename init<TypeList>::type;
+
+        template <typename, typename>
+        struct append;
+
+        /**
+         * Appends a type to the list.
+         */
+        template <typename T, typename... Ts>
+        struct append<T, type_list<Ts...>>
+        {
+            using type = type_list<Ts..., T>;
+        };
+
+        /**
+         * Appends a type to the list.
+         * @see prepend
+         */
+        template <typename T, typename TypeList>
+        using append_t = typename append<T, TypeList>::type;
+
+        template <typename, typename>
+        struct prepend;
+
+        /**
+         * Prepends a type to the list.
+         */
+        template <typename T, typename... Ts>
+        struct prepend<T, type_list<Ts...>>
+        {
+            using type = type_list<T, Ts...>;
+        };
+
+        /**
+         * Prepends a type to the list.
+         * @see prepend
+         */
+        template <typename T, typename TypeList>
+        using prepend_t = typename prepend<T, TypeList>::type;
+
+        namespace detail
+        {
+            template <typename, typename>
+            struct reverse_impl;
+            
+            template <typename... Us>
+            struct reverse_impl<type_list<Us...>, type_list<>>
+            {
+                using type = type_list<Us...>;
+            };
+
+            template <typename... Us, typename T, typename... Ts>
+            struct reverse_impl<type_list<Us...>, type_list<T, Ts...>>
+            {
+                using type = typename reverse_impl<type_list<T, Us...>, type_list<Ts...>>::type;
+            };
+
+        } // namespace detail
+
+        /**
+         * Reverses a list of types.
+         */
+        template <typename TypeList>
+        struct reverse : detail::reverse_impl<type_list<>, TypeList>
+        {
+        };
+
+        /**
+         * Reverses a list of types.
+         * @see reverse
+         */
+        template <typename TypeList>
+        using reverse_t = typename reverse<TypeList>::type;
+
+        template <typename, typename>
+        struct concat;
+
+        /**
+         * Concatenates two lists together.
+         */
+        template <typename... Ts, typename... Us>
+        struct concat<type_list<Ts...>, type_list<Us...>>
+        {
+            using type = type_list<Ts..., Us...>;
+        };
+
+        /**
+         * Concatenates two lists together.
+         * @see concat
+         */
+        template <typename Lhs, typename Rhs>
+        using concat_t = typename concat<Lhs, Rhs>::type;
+        
+        namespace detail
+        {
+            template <template<typename> typename, typename>
             struct filter_impl;
 
             template <template<typename> typename Predicate>
-            struct filter_impl<Predicate>
+            struct filter_impl<Predicate, type_list<>>
             {
                 using type = type_list<>;
             };
 
             template <template<typename> typename Predicate, typename Head, typename ...Tail>
-            struct filter_impl<Predicate, Head, Tail...>
+            struct filter_impl<Predicate, type_list<Head, Tail...>>
             {
                 using type = std::conditional_t<Predicate<Head>::value,
-                    typename cons<Head, typename filter_impl<Predicate, Tail...>::type>::type,
-                    typename filter_impl<Predicate, Tail...>::type
+                    typename prepend<Head, typename filter_impl<Predicate, type_list<Tail...>>::type>::type,
+                    typename filter_impl<Predicate, type_list<Tail...>>::type
                 >;
-            };
-
-            template <template<typename> typename Predicate, typename... Ts>
-            struct filter_impl<Predicate, type_list<Ts...>> : public filter_impl<Predicate, Ts...>
-            {
             };
 
             /**
@@ -744,28 +950,24 @@ namespace refl {
             template <template<typename> typename Predicate>
             struct filter
             {
-                template <typename... Ts>
-                using apply = typename detail::filter_impl<Predicate, Ts...>::type;
+                template <typename TypeList>
+                using apply = typename detail::filter_impl<Predicate, TypeList>::type;
             };
 
-            template <template<typename> typename, typename...>
+            template <template<typename> typename, typename>
             struct map_impl;
 
             template <template<typename> typename Mapper>
-            struct map_impl<Mapper>
+            struct map_impl<Mapper, type_list<>>
             {
                 using type = type_list<>;
             };
 
             template <template<typename> typename Mapper, typename Head, typename ...Tail>
-            struct map_impl<Mapper, Head, Tail...>
+            struct map_impl<Mapper, type_list<Head, Tail...>>
             {
-                using type = typename cons<typename Mapper<Head>::type, typename map_impl<Mapper, Tail...>::type>::type;
-            };
-
-            template <template<typename> typename Mapper, typename... Ts>
-            struct map_impl<Mapper, type_list<Ts...>> : public map_impl<Mapper, Ts...>
-            {
+                using type = typename prepend<typename Mapper<Head>::type, 
+                    typename map_impl<Mapper, type_list<Tail...>>::type>::type;
             };
 
             /**
@@ -774,34 +976,41 @@ namespace refl {
             template <template<typename> typename Mapper>
             struct map
             {
-                template <typename... Ts>
-                using apply = typename detail::map_impl<Mapper, Ts...>::type;
+                template <typename TypeList>
+                using apply = typename detail::map_impl<Mapper, TypeList>::type;
             };
         }
+
+        
+        template <template<typename> typename, typename>
+        struct filter;
 
         /**
          * Filters a type_list according to a predicate template.
          */
         template <template<typename> typename Predicate, typename... Ts>
-        struct filter 
+        struct filter<Predicate, type_list<Ts...>>
         {   
-            typedef typename detail::filter<Predicate>::template apply<Ts...> type;
+            typedef typename detail::filter<Predicate>::template apply<type_list<Ts...>> type;
         };
         
         /**
          * Filters a type_list according to a predicate template.
          * @see filter
          */
-        template <template<typename> typename Predicate, typename... Ts>
-        using filter_t = typename filter<Predicate, Ts...>::type;
+        template <template<typename> typename Predicate, typename TypeList>
+        using filter_t = typename filter<Predicate, TypeList>::type;
+
+        template <template<typename> typename, typename>
+        struct map;
 
         /**
          * Maps a type_list according to a predicate template.
          */
         template <template<typename> typename Mapper, typename... Ts>
-        struct map 
+        struct map<Mapper, type_list<Ts...>>
         {
-            typedef typename detail::map<Mapper>::template apply<Ts...> type;
+            typedef typename detail::map<Mapper>::template apply<type_list<Ts...>> type;
         };
 
         /**
@@ -825,7 +1034,6 @@ namespace refl {
         {
             return std::apply([](auto&& ... args) -> std::array<T, sizeof...(Ts)> { return { std::forward<decltype(args)>(args)... }; }, tuple);
         }
-
 
         /**
          * Creates an empty array of type 'T.
@@ -856,8 +1064,7 @@ namespace refl {
         }
 
         namespace detail
-        {
-            
+        {   
             template <typename F, typename... Carry>
             constexpr auto eval_in_order_to_tuple(type_list<>, std::index_sequence<>, F&&, Carry&&... carry)
             {
@@ -930,36 +1137,41 @@ namespace refl {
                 return 0; 
             });
         }
+
+        template <typename R, typename F, typename... Ts>
+        constexpr R accumulate(type_list<>, F&&, R&& initial_value)
+        {
+            return std::forward<R>(initial_value);
+        }
         
         /*
-            * Applies an accumulation function F to each type in the type_list.
-            * F can optionally take an index of type size_t.
-            */
-        template <typename R, typename F, typename... Ts>
-        constexpr R accumulate(type_list<Ts...> list, F&& f, R&& initial_value)
+        * Applies an accumulation function F to each type in the type_list.
+        * Note: Breaking changes introduced in v0.7.0: 
+        *   Behaviour changed to imitate std::accumulate. 
+        *   F can now no longer take a second index argument.
+        */
+        template <typename R, typename F, typename T, typename... Ts>
+        constexpr auto accumulate(type_list<T, Ts...>, F&& f, R&& initial_value)
         {
-            R r{ initial_value };
-            for_each(list, [&](auto&&... args) -> decltype(f(r, std::forward<decltype(args)>(args)...), 0) 
-            { 
-                f(r, std::forward<decltype(args)>(args)...); 
-                return 0; 
-            });
-            return r;
+            static_assert(std::is_trivial_v<T>, "Cannot synthesize a value of type T while iterating type_list<T, ...>!");
+
+            return accumulate(type_list<Ts...> {},
+                std::forward<F>(f),
+                std::forward<std::invoke_result_t<F&&, R&&, T&&>>(
+                    f(std::forward<R>(initial_value), T {})));
         }
 
         /**
          * Counts the number of times the predicate F returns true.
+        * Note: Breaking changes introduced in v0.7.0: 
+        *   F can now no longer take a second index argument.
          */
         template <typename F, typename... Ts>
         constexpr size_t count_if(type_list<Ts...> list, F&& f)
         {
-            return accumulate<size_t>(list, [&](size_t& current, auto&&... args) -> decltype(f(std::forward<decltype(args)>(args)...), void(0))
-            {
-                if (f(std::forward<decltype(args)>(args)...)) 
-                {
-                    current += 1;
-                }
-            }, 0);
+            return accumulate<size_t>(list, 
+                [&](size_t acc, const auto& t) -> size_t { return acc + (f(t) ? 1 : 0); }, 
+                0);
         }
 
         namespace detail
@@ -999,6 +1211,7 @@ namespace refl {
         constexpr auto find_first(type_list<Ts...> list, F f) 
         {
             using result_list = decltype(detail::filter(f, list, type_list<>{}));
+            static_assert(result_list::size != 0, "find_first did not match anything!");
             return trait::get_t<0, result_list>{};
         }
 
@@ -1009,6 +1222,7 @@ namespace refl {
         constexpr auto find_one(type_list<Ts...> list, F f) 
         {
             using result_list = decltype(detail::filter(f, list, type_list<>{}));
+            static_assert(result_list::size != 0, "find_one did not match anything!");
             static_assert(result_list::size == 1, "Cannot resolve multiple matches in find_one!");
             return trait::get_t<0, result_list>{};
         }
@@ -1019,14 +1233,14 @@ namespace refl {
         template <size_t N, typename... Ts>
         constexpr auto find_one(type_list<Ts...> list, const const_string<N>& name) 
         {
-            return find_one(list, [&](auto member) { return member.name == name; });
+            return find_one(list, [&](auto member) -> bool { return member.name == name; });
         }
         
         /**
          * Returns true if any item in the list matches the predicate.
          */
         template <typename F, typename... Ts>
-        constexpr auto contains(type_list<Ts...> list, F f)
+        constexpr auto contains(type_list<Ts...> list, F&& f)
         {
             using result_list = decltype(detail::filter(f, list, type_list<>{}));
             return result_list::size > 0;
@@ -1038,7 +1252,7 @@ namespace refl {
         template <size_t N, typename... Ts>
         constexpr auto contains(type_list<Ts...> list, const const_string<N>& name)
         {
-            constexpr auto f = [&](auto member) { return member.name == name; };
+            constexpr auto f = [&](auto member) -> bool { return member.name == name; };
             using result_list = decltype(detail::filter(f, list, type_list<>{}));
             return result_list::size > 0;
         }
@@ -1614,15 +1828,6 @@ namespace refl {
                 if (!(... || trait::is_instance_of_v<T, Ts>)) return -1;
                 return index_of_template<T, 0, Ts...>();
             }
-        }
-        
-        /** Returns a zero-initialized instance of the type at position N. */
-        template <size_t N, typename... Ts>
-        constexpr auto get(const type_list<Ts...>&) noexcept
-        {
-            using Type = trait::get_t<N, type_list<Ts...>>;
-            static_assert(std::is_trivial_v<Type>, "Cannot synthesize a value of the required type in get<N>(type_list<...>)!");
-            return Type{};
         }
 
         /** A synonym for std::get<N>(tuple). */

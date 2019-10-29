@@ -1,4 +1,4 @@
-# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.6.5) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html)) 
+# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.7.0) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html)) 
 [![Gitter](https://badges.gitter.im/refl-cpp/community.svg)](https://gitter.im/refl-cpp/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔥
@@ -115,6 +115,15 @@ REFL_FUNC(Function, Attribute...)
 
 ## Changelog
 *Releases follow the MAJOR.MINOR.PATCH versioning scheme*
+
+### v0.7.0
+  - Added `constexpr const_string::substr<Pos, [Count]>()`
+  - Added `make_const_string()` as a shortcut for the creation of empty const strings.
+  - Added `trait::{first, last, tail, init, append, prepend, reverse, concat}` and `TraitName_t` equivalents to ease the use of `type_list<...>`.
+  - Breaking change: `trait::map` and `trait::filter` now no longer accept variadic template parameters. Wrap variadic parameters in a type_list. (Allowing both `type_list<Ts...>` and `Ts...` is problematic due to cryptic errors when e.g. `const type_list<Ts...>` is provided.)
+  - Breaking change: `util::accumulate` now mimics the behaviour of `std::accumulate` more closely. It relies on the return value of the functor instead of mutating the accumulator argument. The new implementation now allows for the types of `initial_value` and the return type to differ (thanks to [Siapran](https://github.com/Siapran)).
+  - Removed: `util::get<N>(const type_list<Ts...>&)`. Use `trait::get_t<N, type_list<Ts...>>` instead. This is part of a move towards minimizing the duplication between the `trait::` and `util::` namespaces.
+  - Added two new examples: [example-binding.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-dbo.cpp) and [example-dbo.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-dbo.cpp) to present some of the new things introduced in this release. (example-dbo.cpp based on work by [Siapran](https://github.com/Siapran))
 
 ### v0.6.5
   - Fixed multiple unused X warnings (fixed by [Siapran](https://github.com/Siapran)) #12

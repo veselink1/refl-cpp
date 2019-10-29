@@ -19,6 +19,8 @@ var searchData=
   ['remove_5fqualifiers_5ft',['remove_qualifiers_t',['../namespacerefl_1_1trait.html#a281a1cb4e19fe3ff645e48867aa8daf1',1,'refl::trait']]],
   ['resolve',['resolve',['../classrefl_1_1descriptor_1_1function__descriptor.html#a7f8b63e35466c3c2887f601272d9f0a0',1,'refl::descriptor::function_descriptor']]],
   ['return_5ftype',['return_type',['../classrefl_1_1descriptor_1_1function__descriptor.html#a7f6f665c1d51087c1aa253eaf3edbeae',1,'refl::descriptor::function_descriptor']]],
+  ['reverse',['reverse',['../structrefl_1_1trait_1_1reverse.html',1,'refl::trait']]],
+  ['reverse_5ft',['reverse_t',['../namespacerefl_1_1trait.html#a07f78f44c53134d640b52d34ca1d9031',1,'refl::trait']]],
   ['runtime',['runtime',['../namespacerefl_1_1runtime.html',1,'refl']]],
   ['trait',['trait',['../namespacerefl_1_1trait.html',1,'refl']]],
   ['usage',['usage',['../namespacerefl_1_1attr_1_1usage.html',1,'refl::attr']]],
