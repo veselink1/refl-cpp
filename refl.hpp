@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 //
-// Copyright (c) 2019 Veselin Karaganev (@veselink1)
+// Copyright (c) 2019 Veselin Karaganev (@veselink1) and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -298,11 +298,36 @@ namespace refl
         {
             return os << str.c_str();
         }
+
+        namespace detail
+        {
+            constexpr size_t strlen(const char* const str)
+            {
+                return *str ? 1 + strlen(str + 1) : 0;
+            }
+
+            template <size_t N>
+            constexpr const_string<N> copy_from_unsized(const char* const str)
+            {
+                const_string<N> cstr;
+                for (size_t i = 0; i < N; i++) {
+                    cstr.data[i] = str[i];
+                }
+                return cstr;
+            }
+        } // namespace detail
         
     } // namespace util
 
     using util::const_string;
     using util::make_const_string;
+
+/**
+ * Converts a compile-time available const char* value to a const_string<N>.
+ * The argument must be a *core constant expression* and be null-terminated.
+ */
+#define REFL_MAKE_CONST_STRING(CString) \
+    (::refl::util::detail::copy_from_unsized<::refl::util::detail::strlen(CString)>(CString))
 
     /**
      * The contents of the refl::detail::macro_exports namespace
@@ -2383,7 +2408,7 @@ namespace refl {
                     os << "{ ";
                     if (!compact) os << "\n";
                     constexpr size_t count = count_if(type_descriptor::members, [](auto member) { return is_readable(member); });
-                    for_each(type_descriptor::members, [&](auto member, auto index) {
+                    for_each(type_descriptor::members, [&](auto member, [[maybe_unused]] auto index) {
                         if constexpr (is_readable(member)) {
                             detail::debug_member(os, value, member, compact);
                             if (index + 1 != count) {

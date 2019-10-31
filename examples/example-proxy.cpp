@@ -1,3 +1,16 @@
+/**
+ * Proxies are a really powerful feature of refl-cpp.
+ * They allow the user to create types which imitate the 
+ * interface of another type while also allowing the 
+ * interception of the calls to these members. 
+ * And the best part it that all of that is done at 
+ * compile-time with zero runtime overhead.  
+ * 
+ * Here we see a proxy type called value_proxy which 
+ * imitates the interface of a provided type T, but 
+ * also automatically implements the const T& memberName() const
+ * and void memberName(const T&) accessors for the fields of the target.
+ */
 #include <iostream>
 #include <cassert>
 #include "refl.hpp"

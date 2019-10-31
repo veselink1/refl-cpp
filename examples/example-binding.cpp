@@ -1,3 +1,8 @@
+/**
+ * This example illustrates an example usage scenario for 
+ * refl-cpp: Performing fast type-erased deserialization (from XML)
+ * with the minimum possible amount of runtime overhead. 
+ */
 #include "refl.hpp"
 #include <iostream>
 #include <regex>
@@ -91,6 +96,13 @@ private:
                 }
             }
         });
+
+        /**
+         * for_each loop above essentially gets compiled to multiples of the following (pseudo-code):
+         * if (auto propIter = props.find("MemberA"); propIter != props.end()) {
+         *     instance.MemberA = prop.parser(propIter->second);
+         * }
+         */
 
         return instance;
     }

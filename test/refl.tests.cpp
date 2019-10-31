@@ -61,6 +61,14 @@ void tests()
     static_assert(make_const_string("Hello").template substr<1>() == "ello");
     static_assert(make_const_string("Hello").template substr<1, 3>() == "ell");
 
+    constexpr const_string<0> str = REFL_MAKE_CONST_STRING("");
+    static_assert(str == "");
+    static_assert(str != "A");
+    
+    constexpr const_string<6> str2 = REFL_MAKE_CONST_STRING("foobar");
+    static_assert(str2 == "foobar");
+    static_assert(str2 != "foo");
+
     /* type_list */
     static_assert(type_list<>::size == 0);
     static_assert(type_list<int>::size == 1);

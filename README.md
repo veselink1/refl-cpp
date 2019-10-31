@@ -1,4 +1,4 @@
-# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.7.0) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html)) 
+# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.8.0) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html)) 
 [![Gitter](https://badges.gitter.im/refl-cpp/community.svg)](https://gitter.im/refl-cpp/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔥
@@ -114,7 +114,18 @@ REFL_FUNC(Function, Attribute...)
 ```
 
 ## Changelog
-*Releases follow the MAJOR.MINOR.PATCH versioning scheme*
+*Releases follow the `MAJOR.MINOR.PATCH` versioning scheme*
+
+`Major` denotes a very big change in the structure of the library.
+
+`Minor` denotes a smaller change, which usually includes new features and might also change or even remove certain features. 
+
+`Patch` denotes a version which fixed a bug and does not include new features.
+
+---
+
+### v0.8.0
+  - Added the ability to create `refl::const_string<N>` instances from `const char*` which allows using c-strings (`const char*`) values from attributes together with `const_string<N>` and in `constexpr` context possible. That feature is exposed by the `REFL_MAKE_CONST_STRING(CString)` macro. Important: `CString` must be a [Core constant expression](https://en.cppreference.com/w/cpp/language/constant_expression#Core_constant_expressions). The macro is necessary to avoid the duplication of the provided expression and currently expands to ~ `detail::copy_from_unsized<detail::strlen(CString)>(CString)`. (another thanks to [Siapran](https://github.com/Siapran) for contributing the implementation for the `constexpr length()` function.)
 
 ### v0.7.0
   - Added `constexpr const_string::substr<Pos, [Count]>()`
@@ -123,7 +134,7 @@ REFL_FUNC(Function, Attribute...)
   - Breaking change: `trait::map` and `trait::filter` now no longer accept variadic template parameters. Wrap variadic parameters in a type_list. (Allowing both `type_list<Ts...>` and `Ts...` is problematic due to cryptic errors when e.g. `const type_list<Ts...>` is provided.)
   - Breaking change: `util::accumulate` now mimics the behaviour of `std::accumulate` more closely. It relies on the return value of the functor instead of mutating the accumulator argument. The new implementation now allows for the types of `initial_value` and the return type to differ (thanks to [Siapran](https://github.com/Siapran)).
   - Removed: `util::get<N>(const type_list<Ts...>&)`. Use `trait::get_t<N, type_list<Ts...>>` instead. This is part of a move towards minimizing the duplication between the `trait::` and `util::` namespaces.
-  - Added two new examples: [example-binding.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-binding.cpp) and [example-dbo.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-dbo.cpp) to present some of the new things introduced in this release. (example-dbo.cpp based on work by [Siapran](https://github.com/Siapran))
+  - Added two new examples: [example-binding.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-binding.cpp) and [example-dao.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-dao.cpp) to present some of the new things introduced in this release. (example-dao.cpp based on work by [Siapran](https://github.com/Siapran))
 
 ### v0.6.5
   - Fixed multiple unused X warnings (fixed by [Siapran](https://github.com/Siapran)) #12
