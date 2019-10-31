@@ -10,8 +10,6 @@ var searchData=
   ['contains',['contains',['../structrefl_1_1trait_1_1contains.html',1,'refl::trait::contains&lt; T, TypeList &gt;'],['../namespacerefl_1_1util.html#a7914b083611095970bd257f39db71d5c',1,'refl::util::contains(type_list&lt; Ts... &gt; list, F &amp;&amp;f)'],['../namespacerefl_1_1util.html#a3c6a2cc90e4da4ea186e28ed0c2de7a3',1,'refl::util::contains(type_list&lt; Ts... &gt; list, const const_string&lt; N &gt; &amp;name)']]],
   ['contains_5fbase',['contains_base',['../structrefl_1_1trait_1_1contains__base.html',1,'refl::trait']]],
   ['contains_5finstance',['contains_instance',['../structrefl_1_1trait_1_1contains__instance.html',1,'refl::trait']]],
-  ['contributors_2emd',['contributors.md',['../contributors_8md.html',1,'']]],
   ['count_5fif',['count_if',['../namespacerefl_1_1util.html#aea0417f0fd0129f2cf1ee5fa055d9c20',1,'refl::util']]],
-  ['contributor_20covenant_20code_20of_20conduct',['Contributor Covenant Code of Conduct',['../md__c_o_d_e__o_f__c_o_n_d_u_c_t.html',1,'']]],
-  ['contributors',['Contributors',['../md_contributors.html',1,'']]]
+  ['contributor_20covenant_20code_20of_20conduct',['Contributor Covenant Code of Conduct',['../md__c_o_d_e__o_f__c_o_n_d_u_c_t.html',1,'']]]
 ];

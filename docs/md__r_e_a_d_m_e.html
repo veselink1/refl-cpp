@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>refl-cpp: &lt;a href=&quot;https://github.com/veselink1/refl-cpp&quot;&gt;refl-cpp&lt;/a&gt; (v0.7.0) (&lt;a href=&quot;https://veselink1.github.io/refl-cpp/namespacerefl.html&quot;&gt;Documentation&lt;/a&gt;)</title>
+<title>refl-cpp: &lt;a href=&quot;https://github.com/veselink1/refl-cpp&quot;&gt;refl-cpp&lt;/a&gt; (v0.8.0) (&lt;a href=&quot;https://veselink1.github.io/refl-cpp/namespacerefl.html&quot;&gt;Documentation&lt;/a&gt;)</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -96,7 +96,7 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 
 <div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title"><a href="https://github.com/veselink1/refl-cpp">refl-cpp</a> (v0.7.0) (<a href="https://veselink1.github.io/refl-cpp/namespacerefl.html">Documentation</a>) </div>  </div>
+<div class="title"><a href="https://github.com/veselink1/refl-cpp">refl-cpp</a> (v0.8.0) (<a href="https://veselink1.github.io/refl-cpp/namespacerefl.html">Documentation</a>) </div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a href="https://gitter.im/refl-cpp/community?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge"><object type="image/svg+xml" data="https://badges.gitter.im/refl-cpp/community.svg" alt="Gitter"></object>
@@ -135,7 +135,15 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 <li>See <a href="https://github.com/veselink1/refl-cpp/tree/master/examples">examples/</a> for more usage examples.</li>
 </ul>
 <p>## Metadata-generation macros </p><div class="fragment"><div class="line"><span class="comment">// Describes a type and all of its members</span></div><div class="line">REFL_AUTO(</div><div class="line">  type(Name, Attribute...),</div><div class="line">  field(Name, Attribute...),</div><div class="line">  func(Name, Attribute...)</div><div class="line">)</div><div class="line"></div><div class="line"><span class="comment">// Starts the declaration of Type&#39;s metadata.</span></div><div class="line"><span class="comment">// Must be followed by one of: REFL_END, REFL_FIELD, REFL_FUNC.</span></div><div class="line"><span class="comment">// Example: REFL_TYPE(Dog, bases&lt;Animal&gt;)</span></div><div class="line"><a class="code" href="refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71">REFL_TYPE</a>(Type, Attributes...)</div><div class="line"></div><div class="line"><span class="comment">// Starts the declaration of Type&#39;s metadata.</span></div><div class="line"><span class="comment">// Must be followed by one of: REFL_END, REFL_FIELD, REFL_FUNC.</span></div><div class="line"><span class="comment">// Example: REFL_TEMPLATE((typename K, typename V), (std::pair&lt;K, V&gt;))</span></div><div class="line"><a class="code" href="refl_8hpp.html#a832b795bfa32d4130b04e9e33635c507">REFL_TEMPLATE</a>((typename... Ts), (Type&lt;Ts...&gt;)), Attributes...)</div><div class="line"></div><div class="line"><span class="comment">// End the declaration of Type&#39;s metadata.</span></div><div class="line"><span class="comment">// Does not have an argument list</span></div><div class="line">REFL_END</div><div class="line"></div><div class="line"><span class="comment">// Describes a field.</span></div><div class="line"><span class="comment">// Example: REFL_FIELD(first_name, property{ &quot;Value&quot; })</span></div><div class="line">REFL_FIELD(Field, Attributes...)</div><div class="line"></div><div class="line"><span class="comment">// Describes a function.</span></div><div class="line"><span class="comment">// Example: REFL_FUNC(first_name, property{ &quot;Size&quot; })</span></div><div class="line">REFL_FUNC(Function, Attribute...)</div><div class="line"></div><div class="line"><span class="comment">// NOTE: None of the macros above need a terminating semi-colon (;)</span></div></div><!-- fragment --><h2>Changelog</h2>
-<p><em>Releases follow the MAJOR.MINOR.PATCH versioning scheme</em></p>
+<p><em>Releases follow the <code>MAJOR.MINOR.PATCH</code> versioning scheme</em></p>
+<p><code>Major</code> denotes a very big change in the structure of the library.</p>
+<p><code>Minor</code> denotes a smaller change, which usually includes new features and might also change or even remove certain features.</p>
+<p><code>Patch</code> denotes a version which fixed a bug and does not include new features.</p>
+<hr/>
+<h3>v0.8.0</h3>
+<ul>
+<li>Added the ability to create <code>refl::const_string&lt;N&gt;</code> instances from <code>const char*</code> which allows using c-strings (<code>const char*</code>) values from attributes together with <code>const_string&lt;N&gt;</code> and in <code>constexpr</code> context possible. That feature is exposed by the <code><a class="el" href="refl_8hpp.html#a2cb939da062920a29a38dff73aaf0968">REFL_MAKE_CONST_STRING(CString)</a></code> macro. Important: <code>CString</code> must be a <a href="https://en.cppreference.com/w/cpp/language/constant_expression#Core_constant_expressions">Core constant expression</a>. The macro is necessary to avoid the duplication of the provided expression and currently expands to ~ <code>detail::copy_from_unsized&lt;detail::strlen(CString)&gt;(CString)</code>. (another thanks to <a href="https://github.com/Siapran">Siapran</a> for contributing the implementation for the <code>constexpr length()</code> function.)</li>
+</ul>
 <h3>v0.7.0</h3>
 <ul>
 <li>Added <code>constexpr const_string::substr&lt;Pos, [Count]&gt;()</code></li>
@@ -144,7 +152,7 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 <li>Breaking change: <code>trait::map</code> and <code>trait::filter</code> now no longer accept variadic template parameters. Wrap variadic parameters in a type_list. (Allowing both <code>type_list&lt;Ts...&gt;</code> and <code>Ts...</code> is problematic due to cryptic errors when e.g. <code>const type_list&lt;Ts...&gt;</code> is provided.)</li>
 <li>Breaking change: <code>util::accumulate</code> now mimics the behaviour of <code>std::accumulate</code> more closely. It relies on the return value of the functor instead of mutating the accumulator argument. The new implementation now allows for the types of <code>initial_value</code> and the return type to differ (thanks to <a href="https://github.com/Siapran">Siapran</a>).</li>
 <li>Removed: <code>util::get&lt;N&gt;(const type_list&lt;Ts...&gt;&amp;)</code>. Use <code>trait::get_t&lt;N, type_list&lt;Ts...&gt;&gt;</code> instead. This is part of a move towards minimizing the duplication between the <code>trait::</code> and <code>util::</code> namespaces.</li>
-<li>Added two new examples: <a href="https://github.com/veselink1/refl-cpp/blob/master/examples/example-dbo.cpp">example-binding.cpp</a> and <a href="https://github.com/veselink1/refl-cpp/blob/master/examples/example-dbo.cpp">example-dbo.cpp</a> to present some of the new things introduced in this release. (example-dbo.cpp based on work by <a href="https://github.com/Siapran">Siapran</a>)</li>
+<li>Added two new examples: <a href="https://github.com/veselink1/refl-cpp/blob/master/examples/example-binding.cpp">example-binding.cpp</a> and <a href="https://github.com/veselink1/refl-cpp/blob/master/examples/example-dao.cpp">example-dao.cpp</a> to present some of the new things introduced in this release. (example-dao.cpp based on work by <a href="https://github.com/Siapran">Siapran</a>)</li>
 </ul>
 <h3>v0.6.5</h3>
 <ul>
@@ -264,7 +272,7 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Tue Oct 29 2019 22:54:13 for refl-cpp by
+    <li class="footer">Generated on Thu Oct 31 2019 19:20:35 for refl-cpp by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>

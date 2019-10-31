@@ -12,6 +12,7 @@ var searchData=
   ['refl_5fdetail_5fstr',['REFL_DETAIL_STR',['../refl_8hpp.html#ac16abdfd738e4366eb239e904b90e930',1,'refl.hpp']]],
   ['refl_5fdetail_5fstr_5fimpl',['REFL_DETAIL_STR_IMPL',['../refl_8hpp.html#a3eb9f0fdea25c64045020adb97393613',1,'refl.hpp']]],
   ['refl_5fdetail_5ftype_5fbody',['REFL_DETAIL_TYPE_BODY',['../refl_8hpp.html#ac7f8b46b069c2311101168d841a71b37',1,'refl.hpp']]],
+  ['refl_5fmake_5fconst_5fstring',['REFL_MAKE_CONST_STRING',['../refl_8hpp.html#a2cb939da062920a29a38dff73aaf0968',1,'refl.hpp']]],
   ['refl_5ftemplate',['REFL_TEMPLATE',['../refl_8hpp.html#a832b795bfa32d4130b04e9e33635c507',1,'refl.hpp']]],
   ['refl_5ftype',['REFL_TYPE',['../refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71',1,'refl.hpp']]],
   ['reflect',['reflect',['../namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e',1,'refl::reflect() noexcept'],['../namespacerefl.html#a5a70ee908d690769979f0aa9f57eb3e9',1,'refl::reflect(const T &amp;) noexcept']]],

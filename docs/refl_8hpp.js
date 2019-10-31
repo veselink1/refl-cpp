@@ -65,6 +65,7 @@ var refl_8hpp =
     [ "REFL_DETAIL_STR", "refl_8hpp.html#ac16abdfd738e4366eb239e904b90e930", null ],
     [ "REFL_DETAIL_STR_IMPL", "refl_8hpp.html#a3eb9f0fdea25c64045020adb97393613", null ],
     [ "REFL_DETAIL_TYPE_BODY", "refl_8hpp.html#ac7f8b46b069c2311101168d841a71b37", null ],
+    [ "REFL_MAKE_CONST_STRING", "refl_8hpp.html#a2cb939da062920a29a38dff73aaf0968", null ],
     [ "REFL_TEMPLATE", "refl_8hpp.html#a832b795bfa32d4130b04e9e33635c507", null ],
     [ "REFL_TYPE", "refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71", null ],
     [ "append_t", "refl_8hpp.html#a644910ba9f353221e50e2541a492e5cc", null ],

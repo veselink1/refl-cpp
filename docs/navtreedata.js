@@ -25,8 +25,7 @@ var NAVTREE =
 [
   [ "refl-cpp", "index.html", [
     [ "Contributor Covenant Code of Conduct", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html", null ],
-    [ "Contributors", "md_contributors.html", null ],
-    [ "<a href=\"https://github.com/veselink1/refl-cpp\">refl-cpp</a> (v0.7.0) (<a href=\"https://veselink1.github.io/refl-cpp/namespacerefl.html\">Documentation</a>)", "md__r_e_a_d_m_e.html", null ],
+    [ "<a href=\"https://github.com/veselink1/refl-cpp\">refl-cpp</a> (v0.8.0) (<a href=\"https://veselink1.github.io/refl-cpp/namespacerefl.html\">Documentation</a>)", "md__r_e_a_d_m_e.html", null ],
     [ "Learn by Example", "md__starter_guide.html", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
