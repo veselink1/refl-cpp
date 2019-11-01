@@ -17,7 +17,7 @@ type_descriptor<Point>::name; // -> const_string<5>{"Point"}
 The `type_descriptor<T>` type also exposes a `members` data member and a `member_types` type alias where the former is a default instance of the latter. 
 
 ```cpp
-type_descriptor<Point>::member_types; // -> type_list<member-descriptor-x, member-descriptor-y>
+type_descriptor<Point>::member_types; // -> type_list<member-descriptor-x, member-descriptor-y, func-descriptor-magnitude>
 ```
 
 Since refl-cpp is a compile-time library, all of the metadata is preserved in a compile-time aware way. Each `type`. `field` or `function_descriptor<T, N>` is a template specialization. That is different from most classic reflection libraries which make use of runtime polymorphism
@@ -57,7 +57,7 @@ x_field_descriptor::get(); // -> double&
 Specializations of the `function_descriptor<T, N>` type represents member functions in refl-cpp. The `function_descriptor` type has a few key properties:
 
 ```cpp
-using magnitude_descriptor = trait::get_t<3, member_list<Point>>;
+using magnitude_descriptor = trait::get_t<2, member_list<Point>>;
 
 // inherited from member_descriptor_base<T, N>
 magnitude_descriptor::name; // -> const_string<9>{"magnitude"}
