@@ -60,10 +60,12 @@ constexpr auto make_sql_field_spec(Member)
     constexpr auto col = descriptor::get_attribute<Column>(Member{});
     
     if constexpr (DataType::ID == col.data_type) {
-        return Member::name + " int PRIMARY KEY";
+        // convert the const char* data member to a refl::const_string<N>
+        // (necessary to be able to do compile-time string concat)
+        return REFL_MAKE_CONST_STRING(col.name) + " int PRIMARY KEY";
     } 
     else if constexpr (DataType::TEXT == col.data_type) {
-        return Member::name + " TEXT";
+        return REFL_MAKE_CONST_STRING(col.name) + " TEXT";
     }
 }
 
