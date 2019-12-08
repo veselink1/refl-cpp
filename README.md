@@ -20,9 +20,9 @@ A compile-time reflection library for modern C++ with support for templates, att
 - MIT License (for more details, see the [license file](https://github.com/veselink1/refl-cpp/blob/master/LICENSE))
 
 ## Related Articles
-- Introductory post - [Compile-time reflection in C++ 17](https://medium.com/@vesko.karaganev/compile-time-reflection-in-c-17-55c14ee8106b)
+- Introductory post - [Compile-time reflection in C++ 17](https://veselink1.github.io/blog/cpp/metaprogramming/2019/06/08/compile-time-reflection-cpp-17.html)
 
-- In-depth post - [refl-cpp — A deep dive](https://medium.com/@vesko.karaganev/refl-cpp-deep-dive-86b185f68678)
+- In-depth post - [refl-cpp — A deep dive](https://veselink1.github.io/blog/cpp/metaprogramming/2019/07/13/refl-cpp-deep-dive.html)
 
 ## Contributing
 See [contributors.md](https://github.com/veselink1/refl-cpp/blob/master/contributors.md)
