@@ -1,10 +1,10 @@
-# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.8.0) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html)) 
+# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.8.1) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
 [![Gitter](https://badges.gitter.im/refl-cpp/community.svg)](https://gitter.im/refl-cpp/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔥
 
 ## Synopsis
-**[refl-cpp](https://github.com/veselink1/refl-cpp) allows static reflection and inspection of types in C++ with full support for *templated types and functions*!** The metadata required for this is specified through the use of macros (but wait!). The macros require the user to only specify the type that is being reflected and only the names of the members that are of interest. ReflCpp has a small and **well-organised API surface**. 
+**[refl-cpp](https://github.com/veselink1/refl-cpp) allows static reflection and inspection of types in C++ with full support for *templated types and functions*!** The metadata required for this is specified through the use of macros (but wait!). The macros require the user to only specify the type that is being reflected and only the names of the members that are of interest. ReflCpp has a small and **well-organised API surface**.
 
 - Macro-based code-gen has been minimized as much as is possible to support all basic requirements. All higher-level operations are implemented as free types and function in one of the utility namespaces.
 
@@ -62,13 +62,13 @@ REFL_END
 
 ### Basic usage example
 ```cpp
-  // Printing an object's properties: 
+  // Printing an object's properties:
   Point pt{};
   for_each(refl::reflect(pt).members, [&](auto member) {
       std::cout << member.name << "=" << member(pt) << ";";
   }
   // Result: prints x=0;y=0;
-  
+
   // Converting to an std::tuple: (Note the constexpr!)
   constexpr auto values = map_to_tuple(refl::reflect(pt).members, [&](auto member) {
       return member(pt);
@@ -79,7 +79,7 @@ REFL_END
 ## More examples
 - See [examples/](https://github.com/veselink1/refl-cpp/tree/master/examples) for more usage examples.
 
-## Metadata-generation macros 
+## Metadata-generation macros
 ```cpp
 // Describes a type and all of its members
 REFL_AUTO(
@@ -118,11 +118,14 @@ REFL_FUNC(Function, Attribute...)
 
 `Major` denotes a very big change in the structure of the library.
 
-`Minor` denotes a smaller change, which usually includes new features and might also change or even remove certain features. 
+`Minor` denotes a smaller change, which usually includes new features and might also change or even remove certain features.
 
 `Patch` denotes a version which fixed a bug and does not include new features.
 
 ---
+### v0.8.1
+  - Fixed a bug that prevented the compilation of `refl::descriptor::get_display_name()` in some compilers (thanks to [ticelo](https://github.com/ticelo))
+  - Removed improper usage of `[[maybe_unused]]` that caused warnings under clang.
 
 ### v0.8.0
   - Added the ability to create `refl::const_string<N>` instances from `const char*` which allows using c-strings (`const char*`) values from attributes together with `const_string<N>` and in `constexpr` context possible. That feature is exposed by the `REFL_MAKE_CONST_STRING(CString)` macro. Important: `CString` must be a [Core constant expression](https://en.cppreference.com/w/cpp/language/constant_expression#Core_constant_expressions). The macro is necessary to avoid the duplication of the provided expression and currently expands to ~ `detail::copy_from_unsized<detail::strlen(CString)>(CString)`. (another thanks to [Siapran](https://github.com/Siapran) for contributing the implementation for the `constexpr length()` function.)
@@ -150,22 +153,22 @@ REFL_FUNC(Function, Attribute...)
 
 ### v0.6.1
   - Bugfix: const_string::operator std::string() was incorrectly marked as constexpr which caused compilation failure in non-C++20-compliant compilers
-  
+
 ### v0.6.0
   - Changed: property() is now only usable on function members / use contract based checks for functions and fields (is_readable/writable)
-  - Removed: read_only, write_only, read_write access modifiers for property() attributes (rw-detection now based on contract). 
+  - Removed: read_only, write_only, read_write access modifiers for property() attributes (rw-detection now based on contract).
 
 ### v0.5.2
   - Added: `type_descriptor<T>::type` as an alias for `T`.
   - Added: `function_descriptor<T, N>::pointer` which points to the target function, if the pointer can be resolved and to nullptr otherwise.
   - Added: `function_descriptor<T, N>::is_resolved` for checking whether the pointer to the function has been resolved successfully.
-  - Added: `function_descriptor<T, N>::resolve<Pointer>` for explicitly resolving the function pointer as a value of the specified type. 
+  - Added: `function_descriptor<T, N>::resolve<Pointer>` for explicitly resolving the function pointer as a value of the specified type.
   - Added: `util::get<size_t N>(type_list<Ts...>&&)` which zero-initializes and returns the type at the N-th position.
   - Added: `util::get<size_t N>(Tuple&&)` as an alias for `std::get<N>`.
 
 ### v0.5.1
   - Bugfix: The REFL_AUTO macro was not working properly in MSVC and led to Internal compiler errors
-  - Changed: As a result of the related bugfix, the REFL_AUTO macro has been stabilized and its use is now recommended 
+  - Changed: As a result of the related bugfix, the REFL_AUTO macro has been stabilized and its use is now recommended
 
 ### v0.5.0
   - Removed deprecated macros `$refl(...)`, `REFL_UNSTABLE(...)`, `REFL_DEPRECATED(...)`
@@ -179,7 +182,7 @@ REFL_FUNC(Function, Attribute...)
   - Added: `trait::is_type[_v]`, `descriptor::is_type(const T&)` for checking whether a type is a type_descriptor<T> instance.
 
 ### v0.4.1
-  - `trait::as_type_list` now supports reference type in place of `T<Ts...>` (e.g. `std::tuple<Ts...>&` -> `type_list<Ts...>`). 
+  - `trait::as_type_list` now supports reference type in place of `T<Ts...>` (e.g. `std::tuple<Ts...>&` -> `type_list<Ts...>`).
   - `refl::attr::access_type::{read, write}` now deprecated, replaced by `{read_only, write_only}` (Note: implicitly-usable `read_only`, `write_only` constants in attribute (in `REFL_...` macros) context remain unchanged)
   - `refl::descriptor::field_descriptor::operator()` now supports acting as a setter. `refl::descriptor::make_invoker` is now no longer needed and marked as deprecated.
 
@@ -216,7 +219,7 @@ REFL_AUTO
 ### v0.3.2
   - `refl::runtime::debug` now captures values of member invocations by universal references (previous implementations required a copy of the value)
   - `refl::runtime::debug` now does not require the members of composites to be reflectable. (members that cannot be printed get replaced with `<?>`).
-  - `refl::trait::is_reflectable` now discards cv-qualifiers -> all cv-qualified types are now also reflectable.  
+  - `refl::trait::is_reflectable` now discards cv-qualifiers -> all cv-qualified types are now also reflectable.
 
 ### v0.3.1
   - `refl::descriptor::is_writable` now correctly supports field descriptors
@@ -232,9 +235,9 @@ REFL_AUTO
 ### v0.2.0
   - added `refl::util::contains(type_list<...>, [predicate]), refl::util::contains(type_list<...>, const_string<N>)`
   - removed `refl::attr::is_readable/is_writable` (use `refl::descriptor::is_readable/is_writable` instead; reason: lack of support for fields that lack a property attribute)
-  
+
 ### v0.1.2
   - `refl::runtime::proxy<Derived, Target>` can now delegate field 'invocations'. (Methods with names matching those of the reflected fields are created.)
-  - `refl::attr::property` now can take an optional `refl::attr::access_type` (values: `read_only`, `write_only`, `read_write`) to specify whether the property is considered readable or writable (or both). 
+  - `refl::attr::property` now can take an optional `refl::attr::access_type` (values: `read_only`, `write_only`, `read_write`) to specify whether the property is considered readable or writable (or both).
   - added `refl::descriptor::is_readable/is_writable`
   - added `refl::attr::is_readable/is_writable`
