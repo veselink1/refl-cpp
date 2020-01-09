@@ -2140,7 +2140,7 @@ namespace refl {
         {
             if constexpr (trait::is_property_v<T>) {
                 auto&& friendly_name = util::get<attr::property>(t.attributes).friendly_name;
-                return friendly_name ? *friendly_name : t.name;
+                return friendly_name ? *friendly_name : t.name.c_str();
             }
             return t.name.c_str();
         }
