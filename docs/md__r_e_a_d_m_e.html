@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>refl-cpp: &lt;a href=&quot;https://github.com/veselink1/refl-cpp&quot;&gt;refl-cpp&lt;/a&gt; (v0.8.0) (&lt;a href=&quot;https://veselink1.github.io/refl-cpp/namespacerefl.html&quot;&gt;Documentation&lt;/a&gt;)</title>
+<title>refl-cpp: &lt;a href=&quot;https://github.com/veselink1/refl-cpp&quot;&gt;refl-cpp&lt;/a&gt; (v0.8.2) (&lt;a href=&quot;https://veselink1.github.io/refl-cpp/namespacerefl.html&quot;&gt;Documentation&lt;/a&gt;)</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -96,7 +96,7 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 
 <div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title"><a href="https://github.com/veselink1/refl-cpp">refl-cpp</a> (v0.8.0) (<a href="https://veselink1.github.io/refl-cpp/namespacerefl.html">Documentation</a>) </div>  </div>
+<div class="title"><a href="https://github.com/veselink1/refl-cpp">refl-cpp</a> (v0.8.2) (<a href="https://veselink1.github.io/refl-cpp/namespacerefl.html">Documentation</a>) </div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a href="https://gitter.im/refl-cpp/community?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge"><object type="image/svg+xml" data="https://badges.gitter.im/refl-cpp/community.svg" alt="Gitter"></object>
@@ -123,14 +123,14 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 </ul>
 <h2>Related Articles</h2>
 <ul>
-<li>Introductory post - <a href="https://medium.com/@vesko.karaganev/compile-time-reflection-in-c-17-55c14ee8106b">Compile-time reflection in C++ 17</a></li>
-<li>In-depth post - <a href="https://medium.com/@vesko.karaganev/refl-cpp-deep-dive-86b185f68678">refl-cpp — A deep dive</a></li>
+<li>Introductory post - <a href="https://veselink1.github.io/blog/cpp/metaprogramming/2019/06/08/compile-time-reflection-cpp-17.html">Compile-time reflection in C++ 17</a></li>
+<li>In-depth post - <a href="https://veselink1.github.io/blog/cpp/metaprogramming/2019/07/13/refl-cpp-deep-dive.html">refl-cpp — A deep dive</a></li>
 </ul>
 <h2>Contributing</h2>
 <p>See contributors.md</p>
 <p><a href="https://github.com/veselink1/refl-cpp">refl-cpp</a> is publicly open for any contribution. Bugfixes and new features are welcome. Extra modules are too (as long as the single-header usability is preserved and the functionality is not overly specific to particular use case).</p>
 <h2>Examples</h2>
-<p>### Example metadata declaration (with <a href="https://github.com/veselink1/refl-ht">refl-ht</a> - a lightweight, portable preprocessor) </p><div class="fragment"><div class="line"><span class="keyword">struct </span>Point {</div><div class="line">  <a class="code" href="refl_8hpp.html#a3f8c7841ef8896c48746f951cdd0029c">REFL</a>(<span class="comment">/* attributes */</span>) float x;</div><div class="line">  <a class="code" href="refl_8hpp.html#a3f8c7841ef8896c48746f951cdd0029c">REFL</a>() <span class="keywordtype">float</span> y;</div><div class="line">};</div></div><!-- fragment --><p>### Example metadata declaration (without <a href="https://github.com/veselink1/refl-ht">refl-ht</a>) </p><div class="fragment"><div class="line"><span class="keyword">struct </span>Point {</div><div class="line">  <span class="keywordtype">float</span> x;</div><div class="line">  <span class="keywordtype">float</span> y;</div><div class="line">};</div><div class="line"></div><div class="line"><span class="comment">/* New style */</span></div><div class="line">REFL_AUTO(</div><div class="line">  type(Point),</div><div class="line">  field(x, <span class="comment">/* attributes */</span>),</div><div class="line">  field(y)</div><div class="line">)</div><div class="line"></div><div class="line"><span class="comment">/* Old style */</span></div><div class="line"><a class="code" href="refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71">REFL_TYPE</a>(Point)</div><div class="line">  REFL_FIELD(x, <span class="comment">/* attributes */</span>)</div><div class="line">  REFL_FIELD(y)</div><div class="line">REFL_END</div></div><!-- fragment --><p>### Basic usage example </p><div class="fragment"><div class="line"><span class="comment">// Printing an object&#39;s properties: </span></div><div class="line">Point pt{};</div><div class="line"><a class="code" href="namespacerefl_1_1util.html#a19919596cdd45c858d891c91a7826b22">for_each</a>(<a class="code" href="namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e">refl::reflect</a>(pt).members, [&amp;](<span class="keyword">auto</span> member) {</div><div class="line">    std::cout &lt;&lt; member.name &lt;&lt; <span class="stringliteral">&quot;=&quot;</span> &lt;&lt; member(pt) &lt;&lt; <span class="stringliteral">&quot;;&quot;</span>;</div><div class="line">}</div><div class="line"><span class="comment">// Result: prints x=0;y=0;</span></div><div class="line"></div><div class="line"><span class="comment">// Converting to an std::tuple: (Note the constexpr!)</span></div><div class="line">constexpr <span class="keyword">auto</span> values = <a class="code" href="namespacerefl_1_1util.html#adb5bb478ef1cc5966e9df7c9b10b5dd3">map_to_tuple</a>(<a class="code" href="namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e">refl::reflect</a>(pt).members, [&amp;](<span class="keyword">auto</span> member) {</div><div class="line">    <span class="keywordflow">return</span> member(pt);</div><div class="line">}</div><div class="line"><span class="comment">// Result: values == std::tuple&lt;int, int&gt;{ 0, 0 };</span></div></div><!-- fragment --><h2>More examples</h2>
+<p>### Example metadata declaration (with <a href="https://github.com/veselink1/refl-ht">refl-ht</a> - a lightweight, portable preprocessor) </p><div class="fragment"><div class="line"><span class="keyword">struct </span>Point {</div><div class="line">  <a class="code" href="refl_8hpp.html#a3f8c7841ef8896c48746f951cdd0029c">REFL</a>(<span class="comment">/* attributes */</span>) float x;</div><div class="line">  <a class="code" href="refl_8hpp.html#a3f8c7841ef8896c48746f951cdd0029c">REFL</a>() <span class="keywordtype">float</span> y;</div><div class="line">};</div></div><!-- fragment --><p>### Example metadata declaration (without <a href="https://github.com/veselink1/refl-ht">refl-ht</a>) </p><div class="fragment"><div class="line"><span class="keyword">struct </span>Point {</div><div class="line">  <span class="keywordtype">float</span> x;</div><div class="line">  <span class="keywordtype">float</span> y;</div><div class="line">};</div><div class="line"></div><div class="line"><span class="comment">/* New style */</span></div><div class="line">REFL_AUTO(</div><div class="line">  type(Point),</div><div class="line">  field(x, <span class="comment">/* attributes */</span>),</div><div class="line">  field(y)</div><div class="line">)</div><div class="line"></div><div class="line"><span class="comment">/* Old style */</span></div><div class="line"><a class="code" href="refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71">REFL_TYPE</a>(Point)</div><div class="line">  REFL_FIELD(x, <span class="comment">/* attributes */</span>)</div><div class="line">  REFL_FIELD(y)</div><div class="line">REFL_END</div></div><!-- fragment --><p>### Basic usage example </p><div class="fragment"><div class="line"><span class="comment">// Printing an object&#39;s properties:</span></div><div class="line">Point pt{};</div><div class="line"><a class="code" href="namespacerefl_1_1util.html#a19919596cdd45c858d891c91a7826b22">for_each</a>(<a class="code" href="namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e">refl::reflect</a>(pt).members, [&amp;](<span class="keyword">auto</span> member) {</div><div class="line">    std::cout &lt;&lt; member.name &lt;&lt; <span class="stringliteral">&quot;=&quot;</span> &lt;&lt; member(pt) &lt;&lt; <span class="stringliteral">&quot;;&quot;</span>;</div><div class="line">}</div><div class="line"><span class="comment">// Result: prints x=0;y=0;</span></div><div class="line"></div><div class="line"><span class="comment">// Converting to an std::tuple: (Note the constexpr!)</span></div><div class="line">constexpr <span class="keyword">auto</span> values = <a class="code" href="namespacerefl_1_1util.html#adb5bb478ef1cc5966e9df7c9b10b5dd3">map_to_tuple</a>(<a class="code" href="namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e">refl::reflect</a>(pt).members, [&amp;](<span class="keyword">auto</span> member) {</div><div class="line">    <span class="keywordflow">return</span> member(pt);</div><div class="line">}</div><div class="line"><span class="comment">// Result: values == std::tuple&lt;int, int&gt;{ 0, 0 };</span></div></div><!-- fragment --><h2>More examples</h2>
 <ul>
 <li>See <a href="https://github.com/veselink1/refl-cpp/tree/master/examples">examples/</a> for more usage examples.</li>
 </ul>
@@ -140,6 +140,15 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 <p><code>Minor</code> denotes a smaller change, which usually includes new features and might also change or even remove certain features.</p>
 <p><code>Patch</code> denotes a version which fixed a bug and does not include new features.</p>
 <hr/>
+ <h3>v0.8.2</h3>
+<ul>
+<li>CV-qualifiers are now properly removed from attribute objects (previously, the values in the backing <code>std::tuple&lt;...&gt;</code> were sometimes cv-qualified).</li>
+</ul>
+<h3>v0.8.1</h3>
+<ul>
+<li>Fixed a bug that prevented the compilation of <code><a class="el" href="namespacerefl_1_1descriptor.html#aa7c9753a84fecf4d9c62ce5b5063fb47">refl::descriptor::get_display_name()</a></code> in some compilers (thanks to <a href="https://github.com/ticelo">ticelo</a>)</li>
+<li>Removed improper usage of <code>[[maybe_unused]]</code> that caused warnings under clang.</li>
+</ul>
 <h3>v0.8.0</h3>
 <ul>
 <li>Added the ability to create <code>refl::const_string&lt;N&gt;</code> instances from <code>const char*</code> which allows using c-strings (<code>const char*</code>) values from attributes together with <code>const_string&lt;N&gt;</code> and in <code>constexpr</code> context possible. That feature is exposed by the <code><a class="el" href="refl_8hpp.html#a2cb939da062920a29a38dff73aaf0968">REFL_MAKE_CONST_STRING(CString)</a></code> macro. Important: <code>CString</code> must be a <a href="https://en.cppreference.com/w/cpp/language/constant_expression#Core_constant_expressions">Core constant expression</a>. The macro is necessary to avoid the duplication of the provided expression and currently expands to ~ <code>detail::copy_from_unsized&lt;detail::strlen(CString)&gt;(CString)</code>. (another thanks to <a href="https://github.com/Siapran">Siapran</a> for contributing the implementation for the <code>constexpr length()</code> function.)</li>
@@ -272,7 +281,7 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Nov 1 2019 08:26:21 for refl-cpp by
+    <li class="footer">Generated by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.15 </li>
   </ul>
