@@ -2550,7 +2550,7 @@ namespace refl::detail
      * Req must be one of the types defined in attr::usage.
      */
     template <typename Req, typename... Args>
-    constexpr std::tuple<std::remove_reference_t<Args>...> make_attributes(Args&&... args) noexcept
+    constexpr std::tuple<trait::remove_qualifiers_t<Args>...> make_attributes(Args&&... args) noexcept
     {
         constexpr bool check_unique = validate_attr_unique(type_list<Args...>{});
         static_assert(check_unique, "Some of the supplied attributes cannot be used on this declaration!");
@@ -2558,7 +2558,7 @@ namespace refl::detail
         constexpr bool check_usage = (... && validate_attr_usage<Req, trait::remove_qualifiers_t<Args>>());
         static_assert(check_usage, "Some of the supplied attributes cannot be used on this declaration!");
 
-        return std::tuple<std::remove_reference_t<Args>...>{ std::forward<Args>(args)... };
+        return std::tuple<trait::remove_qualifiers_t<Args>...>{ std::forward<Args>(args)... };
     }
 
     template <typename T, typename...>

@@ -1,4 +1,4 @@
-# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.8.1) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
+# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.8.2) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
 [![Gitter](https://badges.gitter.im/refl-cpp/community.svg)](https://gitter.im/refl-cpp/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔥
@@ -123,6 +123,9 @@ REFL_FUNC(Function, Attribute...)
 `Patch` denotes a version which fixed a bug and does not include new features.
 
 ---
+### v0.8.2
+  - CV-qualifiers are now properly removed from attribute objects (previously, the values in the backing `std::tuple<...>` were sometimes cv-qualified).
+
 ### v0.8.1
   - Fixed a bug that prevented the compilation of `refl::descriptor::get_display_name()` in some compilers (thanks to [ticelo](https://github.com/ticelo))
   - Removed improper usage of `[[maybe_unused]]` that caused warnings under clang.
