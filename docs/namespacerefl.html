@@ -104,7 +104,7 @@ $(document).ready(function(){initNavTree('namespacerefl.html','');});
 </div><!--header-->
 <div class="contents">
 
-<p>The top-level refl-cpp namespace.  
+<p>The top-level refl-cpp namespace It contains a few core refl-cpp namespaces and directly exposes core classes and functions.  
 <a href="#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
@@ -150,7 +150,19 @@ Functions</h2></td></tr>
 <tr class="separator:a5a70ee908d690769979f0aa9f57eb3e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The top-level refl-cpp namespace. </p>
+<div class="textblock"><p>The top-level refl-cpp namespace It contains a few core refl-cpp namespaces and directly exposes core classes and functions. </p>
+<ul>
+<li>
+util - utility functions (for_each, map_to_tuple, etc.) </li>
+<li>
+trait - type-traits and other operations on types (is_function_v, map_t, etc.) </li>
+<li>
+runtime - utility functions and classes that always have a runtime overhead (proxy&lt;T&gt;, debug_str, etc.) </li>
+<li>
+member - contains the empty classes member and function (used for tagging) </li>
+<li>
+descriptor - contains the non-specialized member types (type|field_descriptor&lt;T, N&gt;, and operations on them (get_property, get_display_name, etc.)) </li>
+</ul>
 <p>using <a class="el" href="structrefl_1_1util_1_1type__list.html">util::type_list</a>; <br />
  using <a class="el" href="classrefl_1_1descriptor_1_1type__descriptor.html" title="Represents a reflected type.">descriptor::type_descriptor</a>; <br />
  using <a class="el" href="classrefl_1_1descriptor_1_1field__descriptor.html" title="Represents a reflected field.">descriptor::field_descriptor</a>; <br />

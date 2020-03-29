@@ -362,7 +362,7 @@ template&lt;typename F , typename... Ts&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns true if any item in the list matches the predicate. </p>
+<p>Returns true if any item in the list matches the predicate. Calling f(Ts{})... should be valid in a constexpr context. </p>
 
 </div>
 </div>
@@ -455,7 +455,7 @@ template&lt;typename F , typename... Ts&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Filters the list according to a <em>constexpr</em> predicate. </p>
+<p>Filters the list according to a <em>constexpr</em> predicate. Calling f(Ts{})... should be valid in a constexpr context. </p>
 
 </div>
 </div>
@@ -486,7 +486,7 @@ template&lt;typename F , typename... Ts&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the first instance that matches the <em>constexpr</em> predicate. </p>
+<p>Returns the first instance that matches the <em>constexpr</em> predicate. Calling f(Ts{})... should be valid in a constexpr context. </p>
 
 </div>
 </div>
@@ -517,7 +517,7 @@ template&lt;typename F , typename... Ts&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the only instance that matches the <em>constexpr</em> predicate. If there is no match or multiple matches, fails with static_assert. </p>
+<p>Returns the only instance that matches the <em>constexpr</em> predicate. If there is no match or multiple matches, fails with static_assert. Calling f(Ts{})... should be valid in a constexpr context. </p>
 
 </div>
 </div>
@@ -548,7 +548,7 @@ template&lt;size_t N, typename... Ts&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the member that has the specified name. Fails with static_assert if no such member exists. </p>
+<p>Returns the member that has the specified name. Fails with static_assert if no such member exists. Calling f(Ts{})... should be valid in a constexpr context. </p>
 
 </div>
 </div>

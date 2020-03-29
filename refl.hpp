@@ -66,6 +66,14 @@
 
 /**
  * @brief The top-level refl-cpp namespace
+ * It contains a few core refl-cpp namespaces and directly exposes core classes and functions.
+ * <ul>
+ * <li>util - utility functions (for_each, map_to_tuple, etc.)</li>
+ * <li>trait - type-traits and other operations on types (is_function_v, map_t, etc.)</li>
+ * <li>runtime - utility functions and classes that always have a runtime overhead (proxy<T>, debug_str, etc.)</li>
+ * <li>member - contains the empty classes member and function (used for tagging)</li>
+ * <li>descriptor - contains the non-specialized member types (type|field_descriptor<T, N>, and operations on them (get_property, get_display_name, etc.))</li>
+ * </ul>
  *
  * using util::type_list; <br>
  * using descriptor::type_descriptor; <br>
@@ -84,6 +92,9 @@ namespace refl
         /**
          * Represents a compile-time string. Used in refl-cpp
          * for representing names of reflected types and members.
+         * Supports constexpr concatenation and substring,
+         * and is explicitly-convertible to const char* and std::string.
+         * REFL_MAKE_CONST_STRING can be used to create an instance from a literal string.
          *
          * @param <N> The length of the string excluding the terminating '\0' character.
          */
@@ -1163,6 +1174,9 @@ namespace refl {
             });
         }
 
+        /*
+         * Returns the initial_value unchanged.
+         */
         template <typename R, typename F, typename... Ts>
         constexpr R accumulate(type_list<>, F&&, R&& initial_value)
         {
@@ -1222,6 +1236,7 @@ namespace refl {
 
         /**
          * Filters the list according to a *constexpr* predicate.
+         * Calling f(Ts{})... should be valid in a constexpr context.
          */
         template <typename F, typename... Ts>
         constexpr auto filter(type_list<Ts...> list, F f)
@@ -1231,6 +1246,7 @@ namespace refl {
 
         /**
          * Returns the first instance that matches the *constexpr* predicate.
+         * Calling f(Ts{})... should be valid in a constexpr context.
          */
         template <typename F, typename... Ts>
         constexpr auto find_first(type_list<Ts...> list, F f)
@@ -1241,7 +1257,9 @@ namespace refl {
         }
 
         /**
-         * Returns the only instance that matches the *constexpr* predicate. If there is no match or multiple matches, fails with static_assert.
+         * Returns the only instance that matches the *constexpr* predicate.
+         * If there is no match or multiple matches, fails with static_assert.
+         * Calling f(Ts{})... should be valid in a constexpr context.
          */
         template <typename F, typename... Ts>
         constexpr auto find_one(type_list<Ts...> list, F f)
@@ -1253,7 +1271,9 @@ namespace refl {
         }
 
         /**
-         * Returns the member that has the specified name. Fails with static_assert if no such member exists.
+         * Returns the member that has the specified name.
+         * Fails with static_assert if no such member exists.
+         * Calling f(Ts{})... should be valid in a constexpr context.
          */
         template <size_t N, typename... Ts>
         constexpr auto find_one(type_list<Ts...> list, const const_string<N>& name)
@@ -1263,6 +1283,7 @@ namespace refl {
 
         /**
          * Returns true if any item in the list matches the predicate.
+         * Calling f(Ts{})... should be valid in a constexpr context.
          */
         template <typename F, typename... Ts>
         constexpr auto contains(type_list<Ts...> list, F&& f)
@@ -2374,6 +2395,10 @@ namespace refl {
 
         /**
          * Writes the debug representation of value to the given std::ostream.
+         * Calls the function specified by the debug<F> attribute whenever possible,
+         * before falling back to recursively interating the members and printing them.
+         * Takes an optional arguments specifying whether to print a compact representation.
+         * The compact representation contains no newlines.
          */
         template <typename T>
         void debug(std::ostream& os, const T& value, bool compact)
@@ -2438,7 +2463,7 @@ namespace refl {
         }
 
         /**
-         * Writes the debug representation of the provided values to the given std::ostream.
+         * Writes the detailed debug representation of the provided values to the given std::ostream.
          */
         template <typename T>
         void debug(std::ostream& os, const T& value)
@@ -2447,7 +2472,7 @@ namespace refl {
         }
 
         /**
-         * Writes the (compact) debug representation of the provided values to the given std::ostream.
+         * Writes the compact debug representation of the provided values to the given std::ostream.
          */
         template <typename... Ts>
         void debug_all(std::ostream& os, const Ts&... values) {
@@ -2455,7 +2480,9 @@ namespace refl {
         }
 
         /**
-         * Writes the (compact) debug representation of the provided value to an std::string and returns it.
+         * Writes the debug representation of the provided value to an std::string and returns it.
+         * Takes an optional arguments specifying whether to print a compact representation.
+         * The compact representation contains no newlines.
          */
         template <typename T>
         std::string debug_str(const T& value, bool compact = false)
@@ -2466,7 +2493,7 @@ namespace refl {
         }
 
         /**
-         * Writes the (compact) debug representation of the provided values to an std::string and returns it.
+         * Writes the compact debug representation of the provided values to an std::string and returns it.
          */
         template <typename... Ts>
         std::string debug_all_str(const Ts&... values) {
@@ -2476,6 +2503,10 @@ namespace refl {
         /**
          * Invokes the specified member with the provided arguments.
          * When used with a member that is a field, the function gets or sets the value of the field.
+         * The list of members is initially filtered by the type of the arguments provided.
+         * THe filtered list is then searched at runtime by member name for the specified member
+         * and that member is then invoked by operator(). If no match is found,
+         * an std::runtime_error is thrown.
          */
         template <typename U, typename T, typename... Args>
         U invoke(T&& target, const char* name, Args&&... args)
@@ -2486,7 +2517,6 @@ namespace refl {
 
             std::optional<U> result;
 
-            // TODO: add exception catching
             bool found{ false };
             for_each(type_descriptor::members, [&](auto member) {
                 using member_t = decltype(member);

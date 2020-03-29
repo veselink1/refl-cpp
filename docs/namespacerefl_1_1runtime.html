@@ -163,7 +163,7 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Writes the debug representation of the provided values to the given std::ostream. </p>
+<p>Writes the detailed debug representation of the provided values to the given std::ostream. </p>
 
 </div>
 </div>
@@ -200,7 +200,7 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Writes the debug representation of value to the given std::ostream. </p>
+<p>Writes the debug representation of value to the given std::ostream. Calls the function specified by the debug&lt;F&gt; attribute whenever possible, before falling back to recursively interating the members and printing them. Takes an optional arguments specifying whether to print a compact representation. The compact representation contains no newlines. </p>
 
 </div>
 </div>
@@ -231,7 +231,7 @@ template&lt;typename... Ts&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Writes the (compact) debug representation of the provided values to the given std::ostream. </p>
+<p>Writes the compact debug representation of the provided values to the given std::ostream. </p>
 
 </div>
 </div>
@@ -252,7 +252,7 @@ template&lt;typename... Ts&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Writes the (compact) debug representation of the provided values to an std::string and returns it. </p>
+<p>Writes the compact debug representation of the provided values to an std::string and returns it. </p>
 
 </div>
 </div>
@@ -283,7 +283,7 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Writes the (compact) debug representation of the provided value to an std::string and returns it. </p>
+<p>Writes the debug representation of the provided value to an std::string and returns it. Takes an optional arguments specifying whether to print a compact representation. The compact representation contains no newlines. </p>
 
 </div>
 </div>
@@ -320,7 +320,7 @@ template&lt;typename U , typename T , typename... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Invokes the specified member with the provided arguments. When used with a member that is a field, the function gets or sets the value of the field. </p>
+<p>Invokes the specified member with the provided arguments. When used with a member that is a field, the function gets or sets the value of the field. The list of members is initially filtered by the type of the arguments provided. THe filtered list is then searched at runtime by member name for the specified member and that member is then invoked by operator(). If no match is found, an std::runtime_error is thrown. </p>
 
 </div>
 </div>

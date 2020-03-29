@@ -143,7 +143,7 @@ Static Public Attributes</h2></td></tr>
 <div class="textblock"><h3>template&lt;size_t N&gt;<br />
 struct refl::util::const_string&lt; N &gt;</h3>
 
-<p>Represents a compile-time string. Used in refl-cpp for representing names of reflected types and members.</p>
+<p>Represents a compile-time string. Used in refl-cpp for representing names of reflected types and members. Supports constexpr concatenation and substring, and is explicitly-convertible to const char* and std::string. REFL_MAKE_CONST_STRING can be used to create an instance from a literal string.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">&lt;N&gt;</td><td>The length of the string excluding the terminating '\0' character. </td></tr>
