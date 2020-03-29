@@ -2140,6 +2140,23 @@ namespace refl {
             }
         }
 
+        namespace detail
+        {
+            template <typename T>
+            struct get_type_descriptor
+            {
+                typedef type_descriptor<T> type;
+            };
+        } // namespace detail
+
+        template <typename T>
+        constexpr auto get_bases(const T& t) noexcept
+        {
+            constexpr auto bases = get_attribute<attr::base_types>(t);
+            using base_types = typename decltype(bases)::list_type;
+            return trait::map_t<detail::get_type_descriptor, base_types>{};
+        }
+
         /**
          * Returns the debug name of T. (In the form of 'declaring_type::member_name').
          * (Tip: Take advantage ADL-lookup whenever possible.)
