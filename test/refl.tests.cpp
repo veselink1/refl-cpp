@@ -17,9 +17,16 @@ REFL_TYPE(A)
     REFL_FIELD(x)
     REFL_FIELD(y)
     REFL_FIELD(z)
-    
+
     REFL_FUNC(f)
     REFL_FUNC(g)
+REFL_END
+
+struct ADerived : public A
+{
+};
+
+REFL_TYPE(ADerived, bases<A>)
 REFL_END
 
 template <typename T>
@@ -64,7 +71,7 @@ void tests()
     constexpr const_string<0> str = REFL_MAKE_CONST_STRING("");
     static_assert(str == "");
     static_assert(str != "A");
-    
+
     constexpr const_string<6> str2 = REFL_MAKE_CONST_STRING("foobar");
     static_assert(str2 == "foobar");
     static_assert(str2 != "foo");
@@ -76,7 +83,7 @@ void tests()
     /* trait::* */
     static_assert(std::is_same_v<trait::remove_qualifiers_t<const int&>, int>);
     static_assert(trait::is_reflectable_v<int>);
-    
+
     struct custom {};
     static_assert(!trait::is_reflectable_v<custom>);
 
@@ -98,10 +105,10 @@ void tests()
 
     static_assert(std::is_same_v<trait::get_t<0, type_list<int, float>>, int>);
     static_assert(std::is_same_v<trait::get_t<1, type_list<int, float>>, float>);
-    
+
     static_assert(std::is_same_v<trait::skip_t<1, type_list<int, float>>, type_list<float>>);
     static_assert(std::is_same_v<trait::skip_t<2, type_list<int, float>>, type_list<>>);
-    
+
     static_assert(std::is_same_v<trait::filter_t<std::is_integral, type_list<int, float>>, type_list<int>>);
     static_assert(std::is_same_v<trait::map_t<std::remove_reference, type_list<int&, float&>>, type_list<int, float>>);
 
@@ -113,10 +120,10 @@ void tests()
 
     static_assert(!trait::is_member_v<int>);
     static_assert(trait::is_member_v<trait::get_t<0, member_list<A>>>);
-    
+
     static_assert(!trait::is_field_v<int>);
     static_assert(trait::is_field_v<trait::get_t<0, member_list<A>>>);
-    
+
     static_assert(!trait::is_function_v<int>);
     static_assert(trait::is_function_v<trait::get_t<3, member_list<A>>>);
 
@@ -127,27 +134,27 @@ void tests()
 
         static_assert(std::is_same_v<decltype(util::to_tuple(std::array<int, 2>{})), std::tuple<int, int>>);
         static_assert(std::is_same_v<decltype(util::to_tuple(std::array<int, 0>{})), std::tuple<>>);
-        
-        constexpr std::tuple<int, float> mtt = util::map_to_tuple(type_list<int, float>{}, [](auto x) { 
+
+        constexpr std::tuple<int, float> mtt = util::map_to_tuple(type_list<int, float>{}, [](auto x) {
             return decltype(x)(5);
         });
         static_assert(std::get<0>(mtt) == 5);
         static_assert(std::get<1>(mtt) == 5.f);
-        
-        constexpr std::tuple<size_t, size_t> mtt2 = util::map_to_tuple(type_list<int, float>{}, [](auto, size_t i) { 
+
+        constexpr std::tuple<size_t, size_t> mtt2 = util::map_to_tuple(type_list<int, float>{}, [](auto, size_t i) {
             return i;
         });
         static_assert(std::get<0>(mtt2) == 0);
         static_assert(std::get<1>(mtt2) == 1);
 
-        constexpr std::array<int, 2> mta = util::map_to_array<int>(type_list<int, float>{}, [](auto) { 
-            return 5; 
+        constexpr std::array<int, 2> mta = util::map_to_array<int>(type_list<int, float>{}, [](auto) {
+            return 5;
         });
         static_assert(mta[0] == 5);
         static_assert(mta[1] == 5);
-        
-        constexpr std::array<int, 2> mta2 = util::map_to_array<int>(type_list<int, float>{}, [](auto, size_t i) { 
-            return static_cast<int>(i); 
+
+        constexpr std::array<int, 2> mta2 = util::map_to_array<int>(type_list<int, float>{}, [](auto, size_t i) {
+            return static_cast<int>(i);
         });
         static_assert(mta2[0] == 0);
         static_assert(mta2[1] == 1);
@@ -166,22 +173,22 @@ void tests()
 
         constexpr int acc = util::accumulate(type_list<int, int>{}, std::plus<int>(), 5);
         static_assert(acc == 5);
-        
+
         constexpr int cnt = util::count_if(type_list<int, float>{}, [](auto x) {
             return std::is_integral_v<decltype(x)>;
         });
         static_assert(cnt == 1);
-        
+
         constexpr type_list<int> flt = util::filter(type_list<int, float>{}, [](auto x) {
             return std::is_integral_v<decltype(x)>;
         });
         static_assert(flt.size == 1);
-        
+
         constexpr bool con = util::contains(type_list<int, float>{}, [](auto x) {
             return std::is_same_v<decltype(x), float>;
         });
         static_assert(con);
-        
+
         constexpr int apl = util::apply(type_list<int, float>{}, [](int, float) {
             return 0;
         });
@@ -190,7 +197,7 @@ void tests()
         static_assert(std::is_same_v<decltype(type_descriptor<int>::attributes), const std::tuple<>>);
         static_assert(std::is_same_v<decltype(type_descriptor<int*>::attributes), const std::tuple<>>);
         static_assert(std::is_same_v<decltype(type_descriptor<int* const>::attributes), const std::tuple<>>);
-        
+
         static_assert(std::is_same_v<decltype(type_descriptor<int>::members), const type_list<>>);
         static_assert(std::is_same_v<decltype(type_descriptor<int*>::members), const type_list<>>);
         static_assert(std::is_same_v<decltype(type_descriptor<int* const>::members), const type_list<>>);
@@ -198,29 +205,30 @@ void tests()
         static_assert(field_descriptor<A, 0>::name == "x");
         static_assert(field_descriptor<A, 0>::pointer == &A::x);
         static_assert(!field_descriptor<A, 0>::is_static);
-        
+
         static_assert(function_descriptor<A, 3>::name == "f");
         static_assert(std::is_invocable_v<function_descriptor<A, 3>, A>);
         static_assert(std::is_invocable_v<function_descriptor<A, 3>, A, int>);
         static_assert(!std::is_invocable_v<function_descriptor<A, 3>, A, std::string>);
-        
+
         static_assert(is_reflectable<int>());
         struct dummy {};
         static_assert(!is_reflectable<dummy>());
 
         static_assert(trait::is_instance_v<std::tuple<>>);
         static_assert(!trait::is_instance_v<int>);
-        
+
         static_assert(trait::is_instance_of_v<std::tuple, std::tuple<>>);
         static_assert(!trait::is_instance_of_v<std::tuple, int>);
-        
+        static_assert(!trait::is_instance_of_v<std::vector, std::tuple<>>);
+
         static_assert(trait::contains_v<int, type_list<int, float>>);
         static_assert(!trait::contains_v<int, type_list<float, double>>);
-        
+
         static_assert(trait::contains_instance_v<std::tuple, type_list<int, std::tuple<float>>>);
         static_assert(!trait::contains_instance_v<std::tuple, type_list<int, float>>);
         static_assert(!trait::contains_instance_v<attr::debug, trait::get_t<0, member_list<A>>::attribute_types>);
-        
+
         struct B : A {};
 
         static_assert(trait::contains_base_v<A, type_list<int, A>>);
@@ -229,7 +237,7 @@ void tests()
     }
 
     /* descriptor::* */
-    {    
+    {
         constexpr auto y_member = trait::get_t<1, member_list<A>>{};
         static_assert(y_member.name == "y");
 
