@@ -2026,7 +2026,8 @@ namespace refl {
     {
         /**
          * Checks whether T is a field descriptor.
-         * (Tip: Take advantage ADL-lookup whenever possible.)
+         *
+         * @see refl::descriptor::field_descriptor
          */
         template <typename T>
         constexpr bool is_field(const T&) noexcept
@@ -2036,7 +2037,8 @@ namespace refl {
 
         /**
          * Checks whether T is a function descriptor.
-         * (Tip: Take advantage ADL-lookup whenever possible.)
+         *
+         * @see refl::descriptor::function_descriptor
          */
         template <typename T>
         constexpr bool is_function(const T&) noexcept
@@ -2046,7 +2048,8 @@ namespace refl {
 
         /**
          * Checks whether T is a type descriptor.
-         * (Tip: Take advantage ADL-lookup whenever possible.)
+         *
+         * @see refl::descriptor::type_descriptor
          */
         template <typename T>
         constexpr bool is_type(const T&) noexcept
@@ -2073,16 +2076,6 @@ namespace refl {
         }
 
         /**
-         * Checks whether T is a member descriptor marked with the property attribute.
-         * (Tip: Take advantage ADL-lookup whenever possible.)
-         */
-        template <typename T>
-        constexpr bool is_property(const T& t) noexcept
-        {
-            return has_attribute<attr::property>(t);
-        }
-
-        /**
          * Returns the value of the attribute A on T.
          */
         template <typename A, typename T>
@@ -2101,11 +2094,25 @@ namespace refl {
         }
 
         /**
-         * Gets the property attribute.
-         * (Tip: Take advantage ADL-lookup whenever possible.)
+         * Checks whether T is a member descriptor marked with the property attribute.
+         *
+         * @see refl::attr::property
+         * @see refl::descriptor::get_property
          */
         template <typename T>
-        constexpr attr::property get_property_info(const T& t) noexcept
+        constexpr bool is_property(const T& t) noexcept
+        {
+            return has_attribute<attr::property>(t);
+        }
+
+        /**
+         * Gets the property attribute.
+         *
+         * @see refl::attr::property
+         * @see refl::descriptor::is_property
+         */
+        template <typename T>
+        constexpr attr::property get_property(const T& t) noexcept
         {
             return get_attribute<attr::property>(t);
         }
@@ -2121,7 +2128,6 @@ namespace refl {
 
         /**
          * Checks if T is a readable property or a field.
-         * (Tip: Take advantage ADL-lookup whenever possible.)
          */
         template <typename T>
         constexpr bool is_readable(const T&) noexcept
@@ -2142,7 +2148,6 @@ namespace refl {
 
         /**
          * Checks if T is a writable property or a non-const field.
-         * (Tip: Take advantage ADL-lookup whenever possible.)
          */
         template <typename T>
         constexpr bool is_writable(const T&) noexcept
@@ -2167,9 +2172,30 @@ namespace refl {
             };
         } // namespace detail
 
+        /**
+         * Checks if a type has a bases attribute.
+         *
+         * @see refl::attr::bases
+         * @see refl::descriptor::get_bases
+         */
+        template <typename T>
+        constexpr auto has_bases(const T& t) noexcept
+        {
+            return has_attribute<attr::base_types>(t);
+        }
+
+        /**
+         * Returns a list of the type_descriptor<T>s of the base types of the target,
+         * as specified by the bases<A, B, ...> attribute.
+         *
+         * @see refl::attr::bases
+         * @see refl::descriptor::has_bases
+         */
         template <typename T>
         constexpr auto get_bases(const T& t) noexcept
         {
+            static_assert(has_bases(t), "Target type does not have a bases<A, B, ...> attribute.");
+
             constexpr auto bases = get_attribute<attr::base_types>(t);
             using base_types = typename decltype(bases)::list_type;
             return trait::map_t<detail::get_type_descriptor, base_types>{};
@@ -2177,7 +2203,6 @@ namespace refl {
 
         /**
          * Returns the debug name of T. (In the form of 'declaring_type::member_name').
-         * (Tip: Take advantage ADL-lookup whenever possible.)
          */
         template <typename T>
         const char* get_debug_name(const T& t)
@@ -2189,7 +2214,6 @@ namespace refl {
         /**
          * Returns the display name of T.
          * (Uses the friendly_name of the property attribute or falls back to the in-code name).
-         * (Tip: Take advantage ADL-lookup whenever possible.)
          */
         template <typename T>
         const char* get_display_name(const T& t) noexcept
