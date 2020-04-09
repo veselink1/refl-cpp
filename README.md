@@ -8,8 +8,6 @@ A compile-time reflection library for modern C++ with support for templates, att
 
 - Macro-based code-gen has been minimized as much as is possible to support all basic requirements. All higher-level operations are implemented as free types and function in one of the utility namespaces.
 
-- Support for **autogeneration of reflection metadata** through a **non-intrusive interface** is ~~coming soon~~ *now available* in the form of [refl-ht](https://github.com/veselink1/refl-ht).
-
 ## Requirements
 - Minimum language standard: C++17
 
@@ -31,14 +29,6 @@ See [contributors.md](https://github.com/veselink1/refl-cpp/blob/master/contribu
 
 ## Examples
 
-### Example metadata declaration (with [refl-ht](https://github.com/veselink1/refl-ht) - a lightweight, portable preprocessor)
-```cpp
-struct Point {
-  REFL(/* attributes */) float x;
-  REFL() float y;
-};
-```
-
 ### Example metadata declaration (without [refl-ht](https://github.com/veselink1/refl-ht))
 ```cpp
 struct Point {
@@ -58,6 +48,14 @@ REFL_TYPE(Point)
   REFL_FIELD(x, /* attributes */)
   REFL_FIELD(y)
 REFL_END
+```
+
+### Example metadata declaration (with [refl-ht](https://github.com/veselink1/refl-ht) - a lightweight, portable preprocessor) *(discontinued)*
+```cpp
+struct Point {
+  REFL(/* attributes */) float x;
+  REFL() float y;
+};
 ```
 
 ### Basic usage example
@@ -120,7 +118,7 @@ REFL_FUNC(Function, Attribute...)
 
 `Minor` denotes a smaller change, which usually includes new features and might also change or even remove certain features.
 
-`Patch` denotes a version which fixed a bug and does not include new features.
+`Patch` denotes a version which fixed a bug or does not include major new features.
 
 ---
 ### v0.8.2
