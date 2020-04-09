@@ -1729,12 +1729,30 @@ namespace refl {
 
         namespace detail
         {
+            /**
+             * Checks if T == U<Args...>.
+             * If U<Args...> != T or is invalid the result is false.
+             */
+            template <typename T, template<typename...> typename U, typename... Args>
+            struct is_same_template
+            {
+            private:
+                template <template<typename...> typename V, typename = V<Args...>>
+                static auto test(int) -> std::is_same<V<Args...>, T>;
+
+                template <template<typename...> typename V>
+                static std::false_type test(...);
+            public:
+                static constexpr bool value{decltype(test<U>(0))::value};
+            };
+
             template <template<typename...> typename T, typename U>
             struct is_instance_of : public std::false_type {};
 
             template <template<typename...> typename T, template<typename...> typename U, typename... Args>
-            struct is_instance_of<T, U<Args...>> : public std::is_same<T<Args...>, U<Args...>>
+            struct is_instance_of<T, U<Args...>> : public is_same_template<U<Args...>, T, Args...>
             {
+
             };
         }
 
