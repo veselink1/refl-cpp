@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 //
-// Copyright (c) 2019 Veselin Karaganev (@veselink1) and Contributors
+// Copyright (c) 2020 Veselin Karaganev (@veselink1) and Contributors
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -97,6 +97,7 @@ namespace refl
          * REFL_MAKE_CONST_STRING can be used to create an instance from a literal string.
          *
          * @param <N> The length of the string excluding the terminating '\0' character.
+         * @see refl::descriptor::base_member_descriptor::name
          */
         template <size_t N>
         struct const_string
@@ -193,6 +194,8 @@ namespace refl
 
         /**
          * Creates an empty instance of const_string<N>
+         *
+         * @see refl::util::const_string
          */
         constexpr const_string<0> make_const_string() noexcept
         {
@@ -201,6 +204,8 @@ namespace refl
 
         /**
          * Creates an instance of const_string<N>
+         *
+         * @see refl::util::const_string
          */
         template <size_t N>
         constexpr const_string<N - 1> make_const_string(const char(&str)[N]) noexcept
@@ -210,6 +215,8 @@ namespace refl
 
         /**
          * Concatenates two const_strings together.
+         *
+         * @see refl::util::const_string
          */
         template <size_t N, size_t M>
         constexpr const_string<N + M> operator+(const const_string<N>& a, const const_string<M>& b) noexcept
@@ -224,6 +231,8 @@ namespace refl
 
         /**
          * Concatenates a const_string with a C-style string.
+         *
+         * @see refl::util::const_string
          */
         template <size_t N, size_t M>
         constexpr const_string<N + M - 1> operator+(const const_string<N>& a, const char(&b)[M]) noexcept
@@ -233,6 +242,8 @@ namespace refl
 
         /**
          * Concatenates a C-style string with a const_string.
+         *
+         * @see refl::util::const_string
          */
         template <size_t N, size_t M>
         constexpr const_string<N + M - 1> operator+(const char(&a)[N], const const_string<M>& b) noexcept
@@ -242,6 +253,8 @@ namespace refl
 
         /**
          * Compares two const_strings for equality.
+         *
+         * @see refl::util::const_string
          */
         template <size_t N, size_t M>
         constexpr bool operator==(const const_string<N>& a, const const_string<M>& b) noexcept
@@ -261,6 +274,8 @@ namespace refl
 
         /**
          * Compares two const_strings for equality.
+         *
+         * @see refl::util::const_string
          */
         template <size_t N, size_t M>
         constexpr bool operator!=(const const_string<N>& a, const const_string<M>& b) noexcept
@@ -270,6 +285,8 @@ namespace refl
 
         /**
          * Compares a const_string with a C-style string for equality.
+         *
+         * @see refl::util::const_string
          */
         template <size_t N, size_t M>
         constexpr bool operator==(const const_string<N>& a, const char(&b)[M]) noexcept
@@ -279,6 +296,8 @@ namespace refl
 
         /**
          * Compares a const_string with a C-style string for equality.
+         *
+         * @see refl::util::const_string
          */
         template <size_t N, size_t M>
         constexpr bool operator!=(const const_string<N>& a, const char(&b)[M]) noexcept
@@ -288,6 +307,8 @@ namespace refl
 
         /**
          * Compares a C-style string with a const_string for equality.
+         *
+         * @see refl::util::const_string
          */
         template <size_t N, size_t M>
         constexpr bool operator==(const char(&a)[N], const const_string<M>& b) noexcept
@@ -297,6 +318,8 @@ namespace refl
 
         /**
          * Compares a C-style string with a const_string for equality.
+         *
+         * @see refl::util::const_string
          */
         template <size_t N, size_t M>
         constexpr bool operator!=(const char(&a)[N], const const_string<M>& b) noexcept
@@ -336,6 +359,8 @@ namespace refl
 /**
  * Converts a compile-time available const char* value to a const_string<N>.
  * The argument must be a *core constant expression* and be null-terminated.
+ *
+ * @see refl::util::const_string
  */
 #define REFL_MAKE_CONST_STRING(CString) \
     (::refl::util::detail::copy_from_unsized<::refl::util::detail::strlen(CString)>(CString))
@@ -467,6 +492,9 @@ namespace refl {
         /**
          * Checks whether there is reflection metadata for the type T.
          * Inherits from std::bool_constant<>
+         *
+         * @see REFL_TYPE
+         * @see REFL_AUTO
          */
         template <typename T>
         struct is_reflectable : decltype(detail::is_reflectable_test<T>(0))
@@ -476,6 +504,8 @@ namespace refl {
         /**
          * Checks whether there is reflection metadata for the type T.
          * Inherits from std::bool_constant<>
+         *
+         * @see refl::trait::is_reflectable
          */
         template <typename T>
         [[maybe_unused]] static constexpr bool is_reflectable_v{ is_reflectable<T>::value };
@@ -517,12 +547,16 @@ namespace refl {
         /**
          * An empty type which is equivalent to refl::member_descriptor_base::member_type
          * when the reflected member is a field.
+         *
+         * @see refl::descriptor::field_descriptor
          */
         struct field {};
 
         /**
          * An empty type which is equivalent to refl::member_descriptor_base::member_type
          * when the reflected member is a function.
+         *
+         * @see refl::descriptor::function_descriptor
          */
         struct function {};
     }
