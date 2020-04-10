@@ -1,4 +1,4 @@
-# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.9.0) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
+# [refl-cpp](https://github.com/veselink1/refl-cpp) (v0.9.1) ([Documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html))
 [![Gitter](https://badges.gitter.im/refl-cpp/community.svg)](https://gitter.im/refl-cpp/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔥
@@ -121,6 +121,9 @@ REFL_FUNC(Function, Attribute...)
 `Patch` denotes a version which fixed a bug or does not include major new features.
 
 ---
+### v0.9.1
+  - Bugfix for `refl::descriptor::get_bases` for clang [#19](https://github.com/veselink1/refl-cpp/issues/19)
+
 ### v0.9.0
   - Introduced `refl::descriptor::get_bases` (as well as `refl::descriptor::has_bases`) to inspect a type's declared base types (see [example-inheritance.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-inheritance.cpp))
   - Bugfix for is_instance_of for template types with different arity [#18](https://github.com/veselink1/refl-cpp/issues/18)

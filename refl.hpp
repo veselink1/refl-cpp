@@ -1715,7 +1715,7 @@ namespace refl {
 
     /** Returns true if the non-qualified type T is reflectable.*/
     template <typename T>
-    constexpr bool is_reflectable(const T&) noexcept
+    constexpr bool is_reflectable(const T) noexcept
     {
         return trait::is_reflectable_v<T>;
     }
@@ -1729,7 +1729,7 @@ namespace refl {
 
     /** Returns the type descriptor for the non-qualified type T. */
     template<typename T>
-    constexpr type_descriptor<T> reflect(const T&) noexcept
+    constexpr type_descriptor<T> reflect(const T) noexcept
     {
         return {};
     }
@@ -2064,7 +2064,7 @@ namespace refl {
          * @see refl::descriptor::field_descriptor
          */
         template <typename T>
-        constexpr bool is_field(const T&) noexcept
+        constexpr bool is_field(const T) noexcept
         {
             return trait::is_field_v<T>;
         }
@@ -2075,7 +2075,7 @@ namespace refl {
          * @see refl::descriptor::function_descriptor
          */
         template <typename T>
-        constexpr bool is_function(const T&) noexcept
+        constexpr bool is_function(const T) noexcept
         {
             return trait::is_function_v<T>;
         }
@@ -2086,7 +2086,7 @@ namespace refl {
          * @see refl::descriptor::type_descriptor
          */
         template <typename T>
-        constexpr bool is_type(const T&) noexcept
+        constexpr bool is_type(const T) noexcept
         {
             return trait::is_type_v<T>;
         }
@@ -2095,7 +2095,7 @@ namespace refl {
          * Checks whether T has an attribute of type A.
          */
         template <typename A, typename T>
-        constexpr bool has_attribute(const T&) noexcept
+        constexpr bool has_attribute(const T) noexcept
         {
             return trait::contains_base_v<A, typename T::attribute_types>;
         }
@@ -2104,7 +2104,7 @@ namespace refl {
          * Checks whether T has an attribute of that is a template instance of A.
          */
         template <template<typename...> typename A, typename T>
-        constexpr bool has_attribute(const T&) noexcept
+        constexpr bool has_attribute(const T) noexcept
         {
             return trait::contains_instance_v<A, trait::as_type_list_t<typename T::attribute_types>>;
         }
@@ -2113,7 +2113,7 @@ namespace refl {
          * Returns the value of the attribute A on T.
          */
         template <typename A, typename T>
-        constexpr const A& get_attribute(const T& t) noexcept
+        constexpr const A& get_attribute(const T t) noexcept
         {
             return util::get<A>(t.attributes);
         }
@@ -2122,7 +2122,7 @@ namespace refl {
          * Returns the value of the attribute A on T.
          */
         template <template<typename...> typename A, typename T>
-        constexpr const auto& get_attribute(const T& t) noexcept
+        constexpr const auto& get_attribute(const T t) noexcept
         {
             return util::get_instance<A>(t.attributes);
         }
@@ -2134,7 +2134,7 @@ namespace refl {
          * @see refl::descriptor::get_property
          */
         template <typename T>
-        constexpr bool is_property(const T& t) noexcept
+        constexpr bool is_property(const T t) noexcept
         {
             return has_attribute<attr::property>(t);
         }
@@ -2146,7 +2146,7 @@ namespace refl {
          * @see refl::descriptor::is_property
          */
         template <typename T>
-        constexpr attr::property get_property(const T& t) noexcept
+        constexpr attr::property get_property(const T t) noexcept
         {
             return get_attribute<attr::property>(t);
         }
@@ -2164,7 +2164,7 @@ namespace refl {
          * Checks if T is a readable property or a field.
          */
         template <typename T>
-        constexpr bool is_readable(const T&) noexcept
+        constexpr bool is_readable(const T) noexcept
         {
             if constexpr (trait::is_property_v<T>) {
                 if constexpr (std::is_invocable_v<T, const typename T::declaring_type&>) {
@@ -2184,7 +2184,7 @@ namespace refl {
          * Checks if T is a writable property or a non-const field.
          */
         template <typename T>
-        constexpr bool is_writable(const T&) noexcept
+        constexpr bool is_writable(const T) noexcept
         {
             if constexpr (trait::is_property_v<T>) {
                 return std::is_invocable_v<T, typename T::declaring_type&, detail::placeholder>;
@@ -2213,7 +2213,7 @@ namespace refl {
          * @see refl::descriptor::get_bases
          */
         template <typename T>
-        constexpr auto has_bases(const T& t) noexcept
+        constexpr auto has_bases(const T t) noexcept
         {
             return has_attribute<attr::base_types>(t);
         }
@@ -2226,7 +2226,7 @@ namespace refl {
          * @see refl::descriptor::has_bases
          */
         template <typename T>
-        constexpr auto get_bases(const T& t) noexcept
+        constexpr auto get_bases(const T t) noexcept
         {
             static_assert(has_bases(t), "Target type does not have a bases<A, B, ...> attribute.");
 
