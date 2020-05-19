@@ -2,6 +2,7 @@ var searchData=
 [
   ['attr',['attr',['../namespacerefl_1_1attr.html',1,'refl']]],
   ['descriptor',['descriptor',['../namespacerefl_1_1descriptor.html',1,'refl']]],
+  ['refl_2dcpp_20v0_2e9_2e1_20_28_3ca_20href_3d_22https_3a_2f_2fveselink1_2egithub_2eio_2frefl_2dcpp_2fnamespacerefl_2ehtml_22_3edocumentation_3c_2fa_3e_29',['refl-cpp v0.9.1 (&lt;a href=&quot;https://veselink1.github.io/refl-cpp/namespacerefl.html&quot;&gt;Documentation&lt;/a&gt;)',['../md__r_e_a_d_m_e.html',1,'']]],
   ['member',['member',['../namespacerefl_1_1member.html',1,'refl']]],
   ['readme_2emd',['README.md',['../_r_e_a_d_m_e_8md.html',1,'']]],
   ['refl',['refl',['../namespacerefl.html',1,'refl'],['../refl_8hpp.html#a3f8c7841ef8896c48746f951cdd0029c',1,'REFL():&#160;refl.hpp']]],
@@ -15,7 +16,7 @@ var searchData=
   ['refl_5fmake_5fconst_5fstring',['REFL_MAKE_CONST_STRING',['../refl_8hpp.html#a2cb939da062920a29a38dff73aaf0968',1,'refl.hpp']]],
   ['refl_5ftemplate',['REFL_TEMPLATE',['../refl_8hpp.html#a832b795bfa32d4130b04e9e33635c507',1,'refl.hpp']]],
   ['refl_5ftype',['REFL_TYPE',['../refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71',1,'refl.hpp']]],
-  ['reflect',['reflect',['../namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e',1,'refl::reflect() noexcept'],['../namespacerefl.html#a5a70ee908d690769979f0aa9f57eb3e9',1,'refl::reflect(const T &amp;) noexcept']]],
+  ['reflect',['reflect',['../namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e',1,'refl::reflect() noexcept'],['../namespacerefl.html#a14c814eb58055da8022cef91058b7d3a',1,'refl::reflect(const T) noexcept']]],
   ['remove_5fqualifiers',['remove_qualifiers',['../structrefl_1_1trait_1_1remove__qualifiers.html',1,'refl::trait']]],
   ['remove_5fqualifiers_5ft',['remove_qualifiers_t',['../namespacerefl_1_1trait.html#a281a1cb4e19fe3ff645e48867aa8daf1',1,'refl::trait']]],
   ['resolve',['resolve',['../classrefl_1_1descriptor_1_1function__descriptor.html#a7f8b63e35466c3c2887f601272d9f0a0',1,'refl::descriptor::function_descriptor']]],

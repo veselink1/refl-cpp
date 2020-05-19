@@ -1,95 +1,150 @@
 # Introduction to refl-cpp
 
-## Overview
+## Introduction
 
-refl-cpp allows you to do compile-time introspection, create statically-resolved proxy objects, implement type- or member-wise operations most efficiently and probably more.
+refl-cpp is a new compile-time reflection library targeting C++17 and newer. It works by encoding type metadata in the type system, which allows the user to access that information at compile-time. refl-cpp supports compile-time enumeration of fields and functions, constexpr custom attributes (objects bound to types/fields/functions), template types, proxy objects which resolve function calls at compilation time and much more.
 
-## Basic Usage
-### [Type Descriptors](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1type__descriptor.html)
-`type_descriptor<T>` is the type responsible for exposing a target type `T`'s information.
+This documents gives tips on how best to utilize refl-cpp for your use case. Please, also refer to the [documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html) and [examples](https://github.com/veselink1/refl-cpp/tree/master/examples).
+
+## Basics
+refl-cpp relies on the user to properly specify type metadata through the use of macros.
 
 ```cpp
-type_descriptor<Point>::name; // -> const_string<5>{"Point"}
+struct A {};
+
+REFL_AUTO(type(A))
 ```
 
-`name` is of type `const_string<N>` which is a refl-cpp-provided type which allows `constexpr` string equality, concat and slicing. 
+* The metadata should be available before it is first requested, and should ideally be put right after the definition of the target type (forward declarations won't work).
 
-The `type_descriptor<T>` type also exposes a `members` data member and a `member_types` type alias where the former is a default instance of the latter. 
+## Type metadata
+refl-cpp exposes access to the metadata through the [`type_descriptor<T>`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1type__descriptor.html) type. All of the metadata is stored in static fields on the corresponding specialization of that type, but for convenience, objects of the metadata types are typically used in many places, and can be obtained through calling the trivial constructor or through the [`reflect<T>`](https://veselink1.github.io/refl-cpp/namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e) family of functions.
 
 ```cpp
-type_descriptor<Point>::member_types; // -> type_list<member-descriptor-x, member-descriptor-y, func-descriptor-magnitude>
+// continued from previous example
+using refl::reflect;
+using refl::descriptors::type_descriptor;
+
+constexpr type_descriptor<A> type{};
+constexpr auto type = reflect<A>(); // equivalent
 ```
 
-Since refl-cpp is a compile-time library, all of the metadata is preserved in a compile-time aware way. Each `type`. `field` or `function_descriptor<T, N>` is a template specialization. That is different from most classic reflection libraries which make use of runtime polymorphism
-and have a single non-template type responsible for all fields, functions, etc. 
-
-To allows for operations on these member descriptors refl-cpp uses the `type_list<Ts...>` type which does nothing by itself and is empty, but provides a means for passing a list of types through the type system.
-
-The `member_types` alias above is an alias to a `type_list` where the template arguments are the different "anonymous" classes describing the members of the target class `T`.
-
-As every other `_descriptor` type, `type_descriptor` has an `attributes` data member. `attributes` is a `constexpr std::tuple<Ts...>`, where `Ts...` is exposed by the `attribute_types` type alias. The `attributes` object is a core refl-cpp feature which allows any type or member to be decorated with user-defined objects.
+[`type_descriptor<T>`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1type__descriptor.html) provides access to the target's name, members and attributes.
 
 ```cpp
-type_descriptor<Point>::attributes; // -> std::tuple<Serializable, Debug>
+type.name; // -> const_string<5>{"Point"}
+foo.members; // -> type_list<>{}
+foo.attributes; // -> std::tuple<>{}
 ```
 
-These attributes can be used in a `constexpr` context.
+`name` is of type `const_string<N>` which is a refl-cpp-provided type which allows `constexpr` string equality, concat and slicing.
 
-### [Field Descriptors](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1field__descriptor.html)
-Specializations of the `field_descriptor<T, N>` type represents member fields in refl-cpp. The `field_descriptor` type has a few key properties:
+In a similar way to type metadata, member metadata is also represented through template specializations. The `type_list<Ts...>` is an empty trivial template type, which provides a means for passing that list of types through the type system.
 
-```cpp
-using x_field_descriptor = trait::get_t<0, member_list<Point>>;
+Custom attributes are stored in a constexpr `std::tuple` which is exposed through the metadata descriptor.
 
-// inherited from member_descriptor_base<T, N>
-x_field_descriptor::name; // -> const_string<1>{"X"}
-x_field_descriptor::attributes; // -> std::tuple<...>{attrs...}
-// field_descriptor-specific
-x_field_descriptor::is_static; // -> false
-x_field_descriptor::is_writable; // (is non-const?) -> true
-x_field_descriptor::value_type; // -> double
-x_field_descriptor::pointer; // -> pointer of type double Point::*
-x_field_descriptor::get(); // -> double&
+* Since the type `A` has no members and no attributes defined, `members` and `attribute` are of type `type_list<>`, an empty list of types, and `std::tuple<>`, an empty tuple, respectively.
 
-```
-
-### [Function Descriptors](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html)
-Specializations of the `function_descriptor<T, N>` type represents member functions in refl-cpp. The `function_descriptor` type has a few key properties:
+## Field metadata
+Let's use a the following simple Point type definition to demonstrate how field reflection works.
 
 ```cpp
-using magnitude_descriptor = trait::get_t<2, member_list<Point>>;
-
-// inherited from member_descriptor_base<T, N>
-magnitude_descriptor::name; // -> const_string<9>{"magnitude"}
-magnitude_descriptor::attributes; // -> std::tuple<...>{attrs...}
-// function_descriptor-specific
-magnitude_descriptor::is_resolved; // -> true
-magnitude_descriptor::pointer; // -> pointer of type double (Point::* const)(double, double)
-magnitude_descriptor::resolve<Pointer>; // -> pointer of type Pointer on success, nullptr on fail.
-magnitude_descriptor::invoke([Self&& self], Args&&... args); // -> the result of self.magnitude(args...)
-
-```
-
-`function_descriptors` can be tricky as they represent a "group" of functions with the same name. Overload resolution is done by the `resolve` or `invoke` functions of `function_descriptor`. Only when the function is not overloaded is `pointer` available (`nullptr` otherwise). A call to `resolve` is needed to get a pointer to a specific overload. A call to `resolve` is **not** needed to `invoke` the target function. The `(*this)` object must be passed as the first argument when a member function is invoked. When invoking a static function, simply provide the arguments as usual. 
-
-
-
----
-
-The examples above expect the following definition of `Point`.
-```cpp
-class Point {
-    double x;
-    double y;
-    double magnitude() const;
+struct Point {
+    int x;
+    int y;
 };
 
-void print_point(std::ostream&, const Point&);
-
 REFL_AUTO(
-    type(Point, Serializable(), Debug(&print_point)),
+    type(Point),
     field(x),
-    field(y),
-    func(magnitude)
+    field(y)
 )
 ```
+
+Fields are represented through specializations of the [`field_descriptor<T, N>`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1field__descriptor.html). `T` is the target type, and `N` is the index of the reflected member, regardless of the type of that member (field or function). [`field_descriptor<T, N>`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1field__descriptor.html) is never used directly.
+
+There are multiple ways to get a field's descriptor. The easiest one is by using the name of the member together with the [`find_one`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html#a019b3322cffd29fd129b6378ef499668) helper.
+```cpp
+using refl::reflect;
+using refl::util::find_one;
+constexpr auto type = reflect<Point>();
+
+constexpr auto field = find_one(type.members, [](auto m) { return m.name == "x"; }); // -> field_descriptor<Point, 0>{...}
+```
+
+Field descriptors provide access to the field's name, type, const-ness, whether the field is static, a (member) pointer to the field and convenience [`get()`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1field__descriptor.html#a5a7ca636e0dea5431786a2dac4f149c4) and [`operator()`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1field__descriptor.html#af003db500839f3ca03b9408bcf76b009) methods which return references to that field.
+
+```cpp
+// continued from previous example
+field.name; // -> const_string<1>{"x"}
+field.attributes; // -> std::tuple<>{}
+field.is_static; // -> false
+field.is_writable; // -> true (non-const)
+field.value_type; // -> int
+field.pointer; // -> pointer of type int Point::*
+
+Point pt{5, -2};
+field.get(pt); // -> int& (5)
+field(pt); // -> int& (5)
+```
+
+As with [`type_descriptor<T>`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1type__descriptor.html), all of the metadata is exposed through constexpr static fields and functions, but an object is used to access those for convenience purposes and because objects can be passed to functions as values as well.
+
+* Since the field `Point::x` in this example has no custom attributes associated with it, the `field.attributes` in the example above will be generated as `static constexpr std::tuple<>{}`.
+
+## Function metadata
+We will be using the following type definition for the below examples.
+
+```cpp
+class Circle {
+    double r;
+public:
+    Circle(double r) : r() {}
+    double radius() const;
+    double diameter() const;
+    double area() const;
+};
+
+REFL_AUTO(
+    type(Circle),
+    func(radius),
+    func(diameter),
+    func(area)
+)
+```
+
+Like fields, functions are represented through specializations of a "descriptor" type, namely, [`function_descriptor<T, N>`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html). `T` is the target type, and `N` is the index of the reflected member, regardless of the type of that member (field or function). [`function_descriptor<T, N>`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html) is never used directly.
+
+There are multiple ways to get a function's descriptor. The easiest one is by using the name of the member together with the [`find_one`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html#a019b3322cffd29fd129b6378ef499668) helper.
+
+```cpp
+using refl::reflect;
+using refl::util::find_one;
+constexpr auto type = reflect<Circle>();
+
+constexpr auto func = find_one(type.members, [](auto m) { return m.name == "radius"; }); // -> function_descriptor<Circle, 0>{...}
+```
+
+Function descriptors expose a number of properties to the user.
+
+```cpp
+// continued from previous example
+func.name; // -> const_string<6>{"radius"}
+func.attributes; // -> std::tuple<>{}
+func.is_resolved; // -> true
+func.pointer; // -> pointer of type double (Circle::* const)()
+
+using radius_t = double (Circle::* const)();
+func.template resolve<radius_t>; // -> pointer of type radius_t on success, nullptr_t on fail.
+
+Circle c(2.0);
+func.invoke(c); // -> the result of c.radius()
+```
+
+Function descriptors can be tricky as they represent a "group" of functions with the same name. Overload resolution is done by the `resolve` or `invoke` functions of `function_descriptor`. Only when the function is not overloaded is `pointer` available (`nullptr` otherwise). A call to `resolve` is needed to get a pointer to a specific overload. A call to `resolve` is **not** needed to `invoke` the target function. The `(*this)` object must be passed as the first argument when a member function is invoked. When invoking a static function, simply provide the arguments as usual.
+
+## Custom Attributes
+TOOD
+
+## Proxies
+TODO

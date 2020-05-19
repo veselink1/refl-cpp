@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>refl-cpp: &lt;a href=&quot;https://github.com/veselink1/refl-cpp&quot;&gt;refl-cpp&lt;/a&gt; (v0.9.0) (&lt;a href=&quot;https://veselink1.github.io/refl-cpp/namespacerefl.html&quot;&gt;Documentation&lt;/a&gt;)</title>
+<title>refl-cpp: refl-cpp v0.9.1 (&lt;a href=&quot;https://veselink1.github.io/refl-cpp/namespacerefl.html&quot;&gt;Documentation&lt;/a&gt;)</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -96,17 +96,18 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 
 <div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title"><a href="https://github.com/veselink1/refl-cpp">refl-cpp</a> (v0.9.0) (<a href="https://veselink1.github.io/refl-cpp/namespacerefl.html">Documentation</a>) </div>  </div>
+<div class="title">refl-cpp v0.9.1 (<a href="https://veselink1.github.io/refl-cpp/namespacerefl.html">Documentation</a>) </div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a href="https://gitter.im/refl-cpp/community?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge"><object type="image/svg+xml" data="https://badges.gitter.im/refl-cpp/community.svg" alt="Gitter"></object>
 />
 </a></p>
 <p>A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔥</p>
-<h2>Synopsis</h2>
-<p><b><a href="https://github.com/veselink1/refl-cpp">refl-cpp</a> allows static reflection and inspection of types in C++ with full support for <em>templated types and functions</em>!</b> The metadata required for this is specified through the use of macros (but wait!). The macros require the user to only specify the type that is being reflected and only the names of the members that are of interest. ReflCpp has a small and <b>well-organised API surface</b>.</p>
+<h2>Introduction</h2>
+<p><b><a href="https://github.com/veselink1/refl-cpp">refl-cpp</a> allows static reflection and inspection of types in C++ with full support for <em>templated types and functions</em>!</b> The metadata required for this is specified through the use of macros (but wait!). The macros require the user to only specify the type that is being reflected and only the names of the members that are of interest. refl-cpp has a small and <b>well-organised API surface</b>.</p>
 <ul>
 <li>Macro-based code-gen has been minimized as much as is possible to support all basic requirements. All higher-level operations are implemented as free types and function in one of the utility namespaces.</li>
+<li>See the Introduction document</li>
 </ul>
 <h2>Requirements</h2>
 <ul>
@@ -139,11 +140,15 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 <p><code>Minor</code> denotes a smaller change, which usually includes new features and might also change or even remove certain features.</p>
 <p><code>Patch</code> denotes a version which fixed a bug or does not include major new features.</p>
 <hr/>
- <h3>v0.9.0</h3>
+ <h3>v0.9.1</h3>
 <ul>
-<li>Introduced <code><a class="el" href="namespacerefl_1_1descriptor.html#a845f1a8fe52bbc51b1aa3f162b0a576e">refl::descriptor::get_bases</a></code> (as well as <code><a class="el" href="namespacerefl_1_1descriptor.html#a141df5d4e3b9460c62dc6f77d8ee0ef1">refl::descriptor::has_bases</a></code>) to inspect a type's declared base types (see <a href="https://github.com/veselink1/refl-cpp/blob/master/examples/example-inheritance.cpp">example-inheritance.cpp</a>)</li>
+<li>Bugfix for <code><a class="el" href="namespacerefl_1_1descriptor.html#a5ca7ae3c51dbe88ffa332c310eac9f11">refl::descriptor::get_bases</a></code> for clang <a href="https://github.com/veselink1/refl-cpp/issues/19">#19</a></li>
+</ul>
+<h3>v0.9.0</h3>
+<ul>
+<li>Introduced <code><a class="el" href="namespacerefl_1_1descriptor.html#a5ca7ae3c51dbe88ffa332c310eac9f11">refl::descriptor::get_bases</a></code> (as well as <code><a class="el" href="namespacerefl_1_1descriptor.html#a079a7d252e99cd446ec275b218c461d1">refl::descriptor::has_bases</a></code>) to inspect a type's declared base types (see <a href="https://github.com/veselink1/refl-cpp/blob/master/examples/example-inheritance.cpp">example-inheritance.cpp</a>)</li>
 <li>Bugfix for is_instance_of for template types with different arity <a href="https://github.com/veselink1/refl-cpp/issues/18">#18</a></li>
-<li>Renamed <code>refl::descriptor::get_property_info</code> to <code><a class="el" href="namespacerefl_1_1descriptor.html#a476fa1e0ea747f9f7c144248cee11dfb">refl::descriptor::get_property</a></code> to match the attribute name and its trait-based counterparts.</li>
+<li>Renamed <code>refl::descriptor::get_property_info</code> to <code><a class="el" href="namespacerefl_1_1descriptor.html#a486e58c3515f4da0b687a195f0db1734">refl::descriptor::get_property</a></code> to match the attribute name and its trait-based counterparts.</li>
 <li>Discontinued <a href="https://github.com/veselink1/refl-ht">refl-ht</a> - the preprocessor for refl-cpp, due to unfixable bugs and lack of time/interest.</li>
 </ul>
 <h3>v0.8.2</h3>
@@ -257,7 +262,7 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 </ul>
 <h3>v0.3.1</h3>
 <ul>
-<li><code><a class="el" href="namespacerefl_1_1descriptor.html#a4caced368c7b9ecbce4eb563ce66c52a">refl::descriptor::is_writable</a></code> now correctly supports field descriptors</li>
+<li><code><a class="el" href="namespacerefl_1_1descriptor.html#a66e622cf9e49e06d1e58cb8421f2bd87">refl::descriptor::is_writable</a></code> now correctly supports field descriptors</li>
 <li>most of <code><a class="el" href="refl_8hpp.html">refl.hpp</a></code> is now not included when <code>REFL_PREPROCESSOR</code> is defined (optimization for refl-ht)</li>
 </ul>
 <h3>v0.3.0</h3>
@@ -272,13 +277,13 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html','');});
 <h3>v0.2.0</h3>
 <ul>
 <li>added <code><a class="el" href="namespacerefl_1_1util.html#a7914b083611095970bd257f39db71d5c">refl::util::contains</a>(type_list&lt;...&gt;, [predicate]), <a class="el" href="namespacerefl_1_1util.html#a7914b083611095970bd257f39db71d5c">refl::util::contains</a>(type_list&lt;...&gt;, const_string&lt;N&gt;)</code></li>
-<li>removed <code>refl::attr::is_readable/is_writable</code> (use <code><a class="el" href="namespacerefl_1_1descriptor.html#ab8b266e4675f68fa5f706d7e9d251e90">refl::descriptor::is_readable</a>/is_writable</code> instead; reason: lack of support for fields that lack a property attribute)</li>
+<li>removed <code>refl::attr::is_readable/is_writable</code> (use <code><a class="el" href="namespacerefl_1_1descriptor.html#a9bfb80943064379285289b001fb4c1cc">refl::descriptor::is_readable</a>/is_writable</code> instead; reason: lack of support for fields that lack a property attribute)</li>
 </ul>
 <h3>v0.1.2</h3>
 <ul>
 <li><code><a class="el" href="structrefl_1_1runtime_1_1proxy.html" title="A proxy object that has a static interface identical to the reflected functions and fields of the tar...">refl::runtime::proxy</a>&lt;Derived, Target&gt;</code> can now delegate field 'invocations'. (Methods with names matching those of the reflected fields are created.)</li>
 <li><code><a class="el" href="structrefl_1_1attr_1_1property.html">refl::attr::property</a></code> now can take an optional <code>refl::attr::access_type</code> (values: <code>read_only</code>, <code>write_only</code>, <code>read_write</code>) to specify whether the property is considered readable or writable (or both).</li>
-<li>added <code><a class="el" href="namespacerefl_1_1descriptor.html#ab8b266e4675f68fa5f706d7e9d251e90">refl::descriptor::is_readable</a>/is_writable</code></li>
+<li>added <code><a class="el" href="namespacerefl_1_1descriptor.html#a9bfb80943064379285289b001fb4c1cc">refl::descriptor::is_readable</a>/is_writable</code></li>
 <li>added <code>refl::attr::is_readable/is_writable</code> </li>
 </ul>
 </div></div><!-- PageDoc -->
