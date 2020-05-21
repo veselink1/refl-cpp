@@ -2,7 +2,7 @@
 
 ## Introduction
 
-refl-cpp is a new compile-time reflection library targeting C++17 and newer. It works by encoding type metadata in the type system, which allows the user to access that information at compile-time. refl-cpp supports compile-time enumeration of fields and functions, constexpr custom attributes (objects bound to types/fields/functions), template types, proxy objects which resolve function calls at compilation time and much more.
+refl-cpp is a compile-time reflection library targeting C++17 and newer. It works by encoding type metadata in the type system, which allows the user to access that information at compile-time. refl-cpp supports compile-time enumeration of fields and functions, constexpr custom attributes (objects bound to types/fields/functions), template types, proxy objects which resolve function calls at compilation time and much more.
 
 This documents gives tips on how best to utilize refl-cpp for your use case. Please, also refer to the [documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html) and [examples](https://github.com/veselink1/refl-cpp/tree/master/examples).
 
@@ -141,13 +141,100 @@ Circle c(2.0);
 func.invoke(c); // -> the result of c.radius()
 ```
 
-Function descriptors can be tricky as they represent a "group" of functions with the same name. Overload resolution is done by the `resolve` or `invoke` functions of `function_descriptor`. Only when the function is not overloaded is `pointer` available (`nullptr` otherwise). A call to `resolve` is needed to get a pointer to a specific overload. A call to `resolve` is **not** needed to `invoke` the target function. The `(*this)` object must be passed as the first argument when a member function is invoked. When invoking a static function, simply provide the arguments as usual.
+Function descriptors can be tricky as they represent a "group" of functions with the same name. Overload resolution is done by the [`resolve`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a7f8b63e35466c3c2887f601272d9f0a0) or [`invoke`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a5f6c4091c03a8fb9d5f6459c686ea655) functions of [`function_descriptor<T, N>`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html). Only when the function is not overloaded is [`pointer`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a6e18ad19be31eb26acfe1e84fd320c36) available (`nullptr` otherwise). A call to [`resolve`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a7f8b63e35466c3c2887f601272d9f0a0) is needed to get a pointer to a specific overload. A call to [`resolve`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a7f8b63e35466c3c2887f601272d9f0a0) is **not** needed to [`invoke`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a5f6c4091c03a8fb9d5f6459c686ea655) the target function. The `(*this)` object must be passed as the first argument when a member function is invoked. When invoking a static function, simply provide the arguments as usual.
 
 ## Custom Attributes
-TOOD
+refl-cpp allows the association of compile-time values with reflectable items. Those are referred to as attributes. There are 3 built-in attributes, which can all be found in the [`refl::attr`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1attr.html) namespace.
+
+### Properties
+[`property`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1property.html) (usage: function) - used to specify that a function call corresponds to an object property
+
+```cpp
+RELF_AUTO(
+    type(Circle),
+    func(getArea, property("area"))
+)
+```
+
+Built-in support for properties includes:
+- [`refl::descriptor::get_property`](http://localhost:3000/namespacerefl_1_1descriptor.html#a486e58c3515f4da0b687a195f0db1734) - returns the `property` attribute
+- [`refl::descriptor::is_property`](http://localhost:3000/namespacerefl_1_1descriptor.html#acc8c814d7bd04ba0cf4386e49e469a3b) - checks whether the function is marked with the `property` attribute
+- [`refl::descriptor::get_display_name`](http://localhost:3000/namespacerefl_1_1descriptor.html#aa7c9753a84fecf4d9c62ce5b5063fb47) - returns the [`friendly_name`](http://localhost:3000/structrefl_1_1attr_1_1property.html#a8c45f77ef5159115250f2294bd37d296) set on the property, if present, otherwise the name of the member itself
+
+### Base Types
+[`base_types`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1base__types.html) (usage: type) - used to specify the base types of the target. The `bases<Ts...>` template variable can be used in place of `base_types<Ts...>{}`
+```cpp
+REFL_AUTO(
+    type(Circle, bases<Shape>),
+    /* ... */
+)
+```
+
+Built-in support for base types includes:
+- [`refl::descriptor::get_bases`](http://localhost:3000/namespacerefl_1_1descriptor.html#a5ca7ae3c51dbe88ffa332c310eac9f11) - returns a [`type_list`](http://localhost:3000/structrefl_1_1util_1_1type__list.html) of the type descriptors of the base classes (Important: Fails when there is no [`base_types`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1base__types.html) attribute)
+- [`refl::descriptor::has_bases`](http://localhost:3000/namespacerefl_1_1descriptor.html#a079a7d252e99cd446ec275b218c461d1) - checks whether the target type has a [`base_types`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1base__types.html) attribute
+
+### Debug Formatter
+[`debug<F>`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1debug.html) (usage: any) - used to specify a function to be used when constructing the debug representation of an object by [`refl::runtime::debug`](http://localhost:3000/namespacerefl_1_1runtime.html#a1edadcdb602a1e96beedbdeeca801701)
+
+All attributes specify what targets they can be used with. That is done by inheriting from one or more of the marker types found in [`refl::attr::usage`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1attr_1_1usage.html). These include [`field`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1usage_1_1field.html), [`function`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1usage_1_1field.html), [`type`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1usage_1_1type.html), [`member`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1usage_1_1member.html) (`field` or `function`), [`any`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1usage_1_1any.html) (`member` or `type`).
+
+### Custom Attributes
+
+Custom attributes can be created by inheriting from one of the usage strategies:
+```cpp
+struct Serializable : refl::attr::usage::member
+{
+};
+```
+
+And then used by passing in objects of those types as trailing arguments to the member macros.
+
+```cpp
+REFL_AUTO(
+    type(Circle),
+    func(getArea, property("area"), Serializable())
+)
+```
+
+The presence of custom attributes can be detected using [`refl::descriptor::has_attribute<T>`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1descriptor.html#af47d9eca02998b834a0d827aa2be2252).
+```cpp
+using refl::reflect;
+using refl::descriptor::has_attribute;
+
+for_each(reflect<Circle>().members, [](auto member) {
+    if constexpr (has_attribute<Serializable>(member)) {
+        std::cout << get_display_name(member) << " is serializable\n";
+    }
+});
+```
+
+Values can be obtained using [`refl::descriptor::get_attribute<T>`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1descriptor.html#a2e9e9b85233f7f13fe09cb4fd6bbc6f6).
 
 ## Proxies
-TODO
+
+The powerful proxy functionality provided by [`refl::runtime::proxy<Derived, Target>`](http://localhost:3000/structrefl_1_1runtime_1_1proxy.html) in refl-cpp allows the user to transform existing types.
+
+```cpp
+template <typename T>
+struct Echo : refl::runtime::proxy<value_proxy<T>, T>
+{
+    template <typename Member, typename Self, typename... Args>
+    static constexpr decltype(auto) invoke_impl(Self&& self, Args&&... args)
+    {
+        std::cout << "Calling " << get_display_name(Member{}) << "\n";
+        return Member{}(self, std::forward<Args>(args)...);
+    }
+};
+
+Echo<Circle> c;
+double d = c.getRadius(); // -> calls invoke_impl with Member=function_descriptor<Circle, ?>, Self=Circle&, Args=<>
+// prints "Calling Circle::getRadius" to stdout
+```
+
+This is a very powerful and extremely low-overhead, but also complicated feature. Delegating calls to `invoke_impl` is done at compile-time with no runtime penalty. Arguments are passed using perfect forwarding.
+
+See the examples below for how to build a generic builder pattern and POD wrapper types using proxies.
 
 ## Examples Guide
 
