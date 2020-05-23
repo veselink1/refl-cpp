@@ -1,13 +1,40 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-# Use a package of configuration called an orb.
-orbs:
-  # Declare a dependency on the welcome-orb
-  welcome: circleci/welcome-orb@0.4.1
+jobs:
+    build_gcc_latest_cpp17:
+        docker:
+            - image: gcc:latest
+        steps:
+            - checkout
+            - run: g++ -std=c++17 test/010-TestCase.cpp
+            - run: ./a.out
+    build_gcc_latest_cpplatest:
+        docker:
+            - image: gcc:latest
+        steps:
+            - checkout
+            - run: g++ -std=c++latest test/010-TestCase.cpp
+            - run: ./a.out
+    build_clang_latest_cpp17:
+        docker:
+            - image: centos/llvm-toolset-7-centos7:latest
+        steps:
+            - checkout
+            - run: clang++ -std=c++17 test/010-TestCase.cpp
+            - run: ./a.out
+    build_clang_latest_cpplatest:
+        docker:
+            - image: centos/llvm-toolset-7-centos7:latest
+        steps:
+            - checkout
+            - run: clang++ -std=c++latest test/010-TestCase.cpp
+            - run: ./a.out
+
 # Orchestrate or schedule a set of jobs
 workflows:
-  # Name the workflow "welcome"
-  welcome:
-    # Run the welcome/run job in its own container
-    jobs:
-      - welcome/run
+    build_and_test:
+        jobs:
+            - build_gcc_latest_cpp17
+            - build_gcc_latest_cpplatest
+            - build_clang_latest_cpp17
+            - build_clang_latest_cpplatest
