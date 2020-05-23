@@ -99,17 +99,17 @@ We will be using the following type definition for the below examples.
 class Circle {
     double r;
 public:
-    Circle(double r) : r() {}
-    double radius() const;
-    double diameter() const;
-    double area() const;
+    Circle(double r) : r(r) {}
+    double getRadius() const;
+    double getDiameter() const;
+    double getArea() const;
 };
 
 REFL_AUTO(
     type(Circle),
-    func(radius),
-    func(diameter),
-    func(area)
+    func(getRadius),
+    func(getDiameter),
+    func(getArea)
 )
 ```
 
@@ -122,14 +122,14 @@ using refl::reflect;
 using refl::util::find_one;
 constexpr auto type = reflect<Circle>();
 
-constexpr auto func = find_one(type.members, [](auto m) { return m.name == "radius"; }); // -> function_descriptor<Circle, 0>{...}
+constexpr auto func = find_one(type.members, [](auto m) { return m.name == "getRadius"; }); // -> function_descriptor<Circle, 0>{...}
 ```
 
 Function descriptors expose a number of properties to the user.
 
 ```cpp
 // continued from previous example
-func.name; // -> const_string<6>{"radius"}
+func.name; // -> const_string<6>{"getRadius"}
 func.attributes; // -> std::tuple<>{}
 func.is_resolved; // -> true
 func.pointer; // -> pointer of type double (Circle::* const)()
@@ -138,7 +138,7 @@ using radius_t = double (Circle::* const)();
 func.template resolve<radius_t>; // -> pointer of type radius_t on success, nullptr_t on fail.
 
 Circle c(2.0);
-func.invoke(c); // -> the result of c.radius()
+func.invoke(c); // -> the result of c.getRadius()
 ```
 
 Function descriptors can be tricky as they represent a "group" of functions with the same name. Overload resolution is done by the [`resolve`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a7f8b63e35466c3c2887f601272d9f0a0) or [`invoke`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a5f6c4091c03a8fb9d5f6459c686ea655) functions of [`function_descriptor<T, N>`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html). Only when the function is not overloaded is [`pointer`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a6e18ad19be31eb26acfe1e84fd320c36) available (`nullptr` otherwise). A call to [`resolve`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a7f8b63e35466c3c2887f601272d9f0a0) is needed to get a pointer to a specific overload. A call to [`resolve`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a7f8b63e35466c3c2887f601272d9f0a0) is **not** needed to [`invoke`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a5f6c4091c03a8fb9d5f6459c686ea655) the target function. The `(*this)` object must be passed as the first argument when a member function is invoked. When invoking a static function, simply provide the arguments as usual.
@@ -157,9 +157,9 @@ RELF_AUTO(
 ```
 
 Built-in support for properties includes:
-- [`refl::descriptor::get_property`](http://localhost:3000/namespacerefl_1_1descriptor.html#a486e58c3515f4da0b687a195f0db1734) - returns the `property` attribute
-- [`refl::descriptor::is_property`](http://localhost:3000/namespacerefl_1_1descriptor.html#acc8c814d7bd04ba0cf4386e49e469a3b) - checks whether the function is marked with the `property` attribute
-- [`refl::descriptor::get_display_name`](http://localhost:3000/namespacerefl_1_1descriptor.html#aa7c9753a84fecf4d9c62ce5b5063fb47) - returns the [`friendly_name`](http://localhost:3000/structrefl_1_1attr_1_1property.html#a8c45f77ef5159115250f2294bd37d296) set on the property, if present, otherwise the name of the member itself
+- [`refl::descriptor::get_property`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1descriptor.html#a486e58c3515f4da0b687a195f0db1734) - returns the `property` attribute
+- [`refl::descriptor::is_property`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1descriptor.html#acc8c814d7bd04ba0cf4386e49e469a3b) - checks whether the function is marked with the `property` attribute
+- [`refl::descriptor::get_display_name`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1descriptor.html#aa7c9753a84fecf4d9c62ce5b5063fb47) - returns the [`friendly_name`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1property.html#a8c45f77ef5159115250f2294bd37d296) set on the property, if present, otherwise the name of the member itself
 
 ### Base Types
 [`base_types`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1base__types.html) (usage: type) - used to specify the base types of the target. The `bases<Ts...>` template variable can be used in place of `base_types<Ts...>{}`
@@ -171,11 +171,11 @@ REFL_AUTO(
 ```
 
 Built-in support for base types includes:
-- [`refl::descriptor::get_bases`](http://localhost:3000/namespacerefl_1_1descriptor.html#a5ca7ae3c51dbe88ffa332c310eac9f11) - returns a [`type_list`](http://localhost:3000/structrefl_1_1util_1_1type__list.html) of the type descriptors of the base classes (Important: Fails when there is no [`base_types`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1base__types.html) attribute)
-- [`refl::descriptor::has_bases`](http://localhost:3000/namespacerefl_1_1descriptor.html#a079a7d252e99cd446ec275b218c461d1) - checks whether the target type has a [`base_types`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1base__types.html) attribute
+- [`refl::descriptor::get_bases`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1descriptor.html#a5ca7ae3c51dbe88ffa332c310eac9f11) - returns a [`type_list`](https://veselink1.github.io/refl-cpp/structrefl_1_1util_1_1type__list.html) of the type descriptors of the base classes (Important: Fails when there is no [`base_types`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1base__types.html) attribute)
+- [`refl::descriptor::has_bases`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1descriptor.html#a079a7d252e99cd446ec275b218c461d1) - checks whether the target type has a [`base_types`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1base__types.html) attribute
 
 ### Debug Formatter
-[`debug<F>`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1debug.html) (usage: any) - used to specify a function to be used when constructing the debug representation of an object by [`refl::runtime::debug`](http://localhost:3000/namespacerefl_1_1runtime.html#a1edadcdb602a1e96beedbdeeca801701)
+[`debug<F>`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1debug.html) (usage: any) - used to specify a function to be used when constructing the debug representation of an object by [`refl::runtime::debug`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#a1edadcdb602a1e96beedbdeeca801701)
 
 All attributes specify what targets they can be used with. That is done by inheriting from one or more of the marker types found in [`refl::attr::usage`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1attr_1_1usage.html). These include [`field`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1usage_1_1field.html), [`function`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1usage_1_1field.html), [`type`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1usage_1_1type.html), [`member`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1usage_1_1member.html) (`field` or `function`), [`any`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1usage_1_1any.html) (`member` or `type`).
 
@@ -211,9 +211,11 @@ for_each(reflect<Circle>().members, [](auto member) {
 
 Values can be obtained using [`refl::descriptor::get_attribute<T>`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1descriptor.html#a2e9e9b85233f7f13fe09cb4fd6bbc6f6).
 
+**NOTE: Most of the descriptor-related functions in `refl::descriptor` which take a descriptor parameter can be used without being imported into the current namespace thanks to ADL-lookup (example: `get_display_name` is not explictly imported above)**
+
 ## Proxies
 
-The powerful proxy functionality provided by [`refl::runtime::proxy<Derived, Target>`](http://localhost:3000/structrefl_1_1runtime_1_1proxy.html) in refl-cpp allows the user to transform existing types.
+The powerful proxy functionality provided by [`refl::runtime::proxy<Derived, Target>`](https://veselink1.github.io/refl-cpp/structrefl_1_1runtime_1_1proxy.html) in refl-cpp allows the user to transform existing types.
 
 ```cpp
 template <typename T>
@@ -235,6 +237,70 @@ double d = c.getRadius(); // -> calls invoke_impl with Member=function_descripto
 This is a very powerful and extremely low-overhead, but also complicated feature. Delegating calls to `invoke_impl` is done at compile-time with no runtime penalty. Arguments are passed using perfect forwarding.
 
 See the examples below for how to build a generic builder pattern and POD wrapper types using proxies.
+
+## Runtime Utilities
+Utilities incurring runtime penalty are contained in the [`refl::runtime`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html) namespace. That make it clear when some overhead can be expected.
+
+### Invoking a member by name at runtime
+[`refl::runtime::invoke`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#a0831da0114fa506579224ce219d0ab50) can invoke a member (function or field) on the provided object by taking the name of the member as a `const char*`. [`invoke`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#a0831da0114fa506579224ce219d0ab50) compiles into very efficient code, but is not as fast a directly invoking a member due to the needed string comparison.  This can be useful when generating bindings for external tools and languages. [`invoke`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#a0831da0114fa506579224ce219d0ab50) filters members by argument and returns types *before* doing the string comparison, which often reduces the number of comparisons required substantially.
+
+```cpp
+using refl::runtime::invoke;
+
+Circle c;
+double rad = invoke<double>(c, "getRadius"); // calls c.getRadius(), returns double
+```
+
+## Printing debug output
+refl-cpp can automatically generate a debug representation for your types based on the type metadata it is provided.
+
+```cpp
+REFL_AUTO(
+    type(Circle),
+    func(getRadius, property("radius")),
+    func(getArea, property("area"))
+)
+
+using refl::runtime::debug;
+
+Circle c(2.0);
+
+debug(std::cout, c);
+/* Output: {
+  radius = (double)2,
+  area = (double)19.7392
+} */
+debug(std::cout, c, /* compact */ true);
+/* Output: { radius = 2, area = 19.7392 } */
+```
+
+While [`debug`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#a1edadcdb602a1e96beedbdeeca801701) outputs to a `std::ostream`, a `std::string` result can also be obtained by [`debug_str`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#aa31714a8d8acc6824a58850336fa43ae).
+
+## Utility library
+All utility functions are contained in the [`refl::util`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html) namespace. Some of the most useful utility functions include:
+- [`for_each`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html#a19919596cdd45c858d891c91a7826b22) - Applies function F to each type in the type_list. F can optionally take an index of type size_t.
+- [`map_to_tuple(type_list<Ts...>, F&& f)`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html#af69ca2ba2b0353b7d3433f6a77b62902) - Applies function F to each type in the type_list, aggregating the results in a tuple. F can optionally take an index of type size_t.
+- [`get_instance<T>(std::tuple<Ts...>& ts)`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html#a0aec187f4a301c7f995ac65e17fa029a) - Returns the value of type U, where U is a template instance of T.
+
+**NOTE: Most of the utility functions in `refl::util` which take a `type_list<...>` parameter can be used without being imported into the current namespace thanks to ADL-lookup**
+
+Example:
+```cpp
+for_each(refl::reflect<Circle>(), [](auto m) {});
+```
+
+## Type-level operations
+refl-cpp provides a range of type-transforming operations in the [`refl::trait`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1trait.html) namespace. Some of the most commonly used type traits are:
+- [`get<N, type_list<Ts...>>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1get.html)
+- [`is_container<T>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1is__container.html)
+- [`is_reflectable<T>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1is__reflectable.html)
+- [`is_proxy<T>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1is__proxy.html)
+- [`as_type_list<T<Ts...>>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1as__type__list.html)
+- [`contains<T, type_list<Ts...>>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1contains.html)
+- [`map<Mapper, type_list<Ts...>>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1map_3_01_mapper_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html)
+- [`filter<Predicate, type_list<Ts...>>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1filter_3_01_predicate_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html)
+
+`[trait]_t` and `[trait]_v` typedefs and constexpr variables are provided where appropriate.
 
 ## Examples Guide
 
