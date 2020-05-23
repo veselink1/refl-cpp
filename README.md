@@ -1,4 +1,5 @@
 # refl-cpp v0.9.1 ([Documentation](https://veselink1.github.io/refl-cpp/md__introduction.html))
+[![CircleCI](https://circleci.com/gh/veselink1/refl-cpp.svg?style=shield)](https://circleci.com/gh/veselink1/refl-cpp)
 [![Gitter](https://badges.gitter.im/refl-cpp/community.svg)](https://gitter.im/refl-cpp/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔥
