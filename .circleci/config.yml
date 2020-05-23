@@ -6,28 +6,28 @@ jobs:
             - image: gcc:latest
         steps:
             - checkout
-            - run: g++ -std=c++17 test/010-TestCase.cpp
+            - run: cp refl.hpp test/ && g++ -std=c++17 test/010-TestCase.cpp
             - run: ./a.out
     build_gcc_latest_cpplatest:
         docker:
             - image: gcc:latest
         steps:
             - checkout
-            - run: g++ -std=c++latest test/010-TestCase.cpp
+            - run: cp refl.hpp test/ && g++ -std=c++latest test/010-TestCase.cpp
             - run: ./a.out
     build_clang_latest_cpp17:
         docker:
             - image: centos/llvm-toolset-7-centos7:latest
         steps:
             - checkout
-            - run: clang++ -std=c++17 test/010-TestCase.cpp
+            - run: cp refl.hpp test/ && clang++ -std=c++17 test/010-TestCase.cpp
             - run: ./a.out
     build_clang_latest_cpplatest:
         docker:
             - image: centos/llvm-toolset-7-centos7:latest
         steps:
             - checkout
-            - run: clang++ -std=c++latest test/010-TestCase.cpp
+            - run: cp refl.hpp test/ && clang++ -std=c++latest test/010-TestCase.cpp
             - run: ./a.out
 
 # Orchestrate or schedule a set of jobs
