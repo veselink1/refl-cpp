@@ -6,12 +6,14 @@
 [![Gitter](https://badges.gitter.im/refl-cpp/community.svg)](https://gitter.im/refl-cpp/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Patrons](https://img.shields.io/liberapay/patrons/veselink1.svg?logo=liberapay)](https://liberapay.com/veselink1/donate)
 
-A compile-time reflection library for modern C++ with support for templates, attributes and proxies 🔥
+A compile-time reflection library for modern C++ with support for overloads, templates, attributes and proxies
 
 ## Introduction
-**[refl-cpp](https://github.com/veselink1/refl-cpp) allows static reflection and inspection of types in C++ with full support for *templated types and functions*!** The metadata required for this is specified through the use of macros (but wait!). The macros require the user to only specify the type that is being reflected and only the names of the members that are of interest. refl-cpp has a small and **well-organised API surface**.
-
-- Macro-based code-gen has been minimized as much as is possible to support all basic requirements. All higher-level operations are implemented as free types and function in one of the utility namespaces.
+**[refl-cpp](https://github.com/veselink1/refl-cpp) allows static reflection and inspection of types in C++17! On top of that, refl-cpp is extensible (build your own abstraction or runtime reflection system) and supports all of the following and more:**
+- **overloaded and template functions** - invoke and get pointers to overloaded functions without specifying type arguments in metadata
+- **template types** - reflect and work with template classes like regular classes
+- **constexpr attributes**- attach custom objects to reflectable members and types (create your own markers, names for external bindings or arbitrary data)
+- **proxy types** - programmatic type generation (implement unknown interface, create a generic *builder*, *value type wrapper*, etc.)
 
 ## Requirements
 - Minimum language standard: C++17
@@ -22,70 +24,74 @@ A compile-time reflection library for modern C++ with support for templates, att
 ## License
 - MIT License (for more details, see the [license file](https://github.com/veselink1/refl-cpp/blob/master/LICENSE))
 
-## Related Articles
-- Introductory post - [Compile-time reflection in C++ 17](https://veselink1.github.io/blog/cpp/metaprogramming/2019/06/08/compile-time-reflection-cpp-17.html)
-
-- In-depth post - [refl-cpp — A deep dive](https://veselink1.github.io/blog/cpp/metaprogramming/2019/07/13/refl-cpp-deep-dive.html)
-
 ## Contributing
 See [contributors.md](https://github.com/veselink1/refl-cpp/blob/master/contributors.md)
 
 [refl-cpp](https://github.com/veselink1/refl-cpp) is publicly open for any contribution. Bugfixes and new features are welcome. Extra modules are too (as long as the single-header usability is preserved and the functionality is not overly specific to particular use case).
 
 ## Donations
-Donations are wholeheartedly accepted and will help me, a full-time CS student, support this library long term!
+Donations are wholeheartedly accepted and will help me support this library long term!
 
 [![Donate](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/veselink1/donate)
 
+## Getting started
+See the [Introduction](https://veselink1.github.io/refl-cpp/md__introduction.html) for a quick overview of refl-cpp.
+
 ## Examples
 
-### Example metadata declaration (without [refl-ht](https://github.com/veselink1/refl-ht))
+- **Implement a simple serialization system** - [example-serialization.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-serialization.cpp)
+    Shows how to implement a very efficient and generic serialization procedure from scratch
+
+- **Implement a generic builder class factory** - [example-builders.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-builders.cpp)
+    Shows how to utilize refl-cpp proxy classes to define a generic `builder<T>` class, which implements the builder pattern
+
+- **Simple SQL database abstraction** - [example-dao.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-dao.cpp)
+    Shows how to implement a basic ORM system which can generate SQL statements at compile-time from model classes using custom properties
+
+- **Iterate base classes with `bases<>`** - [example-inheritance.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-inheritance.cpp)
+    Shows to use the built-in `bases<>` attribute to iterate over a type's base classes
+
+- **Access reflection information at runtime** - [example-custom-rtti.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-custom-rtti.cpp)
+    Shows how to implement a basic runtime abstraction over refl-cpp which provides access to the reflection metadata at runtime via custom metadata objects
+
+- **Type factories with proxies** - [example-proxy.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-proxy.cpp)
+    Shows to implement a basic type factory that exposes target type fields as functions
+
+- **XML-based GUI with strongly-types properties** - [example-binding.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-binding.cpp)
+    Shows how to implement a system for reading XML resources describing a UI for an imaginary GUI system with refl-cpp
+
+### Basic usage example
+A basic example showcasing how refl-cpp can be use to convert an arbitrary type to a tuple at compile-time
 ```cpp
 struct Point {
   float x;
   float y;
 };
 
-/* New style */
+/* Metadata */
 REFL_AUTO(
   type(Point),
   field(x, /* attributes */),
   field(y)
 )
 
-/* Old style */
-REFL_TYPE(Point)
-  REFL_FIELD(x, /* attributes */)
-  REFL_FIELD(y)
-REFL_END
-```
+Point pt{};
 
-### Example metadata declaration (with [refl-ht](https://github.com/veselink1/refl-ht) - a lightweight, portable preprocessor) *(discontinued)*
-```cpp
-struct Point {
-  REFL(/* attributes */) float x;
-  REFL() float y;
-};
-```
-
-### Basic usage example
-```cpp
-  // Printing an object's properties:
-  Point pt{};
-  for_each(refl::reflect(pt).members, [&](auto member) {
-      std::cout << member.name << "=" << member(pt) << ";";
+// Converting to an std::tuple: (Note the constexpr!)
+constexpr auto values = map_to_tuple(refl::reflect(pt).members, [&](auto member) {
+  // refl::descriptor::is_readable (found by Koenig lookup)
+  if constexpr (is_readable(pt)) {
+    return member(pt); // invoke the member
   }
-  // Result: prints x=0;y=0;
-
-  // Converting to an std::tuple: (Note the constexpr!)
-  constexpr auto values = map_to_tuple(refl::reflect(pt).members, [&](auto member) {
-      return member(pt);
-  }
-  // Result: values == std::tuple<int, int>{ 0, 0 };
+})
+// Result: values == std::tuple<int, int>{ 0, 0 };
 ```
 
-## More examples
-- See [examples/](https://github.com/veselink1/refl-cpp/tree/master/examples) for more usage examples.
+## How it works
+Warning: Content might be outdated
+- Introductory post - [Compile-time reflection in C++ 17](https://veselink1.github.io/blog/cpp/metaprogramming/2019/06/08/compile-time-reflection-cpp-17.html)
+
+- In-depth post - [refl-cpp — A deep dive](https://veselink1.github.io/blog/cpp/metaprogramming/2019/07/13/refl-cpp-deep-dive.html)
 
 ## Metadata-generation macros
 ```cpp
@@ -95,7 +101,10 @@ REFL_AUTO(
   field(Name, Attribute...),
   func(Name, Attribute...)
 )
+```
 
+## Old style macros
+```cpp
 // Starts the declaration of Type's metadata.
 // Must be followed by one of: REFL_END, REFL_FIELD, REFL_FUNC.
 // Example: REFL_TYPE(Dog, bases<Animal>)

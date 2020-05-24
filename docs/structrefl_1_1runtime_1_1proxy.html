@@ -121,7 +121,7 @@ struct refl::runtime::proxy&lt; Derived, Target &gt;</h3>
 
 <p>A proxy object that has a static interface identical to the reflected functions and fields of the target. </p>
 <p>A proxy object that has a static interface identical to the reflected functions and fields of the target. Users should inherit from this class and specify an invoke_impl(Member member, Args&amp;&amp;... args) function.</p>
-<h1><a class="anchor" id="autotoc_md66"></a>
+<h1><a class="anchor" id="autotoc_md71"></a>
 Examples:</h1>
 <div class="fragment"><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="line"><span class="keyword">struct </span>dummy_proxy : <a class="code" href="structrefl_1_1runtime_1_1proxy.html">refl::runtime::proxy</a>&lt;dummy_proxy&lt;T&gt;, T&gt; {</div>

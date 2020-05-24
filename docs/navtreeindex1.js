@@ -1,5 +1,10 @@
 var NAVTREEINDEX1 =
 {
+"structrefl_1_1trait_1_1is__property.html":[4,0,0,4,22],
+"structrefl_1_1trait_1_1is__proxy.html":[4,0,0,4,23],
+"structrefl_1_1trait_1_1is__reflectable.html":[4,0,0,4,24],
+"structrefl_1_1trait_1_1is__type.html":[4,0,0,4,25],
+"structrefl_1_1trait_1_1last.html":[4,0,0,4,26],
 "structrefl_1_1trait_1_1last_3_01type__list_3_01_t_00_01_ts_8_8_8_01_4_01_4.html":[4,0,0,4,27],
 "structrefl_1_1trait_1_1last_3_01type__list_3_01_t_00_01_ts_8_8_8_01_4_01_4.html#a500bf3f9a0fdeb37fbf95fd5d055ea87":[4,0,0,4,27,0],
 "structrefl_1_1trait_1_1map.html":[4,0,0,4,28],

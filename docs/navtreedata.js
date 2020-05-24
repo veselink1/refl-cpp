@@ -44,50 +44,56 @@ var NAVTREE =
         [ "Custom Attributes", "md__introduction.html#autotoc_md17", null ]
       ] ],
       [ "Proxies", "md__introduction.html#autotoc_md18", null ],
-      [ "Examples Guide", "md__introduction.html#autotoc_md19", null ]
-    ] ],
-    [ "refl-cpp v0.9.1 (<a href=\"https://veselink1.github.io/refl-cpp/namespacerefl.html\">Documentation</a>)", "md__r_e_a_d_m_e.html", [
-      [ "Introduction", "md__r_e_a_d_m_e.html#autotoc_md21", null ],
-      [ "Requirements", "md__r_e_a_d_m_e.html#autotoc_md22", null ],
-      [ "Usage", "md__r_e_a_d_m_e.html#autotoc_md23", null ],
-      [ "License", "md__r_e_a_d_m_e.html#autotoc_md24", null ],
-      [ "Related Articles", "md__r_e_a_d_m_e.html#autotoc_md25", null ],
-      [ "Contributing", "md__r_e_a_d_m_e.html#autotoc_md26", null ],
-      [ "Examples", "md__r_e_a_d_m_e.html#autotoc_md27", [
-        [ "Example metadata declaration (without <a href=\"https://github.com/veselink1/refl-ht\">refl-ht</a>)", "md__r_e_a_d_m_e.html#autotoc_md28", null ],
-        [ "Example metadata declaration (with <a href=\"https://github.com/veselink1/refl-ht\">refl-ht</a> - a lightweight, portable preprocessor) *(discontinued)*", "md__r_e_a_d_m_e.html#autotoc_md29", null ],
-        [ "Basic usage example", "md__r_e_a_d_m_e.html#autotoc_md30", null ]
+      [ "Runtime Utilities", "md__introduction.html#autotoc_md19", [
+        [ "Invoking a member by name at runtime", "md__introduction.html#autotoc_md20", null ]
       ] ],
-      [ "More examples", "md__r_e_a_d_m_e.html#autotoc_md31", null ],
-      [ "Metadata-generation macros", "md__r_e_a_d_m_e.html#autotoc_md32", null ],
-      [ "Changelog", "md__r_e_a_d_m_e.html#autotoc_md33", [
-        [ "v0.9.1", "md__r_e_a_d_m_e.html#autotoc_md35", null ],
-        [ "v0.9.0", "md__r_e_a_d_m_e.html#autotoc_md36", null ],
-        [ "v0.8.2", "md__r_e_a_d_m_e.html#autotoc_md37", null ],
-        [ "v0.8.1", "md__r_e_a_d_m_e.html#autotoc_md38", null ],
-        [ "v0.8.0", "md__r_e_a_d_m_e.html#autotoc_md39", null ],
-        [ "v0.7.0", "md__r_e_a_d_m_e.html#autotoc_md40", null ],
-        [ "v0.6.5", "md__r_e_a_d_m_e.html#autotoc_md41", null ],
-        [ "v0.6.4", "md__r_e_a_d_m_e.html#autotoc_md42", null ],
-        [ "v0.6.3", "md__r_e_a_d_m_e.html#autotoc_md43", null ],
-        [ "v0.6.2", "md__r_e_a_d_m_e.html#autotoc_md44", null ],
-        [ "v0.6.1", "md__r_e_a_d_m_e.html#autotoc_md45", null ],
-        [ "v0.6.0", "md__r_e_a_d_m_e.html#autotoc_md46", null ],
-        [ "v0.5.2", "md__r_e_a_d_m_e.html#autotoc_md47", null ],
-        [ "v0.5.1", "md__r_e_a_d_m_e.html#autotoc_md48", null ],
-        [ "v0.5.0", "md__r_e_a_d_m_e.html#autotoc_md49", null ],
-        [ "v0.4.2", "md__r_e_a_d_m_e.html#autotoc_md50", null ],
-        [ "v0.4.1", "md__r_e_a_d_m_e.html#autotoc_md51", null ],
-        [ "v0.4.0", "md__r_e_a_d_m_e.html#autotoc_md52", null ],
-        [ "v0.3.5", "md__r_e_a_d_m_e.html#autotoc_md53", null ],
-        [ "v0.3.4", "md__r_e_a_d_m_e.html#autotoc_md54", null ],
-        [ "v0.3.3", "md__r_e_a_d_m_e.html#autotoc_md55", null ],
-        [ "v0.3.2", "md__r_e_a_d_m_e.html#autotoc_md56", null ],
-        [ "v0.3.1", "md__r_e_a_d_m_e.html#autotoc_md57", null ],
-        [ "v0.3.0", "md__r_e_a_d_m_e.html#autotoc_md58", null ],
-        [ "v0.2.1", "md__r_e_a_d_m_e.html#autotoc_md59", null ],
-        [ "v0.2.0", "md__r_e_a_d_m_e.html#autotoc_md60", null ],
-        [ "v0.1.2", "md__r_e_a_d_m_e.html#autotoc_md61", null ]
+      [ "Printing debug output", "md__introduction.html#autotoc_md21", null ],
+      [ "Utility library", "md__introduction.html#autotoc_md22", null ],
+      [ "Type-level operations", "md__introduction.html#autotoc_md23", null ],
+      [ "Examples Guide", "md__introduction.html#autotoc_md24", null ]
+    ] ],
+    [ "refl-cpp v0.9.1 (<a href=\"https://veselink1.github.io/refl-cpp/md__introduction.html\">Documentation</a>)", "md__r_e_a_d_m_e.html", [
+      [ "Introduction", "md__r_e_a_d_m_e.html#autotoc_md26", null ],
+      [ "Requirements", "md__r_e_a_d_m_e.html#autotoc_md27", null ],
+      [ "Usage", "md__r_e_a_d_m_e.html#autotoc_md28", null ],
+      [ "License", "md__r_e_a_d_m_e.html#autotoc_md29", null ],
+      [ "Contributing", "md__r_e_a_d_m_e.html#autotoc_md30", null ],
+      [ "Donations", "md__r_e_a_d_m_e.html#autotoc_md31", null ],
+      [ "Getting started", "md__r_e_a_d_m_e.html#autotoc_md32", null ],
+      [ "Examples", "md__r_e_a_d_m_e.html#autotoc_md33", [
+        [ "Basic usage example", "md__r_e_a_d_m_e.html#autotoc_md34", null ]
+      ] ],
+      [ "How it works", "md__r_e_a_d_m_e.html#autotoc_md35", null ],
+      [ "Metadata-generation macros", "md__r_e_a_d_m_e.html#autotoc_md36", null ],
+      [ "Old style macros", "md__r_e_a_d_m_e.html#autotoc_md37", null ],
+      [ "Changelog", "md__r_e_a_d_m_e.html#autotoc_md38", [
+        [ "v0.9.1", "md__r_e_a_d_m_e.html#autotoc_md40", null ],
+        [ "v0.9.0", "md__r_e_a_d_m_e.html#autotoc_md41", null ],
+        [ "v0.8.2", "md__r_e_a_d_m_e.html#autotoc_md42", null ],
+        [ "v0.8.1", "md__r_e_a_d_m_e.html#autotoc_md43", null ],
+        [ "v0.8.0", "md__r_e_a_d_m_e.html#autotoc_md44", null ],
+        [ "v0.7.0", "md__r_e_a_d_m_e.html#autotoc_md45", null ],
+        [ "v0.6.5", "md__r_e_a_d_m_e.html#autotoc_md46", null ],
+        [ "v0.6.4", "md__r_e_a_d_m_e.html#autotoc_md47", null ],
+        [ "v0.6.3", "md__r_e_a_d_m_e.html#autotoc_md48", null ],
+        [ "v0.6.2", "md__r_e_a_d_m_e.html#autotoc_md49", null ],
+        [ "v0.6.1", "md__r_e_a_d_m_e.html#autotoc_md50", null ],
+        [ "v0.6.0", "md__r_e_a_d_m_e.html#autotoc_md51", null ],
+        [ "v0.5.2", "md__r_e_a_d_m_e.html#autotoc_md52", null ],
+        [ "v0.5.1", "md__r_e_a_d_m_e.html#autotoc_md53", null ],
+        [ "v0.5.0", "md__r_e_a_d_m_e.html#autotoc_md54", null ],
+        [ "v0.4.2", "md__r_e_a_d_m_e.html#autotoc_md55", null ],
+        [ "v0.4.1", "md__r_e_a_d_m_e.html#autotoc_md56", null ],
+        [ "v0.4.0", "md__r_e_a_d_m_e.html#autotoc_md57", null ],
+        [ "v0.3.5", "md__r_e_a_d_m_e.html#autotoc_md58", null ],
+        [ "v0.3.4", "md__r_e_a_d_m_e.html#autotoc_md59", null ],
+        [ "v0.3.3", "md__r_e_a_d_m_e.html#autotoc_md60", null ],
+        [ "v0.3.2", "md__r_e_a_d_m_e.html#autotoc_md61", null ],
+        [ "v0.3.1", "md__r_e_a_d_m_e.html#autotoc_md62", null ],
+        [ "v0.3.0", "md__r_e_a_d_m_e.html#autotoc_md63", null ],
+        [ "v0.2.1", "md__r_e_a_d_m_e.html#autotoc_md64", null ],
+        [ "v0.2.0", "md__r_e_a_d_m_e.html#autotoc_md65", null ],
+        [ "v0.1.2", "md__r_e_a_d_m_e.html#autotoc_md66", null ]
       ] ]
     ] ],
     [ "Namespaces", "namespaces.html", [
@@ -123,7 +129,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"structrefl_1_1trait_1_1last_3_01type__list_3_01_t_00_01_ts_8_8_8_01_4_01_4.html"
+"structrefl_1_1trait_1_1is__property.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -740,7 +740,7 @@ Variables</h2></td></tr>
 <b>Value:</b><div class="fragment"><div class="line">    <span class="keyword">namespace </span>refl_impl::metadata { <span class="keyword">template</span> &lt;REFL_DETAIL_GROUP TemplateDeclaration&gt; <span class="keyword">struct </span>type_info__&lt;<a class="code" href="refl_8hpp.html#a4e6ab98a732ec684223ddfd0734f260f">REFL_DETAIL_GROUP</a> TypeName&gt; { \</div>
 <div class="line">        REFL_DETAIL_TYPE_BODY(TypeName, __VA_ARGS__)</div>
 </div><!-- fragment --><p>Creates reflection information for a specified type template. Takes an optional attribute list. TemplateDeclaration must be a panenthesis-enclosed list declaring the template parameters. (e.g. (typename A, typename B)). TypeName must be the fully-specialized type name and should also be enclosed in panenthesis. (e.g. (MyType&lt;A, B&gt;)) This macro must only be expanded in the global namespace.</p>
-<h1><a class="anchor" id="autotoc_md63"></a>
+<h1><a class="anchor" id="autotoc_md68"></a>
 Examples:</h1>
 <div class="fragment"><div class="line"><a class="code" href="refl_8hpp.html#a832b795bfa32d4130b04e9e33635c507">REFL_TEMPLATE</a>((<span class="keyword">typename</span> T), (std::vector&lt;T&gt;))</div>
 <div class="line">...</div>
@@ -776,7 +776,7 @@ Examples:</h1>
 <b>Value:</b><div class="fragment"><div class="line">    <span class="keyword">namespace </span>refl_impl::metadata { <span class="keyword">template</span>&lt;&gt; <span class="keyword">struct </span>type_info__&lt;TypeName&gt; { \</div>
 <div class="line">        REFL_DETAIL_TYPE_BODY((TypeName), __VA_ARGS__)</div>
 </div><!-- fragment --><p>Creates reflection information for a specified type. Takes an optional attribute list. This macro must only be expanded in the global namespace.</p>
-<h1><a class="anchor" id="autotoc_md62"></a>
+<h1><a class="anchor" id="autotoc_md67"></a>
 Examples:</h1>
 <div class="fragment"><div class="line"><a class="code" href="refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71">REFL_TYPE</a>(Point)</div>
 <div class="line">...</div>

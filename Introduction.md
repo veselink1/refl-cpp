@@ -2,20 +2,34 @@
 
 ## Introduction
 
-refl-cpp is a compile-time reflection library targeting C++17 and newer. It works by encoding type metadata in the type system, which allows the user to access that information at compile-time. refl-cpp supports compile-time enumeration of fields and functions, constexpr custom attributes (objects bound to types/fields/functions), template types, proxy objects which resolve function calls at compilation time and much more.
+**[refl-cpp](https://github.com/veselink1/refl-cpp) allows static reflection and inspection of types in C++17! On top of that, refl-cpp is extensible (build your own abstraction or runtime reflection system) and supports all of the following and more:**
+- **overloaded and template functions** - invoke and get pointers to overloaded functions without specifying type arguments in metadata
+- **template types** - reflect and work with template classes like regular classes
+- **constexpr attributes**- attach custom objects to reflectable members and types (create your own markers, names for external bindings or arbitrary data)
+- **proxy types** - programmatic type generation (implement unknown interface, create a generic *builder*, *value type wrapper*, etc.)
 
 This documents gives tips on how best to utilize refl-cpp for your use case. Please, also refer to the [documentation](https://veselink1.github.io/refl-cpp/namespacerefl.html) and [examples](https://github.com/veselink1/refl-cpp/tree/master/examples).
 
 ## Basics
-refl-cpp relies on the user to properly specify type metadata through the use of macros.
+refl-cpp relies on the user to properly specify type metadata through the use of the `REFL_AUTO` macro.
 
 ```cpp
-struct A {};
+struct A {
+    int foo;
+    void bar();
+    void bar(int);
+};
 
-REFL_AUTO(type(A))
+REFL_AUTO(
+    type(A),
+    field(foo),
+    func(bar)
+)
 ```
 
-* The metadata should be available before it is first requested, and should ideally be put right after the definition of the target type (forward declarations won't work).
+This macro generated the necessary metadata needed for compile-time reflection to work. The metadata is encoded in the type system via generated type specializations which is why there is currently no other way that using a macro. See [example-macro.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-macro.cpp) for what the output of the macro looks like. (NOTE: It is a lot, but remember that compilers only validate and produce code for templates once they are used, until then the metadata is just token soup that gets optimized out from the resulting binary)
+
+- The metadata should be available before it is first requested, and should ideally be put right after the definition of the target type (forward declarations won't work).
 
 ## Type metadata
 refl-cpp exposes access to the metadata through the [`type_descriptor<T>`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1type__descriptor.html) type. All of the metadata is stored in static fields on the corresponding specialization of that type, but for convenience, objects of the metadata types are typically used in many places, and can be obtained through calling the trivial constructor or through the [`reflect<T>`](https://veselink1.github.io/refl-cpp/namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e) family of functions.
@@ -62,6 +76,21 @@ REFL_AUTO(
 ```
 
 Fields are represented through specializations of the [`field_descriptor<T, N>`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1field__descriptor.html). `T` is the target type, and `N` is the index of the reflected member, regardless of the type of that member (field or function). [`field_descriptor<T, N>`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1field__descriptor.html) is never used directly.
+
+```cpp
+constexpr auto type = refl::reflect<Point>();
+
+std::cout << "type " << type.c_str() << ":";
+// for_each discovered by Koenig lookup (for_each and decltype(type.members) are in the same namespace)
+for_each(type.members, [](auto member) { // template lambda invoked with field_descriptor<Point, 0..1>{}
+    std::cout << '\t' << member.name << '\n';
+});
+/* Output:
+   type Point:
+       x
+       y
+*/
+```
 
 There are multiple ways to get a field's descriptor. The easiest one is by using the name of the member together with the [`find_one`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html#a019b3322cffd29fd129b6378ef499668) helper.
 ```cpp
@@ -304,19 +333,19 @@ refl-cpp provides a range of type-transforming operations in the [`refl::trait`]
 
 ## Examples Guide
 
-- Implementing a simple serialization system - [example-serialization.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-serialization.cpp)
+- Implement a simple serialization system - [example-serialization.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-serialization.cpp)
     Shows how to implement a very efficient and generic serialization procedure from scratch
 
-- Implementing a generic builder class factory - [example-builders.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-builders.cpp)
+- Implement a generic builder class factory - [example-builders.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-builders.cpp)
     Shows how to utilize refl-cpp proxy classes to define a generic `builder<T>` class, which implements the builder pattern
 
 - Simple SQL database abstraction - [example-dao.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-dao.cpp)
     Shows how to implement a basic ORM system which can generate SQL statements at compile-time from model classes using custom properties
 
-- Iterating base classes with `bases<>` - [example-inheritance.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-inheritance.cpp)
+- Iterate base classes with `bases<>` - [example-inheritance.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-inheritance.cpp)
     Shows to use the built-in `bases<>` attribute to iterate over a type's base classes
 
-- Accessing reflection information at runtime - [example-custom-rtti.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-custom-rtti.cpp)
+- Access reflection information at runtime - [example-custom-rtti.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-custom-rtti.cpp)
     Shows how to implement a basic runtime abstraction over refl-cpp which provides access to the reflection metadata at runtime via custom metadata objects
 
 - Type factories with proxies - [example-proxy.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-proxy.cpp)
