@@ -1,10 +1,15 @@
 # refl-cpp v0.9.1 ([Documentation](https://veselink1.github.io/refl-cpp/md__introduction.html))
 
+<div style="text-align: center;">
+<img src="https://raw.githubusercontent.com/veselink1/refl-cpp/master/branding/logo.svg?sanitize=true" alt="refl-cpp Logo" style="max-width: 100%;" height="140">
+
 [![Contributors](https://img.shields.io/github/contributors/veselink1/refl-cpp.svg)](https://github.com/veselink1/refl-cpp/graphs/contributors)
 [![Activity](https://img.shields.io/github/commit-activity/m/veselink1/refl-cpp.svg)](https://github.com/veselink1/refl-cpp/pulse)
 [![CircleCI](https://circleci.com/gh/veselink1/refl-cpp.svg?style=shield)](https://circleci.com/gh/veselink1/refl-cpp)
 [![Gitter](https://badges.gitter.im/refl-cpp/community.svg)](https://gitter.im/refl-cpp/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Patrons](https://img.shields.io/liberapay/patrons/veselink1.svg?logo=liberapay)](https://liberapay.com/veselink1/donate)
+
+</div>
 
 A compile-time reflection library for modern C++ with support for overloads, templates, attributes and proxies
 
