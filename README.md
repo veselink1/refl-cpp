@@ -1,6 +1,4 @@
-# refl-cpp v0.9.1 ([Documentation](https://veselink1.github.io/refl-cpp/md__introduction.html))
-
-<div style="text-align: center;">
+<center>
 <img src="https://raw.githubusercontent.com/veselink1/refl-cpp/master/branding/logo.svg?sanitize=true" alt="refl-cpp Logo" style="max-width: 100%;" height="140">
 
 [![Contributors](https://img.shields.io/github/contributors/veselink1/refl-cpp.svg)](https://github.com/veselink1/refl-cpp/graphs/contributors)
@@ -9,7 +7,9 @@
 [![Gitter](https://badges.gitter.im/refl-cpp/community.svg)](https://gitter.im/refl-cpp/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Patrons](https://img.shields.io/liberapay/patrons/veselink1.svg?logo=liberapay)](https://liberapay.com/veselink1/donate)
 
-</div>
+</center>
+
+## refl-cpp v0.9.1 [[Documentation](https://veselink1.github.io/refl-cpp/md__introduction.html)]
 
 A compile-time reflection library for modern C++ with support for overloads, templates, attributes and proxies
 
@@ -35,7 +35,7 @@ See [contributors.md](https://github.com/veselink1/refl-cpp/blob/master/contribu
 [refl-cpp](https://github.com/veselink1/refl-cpp) is publicly open for any contribution. Bugfixes and new features are welcome. Extra modules are too (as long as the single-header usability is preserved and the functionality is not overly specific to particular use case).
 
 ## Donations
-Donations are wholeheartedly accepted and will help me support this library long term!
+Donations are wholeheartedly accepted and will help support this library long term! If you are using refl-cpp in your project and it's making your work easier, please consider making a donation!
 
 [![Donate](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/veselink1/donate)
 
