@@ -85,7 +85,7 @@ Point pt{};
 // Converting to an std::tuple: (Note the constexpr!)
 constexpr auto values = map_to_tuple(refl::reflect(pt).members, [&](auto member) {
   // refl::descriptor::is_readable (found by Koenig lookup)
-  if constexpr (is_readable(pt)) {
+  if constexpr (is_readable(member)) {
     return member(pt); // invoke the member
   }
 })
