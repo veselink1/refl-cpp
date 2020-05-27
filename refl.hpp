@@ -759,13 +759,13 @@ namespace refl {
              * Specifies that an attribute type inheriting from this type can
              * only be used with REFL_FUNC or REFL_FIELD.
              */
-			struct member : public function, public field{};
+            struct member : public function, public field{};
 
             /**
              * Specifies that an attribute type inheriting from this type can
              * only be used with any one of REFL_TYPE, REFL_FIELD, REFL_FUNC.
              */
-			struct any : public member, public type {};
+            struct any : public member, public type {};
         }
     } // namespace attr
 
@@ -2781,13 +2781,13 @@ namespace refl::detail
         REFL_DETAIL_ATTRIBUTES(MemberType_, __VA_ARGS__)
 
 /** Creates the support infrastructure needed for the refl::runtime::proxy type. */
+/*
+    There can be a total of 12 differently qualified member functions with the same name.
+    Providing remaps for non-const and const-only strikes a balance between compilation time and usability.
+    And even though there are many other remap implementation possibilities (like virtual, field variants),
+    adding them was considered to not be efficient from a compilation-time point of view.
+*/
 #define REFL_DETAIL_MEMBER_PROXY(MemberName_) \
-        /*
-            There can be a total of 12 differently qualified member functions with the same name.
-            Providing remaps for non-const and const-only strikes a balance between compilation time and usability.
-            And even though there are many other remap implementation possibilities (like virtual, field variants),
-            adding them was considered to not be efficient from a compilation-time point of view.
-        */ \
         template <typename Proxy> struct remap { \
             template <typename... Args> decltype(auto) MemberName_(Args&&... args) { \
                 return Proxy::invoke_impl(static_cast<Proxy&>(*this), ::std::forward<Args>(args)...); \
@@ -2795,7 +2795,7 @@ namespace refl::detail
             template <typename... Args> decltype(auto) MemberName_(Args&&... args) const { \
                 return Proxy::invoke_impl(static_cast<const Proxy&>(*this), ::std::forward<Args>(args)...); \
             } \
-        } \
+        }
 
 /**
  * Creates reflection information for a public field. Takes an optional attribute list.
@@ -2902,52 +2902,52 @@ namespace refl::detail
         os << t;
     }
 
-	template <typename T>
-	void write_impl(std::ostream& os, const volatile T* ptr)
-	{
-		auto f(os.flags());
-		os << "(" << reflect<T>().name << "*)" << std::hex << ptr;
-		os.flags(f);
-	}
+    template <typename T>
+    void write_impl(std::ostream& os, const volatile T* ptr)
+    {
+        auto f(os.flags());
+        os << "(" << reflect<T>().name << "*)" << std::hex << ptr;
+        os.flags(f);
+    }
 
-	inline void write_impl(std::ostream& os, const char* ptr)
-	{
-		os << ptr;
-	}
+    inline void write_impl(std::ostream& os, const char* ptr)
+    {
+        os << ptr;
+    }
 
-	inline void write_impl(std::ostream& os, const std::exception& e)
-	{
-		os << "Exception";
+    inline void write_impl(std::ostream& os, const std::exception& e)
+    {
+        os << "Exception";
 #ifdef REFL_RTTI_ENABLED
-		os << " (" << typeid(e).name() << ")";
+        os << " (" << typeid(e).name() << ")";
 #endif
-		os << ": `" << e.what() << "`";
-	}
+        os << ": `" << e.what() << "`";
+    }
 
-	inline void write_impl(std::ostream& os, const std::string& t)
-	{
-		os << std::quoted(t);
-	}
+    inline void write_impl(std::ostream& os, const std::string& t)
+    {
+        os << std::quoted(t);
+    }
 
-	inline void write_impl(std::ostream& os, const std::wstring& t)
-	{
+    inline void write_impl(std::ostream& os, const std::wstring& t)
+    {
 #ifdef _MSC_VER
 // Disable the "wcsrtombs is unsafe" warning in VS
 #pragma warning(push)
 #pragma warning(disable:4996)
 #endif
-		std::mbstate_t state = std::mbstate_t();
-		const wchar_t* wsptr = t.c_str();
-		std::size_t len = 1 + std::wcsrtombs(nullptr, &wsptr, 0, &state);
+        std::mbstate_t state = std::mbstate_t();
+        const wchar_t* wsptr = t.c_str();
+        std::size_t len = 1 + std::wcsrtombs(nullptr, &wsptr, 0, &state);
 
-		std::string mbstr(len, '\0');
-		std::wcsrtombs(mbstr.data(), &wsptr, mbstr.size(), &state);
+        std::string mbstr(len, '\0');
+        std::wcsrtombs(mbstr.data(), &wsptr, mbstr.size(), &state);
 
-		os << std::quoted(mbstr);
+        os << std::quoted(mbstr);
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-	}
+    }
 
     template <typename Tuple, size_t... Idx>
     void write_impl(std::ostream& os, Tuple&& t, std::index_sequence<Idx...>)
@@ -2963,8 +2963,8 @@ namespace refl::detail
         write_impl(os, t, std::make_index_sequence<sizeof...(Ts)>{});
     }
 
-	template <typename K, typename V>
-	void write_impl(std::ostream& os, const std::pair<K, V>& t);
+    template <typename K, typename V>
+    void write_impl(std::ostream& os, const std::pair<K, V>& t);
 
     template <typename K, typename V>
     void write_impl(std::ostream& os, const std::pair<K, V>& t)
@@ -2997,11 +2997,11 @@ namespace refl::detail
         debug(os, t.lock().get(), true);
     }
 
-	// Dispatches to the appropriate write_impl.
-	constexpr auto write = [](std::ostream & os, auto&& t) -> void
-	{
-		write_impl(os, t);
-	};
+    // Dispatches to the appropriate write_impl.
+    constexpr auto write = [](std::ostream & os, auto&& t) -> void
+    {
+        write_impl(os, t);
+    };
 } // namespace refl::detail
 
 // Custom reflection information for
@@ -3010,7 +3010,7 @@ namespace refl::detail
 #ifndef REFL_NO_STD_SUPPORT
 
 REFL_TYPE(std::exception, debug{ refl::detail::write })
-	REFL_FUNC(what, property{ })
+    REFL_FUNC(what, property{ })
 REFL_END
 
 REFL_TYPE(std::string, debug{ refl::detail::write })
