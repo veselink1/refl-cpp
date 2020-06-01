@@ -87,7 +87,7 @@ namespace refl
          * and is explicitly-convertible to const char* and std::string.
          * REFL_MAKE_CONST_STRING can be used to create an instance from a literal string.
          *
-         * @param <N> The length of the string excluding the terminating '\0' character.
+         * @typeparam <N> The length of the string excluding the terminating '\0' character.
          * @see refl::descriptor::base_member_descriptor::name
          */
         template <size_t N>
@@ -877,7 +877,7 @@ namespace refl {
             {
                 using type = typename init<type_list<Us..., T>, type_list<Ts...>>::type;
             };
-        };
+        }
 
         /**
          * Returns all but the last element of the list.
