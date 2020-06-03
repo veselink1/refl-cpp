@@ -1706,7 +1706,7 @@ namespace refl {
 
     /** Returns true if the non-qualified type T is reflectable.*/
     template <typename T>
-    constexpr bool is_reflectable(const T) noexcept
+    constexpr bool is_reflectable(const T&) noexcept
     {
         return trait::is_reflectable_v<T>;
     }
@@ -1720,7 +1720,7 @@ namespace refl {
 
     /** Returns the type descriptor for the non-qualified type T. */
     template<typename T>
-    constexpr type_descriptor<T> reflect(const T) noexcept
+    constexpr type_descriptor<T> reflect(const T&) noexcept
     {
         return {};
     }
@@ -3013,22 +3013,19 @@ namespace refl::detail
     template <typename T, typename D>
     void write_impl(std::ostream& os, const std::unique_ptr<T, D>& t)
     {
-        os << "(std::unique_ptr)";
-        debug(os, t.get(), true);
+        runtime::debug(os, t.get(), true);
     }
 
     template <typename T>
     void write_impl(std::ostream& os, const std::shared_ptr<T>& t)
     {
-        os << "(std::shared_ptr)";
-        debug(os, t.get(), true);
+        runtime::debug(os, t.get(), true);
     }
 
     template <typename T>
     void write_impl(std::ostream& os, const std::weak_ptr<T>& t)
     {
-        os << "(std::weak_ptr)";
-        debug(os, t.lock().get(), true);
+        runtime::debug(os, t.lock().get(), true);
     }
 
     // Dispatches to the appropriate write_impl.
