@@ -2236,16 +2236,59 @@ namespace refl {
             return name.c_str();
         }
 
+        namespace detail
+        {
+            template <typename T, bool IsPascalCase>
+            constexpr auto normalize_bare_accessor_name()
+            {
+                constexpr auto str = T::name.template substr<3>();
+                if constexpr (str.data[0] == '_') {
+                    return str.template substr<1>();
+                }
+                else if constexpr (!IsPascalCase && str.data[0] >= 'A' && str.data[0] <= 'Z') {
+                    constexpr char s[2]{ char(str.data[0] + ('a' - 'A')) , '\0' };
+                    return s + str.template substr<1>();
+                }
+                else if constexpr (IsPascalCase && str.data[0] >= 'a' && str.data[0] <= 'z') {
+                    constexpr char s[2]{ char(str.data[0] + ('A' - 'a')) , '\0' };
+                    return s + str.template substr<1>();
+                }
+                else {
+                    return str;
+                }
+            }
+
+            template <typename T>
+            constexpr auto normalize_accessor_name(const T&)
+            {
+                constexpr T t{};
+                if constexpr (t.name.size > 3) {
+                    constexpr auto prefix = t.name.template substr<0, 3>();
+                    if constexpr ((is_readable(T{}) && (prefix == "Get" || prefix == "get"))
+                        || (is_writable(T{}) && (prefix == "Set" || prefix == "set"))) {
+                        constexpr bool isPascalCase = prefix.data[0] >= 'A' && prefix.data[0] <= 'Z';
+                        return normalize_bare_accessor_name<T, isPascalCase>();
+                    }
+                    else {
+                        return t.name;
+                    }
+                }
+                else {
+                    return t.name;
+                }
+            }
+        } // namespace detail
+
         /**
          * Returns the display name of T.
-         * (Uses the friendly_name of the property attribute or falls back to the in-code name).
+         * Uses the friendly_name of the property attribute, or the normalized name if no friendly_name was provided.
          */
         template <typename T>
         const char* get_display_name(const T& t) noexcept
         {
             if constexpr (trait::is_property_v<T>) {
                 auto&& friendly_name = util::get<attr::property>(t.attributes).friendly_name;
-                return friendly_name ? *friendly_name : t.name.c_str();
+                return friendly_name ? *friendly_name : detail::normalize_accessor_name(t).c_str();
             }
             return t.name.c_str();
         }
