@@ -598,25 +598,24 @@ namespace refl {
                 typedef T type;
             };
 
-            template <size_t N, typename... Ts>
+            template <size_t N, typename T>
             struct skip;
 
             template <size_t N, typename T, typename... Ts>
-            struct skip<N, T, Ts...> : public skip<N - 1, Ts...>
+            struct skip<N, type_list<T, Ts...>> : skip<N - 1, type_list<Ts...>>
             {
-                static_assert(sizeof...(Ts) + 1 >= N, "Insufficient number of arguments!");
             };
 
-            template <typename T>
-            struct skip<0, T>
+            template <typename T, typename... Ts>
+            struct skip<0, type_list<T, Ts...>>
             {
-                typedef type_list<T> type;
+                typedef type_list<T, Ts...> type;
             };
 
-            template <typename... Ts>
-            struct skip<0, Ts...>
+            template <>
+            struct skip<0, type_list<>>
             {
-                typedef type_list<Ts...> type;
+                typedef type_list<> type;
             };
         }
 
@@ -639,18 +638,12 @@ namespace refl {
         template <size_t N, typename TypeList>
         using get_t = typename get<N, TypeList>::type;
 
-
-        template <size_t, typename>
-        struct skip;
-
         /**
          * Skips the first N types in the provided type_list.
          * Provides a member typedef equivalent to the resuling type_list.
          */
-        template <size_t N, typename... Ts>
-        struct skip<N, type_list<Ts...>> : detail::skip<N, Ts...>
-        {
-        };
+        template <size_t N, typename TypeList>
+        using skip = detail::skip<N, TypeList>;
 
         /**
          * Skips the first N types in the provided type_list.
@@ -687,17 +680,11 @@ namespace refl {
         template <typename T>
         using as_type_list_t = typename as_type_list<T>::type;
 
-        template <typename>
-        struct first;
-
         /**
          * Accesses first type in the list.
          */
-        template <typename T, typename... Ts>
-        struct first<type_list<T, Ts...>>
-        {
-            using type = T;
-        };
+        template <typename TypeList>
+        using first = get<0, TypeList>;
 
         /**
          * Accesses last type in the list.
@@ -706,17 +693,11 @@ namespace refl {
         template <typename TypeList>
         using first_t = typename first<TypeList>::type;
 
-        template <typename>
-        struct last;
-
         /**
          * Accesses last type in the list.
          */
-        template <typename T, typename... Ts>
-        struct last<type_list<T, Ts...>>
-        {
-            using type = get_t<sizeof...(Ts), type_list<T, Ts...>>;
-        };
+        template <typename TypeList>
+        using last = get<TypeList::size - 1, TypeList>;
 
         /**
          * Accesses last type in the list.
@@ -725,17 +706,11 @@ namespace refl {
         template <typename TypeList>
         using last_t = typename last<TypeList>::type;
 
-        template <typename>
-        struct tail;
-
         /**
          * Returns all but the first element of the list.
          */
-        template <typename T, typename... Ts>
-        struct tail<type_list<T, Ts...>>
-        {
-            using type = type_list<Ts...>;
-        };
+        template <typename TypeList>
+        using tail = skip<1, TypeList>;
 
         /**
          * Returns all but the first element of the list.
@@ -746,29 +721,45 @@ namespace refl {
 
         namespace detail
         {
-            template <typename, typename>
-            struct init;
+            template <typename, size_t, typename>
+            struct take;
 
-            template <typename... Us, typename T>
-            struct init<type_list<Us...>, type_list<T>>
+            template <typename... Us>
+            struct take<type_list<Us...>, 0, type_list<>>
             {
                 using type = type_list<Us...>;
             };
 
             template <typename... Us, typename T, typename... Ts>
-            struct init<type_list<Us...>, type_list<T, Ts...>>
+            struct take<type_list<Us...>, 0, type_list<T, Ts...>>
             {
-                using type = typename init<type_list<Us..., T>, type_list<Ts...>>::type;
+                using type = type_list<Us...>;
+            };
+
+            template <size_t N, typename... Us, typename T, typename... Ts>
+            struct take<type_list<Us...>, N, type_list<T, Ts...>>
+            {
+                using type = typename take<type_list<Us..., T>, N - 1, type_list<Ts...>>::type;
             };
         }
+
+        /**
+         * Returns the first N elements of the list.
+         */
+        template <size_t N, typename TypeList>
+        using take = detail::take<type_list<>, N, TypeList>;
+
+        /**
+         * Returns the first N elements of the list.
+         */
+        template <size_t N, typename TypeList>
+        using take_t = typename take<N, TypeList>::type;
 
         /**
          * Returns all but the last element of the list.
          */
         template <typename TypeList>
-        struct init : detail::init<type_list<>, TypeList>
-        {
-        };
+        using init = take<TypeList::size - 1, TypeList>;
 
         /**
          * Returns all but the last element of the list.
@@ -776,44 +767,6 @@ namespace refl {
          */
         template <typename TypeList>
         using init_t = typename init<TypeList>::type;
-
-        template <typename, typename>
-        struct append;
-
-        /**
-         * Appends a type to the list.
-         */
-        template <typename T, typename... Ts>
-        struct append<T, type_list<Ts...>>
-        {
-            using type = type_list<Ts..., T>;
-        };
-
-        /**
-         * Appends a type to the list.
-         * @see prepend
-         */
-        template <typename T, typename TypeList>
-        using append_t = typename append<T, TypeList>::type;
-
-        template <typename, typename>
-        struct prepend;
-
-        /**
-         * Prepends a type to the list.
-         */
-        template <typename T, typename... Ts>
-        struct prepend<T, type_list<Ts...>>
-        {
-            using type = type_list<T, Ts...>;
-        };
-
-        /**
-         * Prepends a type to the list.
-         * @see prepend
-         */
-        template <typename T, typename TypeList>
-        using prepend_t = typename prepend<T, TypeList>::type;
 
         namespace detail
         {
@@ -867,6 +820,39 @@ namespace refl {
          */
         template <typename Lhs, typename Rhs>
         using concat_t = typename concat<Lhs, Rhs>::type;
+
+        /**
+         * Appends a type to the list.
+         */
+        template <typename T, typename TypeList>
+        struct append : concat<TypeList, type_list<T>>
+        {
+        };
+
+        /**
+         * Appends a type to the list.
+         * @see prepend
+         */
+        template <typename T, typename TypeList>
+        using append_t = typename append<T, TypeList>::type;
+
+        template <typename, typename>
+        struct prepend;
+
+        /**
+         * Prepends a type to the list.
+         */
+        template <typename T, typename TypeList>
+        struct prepend : concat<type_list<T>, TypeList>
+        {
+        };
+
+        /**
+         * Prepends a type to the list.
+         * @see prepend
+         */
+        template <typename T, typename TypeList>
+        using prepend_t = typename prepend<T, TypeList>::type;
 
         namespace detail
         {
@@ -924,7 +910,6 @@ namespace refl {
                 using apply = typename detail::map_impl<Mapper, TypeList>::type;
             };
         }
-
 
         template <template<typename> typename, typename>
         struct filter;
