@@ -81,6 +81,15 @@ namespace refl
     namespace util
     {
         /**
+         * Converts a compile-time available const char* value to a const_string<N>.
+         * The argument must be a *core constant expression* and be null-terminated.
+         *
+         * @see refl::util::const_string
+         */
+#define REFL_MAKE_CONST_STRING(CString) \
+    (::refl::util::detail::copy_from_unsized<::refl::util::detail::strlen(CString)>(CString))
+
+        /**
          * Represents a compile-time string. Used in refl-cpp
          * for representing names of reflected types and members.
          * Supports constexpr concatenation and substring,
@@ -342,19 +351,36 @@ namespace refl
             }
         } // namespace detail
 
+        /**
+         * Represents a compile-time list of types provided as variadic template parameters.
+         * type_list is an empty TrivialType. Instances of it can freely be created to communicate
+         * the list of represented types. type_lists support many standard operations that are
+         * implicitly available with ADL-lookup. type_list is used by refl-cpp mostly to represent
+         * the list of refl::field_descriptor, refl::function_descriptor specializations that
+         * allow the compile-time reflection of a type's members.
+         *
+         * @see refl::util::for_each
+         * @see refl::util::map_to_array
+         * @see refl::util::map_to_tuple
+         * @see refl::member_list
+         *
+         * # Examples
+         * ```
+         * for_each(type_list<int, float>(), [](auto) { ... });
+         * ```
+         */
+        template <typename... Ts>
+        struct type_list
+        {
+            /** The number of types in this type_list */
+            static constexpr intptr_t size = sizeof...(Ts);
+        };
+
     } // namespace util
 
     using util::const_string;
     using util::make_const_string;
-
-/**
- * Converts a compile-time available const char* value to a const_string<N>.
- * The argument must be a *core constant expression* and be null-terminated.
- *
- * @see refl::util::const_string
- */
-#define REFL_MAKE_CONST_STRING(CString) \
-    (::refl::util::detail::copy_from_unsized<::refl::util::detail::strlen(CString)>(CString))
+    using util::type_list;
 
     /**
      * The contents of the refl::detail::macro_exports namespace
@@ -370,77 +396,102 @@ namespace refl
 
 } // namespace refl
 
+/**
+ * refl_impl is an internal namespace that should not be used by the users of refl-cpp.
+ */
+namespace refl_impl
+{
     /**
-     * refl_impl is an internal namespace that should not be used by the users of refl-cpp.
+     * Contains the generated metadata types.
+     * (i.e. type_info__)
      */
-    namespace refl_impl
+    namespace metadata
     {
+        // Import everyting from macro_exports here to make it visible in REFL_ macro context.
+        using namespace refl::detail::macro_exports;
+
         /**
-         * Contains the generated metadata types.
-         * (i.e. type_info__)
+         * The core reflection metadata type.
+         * type_info__ holds data for a type T.
+         *
+         * The non-specialized type_info__ type has a member typedef invalid_marker
+         * that can be used to detect it.
+         *
+         * Specializations of this type should provide all members of this
+         * generic definition, except invalid_marker.
+         *
+         * @typeparam <T> The reflected type.
          */
-        namespace metadata
+        template <typename T>
+        struct type_info__
         {
-            // Import everyting from macro_exports here to make it visible in REFL_ macro context.
-            using namespace refl::detail::macro_exports;
+            /** Used for detecting this non-specialized type_info__ instance. */
+            struct invalid_marker{};
 
             /**
-             * The core reflection metadata type.
-             * type_info__ holds data for a type T.
-             *
-             * The non-specialized type_info__ type has a member typedef invalid_marker
-             * that can be used to detect it.
-             *
-             * Specializations of this type should provide all members of this
-             * generic definition, except invalid_marker.
-             *
-             * @typeparam <T> The reflected type.
+             * This is a placeholder definition of which no type instances should be created.
              */
-            template <typename T>
-            struct type_info__
-            {
-                /** Used for detecting this non-specialized type_info__ instance. */
-                struct invalid_marker{};
+            template <size_t, typename>
+            struct member;
 
-                /**
-                 * This is a placeholder definition of which no type instances should be created.
-                 */
-                template <size_t, typename>
-                struct member;
+            /** The number of reflected members of the target type T. */
+            static constexpr size_t member_count{ 0 };
 
-                /** The number of reflected members of the target type T. */
-                static constexpr size_t member_count{ 0 };
+            /** This is a placeholder definition which shold not be referenced by well-formed programs. */
+            static constexpr refl::const_string<0> name{ "" };
 
-                /** This is a placeholder definition which shold not be referenced by well-formed programs. */
-                static constexpr refl::const_string<0> name{ "" };
+            /** This is a placeholder definition which shold not be referenced by well-formed programs. */
+            static constexpr std::tuple<> attributes{ };
+        };
 
-                /** This is a placeholder definition which shold not be referenced by well-formed programs. */
-                static constexpr std::tuple<> attributes{ };
-            };
+        /**
+         * Specializes type_info__ so that a type's const-qualification is effectively discarded.
+         */
+        template <typename T>
+        struct type_info__<const T> : public type_info__<T> {};
 
-            /**
-             * Specializes type_info__ so that a type's const-qualification is effectively discarded.
-             */
-            template <typename T>
-            struct type_info__<const T> : public type_info__<T> {};
+        /**
+         * Specializes type_info__ so that a type's volatile-qualification is effectively discarded.
+         */
+        template <typename T>
+        struct type_info__<volatile T> : public type_info__<T> {};
 
-            /**
-             * Specializes type_info__ so that a type's volatile-qualification is effectively discarded.
-             */
-            template <typename T>
-            struct type_info__<volatile T> : public type_info__<T> {};
+        /**
+         * Specializes type_info__ so that a type's const-volatile-qualification is effectively discarded.
+         */
+        template <typename T>
+        struct type_info__<const volatile T> : public type_info__<T> {};
 
-            /**
-             * Specializes type_info__ so that a type's const-volatile-qualification is effectively discarded.
-             */
-            template <typename T>
-            struct type_info__<const volatile T> : public type_info__<T> {};
+    } // namespace metadata
 
-        } // namespace metadata
-
-    } // namespace refl_impl
+} // namespace refl_impl
 
 namespace refl {
+
+    /**
+     * @brief Contains tag types denoting the different types of reflectable members.
+     *
+     * This namespace contains a number of empty types that correspond to
+     * the different member types that refl-cpp supports reflection over.
+     */
+    namespace member
+    {
+        /**
+         * An empty type which is equivalent to refl::member_descriptor_base::member_type
+         * when the reflected member is a field.
+         *
+         * @see refl::descriptor::field_descriptor
+         */
+        struct field {};
+
+        /**
+         * An empty type which is equivalent to refl::member_descriptor_base::member_type
+         * when the reflected member is a function.
+         *
+         * @see refl::descriptor::function_descriptor
+         */
+        struct function {};
+    }
 
     /**
      * @brief Provides type-level operations for refl-cpp related use-cases.
@@ -449,8 +500,7 @@ namespace refl {
      * for compile-time metaprogramming.
      */
     namespace trait
-    {
-        /**
+    {/**
          * Removes all reference and cv-qualifiers from T.
          * Equivalent to std::remove_cvref which is not currently
          * available on all C++17 compilers.
@@ -525,67 +575,7 @@ namespace refl {
          */
         template <typename T>
         [[maybe_unused]] static constexpr bool is_container_v{ is_container<T>::value };
-    }
 
-    /**
-     * @brief Contains tag types denoting the different types of reflectable members.
-     *
-     * This namespace contains a number of empty types that correspond to
-     * the different member types that refl-cpp supports reflection over.
-     */
-    namespace member
-    {
-        /**
-         * An empty type which is equivalent to refl::member_descriptor_base::member_type
-         * when the reflected member is a field.
-         *
-         * @see refl::descriptor::field_descriptor
-         */
-        struct field {};
-
-        /**
-         * An empty type which is equivalent to refl::member_descriptor_base::member_type
-         * when the reflected member is a function.
-         *
-         * @see refl::descriptor::function_descriptor
-         */
-        struct function {};
-    }
-
-    namespace util
-    {
-        /**
-         * Represents a compile-time list of types provided as variadic template parameters.
-         * type_list is an empty TrivialType. Instances of it can freely be created to communicate
-         * the list of represented types. type_lists support many standard operations that are
-         * implicitly available with ADL-lookup. type_list is used by refl-cpp mostly to represent
-         * the list of refl::field_descriptor, refl::function_descriptor specializations that
-         * allow the compile-time reflection of a type's members.
-         *
-         * @see refl::util::for_each
-         * @see refl::util::map_to_array
-         * @see refl::util::map_to_tuple
-         * @see refl::member_list
-         *
-         * # Examples
-         * ```
-         * for_each(type_list<int, float>(), [](auto) { ... });
-         * ```
-         */
-        template <typename... Ts>
-        struct type_list
-        {
-            /** The number of types in this type_list */
-            static constexpr intptr_t size = sizeof...(Ts);
-        };
-
-    } // namespace util
-
-    // type_list is implicitly available in the top-level refl namespace.
-    using util::type_list;
-
-    namespace trait
-    {
         namespace detail
         {
             template <size_t N, typename... Ts>
@@ -699,112 +689,7 @@ namespace refl {
         template <typename T>
         using as_type_list_t = typename as_type_list<T>::type;
 
-    } // namespace trait
-
-    /**
-     * @brief Contains the definitions of the built-in attributes
-     *
-     * Contains the definitions of the built-in attributes which
-     * are implicitly available in macro context as well as the
-     * attr::usage namespace which contains constraints
-     * for user-provieded attributes.
-     *
-     * # Examples
-     * ```
-     * REFL_TYPE(Point, debug(custom_printer))
-     *     REFL_FIELD(x)
-     *     REFL_FIELD(y)
-     * REFL_END
-     * ```
-     */
-    namespace attr
-    {
-        /**
-         * @brief Contains a number of constraints applicable to refl-cpp attributes.
-         *
-         * Contains base types which create compile-time constraints
-         * that are verified by refl-cpp. These base-types must be inherited
-         * by custom attribute types.
-         */
-        namespace usage
-        {
-            /**
-             * Specifies that an attribute type inheriting from this type can
-             * only be used with REFL_TYPE()
-             */
-            struct type {};
-
-            /**
-             * Specifies that an attribute type inheriting from this type can
-             * only be used with REFL_FUNC()
-             */
-            struct function {};
-
-            /**
-             * Specifies that an attribute type inheriting from this type can
-             * only be used with REFL_FIELD()
-             */
-            struct field {};
-
-            /**
-             * Specifies that an attribute type inheriting from this type can
-             * only be used with REFL_FUNC or REFL_FIELD.
-             */
-            struct member : public function, public field{};
-
-            /**
-             * Specifies that an attribute type inheriting from this type can
-             * only be used with any one of REFL_TYPE, REFL_FIELD, REFL_FUNC.
-             */
-            struct any : public member, public type {};
-        }
-    } // namespace attr
-
-    namespace util
-    {
-        /**
-         * Ignores all parameters. Can take an optional template parameter
-         * specifying the return type of ignore. The return object is iniailized by {}.
-         */
-        template <typename T = int, typename... Ts>
-        constexpr int ignore(Ts&&...) noexcept
-        {
-            return {};
-        }
-
-        /**
-         * Returns the input paratemeter as-is. Useful for expanding variadic
-         * template lists when only one arguments is known to be present.
-         */
-        template <typename T>
-        constexpr decltype(auto) identity(T&& t) noexcept
-        {
-            return t;
-        }
-
-        /**
-         * Adds const to the input reference.
-         */
-        template <typename T>
-        constexpr const T& make_const(const T& value) noexcept
-        {
-            return value;
-        }
-
-        /**
-         * Adds const to the input reference.
-         */
-        template <typename T>
-        constexpr const T& make_const(T& value) noexcept
-        {
-            return value;
-        }
-
-    } // namespace util
-
-    namespace trait
-    {
-        template <typename>
+                template <typename>
         struct first;
 
         /**
@@ -1081,263 +966,220 @@ namespace refl {
         template <template<typename> typename Mapper, typename... Ts>
         using map_t = typename map<Mapper, Ts...>::type;
 
-    } // namespace trait
-
-    namespace util
-    {
-        /**
-        * Creates an array of type 'T' from the provided tuple.
-        * The common type T needs to be specified, in order to prevent any
-        * errors when using the overload taking an empty std::tuple (as there is no common type then).
-        */
-        template <typename T, typename... Ts>
-        constexpr std::array<T, sizeof...(Ts)> to_array(const std::tuple<Ts...>& tuple) noexcept
+        namespace detail
         {
-            return std::apply([](auto&& ... args) -> std::array<T, sizeof...(Ts)> { return { std::forward<decltype(args)>(args)... }; }, tuple);
+            template <typename T>
+            struct is_instance : public std::false_type {};
+
+            template <template<typename...> typename T, typename... Args>
+            struct is_instance<T<Args...>> : public std::true_type {};
         }
 
         /**
-         * Creates an empty array of type 'T.
+         * Detects whether T is a template specialization.
+         * Inherits from std::bool_constant<>.
          */
         template <typename T>
-        constexpr std::array<T, 0> to_array(const std::tuple<>&) noexcept
+        struct is_instance : detail::is_instance<T>
         {
-            return {};
-        }
+        };
+
+        /**
+         * Detects whether T is a template specialization.
+         * @see is_instance
+         */
+        template <typename T>
+        [[maybe_unused]] static constexpr bool is_instance_v{ is_instance<T>::value };
 
         namespace detail
         {
-            template <typename T, size_t... Idx>
-            constexpr auto to_tuple(const std::array<T, sizeof...(Idx)>& array, std::index_sequence<Idx...>) noexcept
+            /**
+             * Checks if T == U<Args...>.
+             * If U<Args...> != T or is invalid the result is false.
+             */
+            template <typename T, template<typename...> typename U, typename... Args>
+            struct is_same_template
             {
-                if constexpr (sizeof...(Idx) == 0) return std::tuple<>{};
-                else return std::make_tuple(std::get<Idx>(array)...);
-            }
+            private:
+                template <template<typename...> typename V, typename = V<Args...>>
+                static auto test(int) -> std::is_same<V<Args...>, T>;
+
+                template <template<typename...> typename V>
+                static std::false_type test(...);
+            public:
+                static constexpr bool value{decltype(test<U>(0))::value};
+            };
+
+            template <template<typename...> typename T, typename U>
+            struct is_instance_of : public std::false_type {};
+
+            template <template<typename...> typename T, template<typename...> typename U, typename... Args>
+            struct is_instance_of<T, U<Args...>> : public is_same_template<U<Args...>, T, Args...>
+            {
+
+            };
         }
 
         /**
-         * Creates a tuple from the provided array.
+         * Detects whther the type U is a template specialization of U.
+         * Inherits from std::bool_constant<>.
          */
-        template <typename T, size_t N>
-        constexpr auto to_tuple(const std::array<T, N>& array) noexcept
+        template <template<typename...>typename T, typename U>
+        struct is_instance_of : detail::is_instance_of<T, U>
         {
-            return detail::to_tuple<T>(array, std::make_index_sequence<N>{});
-        }
+        };
+
+        /**
+         * Detects whther the type U is a template specialization of U.
+         * @see is_instance_of_v
+         */
+        template <template<typename...>typename T, typename U>
+        [[maybe_unused]] static constexpr bool is_instance_of_v{ is_instance_of<T, U>::value };
 
         namespace detail
         {
-            template <typename F, typename... Carry>
-            constexpr auto eval_in_order_to_tuple(type_list<>, std::index_sequence<>, F&&, Carry&&... carry)
+            template <typename, typename>
+            struct contains_impl;
+
+            template <typename T, typename... Ts>
+            struct contains_impl<T, type_list<Ts...>> : std::disjunction<std::is_same<remove_qualifiers_t<Ts>, T>...>
             {
-                if constexpr (sizeof...(Carry) == 0) return std::tuple<>{};
-                else return std::make_tuple(std::forward<Carry>(carry)...);
-            }
+            };
 
-            // This whole jazzy workaround is needed since C++ does not specify
-            // the order in which function arguments are evaluated and this leads
-            // to incorrect order of evaluation (noticeable when using indexes).
-            // Otherwise we could simply do std::make_tuple(f(Ts{}, Idx)...).
-            template <typename F, typename T, typename... Ts, size_t I, size_t... Idx, typename... Carry>
-            constexpr auto eval_in_order_to_tuple(type_list<T, Ts...>, std::index_sequence<I, Idx...>, F&& f, Carry&&... carry)
+            template <template<typename...> typename, typename>
+            struct contains_instance_impl;
+
+            template <template<typename...> typename T, typename... Ts>
+            struct contains_instance_impl<T, type_list<Ts...>> : std::disjunction<trait::is_instance_of<T, remove_qualifiers_t<Ts>>...>
             {
-                static_assert(std::is_trivial_v<T>, "Cannot synthesize a value of type T while iterating type_list<T, ...>!");
+            };
 
-                if constexpr (std::is_invocable_v<F, T, size_t>) {
-                    return eval_in_order_to_tuple(
-                        type_list<Ts...>{},
-                        std::index_sequence<Idx...>{},
-                        std::forward<F>(f),
-                        std::forward<Carry>(carry)..., // carry the previous results over
-                        f(T{}, I) // pass the current result after them
-                    );
-                }
-                else {
-                    return eval_in_order_to_tuple(
-                        type_list<Ts...>{},
-                        std::index_sequence<Idx...>{},
-                        std::forward<F>(f),
-                        std::forward<Carry>(carry)..., // carry the previous results over
-                        f(T{}) // pass the current result after them
-                    );
-                }
-            }
-        }
+            template <typename, typename>
+            struct contains_base_impl;
 
-        /**
-         * Applies function F to each type in the type_list, aggregating
-         * the results in a tuple. F can optionally take an index of type size_t.
-         */
-        template <typename F, typename... Ts>
-        constexpr auto map_to_tuple(type_list<Ts...> list, F&& f)
-        {
-            return detail::eval_in_order_to_tuple(list, std::make_index_sequence<sizeof...(Ts)>{}, std::forward<F>(f));
-        }
-
-        static_assert(map_to_tuple(type_list<int>{}, [](auto t) { return t; }) == std::tuple<int>{ 0 });
-
-        /**
-         * Applies function F to each type in the type_list, aggregating
-         * the results in an array. F can optionally take an index of type size_t.
-         */
-        template <typename T, typename F, typename... Ts>
-        constexpr auto map_to_array(type_list<Ts...> list, F&& f)
-        {
-            return to_array<T>(map_to_tuple(list, std::forward<F>(f)));
-        }
-
-        /**
-         * Applies function F to each type in the type_list.
-         * F can optionally take an index of type size_t.
-         */
-        template <typename F, typename... Ts>
-        constexpr void for_each(type_list<Ts...> list, F&& f)
-        {
-            map_to_tuple(list, [&](auto&&... args) -> decltype(f(std::forward<decltype(args)>(args)...), 0)
+            template <typename T, typename... Ts>
+            struct contains_base_impl<T, type_list<Ts...>> : std::disjunction<std::is_base_of<T, remove_qualifiers_t<Ts>>...>
             {
-                f(std::forward<decltype(args)>(args)...);
-                return 0;
-            });
-        }
-
-        /*
-         * Returns the initial_value unchanged.
-         */
-        template <typename R, typename F, typename... Ts>
-        constexpr R accumulate(type_list<>, F&&, R&& initial_value)
-        {
-            return std::forward<R>(initial_value);
-        }
-
-        /*
-        * Applies an accumulation function F to each type in the type_list.
-        * Note: Breaking changes introduced in v0.7.0:
-        *   Behaviour changed to imitate std::accumulate.
-        *   F can now no longer take a second index argument.
-        */
-        template <typename R, typename F, typename T, typename... Ts>
-        constexpr auto accumulate(type_list<T, Ts...>, F&& f, R&& initial_value)
-        {
-            static_assert(std::is_trivial_v<T>, "Cannot synthesize a value of type T while iterating type_list<T, ...>!");
-
-            return accumulate(type_list<Ts...> {},
-                std::forward<F>(f),
-                std::forward<std::invoke_result_t<F&&, R&&, T&&>>(
-                    f(std::forward<R>(initial_value), T {})));
+            };
         }
 
         /**
-         * Counts the number of times the predicate F returns true.
-        * Note: Breaking changes introduced in v0.7.0:
-        *   F can now no longer take a second index argument.
+         * Checks whether T is contained in the list of types.
+         * Inherits from std::bool_constant<>.
          */
-        template <typename F, typename... Ts>
-        constexpr size_t count_if(type_list<Ts...> list, F&& f)
+        template <typename T, typename TypeList>
+        struct contains : detail::contains_impl<remove_qualifiers_t<T>, TypeList>
         {
-            return accumulate<size_t>(list,
-                [&](size_t acc, const auto& t) -> size_t { return acc + (f(t) ? 1 : 0); },
-                0);
-        }
-
-        namespace detail
-        {
-            template <typename F, typename... Carry>
-            constexpr auto filter(F, type_list<>, type_list<Carry...> carry)
-            {
-                return carry;
-            }
-
-            template <typename F, typename T, typename... Ts, typename... Carry>
-            constexpr auto filter(F f, type_list<T, Ts...>, type_list<Carry...>)
-            {
-                static_assert(std::is_trivial_v<T>, "Cannot synthesize a value of type T while iterating type_list<T, ...>!");
-                if constexpr (f(T{})) {
-                    return filter(f, type_list<Ts...>{}, type_list<T, Carry...>{});
-                }
-                else {
-                    return filter(f, type_list<Ts...>{}, type_list<Carry...>{});
-                }
-            }
-        }
+        };
 
         /**
-         * Filters the list according to a *constexpr* predicate.
-         * Calling f(Ts{})... should be valid in a constexpr context.
+         * Checks whether T is contained in the list of types.
+         * @see contains
          */
-        template <typename F, typename... Ts>
-        constexpr auto filter(type_list<Ts...> list, F f)
-        {
-            return detail::filter(f, list, type_list<>{});
-        }
+        template <typename T, typename TypeList>
+        [[maybe_unused]] static constexpr bool contains_v = contains<T, TypeList>::value;
 
         /**
-         * Returns the first instance that matches the *constexpr* predicate.
-         * Calling f(Ts{})... should be valid in a constexpr context.
+         * Checks whether an instance of the template T is contained in the list of types.
+         * Inherits from std::bool_constant<>.
          */
-        template <typename F, typename... Ts>
-        constexpr auto find_first(type_list<Ts...> list, F f)
+        template <template<typename...> typename T, typename TypeList>
+        struct contains_instance : detail::contains_instance_impl<T, TypeList>
         {
-            using result_list = decltype(detail::filter(f, list, type_list<>{}));
-            static_assert(result_list::size != 0, "find_first did not match anything!");
-            return trait::get_t<0, result_list>{};
-        }
+        };
 
         /**
-         * Returns the only instance that matches the *constexpr* predicate.
-         * If there is no match or multiple matches, fails with static_assert.
-         * Calling f(Ts{})... should be valid in a constexpr context.
+         * Checks whether an instance of the template T is contained in the list of types.
+         * @see contains_instance
          */
-        template <typename F, typename... Ts>
-        constexpr auto find_one(type_list<Ts...> list, F f)
-        {
-            using result_list = decltype(detail::filter(f, list, type_list<>{}));
-            static_assert(result_list::size != 0, "find_one did not match anything!");
-            static_assert(result_list::size == 1, "Cannot resolve multiple matches in find_one!");
-            return trait::get_t<0, result_list>{};
-        }
+        template <template<typename...> typename T, typename TypeList>
+        [[maybe_unused]] static constexpr bool contains_instance_v = contains_instance<T, TypeList>::value;
 
         /**
-         * Returns the member that has the specified name.
-         * Fails with static_assert if no such member exists.
-         * Calling f(Ts{})... should be valid in a constexpr context.
+         * Checks whether a type deriving from T is contained in the list of types.
+         * Inherits from std::bool_constant<>.
          */
-        template <size_t N, typename... Ts>
-        constexpr auto find_one(type_list<Ts...> list, const const_string<N>& name)
+        template <typename T, typename TypeList>
+        struct contains_base : detail::contains_base_impl<remove_qualifiers_t<T>, TypeList>
         {
-            return find_one(list, [&](auto member) -> bool { return member.name == name; });
-        }
+        };
 
         /**
-         * Returns true if any item in the list matches the predicate.
-         * Calling f(Ts{})... should be valid in a constexpr context.
+         * Checks whether a type deriving from T is contained in the list of types.
+         * @see contains_base
          */
-        template <typename F, typename... Ts>
-        constexpr auto contains(type_list<Ts...> list, F&& f)
-        {
-            using result_list = decltype(detail::filter(f, list, type_list<>{}));
-            return result_list::size > 0;
-        }
+        template <typename T, typename TypeList>
+        [[maybe_unused]] static constexpr bool contains_base_v = contains_base<T, TypeList>::value;
 
+    } // namespace trait
+
+    /**
+     * @brief Contains the definitions of the built-in attributes
+     *
+     * Contains the definitions of the built-in attributes which
+     * are implicitly available in macro context as well as the
+     * attr::usage namespace which contains constraints
+     * for user-provieded attributes.
+     *
+     * # Examples
+     * ```
+     * REFL_TYPE(Point, debug(custom_printer))
+     *     REFL_FIELD(x)
+     *     REFL_FIELD(y)
+     * REFL_END
+     * ```
+     */
+    namespace attr
+    {
         /**
-         * Returns true if any member or type descriptor has a name equal to the input parameter.
+         * @brief Contains a number of constraints applicable to refl-cpp attributes.
+         *
+         * Contains base types which create compile-time constraints
+         * that are verified by refl-cpp. These base-types must be inherited
+         * by custom attribute types.
          */
-        template <size_t N, typename... Ts>
-        constexpr auto contains(type_list<Ts...> list, const const_string<N>& name)
+        namespace usage
         {
-            constexpr auto f = [&](auto member) -> bool { return member.name == name; };
-            using result_list = decltype(detail::filter(f, list, type_list<>{}));
-            return result_list::size > 0;
-        }
+            /**
+             * Specifies that an attribute type inheriting from this type can
+             * only be used with REFL_TYPE()
+             */
+            struct type {};
 
+            /**
+             * Specifies that an attribute type inheriting from this type can
+             * only be used with REFL_FUNC()
+             */
+            struct function {};
+
+            /**
+             * Specifies that an attribute type inheriting from this type can
+             * only be used with REFL_FIELD()
+             */
+            struct field {};
+
+            /**
+             * Specifies that an attribute type inheriting from this type can
+             * only be used with REFL_FUNC or REFL_FIELD.
+             */
+            struct member : public function, public field{};
+
+            /**
+             * Specifies that an attribute type inheriting from this type can
+             * only be used with any one of REFL_TYPE, REFL_FIELD, REFL_FUNC.
+             */
+            struct any : public member, public type {};
+        }
+    } // namespace attr
+
+    namespace descriptor
+    {
         /**
-         * Applies a function to the elements of the type_list.
+         * @brief Represents a reflected type.
          */
-        template <typename... Ts, typename F>
-        constexpr auto apply(type_list<Ts...>, F&& f)
-        {
-            return f(Ts{}...);
-        }
-
-    } // namespace util
+        template <typename T>
+        class type_descriptor;
+    }
 
     namespace trait
     {
@@ -1407,6 +1249,37 @@ namespace refl {
          */
         template <typename T>
         [[maybe_unused]] static constexpr bool is_function_v{ is_function<T>::value };
+
+        /**
+         * Detects whether the type T is a type_descriptor.
+         * Inherits from std::bool_constant<>.
+         */
+        template <typename T>
+        struct is_type : is_instance_of<descriptor::type_descriptor, T>
+        {
+        };
+
+        /**
+         * Detects whether the type T is a type_descriptor.
+         * @see is_type
+         */
+        template <typename T>
+        [[maybe_unused]] constexpr bool is_type_v{ is_type<T>::value };
+
+        /**
+         * A trait for detecting whether the type 'T' is a refl-cpp descriptor.
+         */
+        template <typename T>
+        struct is_descriptor : std::disjunction<is_type<T>, is_member<T>>
+        {
+        };
+
+        /**
+         * A trait for detecting whether the type 'T' is a refl-cpp descriptor.
+         */
+        template <typename T>
+        [[maybe_unused]] static constexpr bool is_descriptor_v{ is_descriptor<T>::value };
+
     }
 
     /**
@@ -1415,12 +1288,6 @@ namespace refl {
      */
     namespace descriptor
     {
-        /**
-         * @brief Represents a reflected type.
-         */
-        template <typename T>
-        class type_descriptor;
-
         /**
          * @brief The base type for member descriptors.
          */
@@ -1636,32 +1503,26 @@ namespace refl {
             }
 
         };
-    }
 
-    using descriptor::field_descriptor;
-    using descriptor::function_descriptor;
+        namespace detail
+        {
+            template <typename T, size_t N>
+            using make_descriptor = std::conditional_t<refl::trait::is_field_v<typename refl_impl::metadata::type_info__<T>::template member<N>>,
+                field_descriptor<T, N>,
+                std::conditional_t<refl::trait::is_function_v<typename refl_impl::metadata::type_info__<T>::template member<N>>,
+                    function_descriptor<T, N>,
+                    void
+                >>;
 
-    namespace detail
-    {
-        template <typename T, size_t N>
-        using make_descriptor = std::conditional_t<refl::trait::is_field_v<typename refl_impl::metadata::type_info__<T>::template member<N>>,
-            field_descriptor<T, N>,
-            std::conditional_t<refl::trait::is_function_v<typename refl_impl::metadata::type_info__<T>::template member<N>>,
-                function_descriptor<T, N>,
-                void
-            >>;
+            template <typename T, size_t... Idx>
+            type_list<make_descriptor<T, Idx>...> enumerate_members(std::index_sequence<Idx...>);
 
-        template <typename T, size_t... Idx>
-        type_list<make_descriptor<T, Idx>...> enumerate_members(std::index_sequence<Idx...>);
+        } // namespace detail
 
-    } // namespace detail
+        /** A type_list of the member descriptors of the target type T. */
+        template <typename T>
+        using member_list = decltype(detail::enumerate_members<T>(std::make_index_sequence<refl_impl::metadata::type_info__<T>::member_count>{}));
 
-    /** A type_list of the member descriptors of the target type T. */
-    template <typename T>
-    using member_list = decltype(detail::enumerate_members<T>(std::make_index_sequence<refl_impl::metadata::type_info__<T>::member_count>{}));
-
-    namespace descriptor
-    {
         /** Represents a reflected type. */
         template <typename T>
         class type_descriptor
@@ -1677,14 +1538,14 @@ namespace refl {
             /** The reflected type T. */
             typedef T type;
 
-            /** A synonym for refl::member_list<T>. */
-            typedef refl::member_list<T> member_types;
+            /** A synonym for member_list<T>. */
+            typedef member_list<T> member_types;
 
             /** An alias specifying the types of the attributes of the member. (Removes CV-qualifiers.) */
             typedef trait::as_type_list_t<std::remove_cv_t<decltype(type_info::attributes)>> attribute_types;
 
             /** The list of member descriptors. */
-            static constexpr refl::member_list<T> members{  };
+            static constexpr member_list<T> members{  };
 
             /** The name of the reflected type. */
             static constexpr const auto name{ type_info::name };
@@ -1695,6 +1556,9 @@ namespace refl {
         };
     }
 
+    using descriptor::member_list;
+    using descriptor::field_descriptor;
+    using descriptor::function_descriptor;
     using descriptor::type_descriptor;
 
     /** Returns true if the type T is reflectable. */
@@ -1725,173 +1589,296 @@ namespace refl {
         return {};
     }
 
-    namespace trait
-    {
-        namespace detail
-        {
-            template <typename T>
-            struct is_instance : public std::false_type {};
-
-            template <template<typename...> typename T, typename... Args>
-            struct is_instance<T<Args...>> : public std::true_type {};
-        }
-
-        /**
-         * Detects whether T is a template specialization.
-         * Inherits from std::bool_constant<>.
-         */
-        template <typename T>
-        struct is_instance : detail::is_instance<T>
-        {
-        };
-
-        /**
-         * Detects whether T is a template specialization.
-         * @see is_instance
-         */
-        template <typename T>
-        [[maybe_unused]] static constexpr bool is_instance_v{ is_instance<T>::value };
-
-        namespace detail
-        {
-            /**
-             * Checks if T == U<Args...>.
-             * If U<Args...> != T or is invalid the result is false.
-             */
-            template <typename T, template<typename...> typename U, typename... Args>
-            struct is_same_template
-            {
-            private:
-                template <template<typename...> typename V, typename = V<Args...>>
-                static auto test(int) -> std::is_same<V<Args...>, T>;
-
-                template <template<typename...> typename V>
-                static std::false_type test(...);
-            public:
-                static constexpr bool value{decltype(test<U>(0))::value};
-            };
-
-            template <template<typename...> typename T, typename U>
-            struct is_instance_of : public std::false_type {};
-
-            template <template<typename...> typename T, template<typename...> typename U, typename... Args>
-            struct is_instance_of<T, U<Args...>> : public is_same_template<U<Args...>, T, Args...>
-            {
-
-            };
-        }
-
-        /**
-         * Detects whther the type U is a template specialization of U.
-         * Inherits from std::bool_constant<>.
-         */
-        template <template<typename...>typename T, typename U>
-        struct is_instance_of : detail::is_instance_of<T, U>
-        {
-        };
-
-        /**
-         * Detects whther the type U is a template specialization of U.
-         * @see is_instance_of_v
-         */
-        template <template<typename...>typename T, typename U>
-        [[maybe_unused]] static constexpr bool is_instance_of_v{ is_instance_of<T, U>::value };
-
-        namespace detail
-        {
-            template <typename, typename>
-            struct contains_impl;
-
-            template <typename T, typename... Ts>
-            struct contains_impl<T, type_list<Ts...>> : std::disjunction<std::is_same<remove_qualifiers_t<Ts>, T>...>
-            {
-            };
-
-            template <template<typename...> typename, typename>
-            struct contains_instance_impl;
-
-            template <template<typename...> typename T, typename... Ts>
-            struct contains_instance_impl<T, type_list<Ts...>> : std::disjunction<trait::is_instance_of<T, remove_qualifiers_t<Ts>>...>
-            {
-            };
-
-            template <typename, typename>
-            struct contains_base_impl;
-
-            template <typename T, typename... Ts>
-            struct contains_base_impl<T, type_list<Ts...>> : std::disjunction<std::is_base_of<T, remove_qualifiers_t<Ts>>...>
-            {
-            };
-        }
-
-        /**
-         * Checks whether T is contained in the list of types.
-         * Inherits from std::bool_constant<>.
-         */
-        template <typename T, typename TypeList>
-        struct contains : detail::contains_impl<remove_qualifiers_t<T>, TypeList>
-        {
-        };
-
-        /**
-         * Checks whether T is contained in the list of types.
-         * @see contains
-         */
-        template <typename T, typename TypeList>
-        [[maybe_unused]] static constexpr bool contains_v = contains<T, TypeList>::value;
-
-        /**
-         * Checks whether an instance of the template T is contained in the list of types.
-         * Inherits from std::bool_constant<>.
-         */
-        template <template<typename...> typename T, typename TypeList>
-        struct contains_instance : detail::contains_instance_impl<T, TypeList>
-        {
-        };
-
-        /**
-         * Checks whether an instance of the template T is contained in the list of types.
-         * @see contains_instance
-         */
-        template <template<typename...> typename T, typename TypeList>
-        [[maybe_unused]] static constexpr bool contains_instance_v = contains_instance<T, TypeList>::value;
-
-        /**
-         * Checks whether a type deriving from T is contained in the list of types.
-         * Inherits from std::bool_constant<>.
-         */
-        template <typename T, typename TypeList>
-        struct contains_base : detail::contains_base_impl<remove_qualifiers_t<T>, TypeList>
-        {
-        };
-
-        /**
-         * Checks whether a type deriving from T is contained in the list of types.
-         * @see contains_base
-         */
-        template <typename T, typename TypeList>
-        [[maybe_unused]] static constexpr bool contains_base_v = contains_base<T, TypeList>::value;
-
-        /**
-         * Detects whether the type T is a type_descriptor.
-         * Inherits from std::bool_constant<>.
-         */
-        template <typename T>
-        struct is_type : is_instance_of<type_descriptor, T>
-        {
-        };
-
-        /**
-         * Detects whether the type T is a type_descriptor.
-         * @see is_type
-         */
-        template <typename T>
-        [[maybe_unused]] constexpr bool is_type_v{ is_type<T>::value };
-
-    } // namespace trait
-
     namespace util
     {
+        /**
+         * Ignores all parameters. Can take an optional template parameter
+         * specifying the return type of ignore. The return object is iniailized by {}.
+         */
+        template <typename T = int, typename... Ts>
+        constexpr int ignore(Ts&&...) noexcept
+        {
+            return {};
+        }
+
+        /**
+         * Returns the input paratemeter as-is. Useful for expanding variadic
+         * template lists when only one arguments is known to be present.
+         */
+        template <typename T>
+        constexpr decltype(auto) identity(T&& t) noexcept
+        {
+            return t;
+        }
+
+        /**
+         * Adds const to the input reference.
+         */
+        template <typename T>
+        constexpr const T& make_const(const T& value) noexcept
+        {
+            return value;
+        }
+
+        /**
+         * Adds const to the input reference.
+         */
+        template <typename T>
+        constexpr const T& make_const(T& value) noexcept
+        {
+            return value;
+        }
+
+        /**
+        * Creates an array of type 'T' from the provided tuple.
+        * The common type T needs to be specified, in order to prevent any
+        * errors when using the overload taking an empty std::tuple (as there is no common type then).
+        */
+        template <typename T, typename... Ts>
+        constexpr std::array<T, sizeof...(Ts)> to_array(const std::tuple<Ts...>& tuple) noexcept
+        {
+            return std::apply([](auto&& ... args) -> std::array<T, sizeof...(Ts)> { return { std::forward<decltype(args)>(args)... }; }, tuple);
+        }
+
+        /**
+         * Creates an empty array of type 'T.
+         */
+        template <typename T>
+        constexpr std::array<T, 0> to_array(const std::tuple<>&) noexcept
+        {
+            return {};
+        }
+
+        namespace detail
+        {
+            template <typename T, size_t... Idx>
+            constexpr auto to_tuple(const std::array<T, sizeof...(Idx)>& array, std::index_sequence<Idx...>) noexcept
+            {
+                if constexpr (sizeof...(Idx) == 0) return std::tuple<>{};
+                else return std::make_tuple(std::get<Idx>(array)...);
+            }
+        }
+
+        /**
+         * Creates a tuple from the provided array.
+         */
+        template <typename T, size_t N>
+        constexpr auto to_tuple(const std::array<T, N>& array) noexcept
+        {
+            return detail::to_tuple<T>(array, std::make_index_sequence<N>{});
+        }
+
+        namespace detail
+        {
+            template <typename F, typename... Carry>
+            constexpr auto eval_in_order_to_tuple(type_list<>, std::index_sequence<>, F&&, Carry&&... carry)
+            {
+                if constexpr (sizeof...(Carry) == 0) return std::tuple<>{};
+                else return std::make_tuple(std::forward<Carry>(carry)...);
+            }
+
+            // This whole jazzy workaround is needed since C++ does not specify
+            // the order in which function arguments are evaluated and this leads
+            // to incorrect order of evaluation (noticeable when using indexes).
+            // Otherwise we could simply do std::make_tuple(f(Ts{}, Idx)...).
+            template <typename F, typename T, typename... Ts, size_t I, size_t... Idx, typename... Carry>
+            constexpr auto eval_in_order_to_tuple(type_list<T, Ts...>, std::index_sequence<I, Idx...>, F&& f, Carry&&... carry)
+            {
+                static_assert(std::is_trivial_v<T>, "Argument is a non-trivial type!");
+
+                if constexpr (std::is_invocable_v<F, T, size_t>) {
+                    return eval_in_order_to_tuple(
+                        type_list<Ts...>{},
+                        std::index_sequence<Idx...>{},
+                        std::forward<F>(f),
+                        std::forward<Carry>(carry)..., // carry the previous results over
+                        f(T{}, I) // pass the current result after them
+                    );
+                }
+                else {
+                    return eval_in_order_to_tuple(
+                        type_list<Ts...>{},
+                        std::index_sequence<Idx...>{},
+                        std::forward<F>(f),
+                        std::forward<Carry>(carry)..., // carry the previous results over
+                        f(T{}) // pass the current result after them
+                    );
+                }
+            }
+        }
+
+        /**
+         * Applies function F to each type in the type_list, aggregating
+         * the results in a tuple. F can optionally take an index of type size_t.
+         */
+        template <typename F, typename... Ts>
+        constexpr auto map_to_tuple(type_list<Ts...> list, F&& f)
+        {
+            return detail::eval_in_order_to_tuple(list, std::make_index_sequence<sizeof...(Ts)>{}, std::forward<F>(f));
+        }
+
+        /**
+         * Applies function F to each type in the type_list, aggregating
+         * the results in an array. F can optionally take an index of type size_t.
+         */
+        template <typename T, typename F, typename... Ts>
+        constexpr auto map_to_array(type_list<Ts...> list, F&& f)
+        {
+            return to_array<T>(map_to_tuple(list, std::forward<F>(f)));
+        }
+
+        /**
+         * Applies function F to each type in the type_list.
+         * F can optionally take an index of type size_t.
+         */
+        template <typename F, typename... Ts>
+        constexpr void for_each(type_list<Ts...> list, F&& f)
+        {
+            map_to_tuple(list, [&](auto&&... args) -> decltype(f(std::forward<decltype(args)>(args)...), 0)
+            {
+                f(std::forward<decltype(args)>(args)...);
+                return 0;
+            });
+        }
+
+        /*
+         * Returns the initial_value unchanged.
+         */
+        template <typename R, typename F, typename... Ts>
+        constexpr R accumulate(type_list<>, F&&, R&& initial_value)
+        {
+            return std::forward<R>(initial_value);
+        }
+
+        /*
+        * Applies an accumulation function F to each type in the type_list.
+        * Note: Breaking changes introduced in v0.7.0:
+        *   Behaviour changed to imitate std::accumulate.
+        *   F can now no longer take a second index argument.
+        */
+        template <typename R, typename F, typename T, typename... Ts>
+        constexpr auto accumulate(type_list<T, Ts...>, F&& f, R&& initial_value)
+        {
+            static_assert(std::is_trivial_v<T>, "Argument is a non-trivial type!");
+
+            return accumulate(type_list<Ts...> {},
+                std::forward<F>(f),
+                std::forward<std::invoke_result_t<F&&, R&&, T&&>>(
+                    f(std::forward<R>(initial_value), T {})));
+        }
+
+        /**
+         * Counts the number of times the predicate F returns true.
+        * Note: Breaking changes introduced in v0.7.0:
+        *   F can now no longer take a second index argument.
+         */
+        template <typename F, typename... Ts>
+        constexpr size_t count_if(type_list<Ts...> list, F&& f)
+        {
+            return accumulate<size_t>(list,
+                [&](size_t acc, const auto& t) -> size_t { return acc + (f(t) ? 1 : 0); },
+                0);
+        }
+
+        namespace detail
+        {
+            template <typename F, typename... Carry>
+            constexpr auto filter(F, type_list<>, type_list<Carry...> carry)
+            {
+                return carry;
+            }
+
+            template <typename F, typename T, typename... Ts, typename... Carry>
+            constexpr auto filter(F f, type_list<T, Ts...>, type_list<Carry...>)
+            {
+                static_assert(std::is_trivial_v<T>, "Argument is a non-trivial type!");
+                if constexpr (f(T{})) {
+                    return filter(f, type_list<Ts...>{}, type_list<T, Carry...>{});
+                }
+                else {
+                    return filter(f, type_list<Ts...>{}, type_list<Carry...>{});
+                }
+            }
+        }
+
+        /**
+         * Filters the list according to a *constexpr* predicate.
+         * Calling f(Ts{})... should be valid in a constexpr context.
+         */
+        template <typename F, typename... Ts>
+        constexpr auto filter(type_list<Ts...> list, F f)
+        {
+            return detail::filter(f, list, type_list<>{});
+        }
+
+        /**
+         * Returns the first instance that matches the *constexpr* predicate.
+         * Calling f(Ts{})... should be valid in a constexpr context.
+         */
+        template <typename F, typename... Ts>
+        constexpr auto find_first(type_list<Ts...> list, F f)
+        {
+            using result_list = decltype(detail::filter(f, list, type_list<>{}));
+            static_assert(result_list::size != 0, "find_first did not match anything!");
+            return trait::get_t<0, result_list>{};
+        }
+
+        /**
+         * Returns the only instance that matches the *constexpr* predicate.
+         * If there is no match or multiple matches, fails with static_assert.
+         * Calling f(Ts{})... should be valid in a constexpr context.
+         */
+        template <typename F, typename... Ts>
+        constexpr auto find_one(type_list<Ts...> list, F f)
+        {
+            using result_list = decltype(detail::filter(f, list, type_list<>{}));
+            static_assert(result_list::size != 0, "find_one did not match anything!");
+            static_assert(result_list::size == 1, "Cannot resolve multiple matches in find_one!");
+            return trait::get_t<0, result_list>{};
+        }
+
+        /**
+         * Returns the member that has the specified name.
+         * Fails with static_assert if no such member exists.
+         * Calling f(Ts{})... should be valid in a constexpr context.
+         */
+        template <size_t N, typename... Ts>
+        constexpr auto find_one(type_list<Ts...> list, const const_string<N>& name)
+        {
+            return find_one(list, [&](auto member) -> bool { return member.name == name; });
+        }
+
+        /**
+         * Returns true if any item in the list matches the predicate.
+         * Calling f(Ts{})... should be valid in a constexpr context.
+         */
+        template <typename F, typename... Ts>
+        constexpr auto contains(type_list<Ts...> list, F&& f)
+        {
+            using result_list = decltype(detail::filter(f, list, type_list<>{}));
+            return result_list::size > 0;
+        }
+
+        /**
+         * Returns true if any member or type descriptor has a name equal to the input parameter.
+         */
+        template <size_t N, typename... Ts>
+        constexpr auto contains(type_list<Ts...> list, const const_string<N>& name)
+        {
+            constexpr auto f = [&](auto member) -> bool { return member.name == name; };
+            using result_list = decltype(detail::filter(f, list, type_list<>{}));
+            return result_list::size > 0;
+        }
+
+        /**
+         * Applies a function to the elements of the type_list.
+         */
+        template <typename... Ts, typename F>
+        constexpr auto apply(type_list<Ts...>, F&& f)
+        {
+            return f(Ts{}...);
+        }
+
         namespace detail
         {
             template <template<typename...> typename T, ptrdiff_t N, typename... Ts>
