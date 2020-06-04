@@ -523,12 +523,12 @@ namespace refl {
         {
             /** SFIANE support for detecting whether there is a type_info__ specialization for T. */
             template <typename T>
-            decltype(typename refl_impl::metadata::type_info__<remove_qualifiers_t<T>>::invalid_marker{}, std::false_type{}) is_reflectable_test(int);
+            decltype(typename refl_impl::metadata::type_info__<T>::invalid_marker{}, std::false_type{}) is_reflectable_test(int);
 
             /** SFIANE support for detecting whether there is a type_info__ specialization for T. */
             template <typename T>
             std::true_type is_reflectable_test(...);
-        }
+        } // namespace detail
 
         /**
          * Checks whether there is reflection metadata for the type T.
@@ -666,7 +666,6 @@ namespace refl {
          * Provides a member typedef which is a type_list specialization with
          * template type parameters equivalent to the type parameters of the provided
          * type. The provided type must be a template specialization.
-         * Rerefence and CV-qualifiers are discarded.
          */
         template <template <typename...> typename T, typename... Ts>
         struct as_type_list<T<Ts...>>
@@ -675,7 +674,7 @@ namespace refl {
         };
 
         template <typename T>
-        struct as_type_list : public as_type_list<remove_qualifiers_t<T>>
+        struct as_type_list : as_type_list<remove_qualifiers_t<T>>
         {
         };
 
@@ -683,13 +682,12 @@ namespace refl {
          * A typedef for a type_list specialization with
          * template type parameters equivalent to the type parameters of the provided
          * type. The provided type must be a template specialization.
-         * Rerefence and CV-qualifiers are discarded.
          * @see as_type_list
          */
         template <typename T>
         using as_type_list_t = typename as_type_list<T>::type;
 
-                template <typename>
+        template <typename>
         struct first;
 
         /**
@@ -941,7 +939,8 @@ namespace refl {
         };
 
         /**
-         * Filters a type_list according to a predicate template.
+         * Filters a type_list according to a predicate template
+         * with a static boolean member named "value" (e.g. std::is_trivial)
          * @see filter
          */
         template <template<typename> typename Predicate, typename TypeList>
@@ -951,7 +950,7 @@ namespace refl {
         struct map;
 
         /**
-         * Maps a type_list according to a predicate template.
+         * Transforms a type_list according to a predicate template.
          */
         template <template<typename> typename Mapper, typename... Ts>
         struct map<Mapper, type_list<Ts...>>
@@ -960,7 +959,8 @@ namespace refl {
         };
 
         /**
-         * Maps a type_list according to a predicate template.
+         * Transforms a type_list according to a predicate template
+         * with a typedef named "type" (e.g. std::remove_reference)
          * @see map
          */
         template <template<typename> typename Mapper, typename... Ts>
@@ -1016,16 +1016,16 @@ namespace refl {
             template <template<typename...> typename T, template<typename...> typename U, typename... Args>
             struct is_instance_of<T, U<Args...>> : public is_same_template<U<Args...>, T, Args...>
             {
-
             };
         }
 
         /**
-         * Detects whther the type U is a template specialization of U.
+         * Detects whther the type U is a template specialization of T.
+         * (e.g. is_instance_of<std::vector<>, std::vector<int>>)
          * Inherits from std::bool_constant<>.
          */
         template <template<typename...>typename T, typename U>
-        struct is_instance_of : detail::is_instance_of<T, U>
+        struct is_instance_of : detail::is_instance_of<T, std::remove_cv_t<U>>
         {
         };
 
@@ -1042,7 +1042,7 @@ namespace refl {
             struct contains_impl;
 
             template <typename T, typename... Ts>
-            struct contains_impl<T, type_list<Ts...>> : std::disjunction<std::is_same<remove_qualifiers_t<Ts>, T>...>
+            struct contains_impl<T, type_list<Ts...>> : std::disjunction<std::is_same<std::remove_cv_t<Ts>, T>...>
             {
             };
 
@@ -1050,7 +1050,7 @@ namespace refl {
             struct contains_instance_impl;
 
             template <template<typename...> typename T, typename... Ts>
-            struct contains_instance_impl<T, type_list<Ts...>> : std::disjunction<trait::is_instance_of<T, remove_qualifiers_t<Ts>>...>
+            struct contains_instance_impl<T, type_list<Ts...>> : std::disjunction<trait::is_instance_of<T, std::remove_cv_t<Ts>>...>
             {
             };
 
@@ -1058,7 +1058,7 @@ namespace refl {
             struct contains_base_impl;
 
             template <typename T, typename... Ts>
-            struct contains_base_impl<T, type_list<Ts...>> : std::disjunction<std::is_base_of<T, remove_qualifiers_t<Ts>>...>
+            struct contains_base_impl<T, type_list<Ts...>> : std::disjunction<std::is_base_of<T, std::remove_cv_t<Ts>>...>
             {
             };
         }
@@ -1068,7 +1068,7 @@ namespace refl {
          * Inherits from std::bool_constant<>.
          */
         template <typename T, typename TypeList>
-        struct contains : detail::contains_impl<remove_qualifiers_t<T>, TypeList>
+        struct contains : detail::contains_impl<std::remove_cv_t<T>, TypeList>
         {
         };
 
@@ -1100,7 +1100,7 @@ namespace refl {
          * Inherits from std::bool_constant<>.
          */
         template <typename T, typename TypeList>
-        struct contains_base : detail::contains_base_impl<remove_qualifiers_t<T>, TypeList>
+        struct contains_base : detail::contains_base_impl<std::remove_cv_t<T>, TypeList>
         {
         };
 
@@ -2482,7 +2482,7 @@ namespace refl {
                     auto&& dbg_attr = util::get_instance<attr::debug>(member.attributes);
                     auto&& prop_value = member(value);
 
-                    if constexpr (trait::is_reflectable_v<trait::remove_qualifiers_t<decltype(prop_value)>>) {
+                    if constexpr (trait::is_reflectable_v<decltype(prop_value)>) {
                         if (!compact) {
                             os << "(" << reflect(prop_value).name << ")";
                         }
@@ -2494,7 +2494,7 @@ namespace refl {
                 }
                 else {
                     auto&& prop_value = member(value);
-                    if constexpr (trait::is_reflectable_v<trait::remove_qualifiers_t<decltype(prop_value)>>) {
+                    if constexpr (trait::is_reflectable_v<decltype(prop_value)>) {
                         if (!compact) {
                             os << "(" << reflect(prop_value).name << ")";
                         }
