@@ -1637,7 +1637,7 @@ namespace refl {
         namespace detail
         {
             template <typename T, size_t... Idx>
-            constexpr auto to_tuple(const std::array<T, sizeof...(Idx)>& array, std::index_sequence<Idx...>) noexcept
+            constexpr auto to_tuple([[maybe_unused]] const std::array<T, sizeof...(Idx)>& array, std::index_sequence<Idx...>) noexcept
             {
                 if constexpr (sizeof...(Idx) == 0) return std::tuple<>{};
                 else return std::make_tuple(std::get<Idx>(array)...);
@@ -2500,7 +2500,7 @@ namespace refl {
          * The compact representation contains no newlines.
          */
         template <typename T>
-        void debug(std::ostream& os, const T& value, bool compact)
+        void debug(std::ostream& os, const T& value, [[maybe_unused]] bool compact)
         {
             static_assert(trait::is_reflectable_v<T> || trait::is_container_v<T>,
                 "Type is neither reflectable nor a container of reflectable types!");

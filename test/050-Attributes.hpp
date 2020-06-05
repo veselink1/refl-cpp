@@ -15,9 +15,11 @@ struct Derived : public Base {
     int y() const { return 0; }
 };
 
+constexpr auto custom_print = [](auto& os, auto value) { os << value << "custom";  };
+
 REFL_AUTO(
     type(Derived, bases<Base>),
-    field(x, debug{ [](auto& os, auto value) { os << value << "custom";  } }),
+    field(x, debug{ custom_print }),
     func(get_x, property{ "x" }),
     func(set_x, property{ "x" }),
     func(y, property{ })
