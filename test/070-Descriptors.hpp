@@ -35,6 +35,7 @@ TEST_CASE( "descriptors" ) {
     }
 
     SECTION( "field_descriptor" ) {
+        using namespace std::string_literals;
         REQUIRE( field_descriptor<Foo, 0>::name == "x" );
         REQUIRE( field_descriptor<Foo, 0>::pointer == &Foo::x );
         REQUIRE( !field_descriptor<Foo, 0>::is_static );
@@ -42,8 +43,8 @@ TEST_CASE( "descriptors" ) {
         constexpr auto y_member = trait::get_t<1, member_list<Foo>>{};
         REQUIRE( is_field(y_member) );
         REQUIRE( !is_function(y_member) );
-        REQUIRE( strcmp(get_display_name(y_member), "y") == 0 );
-        REQUIRE( strcmp(get_debug_name(y_member), "Foo::y") == 0 );
+        REQUIRE( get_display_name(y_member) == "y"s );
+        REQUIRE( get_debug_name(y_member) == "Foo::y"s );
         REQUIRE( y_member(Foo{}) == 0 );
         REQUIRE( std::is_same_v<trait::get_t<3, member_list<Foo>>::return_type<Foo, int>, void> );
         REQUIRE( std::is_invocable_v<trait::get_t<0, member_list<Foo>>, Foo, int> );
