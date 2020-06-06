@@ -125,20 +125,16 @@ namespace refl
              * Creates a copy of a const_string.
              */
             constexpr const_string(const const_string<N>& other) noexcept
-                : data{}
+                : const_string(other, std::make_index_sequence<N>())
             {
-                for (size_t i = 0; i < N; i++)
-                    data[i] = other.data[i];
             }
 
             /**
              * Creates a const_string by copying the contents of data.
              */
             constexpr const_string(const char(&data)[N + 1]) noexcept
-                : data{}
+                : const_string(data, std::make_index_sequence<N>())
             {
-                for (size_t i = 0; i < N; i++)
-                    this->data[i] = data[i];
             }
 
             /**
@@ -188,6 +184,26 @@ namespace refl
                 }
 
                 return const_string<NewSize>(buf);
+            }
+
+        private:
+
+            /**
+             * Creates a copy of a const_string.
+             */
+            template <size_t... Idx>
+            constexpr const_string(const const_string<N>& other, std::index_sequence<Idx...>) noexcept
+                : data{ other.data[Idx]... }
+            {
+            }
+
+            /**
+             * Creates a const_string by copying the contents of data.
+             */
+            template <size_t... Idx>
+            constexpr const_string(const char(&data)[sizeof...(Idx) + 1], std::index_sequence<Idx...>) noexcept
+                : data{ data[Idx]... }
+            {
             }
 
         };
@@ -1768,7 +1784,7 @@ namespace refl {
         namespace detail
         {
             template <typename F, typename... Carry>
-            constexpr auto filter(F, type_list<>, type_list<Carry...> carry)
+            constexpr auto filter(const F&, type_list<>, type_list<Carry...> carry)
             {
                 return carry;
             }
@@ -1791,9 +1807,9 @@ namespace refl {
          * Calling f(Ts{})... should be valid in a constexpr context.
          */
         template <typename F, typename... Ts>
-        constexpr auto filter(type_list<Ts...> list, F f)
+        constexpr auto filter(type_list<Ts...> list, F&& f)
         {
-            return detail::filter(f, list, type_list<>{});
+            return decltype(detail::filter(std::forward<F>(f), list, type_list<>{}))();
         }
 
         /**
@@ -1801,9 +1817,9 @@ namespace refl {
          * Calling f(Ts{})... should be valid in a constexpr context.
          */
         template <typename F, typename... Ts>
-        constexpr auto find_first(type_list<Ts...> list, F f)
+        constexpr auto find_first(type_list<Ts...> list, F&& f)
         {
-            using result_list = decltype(detail::filter(f, list, type_list<>{}));
+            using result_list = decltype(detail::filter(std::forward<F>(f), list, type_list<>{}));
             static_assert(result_list::size != 0, "find_first did not match anything!");
             return trait::get_t<0, result_list>{};
         }
@@ -1814,9 +1830,9 @@ namespace refl {
          * Calling f(Ts{})... should be valid in a constexpr context.
          */
         template <typename F, typename... Ts>
-        constexpr auto find_one(type_list<Ts...> list, F f)
+        constexpr auto find_one(type_list<Ts...> list, F&& f)
         {
-            using result_list = decltype(detail::filter(f, list, type_list<>{}));
+            using result_list = decltype(detail::filter(std::forward<F>(f), list, type_list<>{}));
             static_assert(result_list::size != 0, "find_one did not match anything!");
             static_assert(result_list::size == 1, "Cannot resolve multiple matches in find_one!");
             return trait::get_t<0, result_list>{};
@@ -1829,7 +1845,7 @@ namespace refl {
         template <typename F, typename... Ts>
         constexpr auto contains(type_list<Ts...> list, F&& f)
         {
-            using result_list = decltype(detail::filter(f, list, type_list<>{}));
+            using result_list = decltype(detail::filter(std::forward<F>(f), list, type_list<>{}));
             return result_list::size > 0;
         }
 
