@@ -9,7 +9,7 @@
 
 </center>
 
-## refl-cpp v0.9.1 [[Documentation](https://veselink1.github.io/refl-cpp/md__introduction.html)]
+## refl-cpp v0.10.0 [[Documentation](https://veselink1.github.io/refl-cpp/md__introduction.html)]
 
 A compile-time reflection library for modern C++ with support for overloads, templates, attributes and proxies
 
@@ -145,6 +145,19 @@ REFL_FUNC(Function, Attribute...)
 `Patch` denotes a version which fixed a bug or does not include major new features.
 
 ---
+### v0.10.0
+  - Introduced automatic property name normalization in `get_display_name` for properties with no `friendly_name`. Example: `get_display_name(get_foo) -> "foo"`
+  - Added built-in reflection support for `std::string_view` [#23](https://github.com/veselink1/refl-cpp/issues/23)
+  - Fixed: operations on `type_list` do not properly take into account reference qualifiers
+  - Fixed `const_string` constructor in older versions of clang
+  - Fixed `util::filter` results list order (used to be reversed)
+  - Fixed implementation of `reflect`, `is_reflectable`, `debug`
+  - Improved `runtime::debug` print formatting
+  - Removed filtering by `const_string` utils [#21](https://github.com/veselink1/refl-cpp/issues/21). Suggested workaround: use predicate variants
+  - Removed refl-ht support
+  - Code cleanup [#24](https://github.com/veselink1/refl-cpp/issues/24), [#20](https://github.com/veselink1/refl-cpp/issues/20)
+
+
 ### v0.9.1
   - Bugfix for `refl::descriptor::get_bases` for clang [#19](https://github.com/veselink1/refl-cpp/issues/19)
 

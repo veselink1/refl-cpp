@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['declaring_5ftype_298',['declaring_type',['../classrefl_1_1descriptor_1_1member__descriptor__base.html#af70beb1e0da54d076535cd8fb3dd5381',1,'refl::descriptor::member_descriptor_base']]]
+  ['declaring_5ftype_287',['declaring_type',['../classrefl_1_1descriptor_1_1member__descriptor__base.html#af70beb1e0da54d076535cd8fb3dd5381',1,'refl::descriptor::member_descriptor_base']]]
 ];

@@ -93,6 +93,7 @@ $(document).ready(function(){initNavTree('namespacerefl_1_1descriptor.html','');
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">refl::descriptor Namespace Reference</div>  </div>
@@ -116,6 +117,12 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classrefl_1_1descriptor_1_1type__descriptor.html">type_descriptor</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a reflected type.  <a href="classrefl_1_1descriptor_1_1type__descriptor.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a69ecf7d87e1278607e8735b8f0830b89"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a69ecf7d87e1278607e8735b8f0830b89"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1descriptor.html#a69ecf7d87e1278607e8735b8f0830b89">member_list</a> = decltype(detail::enumerate_members&lt; T &gt;(std::make_index_sequence&lt; refl_impl::metadata::type_info__&lt; T &gt;::member_count &gt;{}))</td></tr>
+<tr class="separator:a69ecf7d87e1278607e8735b8f0830b89"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -164,7 +171,25 @@ Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains the basic reflection primitives as well as functions operating on those primitives. </p>
-</div><h2 class="groupheader">Function Documentation</h2>
+</div><h2 class="groupheader">Typedef Documentation</h2>
+<a id="a69ecf7d87e1278607e8735b8f0830b89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a69ecf7d87e1278607e8735b8f0830b89">&#9670;&nbsp;</a></span>member_list</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="namespacerefl_1_1descriptor.html#a69ecf7d87e1278607e8735b8f0830b89">refl::descriptor::member_list</a> = typedef decltype(detail::enumerate_members&lt;T&gt;(std::make_index_sequence&lt;refl_impl::metadata::type_info__&lt;T&gt;::member_count&gt;{}))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>A type_list of the member descriptors of the target type T. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
 <a id="a2e9e9b85233f7f13fe09cb4fd6bbc6f6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2e9e9b85233f7f13fe09cb4fd6bbc6f6">&#9670;&nbsp;</a></span>get_attribute() <span class="overload">[1/2]</span></h2>
 
@@ -301,7 +326,7 @@ template&lt;typename T &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns the display name of T. (Uses the friendly_name of the property attribute or falls back to the in-code name). </p>
+<p>Returns the display name of T. Uses the friendly_name of the property attribute, or the normalized name if no friendly_name was provided. </p>
 
 </div>
 </div>

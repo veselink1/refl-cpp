@@ -110,12 +110,12 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a1edadcdb602a1e96beedbdeeca801701"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a1edadcdb602a1e96beedbdeeca801701"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1runtime.html#a1edadcdb602a1e96beedbdeeca801701">debug</a> (std::ostream &amp;os, const T &amp;value)</td></tr>
-<tr class="separator:a1edadcdb602a1e96beedbdeeca801701"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a887ab74c1bcde5ce32a158e03b6b9f77"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a887ab74c1bcde5ce32a158e03b6b9f77"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1runtime.html#a887ab74c1bcde5ce32a158e03b6b9f77">debug</a> (std::ostream &amp;os, const T &amp;value, bool compact)</td></tr>
-<tr class="separator:a887ab74c1bcde5ce32a158e03b6b9f77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a130a8f415fe4bcb35bef941e71711a73"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a130a8f415fe4bcb35bef941e71711a73"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1runtime.html#a130a8f415fe4bcb35bef941e71711a73">debug</a> (std::ostream &amp;os, const T &amp;value, bool compact=false)</td></tr>
+<tr class="separator:a130a8f415fe4bcb35bef941e71711a73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a85e59f180bc9d09b31f5849de9e756bc"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a85e59f180bc9d09b31f5849de9e756bc"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1runtime.html#a85e59f180bc9d09b31f5849de9e756bc">debug</a> (std::ostream &amp;os, const T &amp;value, [[maybe_unused]] bool compact)</td></tr>
+<tr class="separator:a85e59f180bc9d09b31f5849de9e756bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acdd4c244b7e4e4e271fa159ad2531397"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
 <tr class="memitem:acdd4c244b7e4e4e271fa159ad2531397"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1runtime.html#acdd4c244b7e4e4e271fa159ad2531397">debug_all</a> (std::ostream &amp;os, const Ts &amp;... values)</td></tr>
 <tr class="separator:acdd4c244b7e4e4e271fa159ad2531397"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,8 +132,8 @@ Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains utilities that can have runtime-overhead (like proxy, debug, invoke) </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="a1edadcdb602a1e96beedbdeeca801701"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1edadcdb602a1e96beedbdeeca801701">&#9670;&nbsp;</a></span>debug() <span class="overload">[1/2]</span></h2>
+<a id="a85e59f180bc9d09b31f5849de9e756bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85e59f180bc9d09b31f5849de9e756bc">&#9670;&nbsp;</a></span>debug() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -150,7 +150,13 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const T &amp;&#160;</td>
-          <td class="paramname"><em>value</em>&#160;</td>
+          <td class="paramname"><em>value</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">[[maybe_unused] ] bool&#160;</td>
+          <td class="paramname"><em>compact</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -159,12 +165,12 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Writes the detailed debug representation of the provided values to the given std::ostream. </p>
+<p>Writes the debug representation of value to the given std::ostream. Calls the function specified by the debug&lt;F&gt; attribute whenever possible, before falling back to recursively interating the members and printing them. Takes an optional arguments specifying whether to print a compact representation. The compact representation contains no newlines. </p>
 
 </div>
 </div>
-<a id="a887ab74c1bcde5ce32a158e03b6b9f77"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a887ab74c1bcde5ce32a158e03b6b9f77">&#9670;&nbsp;</a></span>debug() <span class="overload">[2/2]</span></h2>
+<a id="a130a8f415fe4bcb35bef941e71711a73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a130a8f415fe4bcb35bef941e71711a73">&#9670;&nbsp;</a></span>debug() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -187,7 +193,7 @@ template&lt;typename T &gt; </div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>compact</em>&#160;</td>
+          <td class="paramname"><em>compact</em> = <code>false</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -196,7 +202,6 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Writes the debug representation of value to the given std::ostream. Calls the function specified by the debug&lt;F&gt; attribute whenever possible, before falling back to recursively interating the members and printing them. Takes an optional arguments specifying whether to print a compact representation. The compact representation contains no newlines. </p>
 
 </div>
 </div>
