@@ -1778,7 +1778,7 @@ namespace refl {
             {
                 static_assert(std::is_trivial_v<T>, "Argument is a non-trivial type!");
                 if constexpr (f(T{})) {
-                    return filter(f, type_list<Ts...>{}, type_list<T, Carry...>{});
+                    return filter(f, type_list<Ts...>{}, type_list<Carry..., T>{});
                 }
                 else {
                     return filter(f, type_list<Ts...>{}, type_list<Carry...>{});
@@ -2256,13 +2256,13 @@ namespace refl {
          * Uses the friendly_name of the property attribute, or the normalized name if no friendly_name was provided.
          */
         template <typename T>
-        const char* get_display_name(const T& t) noexcept
+        std::string get_display_name(const T& t) noexcept
         {
             if constexpr (trait::is_property_v<T>) {
                 auto&& friendly_name = util::get<attr::property>(t.attributes).friendly_name;
-                return friendly_name ? *friendly_name : detail::normalize_accessor_name(t).c_str();
+                return friendly_name ? *friendly_name : detail::normalize_accessor_name(t).str();
             }
-            return t.name.c_str();
+            return t.name.str();
         }
 
     } // namespace descriptor
@@ -2447,47 +2447,147 @@ namespace refl {
     namespace runtime
     {
         template <typename T>
-        void debug(std::ostream& os, const T& value);
-
-        template <typename T>
-        void debug(std::ostream& os, const T& value, bool compact);
+        void debug(std::ostream& os, const T& value, bool compact = false);
 
         namespace detail
         {
-            template <typename T, typename Member>
-            void debug_member(std::ostream& os, const T& value, Member member, bool compact)
+            template <typename T, typename = decltype(std::declval<std::ostream&>() << std::declval<T>())>
+            std::true_type is_ostream_printable_test(int);
+
+            template <typename T>
+            std::false_type is_ostream_printable_test(...);
+
+            template <typename T>
+            constexpr bool is_ostream_printable_v{ decltype(is_ostream_printable_test<T>(0))::value };
+
+            int next_depth(int depth)
             {
-                static_assert(is_readable(member));
-                std::string name{ get_display_name(member) };
+                return depth == -1 || depth > 8
+                    ? -1
+                    : depth + 1;
+            }
 
-                if (!compact) os << "  ";
-                os << name << " = ";
-
-                if constexpr (trait::contains_instance_v<attr::debug, typename Member::attribute_types>) {
-                    auto&& dbg_attr = util::get_instance<attr::debug>(member.attributes);
-                    auto&& prop_value = member(value);
-
-                    if constexpr (trait::is_reflectable_v<decltype(prop_value)>) {
-                        if (!compact) {
-                            os << "(" << reflect(prop_value).name << ")";
-                        }
-                        else {
-                            os << "(<?>)";
-                        }
-                    }
-                    dbg_attr.write(os, prop_value);
+            void indent(std::ostream& os, int depth)
+            {
+                for (int i = 0; i < depth; i++) {
+                    os << "    ";
                 }
-                else {
-                    auto&& prop_value = member(value);
-                    if constexpr (trait::is_reflectable_v<decltype(prop_value)>) {
-                        if (!compact) {
-                            os << "(" << reflect(prop_value).name << ")";
-                        }
-                        debug(os, prop_value, true);
+            }
+
+            template <typename T>
+            void debug_impl(std::ostream& os, const T& value, [[maybe_unused]] int depth);
+
+            template <typename T>
+            void debug_detailed(std::ostream& os, const T& value, int depth)
+            {
+                using type_descriptor = type_descriptor<T>;
+                bool compact = depth == -1;
+                // print type with members enclosed in braces
+                os << type_descriptor::name << " { ";
+                if (!compact) os << '\n';
+
+                constexpr auto readable_members = filter(type_descriptor::members, [](auto member) { return is_readable(member); });
+                for_each(readable_members, [&](auto member, [[maybe_unused]] auto index) {
+                    int new_depth = next_depth(depth);
+
+                    indent(os, new_depth);
+                    os << get_display_name(member) << " = ";
+
+                    if constexpr (trait::contains_instance_v<attr::debug, typename decltype(member)::attribute_types>) {
+                        // use the debug attribute to print
+                        auto debug_attr = util::get_instance<attr::debug>(member.attributes);
+                        debug_attr.write(os, value);
                     }
                     else {
-                        os << "<?>";
+                        debug_impl(os, member(value), new_depth);
                     }
+
+                    if (!compact || index + 1 != readable_members.size) {
+                        os << ", ";
+                    }
+                    if (!compact) {
+                        indent(os, depth);
+                        os << '\n';
+                    }
+                });
+
+                if (compact) os << ' ';
+                indent(os, depth);
+                os << '}';
+            }
+
+            template <typename T>
+            void debug_reflectable(std::ostream& os, const T& value, int depth)
+            {
+                using type_descriptor = type_descriptor<T>;
+                if constexpr (trait::contains_instance_v<attr::debug, typename type_descriptor::attribute_types>) {
+                    // use the debug attribute to print
+                    auto debug_attr = util::get_instance<attr::debug>(type_descriptor::attributes);
+                    debug_attr.write(os, value);
+                }
+                else if constexpr (detail::is_ostream_printable_v<T>) {
+                    // type supports printing natively, just use that
+                    os << value;
+                }
+                else {
+                    debug_detailed(os, value, depth);
+                }
+            }
+
+            template <typename T>
+            void debug_container(std::ostream& os, const T& value, int depth)
+            {
+                bool compact = depth == -1;
+                os << "[";
+
+                auto end = value.end();
+                for (auto it = value.begin(); it != end; ++it)
+                {
+                    if (!compact) os << '\n';
+                    int new_depth = next_depth(depth);
+                    indent(os, new_depth);
+
+                    debug_impl(os, *it, new_depth);
+                    if (std::next(it, 1) != end) {
+                        os << ", ";
+                    }
+                    else if (!compact) {
+                        os << '\n';
+                    }
+                }
+
+                indent(os, depth);
+                os << "]";
+            }
+
+            template <typename T>
+            void debug_impl(std::ostream& os, const T& value, int depth)
+            {
+                using no_pointer_t = std::remove_pointer_t<T>;
+
+                if constexpr (std::is_same_v<bool, T>) {
+                    os << (value ? "true" : "false");
+                }
+                else if constexpr (std::is_pointer_v<T> && !std::is_void_v<no_pointer_t> && trait::is_reflectable_v<no_pointer_t>) {
+                    if (value == nullptr) {
+                        os << "nullptr";
+                    }
+                    else {
+                        os << '&';
+                        debug_impl(os, *value, -1);
+                    }
+                }
+                else if constexpr (trait::is_reflectable_v<T>) {
+                    debug_reflectable(os, value, depth);
+                }
+                else if constexpr (detail::is_ostream_printable_v<T>) {
+                    os << value;
+                }
+                else if constexpr (trait::is_container_v<T>) {
+                    debug_container(os, value, depth);
+                }
+                else {
+                    os << "(not printable)";
                 }
             }
         }
@@ -2502,79 +2602,18 @@ namespace refl {
         template <typename T>
         void debug(std::ostream& os, const T& value, [[maybe_unused]] bool compact)
         {
-            static_assert(trait::is_reflectable_v<T> || trait::is_container_v<T>,
-                "Type is neither reflectable nor a container of reflectable types!");
+            static_assert(trait::is_reflectable_v<T> || trait::is_container_v<T> || detail::is_ostream_printable_v<T>,
+                "Type is not reflectable, not a container of reflectable types and does not support operator<<(std::ostream&, T)!");
 
-            if constexpr (trait::is_reflectable_v<T>) {
-                typedef type_descriptor<T> type_descriptor;
-                if constexpr (trait::contains_instance_v<attr::debug, typename type_descriptor::attribute_types>) {
-                    auto debug = util::get_instance<attr::debug>(type_descriptor::attributes);
-                    debug.write(os, value);
-                }
-                else if constexpr (std::is_fundamental_v<T>) {
-                    std::ios_base::fmtflags old_flags{ os.flags() };
-                    os << std::boolalpha << value;
-                    os.flags(old_flags);
-                }
-                else if constexpr (std::is_pointer_v<T>) {
-                    if (!compact) {
-                        os << "(" << reflect<std::remove_pointer_t<T>>().name << "*)";
-                    }
-                    if (value) {
-                        os << '&';
-                        runtime::debug(os, *value, true);
-                    }
-                    else {
-                        os << "nullptr";
-                    }
-                }
-                else {
-                    os << "{ ";
-                    if (!compact) os << "\n";
-                    constexpr size_t count = count_if(type_descriptor::members, [](auto member) { return is_readable(member); });
-                    for_each(type_descriptor::members, [&](auto member, [[maybe_unused]] auto index) {
-                        if constexpr (is_readable(member)) {
-                            detail::debug_member(os, value, member, compact);
-                            if (index + 1 != count) {
-                                os << ", ";
-                            }
-                            if (!compact) os << "\n";
-                        }
-                    });
-
-                    if (compact) os << " }";
-                    else os << "}";
-                }
-            }
-            else { // T supports begin() and end()
-                os << "[";
-                auto end = value.end();
-                for (auto it = value.begin(); it != end; ++it)
-                {
-                    debug(os, *it, true);
-                    if (std::next(it, 1) != end)
-                    {
-                        os << ", ";
-                    }
-                }
-                os << "]";
-            }
-        }
-
-        /**
-         * Writes the detailed debug representation of the provided values to the given std::ostream.
-         */
-        template <typename T>
-        void debug(std::ostream& os, const T& value)
-        {
-            debug(os, value, false);
+            detail::debug_impl(os, value, compact ? -1 : 0);
         }
 
         /**
          * Writes the compact debug representation of the provided values to the given std::ostream.
          */
         template <typename... Ts>
-        void debug_all(std::ostream& os, const Ts&... values) {
+        void debug_all(std::ostream& os, const Ts&... values)
+        {
             refl::runtime::debug(os, std::forward_as_tuple(static_cast<const Ts&>(values)...), true);
         }
 
@@ -2595,7 +2634,8 @@ namespace refl {
          * Writes the compact debug representation of the provided values to an std::string and returns it.
          */
         template <typename... Ts>
-        std::string debug_all_str(const Ts&... values) {
+        std::string debug_all_str(const Ts&... values)
+        {
             return refl::runtime::debug_str(std::forward_as_tuple(static_cast<const Ts&>(values)...), true);
         }
 

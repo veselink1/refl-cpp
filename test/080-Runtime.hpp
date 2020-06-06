@@ -22,6 +22,21 @@ REFL_TYPE(Bar)
     REFL_FUNC(g)
 REFL_END
 
+struct BarBar {
+    Bar bar{};
+    void* vp{nullptr};
+    int* ip = new int(0);
+    std::string str = "Hi!";
+    std::vector<Bar> bars{ {}, {} };
+};
+
+REFL_TYPE(BarBar)
+    REFL_FIELD(bar)
+    REFL_FIELD(vp)
+    REFL_FIELD(ip)
+    REFL_FIELD(str)
+    REFL_FIELD(bars)
+REFL_END
 
 template <typename T>
 struct dummy_proxy : refl::runtime::proxy<dummy_proxy<T>, T>
@@ -49,6 +64,7 @@ TEST_CASE( "runtime utils" ) {
 
     SECTION( "debug" ) {
         REQUIRE( runtime::debug_str(Bar{}).find("x = ") != std::string::npos );
+        REQUIRE( runtime::debug_str(Bar{}).find("y = ") != std::string::npos );
         REQUIRE( runtime::debug_str(Bar{}).find("y = ") != std::string::npos );
     }
 
