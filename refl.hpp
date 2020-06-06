@@ -1823,34 +1823,12 @@ namespace refl {
         }
 
         /**
-         * Returns the member that has the specified name.
-         * Fails with static_assert if no such member exists.
-         * Calling f(Ts{})... should be valid in a constexpr context.
-         */
-        template <size_t N, typename... Ts>
-        constexpr auto find_one(type_list<Ts...> list, const const_string<N>& name)
-        {
-            return find_one(list, [&](auto member) -> bool { return member.name == name; });
-        }
-
-        /**
          * Returns true if any item in the list matches the predicate.
          * Calling f(Ts{})... should be valid in a constexpr context.
          */
         template <typename F, typename... Ts>
         constexpr auto contains(type_list<Ts...> list, F&& f)
         {
-            using result_list = decltype(detail::filter(f, list, type_list<>{}));
-            return result_list::size > 0;
-        }
-
-        /**
-         * Returns true if any member or type descriptor has a name equal to the input parameter.
-         */
-        template <size_t N, typename... Ts>
-        constexpr auto contains(type_list<Ts...> list, const const_string<N>& name)
-        {
-            constexpr auto f = [&](auto member) -> bool { return member.name == name; };
             using result_list = decltype(detail::filter(f, list, type_list<>{}));
             return result_list::size > 0;
         }
