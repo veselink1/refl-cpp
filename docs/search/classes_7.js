@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['last_193',['last',['../structrefl_1_1trait_1_1last.html',1,'refl::trait']]],
-  ['last_3c_20type_5flist_3c_20t_2c_20ts_2e_2e_2e_20_3e_20_3e_194',['last&lt; type_list&lt; T, Ts... &gt; &gt;',['../structrefl_1_1trait_1_1last_3_01type__list_3_01_t_00_01_ts_8_8_8_01_4_01_4.html',1,'refl::trait']]]
+  ['map_189',['map',['../structrefl_1_1trait_1_1map.html',1,'refl::trait']]],
+  ['map_3c_20mapper_2c_20type_5flist_3c_20ts_2e_2e_2e_20_3e_20_3e_190',['map&lt; Mapper, type_list&lt; Ts... &gt; &gt;',['../structrefl_1_1trait_1_1map_3_01_mapper_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html',1,'refl::trait']]],
+  ['member_191',['member',['../structrefl_1_1attr_1_1usage_1_1member.html',1,'refl::attr::usage']]],
+  ['member_5fdescriptor_5fbase_192',['member_descriptor_base',['../classrefl_1_1descriptor_1_1member__descriptor__base.html',1,'refl::descriptor']]]
 ];

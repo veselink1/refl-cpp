@@ -93,7 +93,6 @@ $(document).ready(function(){initNavTree('namespacerefl.html',''); initResizable
 <div class="header">
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">refl Namespace Reference</div>  </div>
@@ -124,26 +123,20 @@ Namespaces</h2></td></tr>
 <tr class="memdesc:namespacerefl_1_1util"><td class="mdescLeft">&#160;</td><td class="mdescRight">Contains utility types and functions for working with those types. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
-Typedefs</h2></td></tr>
-<tr class="memitem:abd6e1d866e696d2f1173fd2d3cd30875"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:abd6e1d866e696d2f1173fd2d3cd30875"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl.html#abd6e1d866e696d2f1173fd2d3cd30875">member_list</a> = decltype(detail::enumerate_members&lt; T &gt;(std::make_index_sequence&lt; refl_impl::metadata::type_info__&lt; T &gt;::member_count &gt;{}))</td></tr>
-<tr class="separator:abd6e1d866e696d2f1173fd2d3cd30875"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a12e0f11daf60216683e454102d247300"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a12e0f11daf60216683e454102d247300"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl.html#a12e0f11daf60216683e454102d247300">is_reflectable</a> () noexcept</td></tr>
 <tr class="separator:a12e0f11daf60216683e454102d247300"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8a652def66d95d9d9838e32396db25fe"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a8a652def66d95d9d9838e32396db25fe"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl.html#a8a652def66d95d9d9838e32396db25fe">is_reflectable</a> (const T) noexcept</td></tr>
-<tr class="separator:a8a652def66d95d9d9838e32396db25fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a988e607c536b5e75698d9f086909246c"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a988e607c536b5e75698d9f086909246c"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl.html#a988e607c536b5e75698d9f086909246c">is_reflectable</a> (const T &amp;) noexcept</td></tr>
+<tr class="separator:a988e607c536b5e75698d9f086909246c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae95fbc2d63a7db5ce4d8a4dcca3d637e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:ae95fbc2d63a7db5ce4d8a4dcca3d637e"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="classrefl_1_1descriptor_1_1type__descriptor.html">type_descriptor</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e">reflect</a> () noexcept</td></tr>
 <tr class="separator:ae95fbc2d63a7db5ce4d8a4dcca3d637e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a14c814eb58055da8022cef91058b7d3a"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a14c814eb58055da8022cef91058b7d3a"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="classrefl_1_1descriptor_1_1type__descriptor.html">type_descriptor</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl.html#a14c814eb58055da8022cef91058b7d3a">reflect</a> (const T) noexcept</td></tr>
-<tr class="separator:a14c814eb58055da8022cef91058b7d3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a70ee908d690769979f0aa9f57eb3e9"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a5a70ee908d690769979f0aa9f57eb3e9"><td class="memTemplItemLeft" align="right" valign="top">constexpr <a class="el" href="classrefl_1_1descriptor_1_1type__descriptor.html">type_descriptor</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl.html#a5a70ee908d690769979f0aa9f57eb3e9">reflect</a> (const T &amp;) noexcept</td></tr>
+<tr class="separator:a5a70ee908d690769979f0aa9f57eb3e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The top-level refl-cpp namespace It contains a few core refl-cpp namespaces and directly exposes core classes and functions. </p>
@@ -166,25 +159,7 @@ descriptor - contains the non-specialized member types (type|field_descriptor&lt
  using <a class="el" href="structrefl_1_1util_1_1const__string.html">util::const_string</a>; <br  />
  using <a class="el" href="namespacerefl_1_1util.html#a4902f2250ab00bb4884b348893fb7641">util::make_const_string</a>; <br  />
  </p>
-</div><h2 class="groupheader">Typedef Documentation</h2>
-<a id="abd6e1d866e696d2f1173fd2d3cd30875"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abd6e1d866e696d2f1173fd2d3cd30875">&#9670;&nbsp;</a></span>member_list</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="namespacerefl.html#abd6e1d866e696d2f1173fd2d3cd30875">refl::member_list</a> = typedef decltype(detail::enumerate_members&lt;T&gt;(std::make_index_sequence&lt;refl_impl::metadata::type_info__&lt;T&gt;::member_count&gt;{}))</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>A type_list of the member descriptors of the target type T. </p>
-
-</div>
-</div>
-<h2 class="groupheader">Function Documentation</h2>
+</div><h2 class="groupheader">Function Documentation</h2>
 <a id="a12e0f11daf60216683e454102d247300"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a12e0f11daf60216683e454102d247300">&#9670;&nbsp;</a></span>is_reflectable() <span class="overload">[1/2]</span></h2>
 
@@ -213,8 +188,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a8a652def66d95d9d9838e32396db25fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8a652def66d95d9d9838e32396db25fe">&#9670;&nbsp;</a></span>is_reflectable() <span class="overload">[2/2]</span></h2>
+<a id="a988e607c536b5e75698d9f086909246c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a988e607c536b5e75698d9f086909246c">&#9670;&nbsp;</a></span>is_reflectable() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -227,8 +202,8 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">constexpr bool refl::is_reflectable </td>
           <td>(</td>
-          <td class="paramtype">const&#160;</td>
-          <td class="paramname"><em>T</em></td><td>)</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -270,8 +245,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a14c814eb58055da8022cef91058b7d3a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a14c814eb58055da8022cef91058b7d3a">&#9670;&nbsp;</a></span>reflect() <span class="overload">[2/2]</span></h2>
+<a id="a5a70ee908d690769979f0aa9f57eb3e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a70ee908d690769979f0aa9f57eb3e9">&#9670;&nbsp;</a></span>reflect() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -284,8 +259,8 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">constexpr <a class="el" href="classrefl_1_1descriptor_1_1type__descriptor.html">type_descriptor</a>&lt;T&gt; refl::reflect </td>
           <td>(</td>
-          <td class="paramtype">const&#160;</td>
-          <td class="paramname"><em>T</em></td><td>)</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>

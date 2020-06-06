@@ -125,20 +125,16 @@ namespace refl
              * Creates a copy of a const_string.
              */
             constexpr const_string(const const_string<N>& other) noexcept
-                : data{}
+                : const_string(other, std::make_index_sequence<N>())
             {
-                for (size_t i = 0; i < N; i++)
-                    data[i] = other.data[i];
             }
 
             /**
              * Creates a const_string by copying the contents of data.
              */
             constexpr const_string(const char(&data)[N + 1]) noexcept
-                : data{}
+                : const_string(data, std::make_index_sequence<N>())
             {
-                for (size_t i = 0; i < N; i++)
-                    this->data[i] = data[i];
             }
 
             /**
@@ -188,6 +184,26 @@ namespace refl
                 }
 
                 return const_string<NewSize>(buf);
+            }
+
+        private:
+
+            /**
+             * Creates a copy of a const_string.
+             */
+            template <size_t... Idx>
+            constexpr const_string(const const_string<N>& other, std::index_sequence<Idx...>) noexcept
+                : data{ other.data[Idx]... }
+            {
+            }
+
+            /**
+             * Creates a const_string by copying the contents of data.
+             */
+            template <size_t... Idx>
+            constexpr const_string(const char(&data)[sizeof...(Idx) + 1], std::index_sequence<Idx...>) noexcept
+                : data{ data[Idx]... }
+            {
             }
 
         };
