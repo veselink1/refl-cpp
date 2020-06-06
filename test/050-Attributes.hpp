@@ -25,6 +25,29 @@ REFL_AUTO(
     func(y, property{ })
 )
 
+struct NormalizedProps {
+    int getfoo() const { return 0; }
+    int get_foo() const { return 0; }
+    int getFoo() const { return 0; }
+    int get_Foo() const { return 0; }
+    int Getfoo() const { return 0; }
+    int Get_foo() const { return 0; }
+    int GetFoo() const { return 0; }
+    int Get_Foo() const { return 0; }
+};
+
+REFL_AUTO(
+    type(NormalizedProps),
+    func(getfoo, property()),
+    func(get_foo, property()),
+    func(getFoo, property()),
+    func(get_Foo, property()),
+    func(Getfoo, property()),
+    func(Get_foo, property()),
+    func(GetFoo, property()),
+    func(Get_Foo, property())
+)
+
 TEST_CASE( "attributes" ) {
 
     SECTION( "usage tags" ) {
@@ -52,6 +75,8 @@ TEST_CASE( "attributes" ) {
         }
 
         SECTION( "property" ) {
+            using namespace std::string_literals;
+
             using getter_x_t = trait::get_t<1, member_list<Derived>>;
             REQUIRE( is_property(getter_x_t{}) );
             REQUIRE( *get_property(getter_x_t{}).friendly_name == std::string("x") );
@@ -59,6 +84,16 @@ TEST_CASE( "attributes" ) {
             using getter_y_t = trait::get_t<3, member_list<Derived>>;
             REQUIRE( is_property(getter_y_t{}) );
             REQUIRE( get_property(getter_y_t{}).friendly_name == std::nullopt );
+
+            REQUIRE( get_display_name(find_one(member_list<NormalizedProps>(), [](auto m) { return m.name == "getfoo"; })) == "getfoo"s );
+            REQUIRE( get_display_name(find_one(member_list<NormalizedProps>(), [](auto m) { return m.name == "Getfoo"; })) == "Getfoo"s );
+            REQUIRE( get_display_name(find_one(member_list<NormalizedProps>(), [](auto m) { return m.name == "Get_foo"; })) == "Get_foo"s );
+            REQUIRE( get_display_name(find_one(member_list<NormalizedProps>(), [](auto m) { return m.name == "Get_Foo"; })) == "Get_Foo"s );
+            REQUIRE( get_display_name(find_one(member_list<NormalizedProps>(), [](auto m) { return m.name == "get_Foo"; })) == "get_Foo"s );
+
+            REQUIRE( get_display_name(find_one(member_list<NormalizedProps>(), [](auto m) { return m.name == "get_foo"; })) == "foo"s );
+            REQUIRE( get_display_name(find_one(member_list<NormalizedProps>(), [](auto m) { return m.name == "getFoo"; })) == "foo"s );
+            REQUIRE( get_display_name(find_one(member_list<NormalizedProps>(), [](auto m) { return m.name == "GetFoo"; })) == "Foo"s );
         }
 
     }

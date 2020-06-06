@@ -2210,19 +2210,38 @@ namespace refl {
 
         namespace detail
         {
-            template <typename T, bool IsPascalCase>
+            constexpr bool is_upper(char ch)
+            {
+                return ch >= 'A' && ch <= 'Z';
+            }
+
+            constexpr char to_upper(char ch)
+            {
+                return ch >= 'a' && ch <= 'z'
+                    ? char(ch + ('A' - 'a'))
+                    : ch;
+            }
+
+            constexpr char to_lower(char ch)
+            {
+                return ch >= 'A' && ch <= 'Z'
+                    ? char(ch + ('a' - 'A'))
+                    : ch;
+            }
+
+            template <typename T, bool PreferUpper>
             constexpr auto normalize_bare_accessor_name()
             {
                 constexpr auto str = T::name.template substr<3>();
                 if constexpr (str.data[0] == '_') {
                     return str.template substr<1>();
                 }
-                else if constexpr (!IsPascalCase && str.data[0] >= 'A' && str.data[0] <= 'Z') {
-                    constexpr char s[2]{ char(str.data[0] + ('a' - 'A')) , '\0' };
+                else if constexpr (!PreferUpper && str.data[0] >= 'A' && str.data[0] <= 'Z') {
+                    constexpr char s[2]{ to_lower(str.data[0]) , '\0' };
                     return s + str.template substr<1>();
                 }
-                else if constexpr (IsPascalCase && str.data[0] >= 'a' && str.data[0] <= 'z') {
-                    constexpr char s[2]{ char(str.data[0] + ('A' - 'a')) , '\0' };
+                else if constexpr (PreferUpper) {
+                    constexpr char s[2]{ to_upper(str.data[0]) , '\0' };
                     return s + str.template substr<1>();
                 }
                 else {
@@ -2236,10 +2255,13 @@ namespace refl {
                 constexpr T t{};
                 if constexpr (t.name.size > 3) {
                     constexpr auto prefix = t.name.template substr<0, 3>();
-                    if constexpr ((is_readable(T{}) && (prefix == "Get" || prefix == "get"))
-                        || (is_writable(T{}) && (prefix == "Set" || prefix == "set"))) {
-                        constexpr bool isPascalCase = prefix.data[0] >= 'A' && prefix.data[0] <= 'Z';
-                        return normalize_bare_accessor_name<T, isPascalCase>();
+                    constexpr bool cont_snake_or_camel = (t.name.size > 4 && t.name.data[3] == '_' && !is_upper(t.name.data[4])) || is_upper(t.name.data[3]);
+                    constexpr bool cont_pascal = is_upper(t.name.data[3]);
+
+                    if constexpr ((is_readable(T{}) && ((prefix == "Get" && cont_pascal) || (prefix == "get" && cont_snake_or_camel)))
+                        || (is_writable(T{}) && ((prefix == "Set" && cont_pascal) || (prefix == "set" && cont_snake_or_camel)))) {
+                        constexpr bool prefer_upper = is_upper(prefix.data[0]);
+                        return normalize_bare_accessor_name<T, prefer_upper>();
                     }
                     else {
                         return t.name;
@@ -2249,6 +2271,16 @@ namespace refl {
                     return t.name;
                 }
             }
+
+            template <typename T>
+            std::string get_display_name(const T& t) noexcept
+            {
+                if constexpr (trait::is_property_v<T>) {
+                    auto&& friendly_name = util::get<attr::property>(t.attributes).friendly_name;
+                    return friendly_name ? *friendly_name : detail::normalize_accessor_name(t).str();
+                }
+                return t.name.str();
+            }
         } // namespace detail
 
         /**
@@ -2256,13 +2288,10 @@ namespace refl {
          * Uses the friendly_name of the property attribute, or the normalized name if no friendly_name was provided.
          */
         template <typename T>
-        std::string get_display_name(const T& t) noexcept
+        const char* get_display_name(const T& t) noexcept
         {
-            if constexpr (trait::is_property_v<T>) {
-                auto&& friendly_name = util::get<attr::property>(t.attributes).friendly_name;
-                return friendly_name ? *friendly_name : detail::normalize_accessor_name(t).str();
-            }
-            return t.name.str();
+            static const std::string name(detail::get_display_name(t));
+            return name.c_str();
         }
 
     } // namespace descriptor
