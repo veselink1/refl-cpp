@@ -230,6 +230,17 @@ namespace refl
         }
 
         /**
+         * Creates an instance of const_string<N>
+         *
+         * @see refl::util::const_string
+         */
+        constexpr const_string<1> make_const_string(char ch) noexcept
+        {
+            const char str[2]{ ch, '\0' };
+            return make_const_string(str);
+        }
+
+        /**
          * Concatenates two const_strings together.
          *
          * @see refl::util::const_string
@@ -2231,12 +2242,10 @@ namespace refl {
                     return str.template substr<1>();
                 }
                 else if constexpr (!PreferUpper && str.data[0] >= 'A' && str.data[0] <= 'Z') {
-                    constexpr char s[2]{ to_lower(str.data[0]) , '\0' };
-                    return s + str.template substr<1>();
+                    return make_const_string(to_lower(str.data[0])) + str.template substr<1>();
                 }
                 else if constexpr (PreferUpper) {
-                    constexpr char s[2]{ to_upper(str.data[0]) , '\0' };
-                    return s + str.template substr<1>();
+                    return make_const_string(to_upper(str.data[0])) + str.template substr<1>();
                 }
                 else {
                     return str;
