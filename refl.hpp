@@ -493,7 +493,16 @@ namespace refl_impl
 
 } // namespace refl_impl
 
-namespace refl {
+namespace refl
+{
+    namespace detail
+    {
+        template <typename T>
+        using type_info = refl_impl::metadata::type_info__<T>;
+
+        template <typename T, size_t N>
+        using member_info = typename type_info<T>::template member<N>;
+    } // namespace detail
 
     /**
      * @brief Contains tag types denoting the different types of reflectable members.
@@ -550,7 +559,7 @@ namespace refl {
         {
             /** SFIANE support for detecting whether there is a type_info__ specialization for T. */
             template <typename T>
-            decltype(typename refl_impl::metadata::type_info__<T>::invalid_marker{}, std::false_type{}) is_reflectable_test(int);
+            decltype(typename refl::detail::type_info<T>::invalid_marker{}, std::false_type{}) is_reflectable_test(int);
 
             /** SFIANE support for detecting whether there is a type_info__ specialization for T. */
             template <typename T>
@@ -563,6 +572,7 @@ namespace refl {
          *
          * @see REFL_TYPE
          * @see REFL_AUTO
+         * @see refl::is_reflectable
          */
         template <typename T>
         struct is_reflectable : decltype(detail::is_reflectable_test<T>(0))
@@ -625,22 +635,22 @@ namespace refl {
                 typedef T type;
             };
 
-            template <size_t N, typename T>
+            template <size_t N, typename...>
             struct skip;
 
             template <size_t N, typename T, typename... Ts>
-            struct skip<N, type_list<T, Ts...>> : skip<N - 1, type_list<Ts...>>
+            struct skip<N, T, Ts...> : skip<N - 1, Ts...>
             {
             };
 
             template <typename T, typename... Ts>
-            struct skip<0, type_list<T, Ts...>>
+            struct skip<0, T, Ts...>
             {
                 typedef type_list<T, Ts...> type;
             };
 
             template <>
-            struct skip<0, type_list<>>
+            struct skip<0>
             {
                 typedef type_list<> type;
             };
@@ -665,12 +675,17 @@ namespace refl {
         template <size_t N, typename TypeList>
         using get_t = typename get<N, TypeList>::type;
 
+        template <size_t, typename>
+        struct skip;
+
         /**
          * Skips the first N types in the provided type_list.
          * Provides a member typedef equivalent to the resuling type_list.
          */
-        template <size_t N, typename TypeList>
-        using skip = detail::skip<N, TypeList>;
+        template <size_t N, typename... Ts>
+        struct skip<N, type_list<Ts...>> : detail::skip<N, Ts...>
+        {
+        };
 
         /**
          * Skips the first N types in the provided type_list.
@@ -679,7 +694,7 @@ namespace refl {
         template <size_t N, typename TypeList>
         using skip_t = typename skip<N, TypeList>::type;
 
-        template <typename T>
+        template <typename>
         struct as_type_list;
 
         /**
@@ -706,6 +721,34 @@ namespace refl {
          */
         template <typename T>
         using as_type_list_t = typename as_type_list<T>::type;
+
+        template <typename>
+        struct as_tuple;
+
+        /**
+         * Provides a member typedef which is a std::tuple specialization with
+         * template type parameters equivalent to the type parameters of the provided
+         * type. The provided type must be a template specialization.
+         */
+        template <template <typename...> typename T, typename... Ts>
+        struct as_tuple<T<Ts...>>
+        {
+            typedef std::tuple<Ts...> type;
+        };
+
+        template <typename T>
+        struct as_tuple : as_tuple<remove_qualifiers_t<T>>
+        {
+        };
+
+        /**
+         * A typedef for a std::tuple specialization with
+         * template type parameters equivalent to the type parameters of the provided
+         * type. The provided type must be a template specialization.
+         * @see as_tuple
+         */
+        template <typename T>
+        using as_tuple_t = typename as_tuple<T>::type;
 
         /**
          * Accesses first type in the list.
@@ -883,58 +926,38 @@ namespace refl {
 
         namespace detail
         {
-            template <template<typename> typename, typename>
+            template <template<typename> typename, typename...>
             struct filter_impl;
 
             template <template<typename> typename Predicate>
-            struct filter_impl<Predicate, type_list<>>
+            struct filter_impl<Predicate>
             {
                 using type = type_list<>;
             };
 
-            template <template<typename> typename Predicate, typename Head, typename ...Tail>
-            struct filter_impl<Predicate, type_list<Head, Tail...>>
+            template <template<typename> typename Predicate, typename Head, typename... Tail>
+            struct filter_impl<Predicate, Head, Tail...>
             {
                 using type = std::conditional_t<Predicate<Head>::value,
-                    typename prepend<Head, typename filter_impl<Predicate, type_list<Tail...>>::type>::type,
-                    typename filter_impl<Predicate, type_list<Tail...>>::type
+                    prepend_t<Head, typename filter_impl<Predicate, Tail...>::type>,
+                    typename filter_impl<Predicate, Tail...>::type
                 >;
             };
 
-            /**
-             * filters a type_list according to a Predicate (a type-trait-like template type).
-             */
-            template <template<typename> typename Predicate>
-            struct filter
-            {
-                template <typename TypeList>
-                using apply = typename detail::filter_impl<Predicate, TypeList>::type;
-            };
-
-            template <template<typename> typename, typename>
+            template <template<typename> typename, typename...>
             struct map_impl;
 
             template <template<typename> typename Mapper>
-            struct map_impl<Mapper, type_list<>>
+            struct map_impl<Mapper>
             {
                 using type = type_list<>;
             };
 
             template <template<typename> typename Mapper, typename Head, typename ...Tail>
-            struct map_impl<Mapper, type_list<Head, Tail...>>
+            struct map_impl<Mapper, Head, Tail...>
             {
                 using type = typename prepend<typename Mapper<Head>::type,
-                    typename map_impl<Mapper, type_list<Tail...>>::type>::type;
-            };
-
-            /**
-             * filters a type_list according to a Predicate (a type-trait-like template type).
-             */
-            template <template<typename> typename Mapper>
-            struct map
-            {
-                template <typename TypeList>
-                using apply = typename detail::map_impl<Mapper, TypeList>::type;
+                    typename map_impl<Mapper, Tail...>::type>::type;
             };
         }
 
@@ -947,7 +970,7 @@ namespace refl {
         template <template<typename> typename Predicate, typename... Ts>
         struct filter<Predicate, type_list<Ts...>>
         {
-            typedef typename detail::filter<Predicate>::template apply<type_list<Ts...>> type;
+            using type = typename detail::filter_impl<Predicate, Ts...>::type;
         };
 
         /**
@@ -967,7 +990,7 @@ namespace refl {
         template <template<typename> typename Mapper, typename... Ts>
         struct map<Mapper, type_list<Ts...>>
         {
-            typedef typename detail::map<Mapper>::template apply<type_list<Ts...>> type;
+            using type = typename detail::map_impl<Mapper, Ts...>::type;
         };
 
         /**
@@ -985,7 +1008,7 @@ namespace refl {
 
             template <template<typename...> typename T, typename... Args>
             struct is_instance<T<Args...>> : public std::true_type {};
-        }
+        } // namespace detail
 
         /**
          * Detects whether T is a template specialization.
@@ -1012,13 +1035,12 @@ namespace refl {
             template <typename T, template<typename...> typename U, typename... Args>
             struct is_same_template
             {
-            private:
                 template <template<typename...> typename V, typename = V<Args...>>
                 static auto test(int) -> std::is_same<V<Args...>, T>;
 
                 template <template<typename...> typename V>
                 static std::false_type test(...);
-            public:
+
                 static constexpr bool value{decltype(test<U>(0))::value};
             };
 
@@ -1042,45 +1064,21 @@ namespace refl {
         };
 
         /**
-         * Detects whther the type U is a template specialization of U.
+         * Detects whther the type U is a template specialization of T.
          * @see is_instance_of_v
          */
         template <template<typename...>typename T, typename U>
         [[maybe_unused]] static constexpr bool is_instance_of_v{ is_instance_of<T, U>::value };
 
-        namespace detail
-        {
-            template <typename, typename>
-            struct contains_impl;
-
-            template <typename T, typename... Ts>
-            struct contains_impl<T, type_list<Ts...>> : std::disjunction<std::is_same<std::remove_cv_t<Ts>, T>...>
-            {
-            };
-
-            template <template<typename...> typename, typename>
-            struct contains_instance_impl;
-
-            template <template<typename...> typename T, typename... Ts>
-            struct contains_instance_impl<T, type_list<Ts...>> : std::disjunction<trait::is_instance_of<T, std::remove_cv_t<Ts>>...>
-            {
-            };
-
-            template <typename, typename>
-            struct contains_base_impl;
-
-            template <typename T, typename... Ts>
-            struct contains_base_impl<T, type_list<Ts...>> : std::disjunction<std::is_base_of<T, std::remove_cv_t<Ts>>...>
-            {
-            };
-        }
+        template <typename, typename>
+        struct contains;
 
         /**
          * Checks whether T is contained in the list of types.
          * Inherits from std::bool_constant<>.
          */
-        template <typename T, typename TypeList>
-        struct contains : detail::contains_impl<std::remove_cv_t<T>, TypeList>
+        template <typename T, typename... Ts>
+        struct contains<T, type_list<Ts...>> : std::disjunction<std::is_same<std::remove_cv_t<T>, std::remove_cv_t<Ts>>...>
         {
         };
 
@@ -1091,12 +1089,15 @@ namespace refl {
         template <typename T, typename TypeList>
         [[maybe_unused]] static constexpr bool contains_v = contains<T, TypeList>::value;
 
+        template <template<typename...> typename, typename>
+        struct contains_instance;
+
         /**
          * Checks whether an instance of the template T is contained in the list of types.
          * Inherits from std::bool_constant<>.
          */
-        template <template<typename...> typename T, typename TypeList>
-        struct contains_instance : detail::contains_instance_impl<T, TypeList>
+        template <template<typename...> typename T, typename... Ts>
+        struct contains_instance<T, type_list<Ts...>> : std::disjunction<trait::is_instance_of<T, std::remove_cv_t<Ts>>...>
         {
         };
 
@@ -1107,12 +1108,15 @@ namespace refl {
         template <template<typename...> typename T, typename TypeList>
         [[maybe_unused]] static constexpr bool contains_instance_v = contains_instance<T, TypeList>::value;
 
+        template <typename, typename>
+        struct contains_base;
+
         /**
          * Checks whether a type deriving from T is contained in the list of types.
          * Inherits from std::bool_constant<>.
          */
-        template <typename T, typename TypeList>
-        struct contains_base : detail::contains_base_impl<std::remove_cv_t<T>, TypeList>
+        template <typename T, typename... Ts>
+        struct contains_base<T, type_list<Ts...>> : std::disjunction<std::is_base_of<std::remove_cv_t<T>, std::remove_cv_t<Ts>>...>
         {
         };
 
@@ -1308,7 +1312,7 @@ namespace refl {
         {
         protected:
 
-            typedef typename refl_impl::metadata::type_info__<T>::template member<N> member;
+            typedef refl::detail::member_info<T, N> member;
 
         public:
 
@@ -1519,9 +1523,9 @@ namespace refl {
         namespace detail
         {
             template <typename T, size_t N>
-            using make_descriptor = std::conditional_t<refl::trait::is_field_v<typename refl_impl::metadata::type_info__<T>::template member<N>>,
+            using make_descriptor = std::conditional_t<refl::trait::is_field_v<refl::detail::member_info<T, N>>,
                 field_descriptor<T, N>,
-                std::conditional_t<refl::trait::is_function_v<typename refl_impl::metadata::type_info__<T>::template member<N>>,
+                std::conditional_t<refl::trait::is_function_v<refl::detail::member_info<T, N>>,
                     function_descriptor<T, N>,
                     void
                 >>;
@@ -1533,7 +1537,7 @@ namespace refl {
 
         /** A type_list of the member descriptors of the target type T. */
         template <typename T>
-        using member_list = decltype(detail::enumerate_members<T>(std::make_index_sequence<refl_impl::metadata::type_info__<T>::member_count>{}));
+        using member_list = decltype(detail::enumerate_members<T>(std::make_index_sequence<refl::detail::type_info<T>::member_count>{}));
 
         /** Represents a reflected type. */
         template <typename T>
@@ -1543,7 +1547,7 @@ namespace refl {
 
             static_assert(refl::trait::is_reflectable_v<T>, "This type does not support reflection!");
 
-            typedef refl_impl::metadata::type_info__<T> type_info;
+            typedef refl::detail::type_info<T> type_info;
 
         public:
 
@@ -1678,6 +1682,26 @@ namespace refl {
         constexpr auto to_tuple(const std::array<T, N>& array) noexcept
         {
             return detail::to_tuple<T>(array, std::make_index_sequence<N>{});
+        }
+
+        /**
+         * Creates a matching std::tuple from a type_list.
+         * Types in the type_list must be Trivial.
+         */
+        template <typename... Ts>
+        constexpr std::tuple<Ts...> as_tuple(type_list<Ts...>) noexcept
+        {
+            static_assert((... && std::is_trivial_v<Ts>), "Non-trivial types in type_list as not allowed!");
+            return {};
+        }
+
+        /**
+         * Creates a matching type_list from a std::tuple.
+         */
+        template <typename... Ts>
+        constexpr type_list<Ts...> as_type_list(const std::tuple<Ts...>&) noexcept
+        {
+            return {};
         }
 
         namespace detail
@@ -1853,11 +1877,47 @@ namespace refl {
          * Returns true if any item in the list matches the predicate.
          * Calling f(Ts{})... should be valid in a constexpr context.
          */
-        template <typename F, typename... Ts>
-        constexpr auto contains(type_list<Ts...> list, F&& f)
+        template <typename F, typename T, typename... Ts>
+        constexpr bool contains(type_list<T, Ts...> list, F&& f)
         {
             using result_list = decltype(detail::filter(std::forward<F>(f), list, type_list<>{}));
             return result_list::size > 0;
+        }
+
+        /**
+         * Returns true if the type_list contains the specified type.
+         */
+        template <typename T, typename... Ts>
+        constexpr bool contains(type_list<Ts...>)
+        {
+            return trait::contains_v<T, type_list<Ts...>>;
+        }
+
+        /**
+         * Returns true if the tuple contains the specified type.
+         */
+        template <typename T, typename... Ts>
+        constexpr bool contains(const std::tuple<Ts...>&)
+        {
+            return trait::contains_v<T, type_list<Ts...>>;
+        }
+
+        /**
+         * Returns true if the tuple contains the specified type or a supertype.
+         */
+        template <typename T, typename... Ts>
+        constexpr bool contains_base(const std::tuple<Ts...>&)
+        {
+            return trait::contains_base_v<T, type_list<Ts...>>;
+        }
+
+        /**
+         * Returns true if the tuple contains an instance of the specified type.
+         */
+        template <template <typename...> typename T, typename... Ts>
+        constexpr bool contains_instance(const std::tuple<Ts...>&)
+        {
+            return trait::contains_instance_v<T, type_list<Ts...>>;
         }
 
         /**
@@ -1891,7 +1951,7 @@ namespace refl {
             template <template<typename...> typename T, typename... Ts>
             constexpr ptrdiff_t index_of_template() noexcept
             {
-                if (!(... || trait::is_instance_of_v<T, Ts>)) return -1;
+                if constexpr (!(... || trait::is_instance_of_v<T, Ts>)) return -1;
                 return index_of_template<T, 0, Ts...>();
             }
         }
@@ -2074,7 +2134,7 @@ namespace refl {
         template <template<typename...> typename A, typename T>
         constexpr bool has_attribute(const T) noexcept
         {
-            return trait::contains_instance_v<A, trait::as_type_list_t<typename T::attribute_types>>;
+            return trait::contains_instance_v<A, typename T::attribute_types>;
         }
 
         /**
@@ -2320,13 +2380,13 @@ namespace refl {
             template <typename T, size_t N>
             struct get_member_info<refl::function_descriptor<T, N>>
             {
-                using type = typename refl_impl::metadata::type_info__<T>::template member<N>;
+                using type = refl::detail::member_info<T, N>;
             };
 
             template <typename T, size_t N>
             struct get_member_info<refl::field_descriptor<T, N>>
             {
-                using type = typename refl_impl::metadata::type_info__<T>::template member<N>;
+                using type = refl::detail::member_info<T, N>;
             };
 
             template <typename T, typename U>
@@ -2354,7 +2414,6 @@ namespace refl {
                 {
                     return Derived::template invoke_impl<Func>(static_ref_cast<Derived>(self), std::forward<Args>(args)...);
                 }
-
             };
 
             template <typename, typename>
@@ -2379,7 +2438,6 @@ namespace refl {
                 {
                     return Derived::template invoke_impl<Field>(static_ref_cast<Derived>(self), std::forward<Args>(args)...);
                 }
-
             };
 
 
@@ -2393,10 +2451,10 @@ namespace refl {
             };
 
             template <typename T>
-            using functions = trait::filter_t<trait::is_function, member_list<std::remove_reference_t<T>>>;
+            using functions = trait::filter_t<trait::is_function, member_list<T>>;
 
             template <typename T>
-            using fields = trait::filter_t<trait::is_field, member_list<std::remove_reference_t<T>>>;
+            using fields = trait::filter_t<trait::is_field, member_list<T>>;
 
         } // namespace detail
 
@@ -2525,7 +2583,7 @@ namespace refl {
                     indent(os, new_depth);
                     os << get_display_name(member) << " = ";
 
-                    if constexpr (trait::contains_instance_v<attr::debug, typename decltype(member)::attribute_types>) {
+                    if constexpr (util::contains_instance<attr::debug>(member.attributes)) {
                         // use the debug attribute to print
                         auto debug_attr = util::get_instance<attr::debug>(member.attributes);
                         debug_attr.write(os, value);
