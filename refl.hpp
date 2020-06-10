@@ -1186,7 +1186,7 @@ namespace refl
     namespace descriptor
     {
         template <typename T>
-        struct type_descriptor;
+        class type_descriptor;
     } // namespace descriptor
 
     namespace util
@@ -1663,15 +1663,6 @@ namespace refl
         struct base_types;
     } // namespace attr
 
-    namespace descriptor
-    {
-        /**
-         * @brief Represents a reflected type.
-         */
-        template <typename T>
-        class type_descriptor;
-    }
-
     namespace trait
     {
         namespace detail
@@ -2030,54 +2021,59 @@ namespace refl
             {
             };
 
+            template <typename T, typename Base>
+            static constexpr void validate_base()
+            {
+                static_assert(std::is_base_of_v<Base, T>, "Base is not a base type of T!");
+            }
+
+            template <typename T, typename... Bases>
+            static constexpr void validate_bases(type_list<Bases...>)
+            {
+                util::ignore((validate_base<T, Bases>(), 0)...);
+            }
+
+            template <typename T>
+            static constexpr auto get_declared_base_type_list()
+            {
+                if constexpr (trait::contains_instance_v<attr::base_types, attribute_types<T>>) {
+                    using base_types_type = trait::remove_qualifiers_t<decltype(util::get_instance<attr::base_types>(refl::detail::type_info<T>::attributes))>;
+                    validate_bases<T>(base_types_type::list);
+                    return typename base_types_type::list_type{};
+                }
+                else {
+                    return type_list<>{};
+                }
+            }
+
             template <typename T>
             struct declared_base_type_list
             {
-                static constexpr auto get()
-                {
-                    if constexpr (trait::contains_instance_v<attr::base_types, attribute_types<T>>) {
-                        using base_types_type = trait::remove_qualifiers_t<decltype(util::get_instance<attr::base_types>(refl::detail::type_info<T>::attributes))>;
-                        validate_bases(base_types_type::list);
-                        return typename base_types_type::list_type{};
-                    }
-                    else {
-                        return type_list<>{};
-                    }
-                }
-
-                template <typename Base>
-                static constexpr void validate_base()
-                {
-                    static_assert(std::is_base_of_v<Base, T>, "Base is not a base type of T!");
-                }
-
-                template <typename... Bases>
-                static constexpr void validate_bases(type_list<Bases...> bases)
-                {
-                    util::ignore((validate_base<Bases>(), 0)...);
-                }
-
-                using type = decltype(get());
+                using type = decltype(get_declared_base_type_list<T>());
             };
+
+            template <typename T>
+            struct base_type_list;
+
+            template <typename T>
+            static constexpr auto get_base_type_list()
+            {
+                if constexpr (trait::contains_instance_v<attr::base_types, attribute_types<T>>) {
+                    using declared_bases = typename declared_base_type_list<T>::type;
+                    using rec_bases = typename flatten<trait::map_t<base_type_list, declared_bases>>::type;
+                    return trait::unique_t<trait::concat_t<declared_bases, rec_bases>>{};
+                }
+                else {
+                    return type_list<>{};
+                }
+            }
 
             template <typename T>
             struct base_type_list
             {
-                static constexpr auto get()
-                {
-                    if constexpr (trait::contains_instance_v<attr::base_types, attribute_types<T>>) {
-                        using declared_bases = typename declared_base_type_list<T>::type;
-                        using rec_bases = typename flatten<trait::map_t<base_type_list, declared_bases>>::type;
-                        return trait::unique_t<trait::concat_t<declared_bases, rec_bases>>{};
-                    }
-                    else {
-                        return type_list<>{};
-                    }
-                }
-
-                using type = decltype(get());
+                using type = decltype(get_base_type_list<T>());
             };
-
+                
             template <typename T>
             struct member_list : flatten<trait::map_t<declared_member_list, trait::prepend_t<T, typename base_type_list<T>::type>>>
             {
@@ -2515,7 +2511,9 @@ namespace refl
                     auto&& friendly_name = util::get<attr::property>(t.attributes).friendly_name;
                     return friendly_name ? *friendly_name : detail::normalize_accessor_name(t).str();
                 }
-                return t.name.str();
+                else {
+                    return t.name.str();
+                }
             }
         } // namespace detail
 
@@ -2804,7 +2802,7 @@ namespace refl
             }
 
             template <typename T>
-            void debug_reflectable(std::ostream& os, const T& value, int depth)
+            void debug_reflectable(std::ostream& os, const T& value, [[maybe_unused]] int depth)
             {
                 using type_descriptor = type_descriptor<T>;
                 if constexpr (trait::contains_instance_v<attr::debug, typename type_descriptor::attribute_types>) {
@@ -2848,7 +2846,7 @@ namespace refl
             }
 
             template <typename T>
-            void debug_impl(std::ostream& os, const T& value, int depth)
+            void debug_impl(std::ostream& os, const T& value, [[maybe_unused]] int depth)
             {
                 using no_pointer_t = std::remove_pointer_t<T>;
 
@@ -3180,7 +3178,7 @@ namespace refl::detail
     REFL_DETAIL_MEMBER_HEADER { \
         REFL_DETAIL_MEMBER_COMMON(function, FunctionName_, __VA_ARGS__) \
         public: \
-        template<typename Self, typename... Args> static constexpr auto invoke(Self&& self, Args&&... args) -> decltype(std::declval<type>().FunctionName_(::std::declval<Args>()...)) {\
+        template<typename Self, typename... Args> static constexpr auto invoke(Self&& self, Args&&... args) -> decltype(::refl::detail::forward_cast<Self, type>(self).FunctionName_(::std::forward<Args>(args)...)) {\
             return ::refl::detail::forward_cast<Self, type>(self).FunctionName_(::std::forward<Args>(args)...); \
         } \
         template<typename... Args> static constexpr auto invoke(Args&&... args) -> decltype(::refl::detail::head_t<type, Args...>::FunctionName_(::std::declval<Args>()...)) { \
