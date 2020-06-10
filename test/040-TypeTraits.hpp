@@ -64,6 +64,7 @@ TEST_CASE( "type traits" ) {
         REQUIRE( std::is_same_v<trait::concat_t<type_list<int, float>, type_list<>>, type_list<int, float>> );
         REQUIRE( std::is_same_v<trait::concat_t<type_list<>, type_list<int, float>>, type_list<int, float>> );
         REQUIRE( std::is_same_v<trait::concat_t<type_list<int, float>, type_list<float, int>>, type_list<int, float, float, int>> );
+        REQUIRE( std::is_same_v<trait::concat_t<type_list<int, float>, type_list<>, type_list<int, float>>, type_list<int, float, int, float>> );
     }
 
     SECTION( "type_list get" ) {

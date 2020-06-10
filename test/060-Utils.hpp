@@ -90,4 +90,11 @@ TEST_CASE( "utilities" ) {
         REQUIRE( apl == 0 );
     }
 
+    SECTION( "box/unbox" ) {
+        constexpr auto boxed = reflect_types(type_list<int, float>{});
+        constexpr auto boxed2 = reflect_types(unreflect_types(boxed));
+
+        REQUIRE( std::is_same_v<decltype(boxed), decltype(boxed2)> );
+    }
+
 }

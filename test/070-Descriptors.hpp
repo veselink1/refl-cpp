@@ -3,6 +3,18 @@
 
 using namespace refl;
 
+struct FooBaseBase {};
+
+REFL_AUTO(type(FooBaseBase))
+
+struct FooBase {
+    void m();
+};
+
+REFL_TYPE(FooBase, bases<FooBaseBase>)
+    REFL_FUNC(m)
+REFL_END
+
 struct Foo {
     int x;
     float* y;
@@ -13,7 +25,7 @@ struct Foo {
     int g(int) { return 0; }
 };
 
-REFL_TYPE(Foo)
+REFL_TYPE(Foo, bases<FooBase>)
     REFL_FIELD(x)
     REFL_FIELD(y)
     REFL_FIELD(z)
@@ -21,6 +33,21 @@ REFL_TYPE(Foo)
     REFL_FUNC(f)
     REFL_FUNC(g)
 REFL_END
+
+struct ShadowingBase {
+    int baz = 0;
+    int bar = 0;
+    int foo() { return 0; }
+};
+
+REFL_AUTO(type(ShadowingBase), func(foo), field(bar), field(baz))
+
+struct ShadowingDerived : public ShadowingBase {
+    int bar = 1;
+    int foo() { return 1; }
+};
+
+REFL_AUTO(type(ShadowingDerived, bases<ShadowingBase>), func(foo), field(bar))
 
 TEST_CASE( "descriptors" ) {
 
@@ -32,6 +59,34 @@ TEST_CASE( "descriptors" ) {
         REQUIRE( std::is_same_v<decltype(type_descriptor<int>::members), const type_list<>> );
         REQUIRE( std::is_same_v<decltype(type_descriptor<int*>::members), const type_list<>> );
         REQUIRE( std::is_same_v<decltype(type_descriptor<int* const>::members), const type_list<>> );
+
+        REQUIRE( type_descriptor<Foo>::name == "Foo" );
+    }
+
+    SECTION( "type_descriptor inheritance" ) {
+        REQUIRE( type_descriptor<FooBaseBase>::declared_base_types::size == 0 );
+        REQUIRE( type_descriptor<FooBaseBase>::base_types::size == 0 );
+
+        REQUIRE( type_descriptor<FooBase>::declared_base_types::size == 1 );
+        REQUIRE( type_descriptor<FooBase>::base_types::size == 1 );
+
+        REQUIRE( type_descriptor<Foo>::declared_base_types::size == 1 );
+        REQUIRE( type_descriptor<Foo>::base_types::size == 2 );
+
+        REQUIRE( type_descriptor<Foo>::member_types::size == type_descriptor<Foo>::declared_member_types::size + type_descriptor<FooBase>::member_types::size );
+
+        REQUIRE( type_descriptor<ShadowingBase>::member_types::size == 3 );
+        REQUIRE( type_descriptor<ShadowingDerived>::declared_member_types::size == 2 );
+        REQUIRE( type_descriptor<ShadowingDerived>::member_types::size == 5 );
+
+        ShadowingDerived instance;
+        for_each(type_descriptor<ShadowingDerived>::members, [&](auto member) {
+            if constexpr (std::is_same_v<typename decltype(member)::declaring_type, ShadowingDerived>) {
+                REQUIRE( member(instance) == 1 );
+            } else {
+                REQUIRE( member(instance) == 0 );
+            }
+        });
     }
 
     SECTION( "field_descriptor" ) {

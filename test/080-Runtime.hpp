@@ -60,6 +60,13 @@ TEST_CASE( "runtime utils" ) {
 
         REQUIRE( trait::is_proxy_v<dummy_proxy<Bar>> );
         REQUIRE( !trait::is_proxy_v<int> );
+
+        dummy_proxy<ShadowingBase> sb;
+        dummy_proxy<ShadowingDerived> sd;
+
+        ShadowingDerived{}.foo();
+        sd.foo();
+        sd.baz();
     }
 
     SECTION( "debug" ) {
