@@ -3029,22 +3029,52 @@ namespace refl::detail
     using head_t = typename head<T, Ts...>::type;
 
     template <typename T, typename U>
-    struct transfer_qualifiers
+    struct transfer_cv
     {
         using type = U;
     };
 
     template <typename T, typename U>
-    struct transfer_qualifiers<const T, U> : transfer_qualifiers<T, const U> {};
+    struct transfer_cv<const T, U>
+    {
+        using type = const U;
+    };
 
     template <typename T, typename U>
-    struct transfer_qualifiers<volatile T, U> : transfer_qualifiers<T, volatile U> {};
+    struct transfer_cv<volatile T, U>
+    {
+        using type = volatile U;
+    };
 
     template <typename T, typename U>
-    struct transfer_qualifiers<T&, U> : transfer_qualifiers<T, U&> {};
+    struct transfer_cv<const volatile T, U>
+    {
+        using type = const volatile U;
+    };
 
     template <typename T, typename U>
-    struct transfer_qualifiers<T&&, U> : transfer_qualifiers<T, U&&> {};
+    struct transfer_ref
+    {
+        using type = U;
+    };
+
+    template <typename T, typename U>
+    struct transfer_ref<T&, U>
+    {
+        using type = U&;
+    };
+
+    template <typename T, typename U>
+    struct transfer_ref<T&&, U>
+    {
+        using type = U&&;
+    };
+
+    template <typename T, typename U>
+    struct transfer_qualifiers
+    {
+        using type = typename transfer_ref<T, typename transfer_cv<std::remove_reference_t<T>, U>::type>::type;
+    };
 
     template <typename T, typename U>
     constexpr typename transfer_qualifiers<T, U>::type&& forward_cast(std::remove_reference_t<T>& t)
