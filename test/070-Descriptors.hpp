@@ -7,7 +7,8 @@ struct FooBaseBase {};
 
 REFL_AUTO(type(FooBaseBase))
 
-struct FooBase {
+struct FooBase : FooBaseBase
+{
     void m();
 };
 
@@ -15,7 +16,8 @@ REFL_TYPE(FooBase, bases<FooBaseBase>)
     REFL_FUNC(m)
 REFL_END
 
-struct Foo {
+struct Foo : FooBase
+{
     int x;
     float* y;
     const char z;

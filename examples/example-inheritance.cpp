@@ -3,34 +3,46 @@
 
 class Animal
 {
+public:
+    virtual std::string get_species() const = 0;
 };
 
-REFL_TYPE(Animal, bases<>)
-    REFL_FUNC(species)
-REFL_END
+REFL_AUTO(
+    type(Animal),
+    func(get_species, property())
+)
 
-class Dog : public Animal
+class Wolf : public Animal
 {
+public:
+    std::string get_species() const override
+    {
+        return "Canis lupus";
+    }
 };
 
-REFL_TYPE(Dog, bases<Animal>)
-    REFL_FUNC(species)
-REFL_END
+REFL_AUTO(type(Wolf, bases<Animal>))
+
+class Dog : public Wolf
+{
+public:
+    std::string get_species() const override
+    {
+        return "Canis lupus familiaris";
+    }
+};
+
+REFL_AUTO(type(Dog, bases<Wolf>))
 
 template <typename T>
 void print_bases()
 {
-    using refl::reflect;                    // shorthand for refl::descriptor::type_descriptor<T>
-    using refl::descriptor::get_attribute;  // get_attribute<A, T>, get_attribute<A<Ts...>, T>
-                                            // for variadic and non-variadic attributes
-
-    constexpr auto type = reflect<T>();
+    constexpr auto type = refl::reflect<T>();
     std::cout << type.name << " inherits from ";
 
-    constexpr auto bases = get_bases(type);
-    if constexpr (bases.size)
+    if constexpr (type.declared_bases.size)
     {
-        for_each(bases, [](auto t)
+        for_each(reflect_types(type.declared_bases), [](auto t)
         {
             std::cout << t.name << " ";
         });
@@ -44,10 +56,15 @@ void print_bases()
 
 int main()
 {
-    using refl::reflect;                    // shorthand for refl::descriptor::type_descriptor<T>
-    using refl::descriptor::get_attribute;  // get_attribute<A, T>, get_attribute<A<Ts...>, T>
-                                            // for variadic and non-variadic attributes
-
     print_bases<Animal>();
+    print_bases<Wolf>();
     print_bases<Dog>();
+
+    Dog d{};
+    std::cout << "type Dog:\n";
+    for_each(refl::reflect<Dog>().members, [&](auto member) {
+        std::cout << "  " << get_display_name(member) << " (" << member.name << ") = ";
+        refl::runtime::debug(std::cout, member(d));
+        std::cout << "\n";
+    });
 }
