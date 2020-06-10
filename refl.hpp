@@ -875,6 +875,12 @@ namespace refl
         template <typename...>
         struct concat;
 
+        template <>
+        struct concat<>
+        {
+            using type = type_list<>;
+        };
+
         template <typename... Ts>
         struct concat<type_list<Ts...>>
         {
