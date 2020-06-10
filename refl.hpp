@@ -2031,11 +2031,24 @@ namespace refl
                 {
                     if constexpr (trait::contains_instance_v<attr::base_types, attribute_types<T>>) {
                         using base_types_type = trait::remove_qualifiers_t<decltype(util::get_instance<attr::base_types>(refl::detail::type_info<T>::attributes))>;
+                        validate_bases(base_types_type::list);
                         return typename base_types_type::list_type{};
                     }
                     else {
                         return type_list<>{};
                     }
+                }
+
+                template <typename Base>
+                static constexpr void validate_base()
+                {
+                    static_assert(std::is_base_of_v<Base, T>, "Base is not a base type of T!");
+                }
+
+                template <typename... Bases>
+                static constexpr void validate_bases(type_list<Bases...> bases)
+                {
+                    util::ignore((validate_base<Bases>(), 0)...);
                 }
 
                 using type = decltype(get());
@@ -2091,7 +2104,7 @@ namespace refl
             /** The declared base types (via base_types<Ts...> attribute) of T. */
             typedef typename detail::declared_base_type_list<T>::type declared_base_types;
 
-            /** The declared  and inherited base types of T. */
+            /** The declared and inherited base types of T. */
             typedef typename detail::base_type_list<T>::type base_types;
 
             /** A synonym for declared_member_list<T>. */
