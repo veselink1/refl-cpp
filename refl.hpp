@@ -3367,6 +3367,7 @@ namespace refl::detail
         return std::basic_string<CharT>(str.begin(), str.end());
     }
 
+#ifdef __cpp_lib_string_view
     struct write_basic_string_view
     {
         template <typename CharT, typename Traits>
@@ -3375,6 +3376,7 @@ namespace refl::detail
             os << std::quoted(str);
         }
     };
+#endif
 
     struct write_basic_string
     {
