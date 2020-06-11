@@ -3404,9 +3404,10 @@ namespace refl::detail
         void write(std::basic_ostream<CharT>& os, Tuple&& t, std::index_sequence<Idx...>) const
         {
             os << CharT('(');
-            for_each(type_list<std::integral_constant<size_t, Idx>...>{}, [&](auto idx) {
-                runtime::debug(os, std::get<decltype(idx)::value>(t));
-                if constexpr (sizeof...(Idx) - 1 != decltype(idx)::value) {
+            for_each(type_list<std::integral_constant<size_t, Idx>...>{}, [&](auto idx_c) {
+                using idx_t = decltype(idx_c);
+                runtime::debug(os, std::get<idx_t::value>(t));
+                if constexpr (sizeof...(Idx) - 1 != idx_t::value) {
                     os << convert<CharT>(", ");
                 }
             });
