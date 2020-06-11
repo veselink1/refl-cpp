@@ -3373,7 +3373,13 @@ namespace refl::detail
         template <typename CharT, typename Traits>
         void operator()(std::basic_ostream<CharT>& os, std::basic_string_view<CharT, Traits> str) const
         {
-            os << std::quoted(str);
+            // some vers of clang dont have std::quoted(string_view) overload
+            if (!*str.end()) { // no copy needed when null-terminated
+                os << std::quoted(str.data());
+            }
+            else {
+                os << std::quoted(std::basic_string<CharT, Traits>(str.begin(), str.end()));
+            }
         }
     };
 #endif
