@@ -43,4 +43,16 @@ TEST_CASE( "const string" ) {
         REQUIRE( make_const_string("Hello").template substr<1, 3>() == "ell" );
     }
 
+    SECTION( "searching" ) {
+        REQUIRE( make_const_string("Hello").find('e') == 1 );
+        REQUIRE( make_const_string("Hello").find('l') == 2 );
+        REQUIRE( make_const_string("Hello").find('w') == static_cast<size_t>(-1) );
+        REQUIRE( make_const_string("Hello").find('l', 3) == 3 );
+
+        REQUIRE( make_const_string("Hello").rfind('e') == 1 );
+        REQUIRE( make_const_string("Hello").rfind('l') == 3 );
+        REQUIRE( make_const_string("Hello").rfind('w') == static_cast<size_t>(-1) );
+        REQUIRE( make_const_string("Hello").rfind('l', 3) == 3 );
+    }
+
 }

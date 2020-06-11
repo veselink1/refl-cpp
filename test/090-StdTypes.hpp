@@ -21,6 +21,11 @@ TEST_CASE( "built-in support for standard types" ) {
         REQUIRE(is_reflectable<std::wstring>());
         constexpr auto members = reflect<std::string>().members;
         REQUIRE(members.size >= 2); // size + data
+        REQUIRE(runtime::debug_str(std::string("xyz")) == "\"xyz\"");
+    }
+
+    SECTION( "std::wstring" ) {
+        REQUIRE(runtime::debug_str<wchar_t>(std::wstring(L"xyz")) == L"\"xyz\"");
     }
 
     SECTION( "std::string_view" ) {
@@ -28,14 +33,23 @@ TEST_CASE( "built-in support for standard types" ) {
         REQUIRE(is_reflectable<std::wstring_view>());
         constexpr auto members = reflect<std::string_view>().members;
         REQUIRE(members.size >= 2); // size + data
+        REQUIRE(runtime::debug_str(std::string_view("xyz")) == "\"xyz\"");
+    }
+
+    SECTION( "std::wstring_view" ) {
+        REQUIRE(runtime::debug_str<wchar_t>(std::wstring_view(L"xyz")) == L"\"xyz\"");
     }
 
     SECTION( "std::tuple" ) {
         REQUIRE(is_reflectable<std::tuple<>>());
+        REQUIRE(runtime::debug_str(std::tuple<>()) == "()");
+        REQUIRE(runtime::debug_str(std::tuple<int>(5)) == "(5)");
+        REQUIRE(runtime::debug_str(std::tuple<int, std::string>(5, "xyz")) == "(5, \"xyz\")");
     }
 
     SECTION( "std::pair" ) {
         REQUIRE(is_reflectable<std::pair<int, float>>());
+        REQUIRE(runtime::debug_str(std::pair<int, std::string>(5, "xyz")) == "(5, \"xyz\")");
     }
 
     SECTION( "std::unique_ptr" ) {

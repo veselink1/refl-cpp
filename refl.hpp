@@ -2798,19 +2798,19 @@ namespace refl
 
     namespace runtime
     {
-        template <typename T>
-        void debug(std::ostream& os, const T& value, bool compact = false);
+        template <typename CharT, typename T>
+        void debug(std::basic_ostream<CharT>& os, const T& value, bool compact = false);
 
         namespace detail
         {
-            template <typename T, typename = decltype(std::declval<std::ostream&>() << std::declval<T>())>
+            template <typename CharT, typename T, typename = decltype(std::declval<std::basic_ostream<CharT>&>() << std::declval<T>())>
             std::true_type is_ostream_printable_test(int);
 
-            template <typename T>
+            template <typename CharT, typename T>
             std::false_type is_ostream_printable_test(...);
 
-            template <typename T>
-            constexpr bool is_ostream_printable_v{ decltype(is_ostream_printable_test<T>(0))::value };
+            template <typename CharT, typename T>
+            constexpr bool is_ostream_printable_v{ decltype(is_ostream_printable_test<CharT, T>(0))::value };
 
             int next_depth(int depth)
             {
@@ -2819,18 +2819,19 @@ namespace refl
                     : depth + 1;
             }
 
-            void indent(std::ostream& os, int depth)
+            template <typename CharT>
+            void indent(std::basic_ostream<CharT>& os, int depth)
             {
                 for (int i = 0; i < depth; i++) {
                     os << "    ";
                 }
             }
 
-            template <typename T>
-            void debug_impl(std::ostream& os, const T& value, [[maybe_unused]] int depth);
+            template <typename CharT, typename T>
+            void debug_impl(std::basic_ostream<CharT>& os, const T& value, [[maybe_unused]] int depth);
 
-            template <typename T>
-            void debug_detailed(std::ostream& os, const T& value, int depth)
+            template <typename CharT, typename T>
+            void debug_detailed(std::basic_ostream<CharT>& os, const T& value, int depth)
             {
                 using type_descriptor = type_descriptor<T>;
                 bool compact = depth == -1;
@@ -2868,8 +2869,8 @@ namespace refl
                 os << '}';
             }
 
-            template <typename T>
-            void debug_reflectable(std::ostream& os, const T& value, [[maybe_unused]] int depth)
+            template <typename CharT, typename T>
+            void debug_reflectable(std::basic_ostream<CharT>& os, const T& value, [[maybe_unused]] int depth)
             {
                 using type_descriptor = type_descriptor<T>;
                 if constexpr (trait::contains_instance_v<attr::debug, typename type_descriptor::attribute_types>) {
@@ -2877,7 +2878,7 @@ namespace refl
                     auto debug_attr = util::get_instance<attr::debug>(type_descriptor::attributes);
                     debug_attr.write(os, value);
                 }
-                else if constexpr (detail::is_ostream_printable_v<T>) {
+                else if constexpr (detail::is_ostream_printable_v<CharT, T>) {
                     // type supports printing natively, just use that
                     os << value;
                 }
@@ -2886,8 +2887,8 @@ namespace refl
                 }
             }
 
-            template <typename T>
-            void debug_container(std::ostream& os, const T& value, int depth)
+            template <typename CharT, typename T>
+            void debug_container(std::basic_ostream<CharT>& os, const T& value, int depth)
             {
                 bool compact = depth == -1;
                 os << "[";
@@ -2912,8 +2913,8 @@ namespace refl
                 os << "]";
             }
 
-            template <typename T>
-            void debug_impl(std::ostream& os, const T& value, [[maybe_unused]] int depth)
+            template <typename CharT, typename T>
+            void debug_impl(std::basic_ostream<CharT>& os, const T& value, [[maybe_unused]] int depth)
             {
                 using no_pointer_t = std::remove_pointer_t<T>;
 
@@ -2932,7 +2933,7 @@ namespace refl
                 else if constexpr (trait::is_reflectable_v<T>) {
                     debug_reflectable(os, value, depth);
                 }
-                else if constexpr (detail::is_ostream_printable_v<T>) {
+                else if constexpr (detail::is_ostream_printable_v<CharT, T>) {
                     os << value;
                 }
                 else if constexpr (trait::is_container_v<T>) {
@@ -2951,10 +2952,10 @@ namespace refl
          * Takes an optional arguments specifying whether to print a compact representation.
          * The compact representation contains no newlines.
          */
-        template <typename T>
-        void debug(std::ostream& os, const T& value, [[maybe_unused]] bool compact)
+        template <typename CharT, typename T>
+        void debug(std::basic_ostream<CharT>& os, const T& value, [[maybe_unused]] bool compact)
         {
-            static_assert(trait::is_reflectable_v<T> || trait::is_container_v<T> || detail::is_ostream_printable_v<T>,
+            static_assert(trait::is_reflectable_v<T> || trait::is_container_v<T> || detail::is_ostream_printable_v<CharT, T>,
                 "Type is not reflectable, not a container of reflectable types and does not support operator<<(std::ostream&, T)!");
 
             detail::debug_impl(os, value, compact ? -1 : 0);
@@ -2963,8 +2964,8 @@ namespace refl
         /**
          * Writes the compact debug representation of the provided values to the given std::ostream.
          */
-        template <typename... Ts>
-        void debug_all(std::ostream& os, const Ts&... values)
+        template <typename CharT, typename... Ts>
+        void debug_all(std::basic_ostream<CharT>& os, const Ts&... values)
         {
             refl::runtime::debug(os, std::forward_as_tuple(static_cast<const Ts&>(values)...), true);
         }
@@ -2974,10 +2975,10 @@ namespace refl
          * Takes an optional arguments specifying whether to print a compact representation.
          * The compact representation contains no newlines.
          */
-        template <typename T>
-        std::string debug_str(const T& value, bool compact = false)
+        template <typename CharT = char, typename T>
+        std::basic_string<CharT> debug_str(const T& value, bool compact = false)
         {
-            std::stringstream ss;
+            std::basic_stringstream<CharT> ss;
             debug(ss, value, compact);
             return ss.str();
         }
@@ -2985,8 +2986,8 @@ namespace refl
         /**
          * Writes the compact debug representation of the provided values to an std::string and returns it.
          */
-        template <typename... Ts>
-        std::string debug_all_str(const Ts&... values)
+        template <typename CharT = char, typename... Ts>
+        std::basic_string<CharT> debug_all_str(const Ts&... values)
         {
             return refl::runtime::debug_str(std::forward_as_tuple(static_cast<const Ts&>(values)...), true);
         }
@@ -3014,13 +3015,7 @@ namespace refl
                 if (found) return;
 
                 if constexpr (std::is_invocable_r_v<U, decltype(member), T, Args...>) {
-                    if constexpr (trait::is_field_v<member_t>) {
-                        if (std::strcmp(member.name.c_str(), name) == 0) {
-                            result.emplace(member(target, std::forward<Args>(args)...));
-                            found = true;
-                        }
-                    }
-                    else if constexpr (trait::is_function_v<member_t>) {
+                    if constexpr (trait::is_member_v<member_t>) {
                         if (std::strcmp(member.name.c_str(), name) == 0) {
                             result.emplace(member(target, std::forward<Args>(args)...));
                             found = true;
@@ -3071,7 +3066,7 @@ namespace refl::detail
      * Req must be one of the types defined in attr::usage.
      */
     template <typename Req, typename... Args>
-    constexpr std::tuple<trait::remove_qualifiers_t<Args>...> make_attributes(Args&&... args) noexcept
+    constexpr auto make_attributes(Args&&... args) noexcept
     {
         constexpr bool check_unique = validate_attr_unique(type_list<Args...>{});
         static_assert(check_unique, "Some of the supplied attributes cannot be used on this declaration!");
@@ -3079,7 +3074,7 @@ namespace refl::detail
         constexpr bool check_usage = (... && validate_attr_usage<Req, trait::remove_qualifiers_t<Args>>());
         static_assert(check_usage, "Some of the supplied attributes cannot be used on this declaration!");
 
-        return std::tuple<trait::remove_qualifiers_t<Args>...>{ std::forward<Args>(args)... };
+        return std::make_tuple(std::forward<Args>(args)...);
     }
 
     template <typename T, typename...>
@@ -3195,7 +3190,7 @@ namespace refl::detail
         REFL_DETAIL_ATTRIBUTES(type, __VA_ARGS__) \
         static constexpr auto name{ ::refl::util::make_const_string(REFL_DETAIL_STR(REFL_DETAIL_GROUP TypeName)) }; \
         static constexpr size_t member_index_offset = __COUNTER__ + 1; \
-        template <size_t N, typename = void> \
+        template <size_t, typename = void> \
         struct member {};
 
 /**
@@ -3366,108 +3361,103 @@ namespace refl::detail
 
 namespace refl::detail
 {
-    template <typename T>
-    auto write_impl(std::ostream& os, T&& t) -> decltype((os << t), void())
+    template <typename CharT>
+    std::basic_string<CharT> convert(const std::string& str)
     {
-        os << t;
+        return std::basic_string<CharT>(str.begin(), str.end());
     }
 
-    template <typename T>
-    void write_impl(std::ostream& os, const volatile T* ptr)
+    struct write_basic_string_view
     {
-        auto f(os.flags());
-        os << "(" << reflect<T>().name << "*)" << std::hex << ptr;
-        os.flags(f);
-    }
+        template <typename CharT, typename Traits>
+        void operator()(std::basic_ostream<CharT>& os, std::basic_string_view<CharT, Traits> str) const
+        {
+            os << std::quoted(str);
+        }
+    };
 
-    inline void write_impl(std::ostream& os, const char* ptr)
+    struct write_basic_string
     {
-        os << ptr;
-    }
+        template <typename CharT, typename Traits, typename Allocator>
+        void operator()(std::basic_ostream<CharT>& os, const std::basic_string<CharT, Traits, Allocator>& str) const
+        {
+            os << std::quoted(str);
+        }
+    };
 
-    inline void write_impl(std::ostream& os, const std::exception& e)
+    struct write_exception
     {
-        os << "Exception";
-#ifdef REFL_RTTI_ENABLED
-        os << " (" << typeid(e).name() << ")";
-#endif
-        os << ": `" << e.what() << "`";
-    }
+        template <typename CharT>
+        void operator()(std::basic_ostream<CharT>& os, const std::exception& e) const
+        {
+            os << convert<CharT>("Exception");
+    #ifdef REFL_RTTI_ENABLED
+            os << convert<CharT>(" (") << convert<CharT>(typeid(e).name()) << convert<CharT>(")");
+    #endif
+            os << convert<CharT>(": `") << e.what() << convert<CharT>("`");
+        }
+    };
 
-    inline void write_impl(std::ostream& os, const std::string& t)
+    struct write_tuple
     {
-        os << std::quoted(t);
-    }
+        template <typename CharT, typename Tuple, size_t... Idx>
+        void write(std::basic_ostream<CharT>& os, Tuple&& t, std::index_sequence<Idx...>) const
+        {
+            os << CharT('(');
+            for_each(type_list<std::integral_constant<size_t, Idx>...>{}, [&](auto idx) {
+                runtime::debug(os, std::get<decltype(idx)::value>(t));
+                if constexpr (sizeof...(Idx) - 1 != decltype(idx)::value) {
+                    os << convert<CharT>(", ");
+                }
+            });
+            os << CharT(')');
+        }
 
-    inline void write_impl(std::ostream& os, const std::wstring& t)
+        template <typename CharT, typename... Ts>
+        void operator()(std::basic_ostream<CharT>& os, const std::tuple<Ts...>& t) const
+        {
+            write(os, t, std::make_index_sequence<sizeof...(Ts)>{});
+        }
+    };
+
+    struct write_pair
     {
-#ifdef _MSC_VER
-// Disable the "wcsrtombs is unsafe" warning in VS
-#pragma warning(push)
-#pragma warning(disable:4996)
-#endif
-        std::mbstate_t state = std::mbstate_t();
-        const wchar_t* wsptr = t.c_str();
-        std::size_t len = 1 + std::wcsrtombs(nullptr, &wsptr, 0, &state);
+        template <typename CharT, typename K, typename V>
+        void operator()(std::basic_ostream<CharT>& os, const std::pair<K, V>& t) const
+        {
+            os << CharT('(');
+            runtime::debug(os, t.first);
+            os << convert<CharT>(", ");
+            runtime::debug(os, t.second);
+            os << CharT(')');
+        }
+    };
 
-        std::string mbstr(len, '\0');
-        std::wcsrtombs(mbstr.data(), &wsptr, mbstr.size(), &state);
-
-        os << std::quoted(mbstr);
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
-    }
-
-    template <typename Tuple, size_t... Idx>
-    void write_impl(std::ostream& os, Tuple&& t, std::index_sequence<Idx...>)
+    struct write_unique_ptr
     {
-        os << "(";
-        refl::util::ignore((os << std::get<Idx>(t))...);
-        os << ")";
-    }
+        template <typename CharT, typename T, typename D>
+        void operator()(std::basic_ostream<CharT>& os, const std::unique_ptr<T, D>& t) const
+        {
+            runtime::debug(os, t.get(), true);
+        }
+    };
 
-    template <typename... Ts>
-    void write_impl(std::ostream& os, const std::tuple<Ts...>& t)
+    struct write_shared_ptr
     {
-        write_impl(os, t, std::make_index_sequence<sizeof...(Ts)>{});
-    }
+        template <typename CharT, typename T>
+        void operator()(std::basic_ostream<CharT>& os, const std::shared_ptr<T>& t) const
+        {
+            runtime::debug(os, t.get(), true);
+        }
+    };
 
-    template <typename K, typename V>
-    void write_impl(std::ostream& os, const std::pair<K, V>& t);
-
-    template <typename K, typename V>
-    void write_impl(std::ostream& os, const std::pair<K, V>& t)
+    struct write_weak_ptr
     {
-        os << "(";
-        write(os, t.first);
-        os << ", ";
-        write(os, t.second);
-        os << ")";
-    }
-
-    template <typename T, typename D>
-    void write_impl(std::ostream& os, const std::unique_ptr<T, D>& t)
-    {
-        runtime::debug(os, t.get(), true);
-    }
-
-    template <typename T>
-    void write_impl(std::ostream& os, const std::shared_ptr<T>& t)
-    {
-        runtime::debug(os, t.get(), true);
-    }
-
-    template <typename T>
-    void write_impl(std::ostream& os, const std::weak_ptr<T>& t)
-    {
-        runtime::debug(os, t.lock().get(), true);
-    }
-
-    // Dispatches to the appropriate write_impl.
-    constexpr auto write = [](std::ostream & os, auto&& t) -> void
-    {
-        write_impl(os, t);
+        template <typename CharT, typename T>
+        void operator()(std::basic_ostream<CharT>& os, const std::weak_ptr<T>& t) const
+        {
+            runtime::debug(os, t.lock().get(), true);
+        }
     };
 } // namespace refl::detail
 
@@ -3476,19 +3466,14 @@ namespace refl::detail
 
 #ifndef REFL_NO_STD_SUPPORT
 
-REFL_TYPE(std::exception, debug{ refl::detail::write })
+REFL_TYPE(std::exception, debug{ refl::detail::write_exception() })
     REFL_FUNC(what, property{ })
-REFL_END
-
-REFL_TYPE(std::string, debug{ refl::detail::write })
-    REFL_FUNC(size, property{ })
-    REFL_FUNC(data, property{ })
 REFL_END
 
 REFL_TEMPLATE(
     (typename Elem, typename Traits, typename Alloc),
     (std::basic_string<Elem, Traits, Alloc>),
-    debug{ refl::detail::write })
+    debug{ refl::detail::write_basic_string() })
     REFL_FUNC(size, property{ })
     REFL_FUNC(data, property{ })
 REFL_END
@@ -3498,7 +3483,7 @@ REFL_END
 REFL_TEMPLATE(
     (typename Elem, typename Traits),
     (std::basic_string_view<Elem, Traits>),
-    debug{ refl::detail::write })
+    debug{ refl::detail::write_basic_string_view() })
     REFL_FUNC(size, property{ })
     REFL_FUNC(data, property{ })
 REFL_END
@@ -3508,25 +3493,25 @@ REFL_END
 REFL_TEMPLATE(
     (typename... Ts),
     (std::tuple<Ts...>),
-    debug{ refl::detail::write })
+    debug{ refl::detail::write_tuple() })
 REFL_END
 
 REFL_TEMPLATE(
     (typename T, typename D),
     (std::unique_ptr<T, D>),
-    debug{ refl::detail::write })
+    debug{ refl::detail::write_unique_ptr() })
 REFL_END
 
 REFL_TEMPLATE(
     (typename T),
     (std::shared_ptr<T>),
-    debug{ refl::detail::write })
+    debug{ refl::detail::write_shared_ptr() })
 REFL_END
 
 REFL_TEMPLATE(
     (typename K, typename V),
     (std::pair<K, V>),
-    debug{ refl::detail::write })
+    debug{ refl::detail::write_pair() })
 REFL_END
 
 #endif // REFL_NO_STD_SUPPORT
