@@ -1234,7 +1234,7 @@ namespace refl
         template <typename T>
         constexpr decltype(auto) identity(T&& t) noexcept
         {
-            return t;
+            return std::forward<T>(t);
         }
 
         /**
@@ -2447,7 +2447,7 @@ namespace refl
          * @see refl::descriptor::get_bases
          */
         template <typename T>
-        constexpr auto has_bases(const T t) noexcept
+        [[deprecated]] constexpr auto has_bases(const T t) noexcept
         {
             static_assert(trait::is_type_v<T>);
             return has_attribute<attr::base_types>(t);
@@ -2461,7 +2461,7 @@ namespace refl
          * @see refl::descriptor::has_bases
          */
         template <typename T>
-        constexpr auto get_bases(const T t) noexcept
+        [[deprecated]] constexpr auto get_bases(const T t) noexcept
         {
             static_assert(trait::is_type_v<T>);
             static_assert(has_bases(t), "Target type does not have a bases<A, B, ...> attribute.");
