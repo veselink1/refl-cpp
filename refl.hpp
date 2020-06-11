@@ -186,6 +186,32 @@ namespace refl
                 return const_string<NewSize>(buf);
             }
 
+            /**
+             * Searches the string for the first occurrence of the character and returns its position.
+             */
+            constexpr auto find(char ch, size_t pos = 0) const noexcept
+            {
+                for (size_t i = pos; i < N; i++) {
+                    if (data[i] == ch) {
+                        return i;
+                    }
+                }
+                return npos;
+            }
+
+            /**
+             * Searches the string for the last occurrence of the character and returns its position.
+             */
+            constexpr auto rfind(char ch, size_t pos = npos) const noexcept
+            {
+                for (size_t i = (pos == npos ? N - 1 : pos); i + 1 > 0; i--) {
+                    if (data[i] == ch) {
+                        return i;
+                    }
+                }
+                return npos;
+            }
+
         private:
 
             /**
@@ -1794,7 +1820,7 @@ namespace refl
             /** The type_descriptor of the declaring type. */
             static constexpr type_descriptor<T> declarator{ };
 
-            /** The name of the reflected type. */
+            /** The name of the reflected member. */
             static constexpr auto name{ member::name };
 
             /** The attributes of the reflected member. */
@@ -2073,7 +2099,7 @@ namespace refl
             {
                 using type = decltype(get_base_type_list<T>());
             };
-                
+
             template <typename T>
             struct member_list : flatten<trait::map_t<declared_member_list, trait::prepend_t<T, typename base_type_list<T>::type>>>
             {
@@ -2096,7 +2122,7 @@ namespace refl
 
             static_assert(refl::trait::is_reflectable_v<T>, "This type does not support reflection!");
 
-            typedef refl_impl::metadata::type_info__<T> type_info;
+            typedef refl::detail::type_info<T> type_info;
 
         public:
 
@@ -2263,6 +2289,7 @@ namespace refl
         template <typename T>
         constexpr bool is_field(const T) noexcept
         {
+            static_assert(trait::is_descriptor_v<T>);
             return trait::is_field_v<T>;
         }
 
@@ -2274,6 +2301,7 @@ namespace refl
         template <typename T>
         constexpr bool is_function(const T) noexcept
         {
+            static_assert(trait::is_descriptor_v<T>);
             return trait::is_function_v<T>;
         }
 
@@ -2285,6 +2313,7 @@ namespace refl
         template <typename T>
         constexpr bool is_type(const T) noexcept
         {
+            static_assert(trait::is_descriptor_v<T>);
             return trait::is_type_v<T>;
         }
 
@@ -2294,6 +2323,7 @@ namespace refl
         template <typename A, typename T>
         constexpr bool has_attribute(const T) noexcept
         {
+            static_assert(trait::is_descriptor_v<T>);
             return trait::contains_base_v<A, typename T::attribute_types>;
         }
 
@@ -2303,6 +2333,7 @@ namespace refl
         template <template<typename...> typename A, typename T>
         constexpr bool has_attribute(const T) noexcept
         {
+            static_assert(trait::is_descriptor_v<T>);
             return trait::contains_instance_v<A, typename T::attribute_types>;
         }
 
@@ -2312,6 +2343,7 @@ namespace refl
         template <typename A, typename T>
         constexpr const A& get_attribute(const T t) noexcept
         {
+            static_assert(trait::is_descriptor_v<T>);
             return util::get<A>(t.attributes);
         }
 
@@ -2321,6 +2353,7 @@ namespace refl
         template <template<typename...> typename A, typename T>
         constexpr const auto& get_attribute(const T t) noexcept
         {
+            static_assert(trait::is_descriptor_v<T>);
             return util::get_instance<A>(t.attributes);
         }
 
@@ -2333,6 +2366,7 @@ namespace refl
         template <typename T>
         constexpr bool is_property(const T t) noexcept
         {
+            static_assert(trait::is_descriptor_v<T>);
             return has_attribute<attr::property>(t);
         }
 
@@ -2345,6 +2379,7 @@ namespace refl
         template <typename T>
         constexpr attr::property get_property(const T t) noexcept
         {
+            static_assert(trait::is_descriptor_v<T>);
             return get_attribute<attr::property>(t);
         }
 
@@ -2363,6 +2398,7 @@ namespace refl
         template <typename T>
         constexpr bool is_readable(const T) noexcept
         {
+            static_assert(trait::is_member_v<T>);
             if constexpr (trait::is_property_v<T>) {
                 if constexpr (std::is_invocable_v<T, const typename T::declaring_type&>) {
                     using return_type = typename T::template return_type<const typename T::declaring_type&>;
@@ -2383,6 +2419,7 @@ namespace refl
         template <typename T>
         constexpr bool is_writable(const T) noexcept
         {
+            static_assert(trait::is_member_v<T>);
             if constexpr (trait::is_property_v<T>) {
                 return std::is_invocable_v<T, typename T::declaring_type&, detail::placeholder>;
             }
@@ -2412,6 +2449,7 @@ namespace refl
         template <typename T>
         constexpr auto has_bases(const T t) noexcept
         {
+            static_assert(trait::is_type_v<T>);
             return has_attribute<attr::base_types>(t);
         }
 
@@ -2425,6 +2463,7 @@ namespace refl
         template <typename T>
         constexpr auto get_bases(const T t) noexcept
         {
+            static_assert(trait::is_type_v<T>);
             static_assert(has_bases(t), "Target type does not have a bases<A, B, ...> attribute.");
 
             constexpr auto bases = get_attribute<attr::base_types>(t);
@@ -2433,12 +2472,40 @@ namespace refl
         }
 
         /**
+         * Returns the unqualified name of the type, discarding the namespace and typenames (if a template type).
+         */
+        template <typename T>
+        constexpr auto get_simple_name(const T t)
+        {
+            static_assert(trait::is_type_v<T>);
+            constexpr size_t template_start = t.name.find('<');
+            constexpr size_t scope_last = t.name.rfind(':', template_start);
+            if constexpr (scope_last == const_string<0>::npos) {
+                return t.name;
+            }
+            else {
+                return t.name.template substr<scope_last + 1, template_start - scope_last - 1>();
+            }
+        }
+
+        /**
+         * Returns the debug name of T (In the form of 'declaring_type::member_name') as a const_string.
+         */
+        template <typename T>
+        constexpr auto get_debug_name_const(const T t)
+        {
+            static_assert(trait::is_member_v<T>);
+            return t.declarator.name + "::" + t.name;
+        }
+
+        /**
          * Returns the debug name of T. (In the form of 'declaring_type::member_name').
          */
         template <typename T>
-        const char* get_debug_name(const T& t)
+        const char* get_debug_name(const T t)
         {
-            static const std::string name(std::string(t.declarator.name) + "::" + t.name.str());
+            static_assert(trait::is_member_v<T>);
+            static const std::string name(get_debug_name_const(t).str());
             return name.c_str();
         }
 
@@ -2482,7 +2549,7 @@ namespace refl
             }
 
             template <typename T>
-            constexpr auto normalize_accessor_name(const T&)
+            constexpr auto normalize_accessor_name(const T)
             {
                 constexpr T t{};
                 if constexpr (t.name.size > 3) {
@@ -2505,7 +2572,7 @@ namespace refl
             }
 
             template <typename T>
-            std::string get_display_name(const T& t) noexcept
+            std::string get_display_name(const T t) noexcept
             {
                 if constexpr (trait::is_property_v<T>) {
                     auto&& friendly_name = util::get<attr::property>(t.attributes).friendly_name;
@@ -2522,7 +2589,7 @@ namespace refl
          * Uses the friendly_name of the property attribute, or the normalized name if no friendly_name was provided.
          */
         template <typename T>
-        const char* get_display_name(const T& t) noexcept
+        const char* get_display_name(const T t) noexcept
         {
             static const std::string name(detail::get_display_name(t));
             return name.c_str();
@@ -3089,6 +3156,17 @@ namespace refl::detail
         return static_cast<typename transfer_qualifiers<T, U>::type&&>(t);
     }
 
+    template <typename T>
+    constexpr auto get_type_name()
+    {
+        if constexpr (trait::is_reflectable_v<T>) {
+            return type_descriptor<T>::name;
+        }
+        else {
+            return make_const_string("(unknown)");
+        }
+    }
+
 } // namespace refl::detail
 
 /********************************/
@@ -3269,7 +3347,7 @@ namespace refl::detail
             typedef T Ptr type; \
             template <size_t N> \
             struct member {}; \
-            static constexpr auto name{ ::refl::util::make_const_string(#Ptr) }; \
+            static constexpr auto name{ ::refl::detail::get_type_name<T>() + ::refl::util::make_const_string(#Ptr) }; \
             static constexpr ::std::tuple<> attributes{ }; \
             static constexpr size_t member_count{ 0 }; \
         }

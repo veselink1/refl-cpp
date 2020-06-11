@@ -3,6 +3,26 @@
 
 using namespace refl;
 
+struct NotReflected {};
+
+namespace ns
+{
+    struct InNamespace
+    {
+        int x;
+    };
+
+    template<typename T>
+    struct TemplateInNamespace
+    {
+        T x;
+    };
+}
+
+REFL_AUTO(type(ns::InNamespace), field(x));
+
+REFL_AUTO(template((typename T), (ns::TemplateInNamespace<T>)), field(x));
+
 struct FooBaseBase {};
 
 REFL_AUTO(type(FooBaseBase))
@@ -52,6 +72,7 @@ struct ShadowingDerived : public ShadowingBase {
 REFL_AUTO(type(ShadowingDerived, bases<ShadowingBase>), func(foo), field(bar))
 
 TEST_CASE( "descriptors" ) {
+    using namespace std::string_literals;
 
     SECTION( "type_descriptor" ) {
         REQUIRE( std::is_same_v<decltype(type_descriptor<int>::attributes), const std::tuple<>> );
@@ -62,7 +83,36 @@ TEST_CASE( "descriptors" ) {
         REQUIRE( std::is_same_v<decltype(type_descriptor<int*>::members), const type_list<>> );
         REQUIRE( std::is_same_v<decltype(type_descriptor<int* const>::members), const type_list<>> );
 
+        REQUIRE( type_descriptor<Foo&>::name == "Foo&" );
+        REQUIRE( type_descriptor<Foo&&>::name == "Foo&&" );
+        REQUIRE( type_descriptor<Foo*>::name == "Foo*" );
+        REQUIRE( type_descriptor<NotReflected*>::name == "(unknown)*" );
+        REQUIRE( type_descriptor<NotReflected&>::name == "(unknown)&" );
+        REQUIRE( type_descriptor<NotReflected&&>::name == "(unknown)&&" );
+        REQUIRE( type_descriptor<ns::InNamespace>::name == "ns::InNamespace" );
+        REQUIRE( type_descriptor<ns::TemplateInNamespace<int>>::name == "ns::TemplateInNamespace<T>" );
+
         REQUIRE( type_descriptor<Foo>::name == "Foo" );
+        REQUIRE( type_descriptor<Foo>::members.size > 0 );
+        REQUIRE( type_descriptor<const Foo>::members.size > 0 );
+        REQUIRE( type_descriptor<volatile Foo>::members.size > 0 );
+        REQUIRE( type_descriptor<const volatile Foo>::members.size > 0 );
+
+        REQUIRE( type_descriptor<Foo&>::members.size == 0 );
+        REQUIRE( type_descriptor<const Foo&>::members.size == 0 );
+        REQUIRE( type_descriptor<Foo&&>::members.size == 0 );
+        REQUIRE( type_descriptor<const Foo&&>::members.size == 0 );
+
+        REQUIRE( get_simple_name(type_descriptor<signed int>{}) == "signed int" );
+        REQUIRE( get_simple_name(type_descriptor<const Foo&&>{}) == "Foo&&" );
+        REQUIRE( get_simple_name(type_descriptor<ns::InNamespace>{}) == "InNamespace" );
+        REQUIRE( get_simple_name(type_descriptor<ns::TemplateInNamespace<int>>{}) == "TemplateInNamespace" );
+
+        REQUIRE( get_debug_name(trait::get_t<0, member_list<ns::InNamespace>>{}) == "ns::InNamespace::x"s );
+        REQUIRE( get_debug_name(trait::get_t<0, member_list<ns::TemplateInNamespace<int>>>{}) == "ns::TemplateInNamespace<T>::x"s );
+
+        REQUIRE( get_debug_name_const(trait::get_t<0, member_list<ns::InNamespace>>{}) == "ns::InNamespace::x" );
+        REQUIRE( get_debug_name_const(trait::get_t<0, member_list<ns::TemplateInNamespace<int>>>{}) == "ns::TemplateInNamespace<T>::x" );
     }
 
     SECTION( "type_descriptor inheritance" ) {
@@ -92,7 +142,6 @@ TEST_CASE( "descriptors" ) {
     }
 
     SECTION( "field_descriptor" ) {
-        using namespace std::string_literals;
         REQUIRE( field_descriptor<Foo, 0>::name == "x" );
         REQUIRE( field_descriptor<Foo, 0>::pointer == &Foo::x );
         REQUIRE( !field_descriptor<Foo, 0>::is_static );
