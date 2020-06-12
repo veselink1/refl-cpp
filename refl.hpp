@@ -429,11 +429,22 @@ namespace refl
             static constexpr intptr_t size = sizeof...(Ts);
         };
 
+        template <typename T>
+        struct type_list<T>
+        {
+            typedef T type;
+            static constexpr intptr_t size = 1;
+        };
+
+        template <typename T>
+        using type_tag = type_list<T>;
+
     } // namespace util
 
     using util::const_string;
     using util::make_const_string;
     using util::type_list;
+    using util::type_tag;
 
     /**
      * The contents of the refl::detail::macro_exports namespace
