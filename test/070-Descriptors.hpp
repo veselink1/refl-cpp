@@ -103,6 +103,14 @@ TEST_CASE( "descriptors" ) {
         REQUIRE( type_descriptor<Foo&&>::members.size == 0 );
         REQUIRE( type_descriptor<const Foo&&>::members.size == 0 );
 
+        REQUIRE( get_name(type_descriptor<signed int>{}) == "signed int" );
+        REQUIRE( get_name(type_descriptor<const Foo&&>{}) == "Foo&&" );
+        REQUIRE( get_name(type_descriptor<ns::InNamespace>{}) == "ns::InNamespace" );
+        REQUIRE( get_name(type_descriptor<ns::TemplateInNamespace<int>>{}) == "ns::TemplateInNamespace<T>" );
+
+        REQUIRE( get_attributes(type_descriptor<signed int>{}) == std::tuple<>{} );
+        REQUIRE( util::contains_instance<attr::base_types>(get_attributes(type_descriptor<Foo>{})) );
+
         REQUIRE( get_simple_name(type_descriptor<signed int>{}) == "signed int" );
         REQUIRE( get_simple_name(type_descriptor<const Foo&&>{}) == "Foo&&" );
         REQUIRE( get_simple_name(type_descriptor<ns::InNamespace>{}) == "InNamespace" );
@@ -116,19 +124,29 @@ TEST_CASE( "descriptors" ) {
     }
 
     SECTION( "type_descriptor inheritance" ) {
+        REQUIRE( get_declared_base_types(type_descriptor<FooBaseBase>{}).size == 0 );
         REQUIRE( type_descriptor<FooBaseBase>::declared_base_types::size == 0 );
+        REQUIRE( get_base_types(type_descriptor<FooBaseBase>{}).size == 0 );
         REQUIRE( type_descriptor<FooBaseBase>::base_types::size == 0 );
 
+        REQUIRE( get_declared_base_types(type_descriptor<FooBase>{}).size == 1 );
         REQUIRE( type_descriptor<FooBase>::declared_base_types::size == 1 );
+        REQUIRE( get_base_types(type_descriptor<FooBase>{}).size == 1 );
         REQUIRE( type_descriptor<FooBase>::base_types::size == 1 );
 
+        REQUIRE( get_declared_base_types(type_descriptor<Foo>{}).size == 1 );
         REQUIRE( type_descriptor<Foo>::declared_base_types::size == 1 );
+        REQUIRE( get_base_types(type_descriptor<Foo>{}).size == 2 );
         REQUIRE( type_descriptor<Foo>::base_types::size == 2 );
 
+        REQUIRE( get_members(type_descriptor<Foo>{}).size == get_declared_members(type_descriptor<Foo>{}).size + get_declared_members(type_descriptor<FooBase>{}).size );
         REQUIRE( type_descriptor<Foo>::member_types::size == type_descriptor<Foo>::declared_member_types::size + type_descriptor<FooBase>::member_types::size );
 
+        REQUIRE( get_members(type_descriptor<ShadowingBase>{}).size == 3 );
         REQUIRE( type_descriptor<ShadowingBase>::member_types::size == 3 );
+        REQUIRE( get_declared_members(type_descriptor<ShadowingDerived>{}).size == 2 );
         REQUIRE( type_descriptor<ShadowingDerived>::declared_member_types::size == 2 );
+        REQUIRE( get_members(type_descriptor<ShadowingDerived>{}).size == 5 );
         REQUIRE( type_descriptor<ShadowingDerived>::member_types::size == 5 );
 
         ShadowingDerived instance;
@@ -151,6 +169,7 @@ TEST_CASE( "descriptors" ) {
         REQUIRE( !is_function(y_member) );
         REQUIRE( get_display_name(y_member) == "y"s );
         REQUIRE( get_debug_name(y_member) == "Foo::y"s );
+        REQUIRE( invoke(y_member, Foo{}) == 0 );
         REQUIRE( y_member(Foo{}) == 0 );
         REQUIRE( std::is_same_v<trait::get_t<3, member_list<Foo>>::return_type<Foo, int>, void> );
         REQUIRE( std::is_invocable_v<trait::get_t<0, member_list<Foo>>, Foo, int> );
@@ -163,12 +182,18 @@ TEST_CASE( "descriptors" ) {
         REQUIRE( !std::is_invocable_v<function_descriptor<Foo, 3>, Foo, std::string> );
 
         using f_td = trait::get_t<3, member_list<Foo>>;
-        static_assert(!f_td::is_resolved);
-        [[maybe_unused]] auto f_ptr = f_td::resolve<void(Foo::*)()>;
+        REQUIRE( !is_resolved(f_td{}) );
+        REQUIRE( !f_td::is_resolved );
+        REQUIRE( descriptor::resolve<int(Foo::*)(Foo)>(f_td{}) == nullptr );
+        REQUIRE( f_td::resolve<int(Foo::*)(Foo)>() == nullptr );
+        REQUIRE( descriptor::resolve<void(Foo::*)()>(f_td{}) != nullptr );
+        REQUIRE( f_td::resolve<void(Foo::*)()>() != nullptr );
 
         using g_td = trait::get_t<4, member_list<Foo>>;
-        static_assert(g_td::is_resolved);
-        [[maybe_unused]] auto g_ptr = g_td::pointer;
+        REQUIRE( g_td::is_resolved );
+        REQUIRE( is_resolved(g_td{}) );
+        REQUIRE( get_pointer(g_td{}) != nullptr );
+        REQUIRE( g_td::pointer != nullptr );
     }
 
 }

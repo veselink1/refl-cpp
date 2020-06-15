@@ -2246,15 +2246,181 @@ namespace refl
         };
 
         /**
+         * Returns the full name of the descriptor
+         */
+        template <typename Descriptor>
+        constexpr auto get_name(Descriptor d) noexcept
+        {
+            static_assert(trait::is_descriptor_v<Descriptor>);
+            return d.name;
+        }
+
+        /**
+         * Returns a const reference to the descriptor's attribute tuple.
+         */
+        template <typename Descriptor>
+        constexpr const auto& get_attributes(Descriptor d) noexcept
+        {
+            static_assert(trait::is_descriptor_v<Descriptor>);
+            return d.attributes;
+        }
+
+        /**
+         * Returns a type_list of the descriptor's attribute types.
+         */
+        template <typename Descriptor>
+        constexpr auto get_attribute_types(Descriptor d) noexcept
+        {
+            static_assert(trait::is_descriptor_v<Descriptor>);
+            return trait::as_type_list_t<std::remove_cv_t<decltype(d.attributes)>>{};
+        }
+
+        /**
+         * Returns a type_list of the declared base types of the type.
+         * Combine with reflect_types to obtain type_descriptors for those types.
+         * @see reflect_types
+         */
+        template <typename TypeDescriptor>
+        constexpr auto get_declared_base_types(TypeDescriptor t) noexcept
+        {
+            static_assert(trait::is_type_v<TypeDescriptor>);
+            return t.declared_bases;
+        }
+
+        /**
+         * Returns a type_list of the declared and inherited base types of the type.
+         * Combine with reflect_types to obtain type_descriptors for those types.
+         * @see reflect_types
+         */
+        template <typename TypeDescriptor>
+        constexpr auto get_base_types(TypeDescriptor t) noexcept
+        {
+            static_assert(trait::is_type_v<TypeDescriptor>);
+            return t.bases;
+        }
+
+        /**
+         * Returns a type_list of the declared members of the type.
+         */
+        template <typename TypeDescriptor>
+        constexpr auto get_declared_members(TypeDescriptor t) noexcept
+        {
+            static_assert(trait::is_type_v<TypeDescriptor>);
+            return t.declared_members;
+        }
+
+        /**
+         * Returns a type_list of the declared and inherited members of the type.
+         */
+        template <typename TypeDescriptor>
+        constexpr auto get_members(TypeDescriptor t) noexcept
+        {
+            static_assert(trait::is_type_v<TypeDescriptor>);
+            return t.members;
+        }
+
+        /**
+         * Returns the type_descriptor of declaring type of the member.
+         */
+        template <typename MemberDescriptor>
+        constexpr auto get_declarator(MemberDescriptor d) noexcept
+        {
+            static_assert(trait::is_member_v<MemberDescriptor>);
+            return d.declarator;
+        }
+
+        /**
+         * Returns a pointer to the reflected field/function.
+         * When the member is a function, the return value might be nullptr
+         * if the type of the function pointer cannot be resolved.
+         * @see is_resolved
+         * @see can_resolve
+         * @see resolve
+         */
+        template <typename MemberDescriptor>
+        constexpr auto get_pointer(MemberDescriptor d) noexcept
+        {
+            static_assert(trait::is_member_v<MemberDescriptor>);
+            return d.pointer;
+        }
+
+        /**
+         * Invokes the member with the specified arguments.
+         */
+        template <typename MemberDescriptor, typename... Args>
+        constexpr auto invoke(MemberDescriptor d, Args&&... args) noexcept -> decltype(d(std::forward<Args>(args)...))
+        {
+            return d(std::forward<Args>(args)...);
+        }
+
+        /**
+         * Checks whether the field is declared as static.
+         */
+        template <typename FieldDescriptor>
+        constexpr auto is_static(FieldDescriptor d) noexcept
+        {
+            static_assert(trait::is_field_v<FieldDescriptor>);
+            return d.is_static;
+        }
+
+        /**
+         * Checks whether the value type of the field is const-qualified.
+         */
+        template <typename FieldDescriptor>
+        constexpr auto is_const(FieldDescriptor d) noexcept
+        {
+            static_assert(trait::is_field_v<FieldDescriptor>);
+            return d.is_const;
+        }
+
+        /**
+         * The return type when invoking the specified descriptor using the provided argument types.
+         * Argument coversion will be applied as per C++ rules.
+         */
+        template <typename FunctionDescriptor, typename... Args>
+        using result_type = typename FunctionDescriptor::template result_type<Args...>;
+
+        /**
+         * Checks whether the function pointer was automatically resolved.
+         */
+        template <typename FunctionDescriptor>
+        constexpr auto is_resolved(FunctionDescriptor d) noexcept
+        {
+            static_assert(trait::is_function_v<FunctionDescriptor>);
+            return d.is_resolved;
+        }
+
+        /**
+         * Checks whether the function pointer can be resolved as
+         * a pointer of the specified type.
+         */
+        template <typename Pointer, typename FunctionDescriptor>
+        constexpr auto can_resolve(FunctionDescriptor d) noexcept
+        {
+            static_assert(trait::is_function_v<FunctionDescriptor>);
+            return d.template can_resolve<Pointer>();
+        }
+
+        /**
+         * Resolves the function pointer as a pointer of the specified type.
+         */
+        template <typename Pointer, typename FunctionDescriptor>
+        constexpr auto resolve(FunctionDescriptor d) noexcept
+        {
+            static_assert(trait::is_function_v<FunctionDescriptor>);
+            return d.template resolve<Pointer>();
+        }
+
+        /**
          * Checks whether T is a field descriptor.
          *
          * @see refl::descriptor::field_descriptor
          */
-        template <typename T>
-        constexpr bool is_field(const T) noexcept
+        template <typename Descriptor>
+        constexpr bool is_field(Descriptor) noexcept
         {
-            static_assert(trait::is_descriptor_v<T>);
-            return trait::is_field_v<T>;
+            static_assert(trait::is_descriptor_v<Descriptor>);
+            return trait::is_field_v<Descriptor>;
         }
 
         /**
@@ -2262,11 +2428,11 @@ namespace refl
          *
          * @see refl::descriptor::function_descriptor
          */
-        template <typename T>
-        constexpr bool is_function(const T) noexcept
+        template <typename Descriptor>
+        constexpr bool is_function(Descriptor) noexcept
         {
-            static_assert(trait::is_descriptor_v<T>);
-            return trait::is_function_v<T>;
+            static_assert(trait::is_descriptor_v<Descriptor>);
+            return trait::is_function_v<Descriptor>;
         }
 
         /**
@@ -2274,51 +2440,51 @@ namespace refl
          *
          * @see refl::descriptor::type_descriptor
          */
-        template <typename T>
-        constexpr bool is_type(const T) noexcept
+        template <typename Descriptor>
+        constexpr bool is_type(Descriptor) noexcept
         {
-            static_assert(trait::is_descriptor_v<T>);
-            return trait::is_type_v<T>;
+            static_assert(trait::is_descriptor_v<Descriptor>);
+            return trait::is_type_v<Descriptor>;
         }
 
         /**
          * Checks whether T has an attribute of type A.
          */
-        template <typename A, typename T>
-        constexpr bool has_attribute(const T) noexcept
+        template <typename A, typename Descriptor>
+        constexpr bool has_attribute(Descriptor) noexcept
         {
-            static_assert(trait::is_descriptor_v<T>);
-            return trait::contains_base_v<A, typename T::attribute_types>;
+            static_assert(trait::is_descriptor_v<Descriptor>);
+            return trait::contains_base_v<A, typename Descriptor::attribute_types>;
         }
 
         /**
          * Checks whether T has an attribute of that is a template instance of A.
          */
-        template <template<typename...> typename A, typename T>
-        constexpr bool has_attribute(const T) noexcept
+        template <template<typename...> typename A, typename Descriptor>
+        constexpr bool has_attribute(Descriptor) noexcept
         {
-            static_assert(trait::is_descriptor_v<T>);
-            return trait::contains_instance_v<A, typename T::attribute_types>;
+            static_assert(trait::is_descriptor_v<Descriptor>);
+            return trait::contains_instance_v<A, typename Descriptor::attribute_types>;
         }
 
         /**
          * Returns the value of the attribute A on T.
          */
-        template <typename A, typename T>
-        constexpr const A& get_attribute(const T t) noexcept
+        template <typename A, typename Descriptor>
+        constexpr const A& get_attribute(Descriptor d) noexcept
         {
-            static_assert(trait::is_descriptor_v<T>);
-            return util::get<A>(t.attributes);
+            static_assert(trait::is_descriptor_v<Descriptor>);
+            return util::get<A>(d.attributes);
         }
 
         /**
          * Returns the value of the attribute A on T.
          */
-        template <template<typename...> typename A, typename T>
-        constexpr const auto& get_attribute(const T t) noexcept
+        template <template<typename...> typename A, typename Descriptor>
+        constexpr const auto& get_attribute(Descriptor d) noexcept
         {
-            static_assert(trait::is_descriptor_v<T>);
-            return util::get_instance<A>(t.attributes);
+            static_assert(trait::is_descriptor_v<Descriptor>);
+            return util::get_instance<A>(d.attributes);
         }
 
         /**
@@ -2327,11 +2493,11 @@ namespace refl
          * @see refl::attr::property
          * @see refl::descriptor::get_property
          */
-        template <typename T>
-        constexpr bool is_property(const T t) noexcept
+        template <typename MemberDescriptor>
+        constexpr bool is_property(MemberDescriptor d) noexcept
         {
-            static_assert(trait::is_descriptor_v<T>);
-            return has_attribute<attr::property>(t);
+            static_assert(trait::is_member_v<MemberDescriptor>);
+            return has_attribute<attr::property>(d);
         }
 
         /**
@@ -2340,11 +2506,11 @@ namespace refl
          * @see refl::attr::property
          * @see refl::descriptor::is_property
          */
-        template <typename T>
-        constexpr attr::property get_property(const T t) noexcept
+        template <typename FunctionDescriptor>
+        constexpr attr::property get_property(FunctionDescriptor d) noexcept
         {
-            static_assert(trait::is_descriptor_v<T>);
-            return get_attribute<attr::property>(t);
+            static_assert(trait::is_function_v<FunctionDescriptor>);
+            return get_attribute<attr::property>(d);
         }
 
         namespace detail
@@ -2359,13 +2525,13 @@ namespace refl
         /**
          * Checks if T is a readable property or a field.
          */
-        template <typename T>
-        constexpr bool is_readable(const T) noexcept
+        template <typename MemberDescriptor>
+        constexpr bool is_readable(MemberDescriptor) noexcept
         {
-            static_assert(trait::is_member_v<T>);
-            if constexpr (trait::is_property_v<T>) {
-                if constexpr (std::is_invocable_v<T, const typename T::declaring_type&>) {
-                    using return_type = typename T::template return_type<const typename T::declaring_type&>;
+            static_assert(trait::is_member_v<MemberDescriptor>);
+            if constexpr (trait::is_property_v<MemberDescriptor>) {
+                if constexpr (std::is_invocable_v<MemberDescriptor, const typename MemberDescriptor::declaring_type&>) {
+                    using return_type = typename MemberDescriptor::template return_type<const typename MemberDescriptor::declaring_type&>;
                     return !std::is_void_v<return_type>;
                 }
                 else {
@@ -2373,22 +2539,22 @@ namespace refl
                 }
             }
             else {
-                return trait::is_field_v<T>;
+                return trait::is_field_v<MemberDescriptor>;
             }
         }
 
         /**
          * Checks if T is a writable property or a non-const field.
          */
-        template <typename T>
-        constexpr bool is_writable(const T) noexcept
+        template <typename MemberDescriptor>
+        constexpr bool is_writable(const MemberDescriptor) noexcept
         {
-            static_assert(trait::is_member_v<T>);
-            if constexpr (trait::is_property_v<T>) {
-                return std::is_invocable_v<T, typename T::declaring_type&, detail::placeholder>;
+            static_assert(trait::is_member_v<MemberDescriptor>);
+            if constexpr (trait::is_property_v<MemberDescriptor>) {
+                return std::is_invocable_v<MemberDescriptor, typename MemberDescriptor::declaring_type&, detail::placeholder>;
             }
-            else if constexpr (trait::is_field_v<T>) {
-                return !std::is_const_v<typename trait::remove_qualifiers_t<T>::value_type>;
+            else if constexpr (trait::is_field_v<MemberDescriptor>) {
+                return !std::is_const_v<typename trait::remove_qualifiers_t<MemberDescriptor>::value_type>;
             }
             else {
                 return false;
@@ -2410,10 +2576,10 @@ namespace refl
          * @see refl::attr::bases
          * @see refl::descriptor::get_bases
          */
-        template <typename T>
-        [[deprecated]] constexpr auto has_bases(const T t) noexcept
+        template <typename TypeDescriptor>
+        [[deprecated]] constexpr auto has_bases(TypeDescriptor t) noexcept
         {
-            static_assert(trait::is_type_v<T>);
+            static_assert(trait::is_type_v<TypeDescriptor>);
             return has_attribute<attr::base_types>(t);
         }
 
@@ -2424,10 +2590,10 @@ namespace refl
          * @see refl::attr::bases
          * @see refl::descriptor::has_bases
          */
-        template <typename T>
-        [[deprecated]] constexpr auto get_bases(const T t) noexcept
+        template <typename TypeDescriptor>
+        [[deprecated]] constexpr auto get_bases(TypeDescriptor t) noexcept
         {
-            static_assert(trait::is_type_v<T>);
+            static_assert(trait::is_type_v<TypeDescriptor>);
             static_assert(has_bases(t), "Target type does not have a bases<A, B, ...> attribute.");
 
             constexpr auto bases = get_attribute<attr::base_types>(t);
@@ -2438,10 +2604,10 @@ namespace refl
         /**
          * Returns the unqualified name of the type, discarding the namespace and typenames (if a template type).
          */
-        template <typename T>
-        constexpr auto get_simple_name(const T t)
+        template <typename TypeDescriptor>
+        constexpr auto get_simple_name(TypeDescriptor t)
         {
-            static_assert(trait::is_type_v<T>);
+            static_assert(trait::is_type_v<TypeDescriptor>);
             constexpr size_t template_start = t.name.find('<');
             constexpr size_t scope_last = t.name.rfind(':', template_start);
             if constexpr (scope_last == const_string<0>::npos) {
@@ -2455,21 +2621,21 @@ namespace refl
         /**
          * Returns the debug name of T (In the form of 'declaring_type::member_name') as a const_string.
          */
-        template <typename T>
-        constexpr auto get_debug_name_const(const T t)
+        template <typename MemberDescriptor>
+        constexpr auto get_debug_name_const(MemberDescriptor d)
         {
-            static_assert(trait::is_member_v<T>);
-            return t.declarator.name + "::" + t.name;
+            static_assert(trait::is_member_v<MemberDescriptor>);
+            return d.declarator.name + "::" + d.name;
         }
 
         /**
          * Returns the debug name of T. (In the form of 'declaring_type::member_name').
          */
-        template <typename T>
-        const char* get_debug_name(const T t)
+        template <typename MemberDescriptor>
+        const char* get_debug_name(MemberDescriptor d)
         {
-            static_assert(trait::is_member_v<T>);
-            static const std::string name(get_debug_name_const(t).str());
+            static_assert(trait::is_member_v<MemberDescriptor>);
+            static const std::string name(get_debug_name_const(d).str());
             return name.c_str();
         }
 
@@ -2552,10 +2718,11 @@ namespace refl
          * Returns the display name of T.
          * Uses the friendly_name of the property attribute, or the normalized name if no friendly_name was provided.
          */
-        template <typename T>
-        const char* get_display_name(const T t) noexcept
+        template <typename Descriptor>
+        const char* get_display_name(Descriptor d) noexcept
         {
-            static const std::string name(detail::get_display_name(t));
+            static_assert(trait::is_descriptor_v<Descriptor>);
+            static const std::string name(detail::get_display_name(d));
             return name.c_str();
         }
 
@@ -3287,6 +3454,8 @@ namespace refl::detail
         } \
         template <typename Dummy = void> \
         static constexpr auto pointer() -> decltype(&::refl::detail::head_t<type, Dummy>::FunctionName_) { return &::refl::detail::head_t<type, Dummy>::FunctionName_; } \
+        template <typename Pointer> \
+        static constexpr auto resolve() -> ::std::decay_t<decltype(Pointer(&type::FunctionName_))> { return Pointer(&type::FunctionName_); } \
         REFL_DETAIL_MEMBER_PROXY(FunctionName_); \
     };
 
