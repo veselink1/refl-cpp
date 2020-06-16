@@ -3296,13 +3296,13 @@ namespace refl::detail
     };
 
     template <typename T, typename U>
-    constexpr typename transfer_cvref<T, U>::type&& forward_cast(std::remove_reference_t<T>& t)
+    constexpr auto forward_cast(std::remove_reference_t<T>& t) -> decltype(static_cast<typename transfer_cvref<T, U>::type&&>(t))
     {
         return static_cast<typename transfer_cvref<T, U>::type&&>(t);
     }
 
     template <typename T, typename U>
-    constexpr typename transfer_cvref<T, U>::type&& forward_cast(std::remove_reference_t<T>&& t)
+    constexpr auto forward_cast(std::remove_reference_t<T>&& t) -> decltype(static_cast<typename transfer_cvref<T, U>::type&&>(t))
     {
         static_assert(!std::is_lvalue_reference_v<T>, "template argument substituting T is an lvalue reference type");
         return static_cast<typename transfer_cvref<T, U>::type&&>(t);

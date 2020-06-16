@@ -45,6 +45,12 @@ struct Foo : FooBase
     void f() {}
     void f(int) {}
     int g(int) { return 0; }
+
+    int m() & { return 0; }
+    int m() const& { return 1; }
+    int m() && { return 2; }
+
+    static int m(int) { return 3; }
 };
 
 REFL_TYPE(Foo, bases<FooBase>)
@@ -54,6 +60,7 @@ REFL_TYPE(Foo, bases<FooBase>)
 
     REFL_FUNC(f)
     REFL_FUNC(g)
+    REFL_FUNC(m)
 REFL_END
 
 struct ShadowingBase {
@@ -198,6 +205,18 @@ TEST_CASE( "descriptors" ) {
         REQUIRE( is_resolved(g_td{}) );
         REQUIRE( get_pointer(g_td{}) != nullptr );
         REQUIRE( g_td::pointer != nullptr );
+
+        using m_td = trait::get_t<5, member_list<Foo>>;
+        REQUIRE( !m_td::is_resolved );
+        REQUIRE( !is_resolved(m_td{}) );
+        REQUIRE( get_pointer(m_td{}) == nullptr );
+        REQUIRE( m_td::pointer == nullptr );
+
+        Foo foo{};
+        REQUIRE( m_td{}((Foo&)foo) == 0 );
+        REQUIRE( m_td{}((const Foo&)foo) == 1 );
+        REQUIRE( m_td{}((Foo&&)Foo{}) == 2 );
+        REQUIRE( m_td{}(0) == 3 );
     }
 
 }
