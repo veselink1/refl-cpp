@@ -2036,6 +2036,7 @@ namespace refl
             struct member_list : flatten<trait::map_t<declared_member_list, trait::prepend_t<T, typename base_type_list<T>::type>>>
             {
             };
+
         } // namespace detail
 
         /** A type_list of the declared member descriptors of the target type T. */
@@ -3256,64 +3257,55 @@ namespace refl::detail
     using head_t = typename head<T, Ts...>::type;
 
     template <typename T, typename U>
-    struct transfer_cv
+    struct transfer_const
     {
-        using type = U;
+        using type = std::conditional_t<std::is_const_v<T>, std::add_const_t<U>, U>;
     };
 
     template <typename T, typename U>
-    struct transfer_cv<const T, U>
+    struct transfer_volatile
     {
-        using type = const U;
+        using type = std::conditional_t<std::is_volatile_v<T>, std::add_volatile_t<U>, U>;
     };
 
     template <typename T, typename U>
-    struct transfer_cv<volatile T, U>
+    struct transfer_cv : transfer_const<T, typename transfer_volatile<T, U>::type>
     {
-        using type = volatile U;
     };
 
     template <typename T, typename U>
-    struct transfer_cv<const volatile T, U>
+    struct transfer_lvalue_ref
     {
-        using type = const volatile U;
+        using type = std::conditional_t<std::is_lvalue_reference_v<T>, std::add_lvalue_reference_t<U>, U>;
     };
 
     template <typename T, typename U>
-    struct transfer_ref
+    struct transfer_rvalue_ref
     {
-        using type = U;
+        using type = std::conditional_t<std::is_rvalue_reference_v<T>, std::add_rvalue_reference_t<U>, U>;
     };
 
     template <typename T, typename U>
-    struct transfer_ref<T&, U>
+    struct transfer_ref : transfer_rvalue_ref<T, typename transfer_lvalue_ref<T, U>::type>
     {
-        using type = U&;
     };
 
     template <typename T, typename U>
-    struct transfer_ref<T&&, U>
+    struct transfer_cvref : transfer_ref<T, typename transfer_cv<std::remove_reference_t<T>, U>::type>
     {
-        using type = U&&;
     };
 
     template <typename T, typename U>
-    struct transfer_qualifiers
+    constexpr typename transfer_cvref<T, U>::type&& forward_cast(std::remove_reference_t<T>& t)
     {
-        using type = typename transfer_ref<T, typename transfer_cv<std::remove_reference_t<T>, U>::type>::type;
-    };
-
-    template <typename T, typename U>
-    constexpr typename transfer_qualifiers<T, U>::type&& forward_cast(std::remove_reference_t<T>& t)
-    {
-        return static_cast<typename transfer_qualifiers<T, U>::type&&>(t);
+        return static_cast<typename transfer_cvref<T, U>::type&&>(t);
     }
 
     template <typename T, typename U>
-    constexpr typename transfer_qualifiers<T, U>::type&& forward_cast(std::remove_reference_t<T>&& t)
+    constexpr typename transfer_cvref<T, U>::type&& forward_cast(std::remove_reference_t<T>&& t)
     {
         static_assert(!std::is_lvalue_reference_v<T>, "template argument substituting T is an lvalue reference type");
-        return static_cast<typename transfer_qualifiers<T, U>::type&&>(t);
+        return static_cast<typename transfer_cvref<T, U>::type&&>(t);
     }
 
     template <typename T>
