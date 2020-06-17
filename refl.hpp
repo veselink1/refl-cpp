@@ -1930,9 +1930,9 @@ namespace refl
             }
 
             template <typename Member>
-            constexpr auto get_function_pointer(int) -> decltype(Member::pointer())
+            constexpr auto get_function_pointer(int) -> decltype(Member::template resolve<void>())
             {
-                return Member::pointer();
+                return Member::template resolve<void>();
             }
 
             template <typename Member, typename Pointer>
@@ -1942,9 +1942,9 @@ namespace refl
             }
 
             template <typename Member, typename Pointer>
-            constexpr auto resolve_function_pointer(int) -> decltype(Member::template resolve<Pointer>())
+            constexpr auto resolve_function_pointer(int) -> decltype(Member::template resolve<void, Pointer>())
             {
-                return Member::template resolve<Pointer>();
+                return Member::template resolve<void, Pointer>();
             }
 
             template <typename T, size_t N>
@@ -2148,14 +2148,22 @@ namespace refl
              * to the instance is provided as first argument.
              */
             template <typename... Args>
-            static constexpr auto invoke(Args&&... args) -> decltype(member::invoke(std::declval<Args>()...))
+            static constexpr auto invoke(Args&&... args)
+                -> decltype((*member::template auto_resolve(type_tag<typename member_descriptor_base<T, N>::declaring_type>(), type_list<Args...>()))(std::forward<Args>(args)...))
             {
-                return member::invoke(std::forward<Args>(args)...);
+                return (*member::template auto_resolve(type_tag<typename member_descriptor_base<T, N>::declaring_type>(), type_list<Args...>()))(std::forward<Args>(args)...);
+            }
+
+            template <typename Self, typename... Args>
+            static constexpr auto invoke(Self&& self, Args&&... args)
+                -> decltype((std::forward<Self>(self).*(member::template auto_resolve(type_tag<Self>(), type_list<Args...>())))(std::forward<Args>(args)...))
+            {
+                return (std::forward<Self>(self).*(member::template auto_resolve(type_tag<Self>(), type_list<Args...>())))(std::forward<Args>(args)...);
             }
 
             /** The return type of an invocation of this member with Args... (as if by invoke(...)). */
             template <typename... Args>
-            using return_type = decltype(member::invoke(std::declval<Args>()...));
+            using return_type = decltype(invoke(std::declval<Args>()...));
 
             /** A synonym for invoke(args...). */
             template <typename... Args>
@@ -3319,6 +3327,30 @@ namespace refl::detail
         }
     }
 
+    template <typename Class, typename Return, typename Self, typename... Args>
+    constexpr auto resolve_pointer(Return(*ptr)(Args...), Self&&, Args&&...)
+        -> decltype((*ptr)(std::declval<Args>()...), ptr);
+
+#define REFL_DETAIL_RESOLVE_POINTER(CvRef_) \
+    template <typename Class, typename Return, typename Self, typename... Args> \
+    constexpr auto resolve_pointer(Return(Class::*ptr)(Args...) CvRef_, Self CvRef_, Args&&...) \
+        -> decltype((std::declval<Self CvRef_>().*ptr)(std::declval<Args>()...), ptr);
+
+    REFL_DETAIL_RESOLVE_POINTER()
+    REFL_DETAIL_RESOLVE_POINTER(const)
+    REFL_DETAIL_RESOLVE_POINTER(volatile)
+    REFL_DETAIL_RESOLVE_POINTER(const volatile)
+    REFL_DETAIL_RESOLVE_POINTER(&)
+    REFL_DETAIL_RESOLVE_POINTER(const&)
+    REFL_DETAIL_RESOLVE_POINTER(volatile&)
+    REFL_DETAIL_RESOLVE_POINTER(const volatile&)
+    REFL_DETAIL_RESOLVE_POINTER(&&)
+    REFL_DETAIL_RESOLVE_POINTER(const&&)
+    REFL_DETAIL_RESOLVE_POINTER(volatile&&)
+    REFL_DETAIL_RESOLVE_POINTER(const volatile&&)
+
+#undef REFL_DETAIL_RESOLVE_POINTER
+
 } // namespace refl::detail
 
 /********************************/
@@ -3438,16 +3470,17 @@ namespace refl::detail
     REFL_DETAIL_MEMBER_HEADER { \
         REFL_DETAIL_MEMBER_COMMON(function, FunctionName_, __VA_ARGS__) \
         public: \
-        template<typename Self, typename... Args> static constexpr auto invoke(Self&& self, Args&&... args) -> decltype(::refl::detail::forward_cast<Self, type>(self).FunctionName_(::std::forward<Args>(args)...)) {\
-            return ::refl::detail::forward_cast<Self, type>(self).FunctionName_(::std::forward<Args>(args)...); \
-        } \
-        template<typename... Args> static constexpr auto invoke(Args&&... args) -> decltype(::refl::detail::head_t<type, Args...>::FunctionName_(::std::declval<Args>()...)) { \
-            return ::refl::detail::head_t<type, Args...>::FunctionName_(::std::forward<Args>(args)...); \
-        } \
-        template <typename Dummy = void> \
-        static constexpr auto pointer() -> decltype(&::refl::detail::head_t<type, Dummy>::FunctionName_) { return &::refl::detail::head_t<type, Dummy>::FunctionName_; } \
-        template <typename Pointer> \
-        static constexpr auto resolve() -> ::std::decay_t<decltype(Pointer(&type::FunctionName_))> { return Pointer(&type::FunctionName_); } \
+        template <typename Self, typename... Args> \
+        static constexpr auto auto_resolve(::refl::type_tag<Self>, ::refl::type_list<Args...>) -> ::std::remove_reference_t<decltype( \
+            ::refl::detail::resolve_pointer< \
+                type, \
+                decltype(::std::declval<Self>().FunctionName_(::std::declval<Args>()...)) \
+            >(&type::FunctionName_, ::std::declval<Self>(), ::std::declval<Args>()...))> \
+        { return &type::FunctionName_; } \
+        \
+        template <typename Dummy, typename Pointer = decltype(&::refl::detail::head_t<type, Dummy>::FunctionName_)> \
+        static constexpr auto resolve() -> decltype(Pointer(&type::FunctionName_)) \
+        { return &type::FunctionName_; } \
         REFL_DETAIL_MEMBER_PROXY(FunctionName_); \
     };
 
