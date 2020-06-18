@@ -171,6 +171,11 @@ namespace refl
 
             /**
              * A constexpr version of std::string::substr.
+             *
+             * \code{.cpp}
+             * make_const_string("Hello, World!").template substr<0, 4>() -> (const_string<4>) "Hell"
+             * make_const_string("Hello, World!").template substr<1, 4>() -> (const_string<3>) "ell"
+             * \endcode
              */
             template <size_t Pos, size_t Count = npos>
             constexpr auto substr() const noexcept
@@ -188,6 +193,11 @@ namespace refl
 
             /**
              * Searches the string for the first occurrence of the character and returns its position.
+             *
+             * \code{.cpp}
+             * make_const_string("Hello, World!").find('e') -> 1
+             * make_const_string("Hello, World!").find('z') -> static_cast<size_t>(-1)
+             * \endcode
              */
             constexpr auto find(char ch, size_t pos = 0) const noexcept
             {
@@ -201,6 +211,11 @@ namespace refl
 
             /**
              * Searches the string for the last occurrence of the character and returns its position.
+             *
+             * \code{.cpp}
+             * make_const_string("Hello, World!").rfind('o') -> 8
+             * make_const_string("Hello, World!").rfind('z') -> static_cast<size_t>(-1)
+             * \endcode
              */
             constexpr auto rfind(char ch, size_t pos = npos) const noexcept
             {
@@ -705,12 +720,18 @@ namespace refl
             };
         }
 
+        /// \private
         template <size_t, typename>
         struct get;
 
         /**
-         * Provides a member typedef named type which is eqiuvalent to the
-         * N-th type of the provided type_list.
+         * Provides a member typedef type which is the
+         * N-th type in the provided type_list.
+         *
+         * \code{.cpp}
+         * typename get<0, type_list<int, float>>::type -> int
+         * typename get<1, type_list<int, float>>::type -> float
+         * \endcode
          */
         template <size_t N, typename... Ts>
         struct get<N, type_list<Ts...>> : detail::get<N, Ts...>
@@ -718,18 +739,24 @@ namespace refl
         };
 
         /**
-         * Equivalent to the N-th type of the provided type_list.
+         * The N-th type in the provided type_list.
          * @see get
          */
         template <size_t N, typename TypeList>
         using get_t = typename get<N, TypeList>::type;
 
+        /// \private
         template <size_t, typename>
         struct skip;
 
         /**
          * Skips the first N types in the provided type_list.
          * Provides a member typedef equivalent to the resuling type_list.
+         *
+         * \code{.cpp}
+         * typename skip<1, type_list<int, float, double>>::type -> type_list<float, double>
+         * typename skip<0, type_list<int, float, double>>::type -> type_list<int, float, double>
+         * \endcode
          */
         template <size_t N, typename... Ts>
         struct skip<N, type_list<Ts...>> : detail::skip<N, Ts...>
@@ -743,13 +770,18 @@ namespace refl
         template <size_t N, typename TypeList>
         using skip_t = typename skip<N, TypeList>::type;
 
+        /// \private
         template <typename>
         struct as_type_list;
 
         /**
-         * Provides a member typedef which is a type_list specialization with
+         * Provides a member typedef type which is a type_list with
          * template type parameters equivalent to the type parameters of the provided
-         * type. The provided type must be a template specialization.
+         * type. The provided type must be a template instance.
+         *
+         * \code{.cpp}
+         * typename as_type_list<std::tuple<int, float>>::type -> type_list<int, float>
+         * \endcode
          */
         template <template <typename...> typename T, typename... Ts>
         struct as_type_list<T<Ts...>>
@@ -757,20 +789,22 @@ namespace refl
             typedef type_list<Ts...> type;
         };
 
+        /// \private
         template <typename T>
         struct as_type_list : as_type_list<remove_qualifiers_t<T>>
         {
         };
 
         /**
-         * A typedef for a type_list specialization with
+         * A typedef for a type_list with
          * template type parameters equivalent to the type parameters of the provided
-         * type. The provided type must be a template specialization.
+         * type. The provided type must be a template instance.
          * @see as_type_list
          */
         template <typename T>
         using as_type_list_t = typename as_type_list<T>::type;
 
+        /// \private
         template <typename>
         struct as_tuple;
 
@@ -778,6 +812,10 @@ namespace refl
          * Provides a member typedef which is a std::tuple specialization with
          * template type parameters equivalent to the type parameters of the provided
          * type. The provided type must be a template specialization.
+         *
+         * \code{.cpp}
+         * typename as_tuple<type_list<int, float>>::type -> std::tuple<int, float>
+         * \endcode
          */
         template <template <typename...> typename T, typename... Ts>
         struct as_tuple<T<Ts...>>
@@ -785,6 +823,7 @@ namespace refl
             typedef std::tuple<Ts...> type;
         };
 
+        /// \private
         template <typename T>
         struct as_tuple : as_tuple<remove_qualifiers_t<T>>
         {
@@ -903,11 +942,14 @@ namespace refl
             {
                 using type = typename reverse_impl<type_list<T, Us...>, type_list<Ts...>>::type;
             };
-
         } // namespace detail
 
         /**
          * Reverses a list of types.
+         *
+         * \code{.cpp}
+         * typename reverse<type_list<int, float>>::type -> type_list<float, int>
+         * \endcode
          */
         template <typename TypeList>
         struct reverse : detail::reverse_impl<type_list<>, TypeList>
@@ -921,15 +963,24 @@ namespace refl
         template <typename TypeList>
         using reverse_t = typename reverse<TypeList>::type;
 
+        /**
+         * Concatenates N lists together.
+         *
+         * \code{.cpp}
+         * typename concat<type_list<int, float>, type_list<double>, type_list<long>>::type -> type_list<int, float, double, long>
+         * \endcode
+         */
         template <typename...>
         struct concat;
 
+        /// \private
         template <>
         struct concat<>
         {
             using type = type_list<>;
         };
 
+        /// \private
         template <typename... Ts>
         struct concat<type_list<Ts...>>
         {
@@ -939,6 +990,7 @@ namespace refl
         /**
          * Concatenates two lists together.
          */
+        /// \private
         template <typename... Ts, typename... Us>
         struct concat<type_list<Ts...>, type_list<Us...>>
         {
@@ -948,6 +1000,7 @@ namespace refl
         /**
          * Concatenates N lists together.
          */
+        /// \private
         template <typename TypeList1, typename TypeList2, typename... TypeLists>
         struct concat<TypeList1, TypeList2, TypeLists...> : concat<typename concat<TypeList1, TypeList2>::type, TypeLists...>
         {
@@ -1030,11 +1083,16 @@ namespace refl
             };
         }
 
+        /// \private
         template <template<typename> typename, typename>
         struct filter;
 
         /**
          * Filters a type_list according to a predicate template.
+         *
+         * \code{.cpp}
+         * typename filter<std::is_reference, type_list<int, float&, double>>::type -> type_list<float&>
+         * \endcode
          */
         template <template<typename> typename Predicate, typename... Ts>
         struct filter<Predicate, type_list<Ts...>>
@@ -1050,11 +1108,16 @@ namespace refl
         template <template<typename> typename Predicate, typename TypeList>
         using filter_t = typename filter<Predicate, TypeList>::type;
 
+        /// \private
         template <template<typename> typename, typename>
         struct map;
 
         /**
          * Transforms a type_list according to a predicate template.
+         *
+         * \code{.cpp}
+         * typename map<std::add_reference, type_list<int, float&, double>>::type -> type_list<int&, float&, double&>
+         * \endcode
          */
         template <template<typename> typename Mapper, typename... Ts>
         struct map<Mapper, type_list<Ts...>>
@@ -1082,6 +1145,11 @@ namespace refl
         /**
          * Detects whether T is a template specialization.
          * Inherits from std::bool_constant<>.
+         *
+         * \code{.cpp}
+         * is_instance<type_list<>>::value -> true
+         * is_instance<int>::value -> false
+         * \endcode
          */
         template <typename T>
         struct is_instance : detail::is_instance<T>
@@ -1126,6 +1194,11 @@ namespace refl
          * Detects whther the type U is a template specialization of T.
          * (e.g. is_instance_of<std::vector<>, std::vector<int>>)
          * Inherits from std::bool_constant<>.
+         *
+         * \code{.cpp}
+         * is_instance_of<type_list, type_list<int>>::value -> true
+         * is_instance_of<type_list, std::tuple<int>>::value -> false
+         * \endcode
          */
         template <template<typename...>typename T, typename U>
         struct is_instance_of : detail::is_instance_of<T, std::remove_cv_t<U>>
@@ -1139,12 +1212,18 @@ namespace refl
         template <template<typename...>typename T, typename U>
         [[maybe_unused]] static constexpr bool is_instance_of_v{ is_instance_of<T, U>::value };
 
+        /// \private
         template <typename, typename>
         struct contains;
 
         /**
          * Checks whether T is contained in the list of types.
          * Inherits from std::bool_constant<>.
+         *
+         * \code{.cpp}
+         * contains<int, type_list<int, float>>::value -> true
+         * contains<double, type_list<int, float>>::value -> false
+         * \endcode
          */
         template <typename T, typename... Ts>
         struct contains<T, type_list<Ts...>> : std::disjunction<std::is_same<std::remove_cv_t<T>, std::remove_cv_t<Ts>>...>
@@ -1158,12 +1237,18 @@ namespace refl
         template <typename T, typename TypeList>
         [[maybe_unused]] static constexpr bool contains_v = contains<T, TypeList>::value;
 
+        /// \private
         template <template<typename...> typename, typename>
         struct contains_instance;
 
         /**
          * Checks whether an instance of the template T is contained in the list of types.
          * Inherits from std::bool_constant<>.
+         *
+         * \code{.cpp}
+         * contains_instance<std::tuple, type_list<int, float, std::tuple<short, double>>>::value -> true
+         * contains_instance<std::vector, type_list<int, float, std::tuple<short, double>>>::value -> false
+         * \endcode
          */
         template <template<typename...> typename T, typename... Ts>
         struct contains_instance<T, type_list<Ts...>> : std::disjunction<trait::is_instance_of<T, std::remove_cv_t<Ts>>...>
@@ -1177,12 +1262,21 @@ namespace refl
         template <template<typename...> typename T, typename TypeList>
         [[maybe_unused]] static constexpr bool contains_instance_v = contains_instance<T, TypeList>::value;
 
+        /// \private
         template <typename, typename>
         struct contains_base;
 
         /**
          * Checks whether a type deriving from T is contained in the list of types.
          * Inherits from std::bool_constant<>.
+         *
+         * \code{.cpp}
+         * struct Base {};
+         * struct Derived : Base {};
+         * contains_base<Base, type_list<int, float, Derived>>::value -> true
+         * contains_base<Base, type_list<int, float, Base>>::value -> true
+         * contains_base<int, type_list<int, float, Derived>>::value -> false
+         * \endcode
          */
         template <typename T, typename... Ts>
         struct contains_base<T, type_list<Ts...>> : std::disjunction<std::is_base_of<std::remove_cv_t<T>, std::remove_cv_t<Ts>>...>
@@ -1218,6 +1312,10 @@ namespace refl
 
         /**
          * Creates a new list containing the repeating elements in the source list only once.
+         *
+         * \code{.cpp}
+         * typename unique<type_list<int, float, int>>::type -> type_list<int, float>
+         * \endcode
          */
         template <typename T>
         struct unique : detail::unique_impl<type_list<>, T>
@@ -1286,6 +1384,7 @@ namespace refl
         /**
          * Creates an empty array of type 'T.
          */
+        /// \private
         template <typename T>
         constexpr std::array<T, 0> to_array(const std::tuple<>&) noexcept
         {
@@ -1373,6 +1472,13 @@ namespace refl
         /**
          * Applies function F to each type in the type_list, aggregating
          * the results in a tuple. F can optionally take an index of type size_t.
+         *
+         * \code{.cpp}
+         * map_to_tuple(reflect_types(type_list<int, float, double>{}), [](auto td) {
+         *   return get_name(td);
+         * })
+         *   -> std::tuple{const_string{"int"}, const_string{"float"}, const_string{"double"}}
+         * \endcode
          */
         template <typename F, typename... Ts>
         constexpr auto map_to_tuple(type_list<Ts...> list, F&& f)
@@ -1383,6 +1489,13 @@ namespace refl
         /**
          * Applies function F to each type in the type_list, aggregating
          * the results in an array. F can optionally take an index of type size_t.
+         *
+         * \code{.cpp}
+         * map_to_array<std::string>(reflect_types(type_list<int, float, double>{}), [](auto td) {
+         *   return get_name(td).str();
+         * })
+         *   -> std::array{std::string{"int"}, std::string{"float"}, std::string{"double"}}
+         * \endcode
          */
         template <typename T, typename F, typename... Ts>
         constexpr auto map_to_array(type_list<Ts...> list, F&& f)
@@ -1393,6 +1506,12 @@ namespace refl
         /**
          * Applies function F to each type in the type_list.
          * F can optionally take an index of type size_t.
+         *
+         * \code{.cpp}
+         * for_each(reflect_types(type_list<int, float, double>{}), [](auto td) {
+         *   std::cout << get_name(td) << '\n';
+         * });
+         * \endcode
          */
         template <typename F, typename... Ts>
         constexpr void for_each(type_list<Ts...> list, F&& f)
@@ -1407,6 +1526,7 @@ namespace refl
         /*
          * Returns the initial_value unchanged.
          */
+        /// \private
         template <typename R, typename F, typename... Ts>
         constexpr R accumulate(type_list<>, F&&, R&& initial_value)
         {
@@ -1467,6 +1587,13 @@ namespace refl
         /**
          * Filters the list according to a *constexpr* predicate.
          * Calling f(Ts{})... should be valid in a constexpr context.
+         *
+         * \code{.cpp}
+         * filter(reflect_types(type_list<int, long, float>{}), [](auto td) {
+         *   return std::is_integral_v<typename decltype(td)::type>;
+         * })
+         *   -> type_list<type_descriptor<int>, type_descriptor<long>>
+         * \endcode
          */
         template <typename F, typename... Ts>
         constexpr auto filter(type_list<Ts...> list, F&& f)
@@ -1513,6 +1640,7 @@ namespace refl
 
         /**
          * Returns true if the type_list contains the specified type.
+         * @see refl::trait::contains
          */
         template <typename T, typename... Ts>
         constexpr bool contains(type_list<Ts...>)
@@ -1521,16 +1649,8 @@ namespace refl
         }
 
         /**
-         * Returns true if the tuple contains the specified type.
-         */
-        template <typename T, typename... Ts>
-        constexpr bool contains(const std::tuple<Ts...>&)
-        {
-            return trait::contains_v<T, type_list<Ts...>>;
-        }
-
-        /**
          * Returns true if the tuple contains the specified type or a supertype.
+         * @see refl::trait::contains_base
          */
         template <typename T, typename... Ts>
         constexpr bool contains_base(const std::tuple<Ts...>&)
@@ -1540,6 +1660,7 @@ namespace refl
 
         /**
          * Returns true if the tuple contains an instance of the specified type.
+         * @see refl::trait::contains_instance
          */
         template <template <typename...> typename T, typename... Ts>
         constexpr bool contains_instance(const std::tuple<Ts...>&)
@@ -1549,6 +1670,13 @@ namespace refl
 
         /**
          * Applies a function to the elements of the type_list.
+         *
+         * \code{.cpp}
+         * apply(reflect_types(type_list<int, long, float>{}), [](auto td_int, auto td_long, auto td_float) {
+         *   return get_name(td_int) + " " +get_name(td_long) + " " + get_name(td_float);
+         * })
+         *   -> "int long float"
+         * \endcode
          */
         template <typename... Ts, typename F>
         constexpr auto apply(type_list<Ts...>, F&& f)
@@ -1629,14 +1757,26 @@ namespace refl
             return std::get<idx>(ts);
         }
 
-        /* Converts a type_list of types to a type_list of the type_descriptors for these types. */
+        /**
+         * Converts a type_list of types to a type_list of the type_descriptors for these types.
+         *
+         * \code{.cpp}
+         * reflect_types(type_list<int, float>{}) -> type_list<type_descriptor<int>, type_descriptor<float>>{}
+         * \endcode
+         */
         template <typename... Ts>
         constexpr type_list<descriptor::type_descriptor<Ts>...> reflect_types(type_list<Ts...>) noexcept
         {
             return {};
         }
 
-        /* Converts a type_list of type_descriptors to a type_list of the target types. */
+        /**
+         * Converts a type_list of type_descriptors to a type_list of the target types.
+         *
+         * \code{.cpp}
+         * unreflect_types(type_list<type_descriptor<int>, type_descriptor<float>>{}) -> type_list<int, float>{}
+         * \endcode
+         */
         template <typename... Ts>
         constexpr type_list<Ts...> unreflect_types(type_list<descriptor::type_descriptor<Ts>...>) noexcept
         {
@@ -2059,22 +2199,43 @@ namespace refl
 
         public:
 
-            /** An alias for the declaring type of the reflected member. */
+            /**
+             * An alias for the declaring type of the reflected member.
+             *
+             * \code{.cpp}
+             * struct Foo { const int* x; };
+             * REFL_AUTO(type(Foo), field(x))
+             *
+             * get_t<0, member_list<Foo>>::declaring_type -> Foo
+             * \endcode
+             */
             typedef T declaring_type;
 
             /** An alias specifying the member type of member. */
             typedef typename member::member_type member_type;
 
-            /** An alias specifying the types of the attributes of the member. (Removes CV-qualifiers.) */
+            /**
+             * An alias specifying the types of the attributes of the member. (Removes CV-qualifiers.)
+             * \copydetails refl::descriptor::get_attribute_types
+             */
             typedef trait::as_type_list_t<std::remove_cv_t<decltype(member::attributes)>> attribute_types;
 
-            /** The type_descriptor of the declaring type. */
+            /**
+             * The type_descriptor of the declaring type.
+             * \copydetails refl::descriptor::get_declarator
+             */
             static constexpr type_descriptor<T> declarator{ };
 
-            /** The name of the reflected member. */
+            /**
+             * The name of the reflected member.
+             * \copydetails refl::descriptor::get_name
+             */
             static constexpr auto name{ member::name };
 
-            /** The attributes of the reflected member. */
+            /**
+             * The attributes of the reflected member.
+             * \copydetails refl::descriptor::get_attributes
+             */
             static constexpr auto attributes{ member::attributes };
 
         };
@@ -2090,16 +2251,34 @@ namespace refl
 
         public:
 
-            /** Type value type of the member. */
+            /**
+             * Type value type of the member.
+             *
+             * \code{.cpp}
+             * struct Foo { const int* x; };
+             * REFL_AUTO(type(Foo), field(x))
+             *
+             * get_t<0, member_list<Foo>>::value_type -> const int*
+             * \endcode
+             */
             typedef typename member::value_type value_type;
 
-            /** Whether the field is static or not. */
+            /**
+             * Whether the field is static or not.
+             * \copydetails refl::descriptor::is_static
+             */
             static constexpr bool is_static{ !std::is_member_object_pointer_v<decltype(member::pointer)> };
 
-            /** Whether the field is const or not. */
+            /**
+             * Whether the field is const or not.
+             * @see refl::descriptor::is_const
+             */
             static constexpr bool is_writable{ !std::is_const_v<value_type> };
 
-            /** A member pointer to the reflected field of the appropriate type. */
+            /**
+             * A member pointer to the reflected field of the appropriate type.
+             * \copydetails refl::descriptor::get_pointer
+             */
             static constexpr auto pointer{ member::pointer };
 
         private:
@@ -2108,21 +2287,30 @@ namespace refl
 
         public:
 
-            /** Returns the value of the field. (for static fields). */
+            /**
+             * Returns the value of the field. (for static fields).
+             * \copydetails refl::descriptor::invoke
+             */
             template <decltype(nullptr) = nullptr>
             static constexpr decltype(auto) get() noexcept
             {
                 return *member::pointer;
             }
 
-            /** Returns the value of the field. (for instance fields). */
+            /**
+             * Returns the value of the field. (for instance fields).
+             * \copydetails refl::descriptor::invoke
+             */
             template <typename U>
             static constexpr decltype(auto) get(U&& target) noexcept
             {
                 return target.*(member::pointer);
             }
 
-            /** A synonym for get(). */
+            /**
+             * A synonym for get().
+             * \copydetails refl::descriptor::invoke
+             */
             template <typename... Args>
             constexpr auto operator()(Args&&... args) const noexcept -> decltype(invoker::invoke(std::forward<Args>(args)...))
             {
@@ -2146,6 +2334,7 @@ namespace refl
              * Invokes the function with the given arguments.
              * If the function is an instance function, a reference
              * to the instance is provided as first argument.
+             * \copydetails refl::descriptor::invoke
              */
             template <typename... Args>
             static constexpr auto invoke(Args&&... args) -> decltype(member::invoke(std::declval<Args>()...))
@@ -2153,11 +2342,17 @@ namespace refl
                 return member::invoke(std::forward<Args>(args)...);
             }
 
-            /** The return type of an invocation of this member with Args... (as if by invoke(...)). */
+            /**
+             * The return type of an invocation of this member with Args... (as if by invoke(...)).
+             * \copydetails refl::descriptor::return_type
+             */
             template <typename... Args>
             using return_type = decltype(member::invoke(std::declval<Args>()...));
 
-            /** A synonym for invoke(args...). */
+            /**
+             * A synonym for invoke(args...).
+             * \copydetails refl::descriptor::invoke
+             */
             template <typename... Args>
             constexpr auto operator()(Args&&... args) const -> decltype(invoke(std::declval<Args>()...))
             {
@@ -2166,17 +2361,20 @@ namespace refl
 
             /**
              * Returns a pointer to a non-overloaded function.
+             * \copydetails refl::descriptor::get_pointer
              */
             static constexpr auto pointer{ detail::get_function_pointer<member>(0) };
 
             /**
              * Whether the pointer member was correctly resolved to a concrete implementation.
              * If this field is false, resolve() would need to be called instead.
+             * \copydetails refl::descriptor::is_resolved
              */
             static constexpr bool is_resolved{ !std::is_same_v<decltype(pointer), const decltype(nullptr)> };
 
             /**
              * Whether the pointer can be resolved as with the specified type.
+             * \copydetails refl::descriptor::can_resolve
              */
             template <typename Pointer>
             static constexpr bool can_resolve()
@@ -2187,6 +2385,8 @@ namespace refl
             /**
              * Resolves the function pointer as being of type Pointer.
              * Required when taking a pointer to an overloaded function.
+             *
+             * \copydetails refl::descriptor::resolve
              */
             template <typename Pointer>
             static constexpr auto resolve()
@@ -2208,46 +2408,100 @@ namespace refl
 
         public:
 
-            /** The reflected type T. */
+            /**
+             * The reflected type T.
+             *
+             * \code{.cpp}
+             * struct Foo {};
+             * REFL_AUTO(type(Foo))
+             *
+             * type_descriptor<Foo>::type -> Foo
+             * \endcode
+             */
             typedef T type;
 
-            /** The declared base types (via base_types<Ts...> attribute) of T. */
+            /**
+             * The declared base types (via base_types<Ts...> attribute) of T.
+             * \copydetails refl::descriptor::get_declared_base_types
+             */
             typedef typename detail::declared_base_type_list<T>::type declared_base_types;
 
-            /** The declared and inherited base types of T. */
+            /**
+             * The declared and inherited base types of T.
+             * \copydetails refl::descriptor::get_base_types
+             */
             typedef typename detail::base_type_list<T>::type base_types;
 
-            /** A synonym for declared_member_list<T>. */
+            /**
+             * A synonym for declared_member_list<T>.
+             * \copydetails refl::descriptor::declared_member_list
+             */
             typedef declared_member_list<T> declared_member_types;
 
-            /** A synonym for member_list<T>. */
+            /**
+             * A synonym for member_list<T>.
+             * \copydetails refl::descriptor::member_list
+             */
             typedef member_list<T> member_types;
 
-            /** An alias specifying the types of the attributes of the member. (Removes CV-qualifiers.) */
+            /**
+             * An alias specifying the types of the attributes of the member. (Removes CV-qualifiers.)
+             * \copydetails refl::descriptor::get_attribute_types
+             */
             typedef detail::attribute_types<T> attribute_types;
 
-            /** The declared base types (via base_types<Ts...> attribute) of T. */
+            /**
+             * The declared base types (via base_types<Ts...> attribute) of T.
+             * \copydetails refl::descriptor::get_declared_base_types
+             */
             static constexpr declared_base_types declared_bases{};
 
-            /** The declared  and inherited base types of T. */
+            /**
+             * The declared  and inherited base types of T.
+             * \copydetails refl::descriptor::get_base_types
+             */
             static constexpr base_types bases{};
 
-            /** The list of declared member descriptors. */
+            /**
+             * The list of declared member descriptors.
+             * \copydetails refl::descriptor::get_declared_members
+             */
             static constexpr declared_member_types declared_members{  };
 
-            /** The list of declared and inherited member descriptors. */
+            /**
+             * The list of declared and inherited member descriptors.
+             * \copydetails refl::descriptor::get_members
+             */
             static constexpr member_types members{  };
 
-            /** The name of the reflected type. */
+            /**
+             * The name of the reflected type.
+             * \copydetails refl::descriptor::get_name
+             */
             static constexpr const auto name{ type_info::name };
 
-            /** The attributes of the reflected type. */
+            /**
+             * The attributes of the reflected type.
+             * \copydetails refl::descriptor::get_attributes
+              */
             static constexpr const auto attributes{ type_info::attributes };
 
         };
 
         /**
          * Returns the full name of the descriptor
+         *
+         * \code{.cpp}
+         * namespace ns {
+         *   struct Foo {
+         *     int x;
+         *   };
+         * }
+         * REFL_AUTO(type(ns::Foo), field(x))
+         *
+         * get_name(reflect<Foo>()) -> "ns::Foo"
+         * get_name(get_t<0, member_list<Foo>>()) -> "x"
+         * \endcode
          */
         template <typename Descriptor>
         constexpr auto get_name(Descriptor d) noexcept
@@ -2258,6 +2512,13 @@ namespace refl
 
         /**
          * Returns a const reference to the descriptor's attribute tuple.
+         *
+         * \code{.cpp}
+         * struct Foo {};
+         * REFL_AUTO(type(Foo, bases<>, ns::serializable()))
+         *
+         * get_attributes(reflect<Foo>()) -> const std::tuple<attr::base_types<>, ns::serializable>&
+         * \endcode
          */
         template <typename Descriptor>
         constexpr const auto& get_attributes(Descriptor d) noexcept
@@ -2268,6 +2529,13 @@ namespace refl
 
         /**
          * Returns a type_list of the descriptor's attribute types.
+         *
+         * \code{.cpp}
+         * struct Foo {};
+         * REFL_AUTO(type(Foo, bases<>, ns::serializable()))
+         *
+         * get_attribute_types(reflect<Foo>()) -> type_list<attr::base_types<>, ns::serializable>
+         * \endcode
          */
         template <typename Descriptor>
         constexpr auto get_attribute_types(Descriptor d) noexcept
@@ -2280,6 +2548,17 @@ namespace refl
          * Returns a type_list of the declared base types of the type.
          * Combine with reflect_types to obtain type_descriptors for those types.
          * @see reflect_types
+         *
+         * \code{.cpp}
+         * struct Animal {};
+         * REFL_AUTO(type(Animal))
+         * struct Mammal : Animal {};
+         * REFL_AUTO(type(Mammal, bases<Animal>))
+         * struct Dog : Mammal {}:
+         * REFL_AUTO(type(Dog, bases<Mammal>))
+         *
+         * get_base_types(reflect<Dog>()) -> type_list<Mammal>
+         * \endcode
          */
         template <typename TypeDescriptor>
         constexpr auto get_declared_base_types(TypeDescriptor t) noexcept
@@ -2292,6 +2571,17 @@ namespace refl
          * Returns a type_list of the declared and inherited base types of the type.
          * Combine with reflect_types to obtain type_descriptors for those types.
          * @see reflect_types
+         *
+         * \code{.cpp}
+         * struct Animal {};
+         * REFL_AUTO(type(Animal))
+         * struct Mammal : Animal {};
+         * REFL_AUTO(type(Mammal, bases<Animal>))
+         * struct Dog : Mammal {}:
+         * REFL_AUTO(type(Dog, bases<Mammal>))
+         *
+         * get_base_types(reflect<Dog>()) -> type_list<Mammal, Animal>
+         * \endcode
          */
         template <typename TypeDescriptor>
         constexpr auto get_base_types(TypeDescriptor t) noexcept
@@ -2302,6 +2592,17 @@ namespace refl
 
         /**
          * Returns a type_list of the declared members of the type.
+         *
+         * \code{.cpp}
+         * struct Base {
+         *  int val;
+         * };
+         * struct Foo : Base {
+         *   int bar, baz;
+         * };
+         * REFL_AUTO(type(Foo, bases<Base>), field(bar), field(baz))
+         * get_declared_members(reflect<Foo>()) -> type_list<field_descriptor<Foo, 0> /bar/, field_descriptor<Foo, 1> /baz/>
+         * \endcode
          */
         template <typename TypeDescriptor>
         constexpr auto get_declared_members(TypeDescriptor t) noexcept
@@ -2312,6 +2613,17 @@ namespace refl
 
         /**
          * Returns a type_list of the declared and inherited members of the type.
+         *
+         * \code{.cpp}
+         * struct Base {
+         *  int val;
+         * };
+         * struct Foo : Base {
+         *   int bar, baz;
+         * };
+         * REFL_AUTO(type(Foo, bases<Base>), field(bar), field(baz))
+         * get_members(reflect<Foo>()) -> type_list<field_descriptor<Foo, 0> /bar/, field_descriptor<Foo, 1> /baz/, field_descriptor<Base, 0> /val/>
+         * \endcode
          */
         template <typename TypeDescriptor>
         constexpr auto get_members(TypeDescriptor t) noexcept
@@ -2322,6 +2634,14 @@ namespace refl
 
         /**
          * Returns the type_descriptor of declaring type of the member.
+         *
+         * \code{.cpp}
+         * struct Foo {
+         *   int bar;
+         * };
+         * REFL_AUTO(type(Foo), field(bar)
+         * get_declarator(get_t<0, member_list<Foo>>()) -> type_descriptor<Foo>{}
+         * \endcode
          */
         template <typename MemberDescriptor>
         constexpr auto get_declarator(MemberDescriptor d) noexcept
@@ -2337,6 +2657,16 @@ namespace refl
          * @see is_resolved
          * @see can_resolve
          * @see resolve
+         *
+         * \code{.cpp}
+         * struct Foo {
+         *   int bar;
+         *   static int baz;
+         * };
+         * REFL_AUTO(type(Foo), field(bar), field(baz))
+         * get_pointer(get_t<0, member_list<Foo>>()) -> (int Foo::*) &Foo::bar
+         * get_pointer(get_t<1, member_list<Foo>>()) -> (int*) &Foo::baz
+         * \endcode
          */
         template <typename MemberDescriptor>
         constexpr auto get_pointer(MemberDescriptor d) noexcept
@@ -2347,6 +2677,20 @@ namespace refl
 
         /**
          * Invokes the member with the specified arguments.
+         *
+         * \code{.cpp}
+         * struct Foo {
+         *   int bar = 1;
+         *   static int baz = 5;
+         *   void foobar(int x) { return x * 2; }
+         *   static void foobaz(int x) { return x * 3; }
+         * };
+         * REFL_AUTO(type(Foo), field(bar), field(baz), func(foobar), func(foobaz))
+         * invoke(get_t<0, member_list<Foo>(), Foo()) -> 1 (Foo().bar)
+         * invoke(get_t<1, member_list<Foo>>()) -> 5 (Foo::baz)
+         * invoke(get_t<2, member_list<Foo>(), Foo(), 10) -> 20 (Foo().foobar())
+         * invoke(get_t<3, member_list<Foo>>()) -> 30 (Foo::foobaz())
+         * \endcode
          */
         template <typename MemberDescriptor, typename... Args>
         constexpr auto invoke(MemberDescriptor d, Args&&... args) noexcept -> decltype(d(std::forward<Args>(args)...))
@@ -2356,6 +2700,16 @@ namespace refl
 
         /**
          * Checks whether the field is declared as static.
+         *
+         * \code{.cpp}
+         * struct Foo {
+         *   int bar;
+         *   static int baz;
+         * };
+         * REFL_AUTO(type(Foo), field(bar), field(baz))
+         * is_static(get_t<0, member_list<Foo>>()) -> false
+         * is_static(get_t<1, member_list<Foo>>()) -> true
+         * \endcode
          */
         template <typename FieldDescriptor>
         constexpr auto is_static(FieldDescriptor d) noexcept
@@ -2366,6 +2720,16 @@ namespace refl
 
         /**
          * Checks whether the value type of the field is const-qualified.
+         *
+         * \code{.cpp}
+         * struct Foo {
+         *   int bar;
+         *   const int baz;
+         * };
+         * REFL_AUTO(type(Foo), field(bar), field(baz))
+         * is_const(get_t<0, member_list<Foo>>()) -> false
+         * is_const(get_t<1, member_list<Foo>>()) -> true
+         * \endcode
          */
         template <typename FieldDescriptor>
         constexpr auto is_const(FieldDescriptor d) noexcept
@@ -2383,6 +2747,17 @@ namespace refl
 
         /**
          * Checks whether the function pointer was automatically resolved.
+         *
+         * \code{.cpp}
+         * struct Foo {
+         *   void bar();
+         *   void bar(int);
+         *   void baz();
+         * };
+         * REFL_AUTO(type(Foo), func(bar), func(baz))
+         * is_resolved(get_t<0, member_list<Foo>>()) -> false
+         * is_resolved(get_t<1, member_list<Foo>>()) -> true
+         * \endcode
          */
         template <typename FunctionDescriptor>
         constexpr auto is_resolved(FunctionDescriptor d) noexcept
@@ -2394,6 +2769,17 @@ namespace refl
         /**
          * Checks whether the function pointer can be resolved as
          * a pointer of the specified type.
+         *
+         * \code{.cpp}
+         * struct Foo {
+         *   void bar();
+         *   void bar(int);
+         * };
+         * REFL_AUTO(type(Foo), func(bar))
+         * can_resolve<void(Foo::*)()>(get_t<0, member_list<Foo>>()) -> true
+         * can_resolve<void(Foo::*)(int)>(get_t<0, member_list<Foo>>()) -> true
+         * can_resolve<void(Foo::*)(std::string)>(get_t<0, member_list<Foo>>()) -> false
+         * \endcode
          */
         template <typename Pointer, typename FunctionDescriptor>
         constexpr auto can_resolve(FunctionDescriptor d) noexcept
@@ -2404,6 +2790,17 @@ namespace refl
 
         /**
          * Resolves the function pointer as a pointer of the specified type.
+         *
+         * \code{.cpp}
+         * struct Foo {
+         *   void bar();
+         *   void bar(int);
+         * };
+         * REFL_AUTO(type(Foo), func(bar))
+         * resolve<void(Foo::*)()>(get_t<0, member_list<Foo>>()) -> <&Foo::bar()>
+         * resolve<void(Foo::*)(int)>(get_t<0, member_list<Foo>>()) -> <&Foo::bar(int)>
+         * resolve<void(Foo::*)(std::string)>(get_t<0, member_list<Foo>>()) -> nullptr
+         * \endcode
          */
         template <typename Pointer, typename FunctionDescriptor>
         constexpr auto resolve(FunctionDescriptor d) noexcept
@@ -2416,6 +2813,12 @@ namespace refl
          * Checks whether T is a field descriptor.
          *
          * @see refl::descriptor::field_descriptor
+         *
+         * \code{.cpp}
+         * REFL_AUTO(type(Foo), func(bar), field(baz))
+         * is_function(get_t<0, member_list<Foo>>()) -> false
+         * is_function(get_t<1, member_list<Foo>>()) -> true
+         * \endcode
          */
         template <typename Descriptor>
         constexpr bool is_field(Descriptor) noexcept
@@ -2428,6 +2831,12 @@ namespace refl
          * Checks whether T is a function descriptor.
          *
          * @see refl::descriptor::function_descriptor
+         *
+         * \code{.cpp}
+         * REFL_AUTO(type(Foo), func(bar), field(baz))
+         * is_function(get_t<0, member_list<Foo>>()) -> true
+         * is_function(get_t<1, member_list<Foo>>()) -> false
+         * \endcode
          */
         template <typename Descriptor>
         constexpr bool is_function(Descriptor) noexcept
@@ -2440,6 +2849,11 @@ namespace refl
          * Checks whether T is a type descriptor.
          *
          * @see refl::descriptor::type_descriptor
+         *
+         * \code{.cpp}
+         * REFL_AUTO(type(Foo))
+         * is_type(reflect<Foo>>()) -> true
+         * \endcode
          */
         template <typename Descriptor>
         constexpr bool is_type(Descriptor) noexcept
@@ -2450,6 +2864,11 @@ namespace refl
 
         /**
          * Checks whether T has an attribute of type A.
+         *
+         * \code{.cpp}
+         * REFL_AUTO(type(User), func(get_name, property()), func(set_name, property()))
+         * has_attribute<attr::property>(get_t<0, member_list<User>>{}) -> true
+         * \endcode
          */
         template <typename A, typename Descriptor>
         constexpr bool has_attribute(Descriptor) noexcept
@@ -2460,6 +2879,11 @@ namespace refl
 
         /**
          * Checks whether T has an attribute of that is a template instance of A.
+         *
+         * \code{.cpp}
+         * REFL_AUTO(type(Random, debug{ [](auto os, auto){ os << "[Random]"; } }))
+         * has_attribute<attr::debug>(reflect<Random>()) -> true
+         * \endcode
          */
         template <template<typename...> typename A, typename Descriptor>
         constexpr bool has_attribute(Descriptor) noexcept
@@ -2470,6 +2894,11 @@ namespace refl
 
         /**
          * Returns the value of the attribute A on T.
+         *
+         * \code{.cpp}
+         * REFL_AUTO(type(User), func(get_name, property()), func(set_name, property()))
+         * get_attribute<attr::property>(get_t<0, member_list<User>>{}) -> property{ friendly_name = nullopt }
+         * \endcode
          */
         template <typename A, typename Descriptor>
         constexpr const A& get_attribute(Descriptor d) noexcept
@@ -2480,6 +2909,11 @@ namespace refl
 
         /**
          * Returns the value of the attribute A on T.
+         *
+         * \code{.cpp}
+         * REFL_AUTO(type(Random, debug{ [](auto os, auto){ os << "[Random]"; } }))
+         * get_attribute<attr::debug>(reflect<Random>()) -> instance of debug<LambdaType>
+         * \endcode
          */
         template <template<typename...> typename A, typename Descriptor>
         constexpr const auto& get_attribute(Descriptor d) noexcept
@@ -2493,6 +2927,11 @@ namespace refl
          *
          * @see refl::attr::property
          * @see refl::descriptor::get_property
+         *
+         * \code{.cpp}
+         * REFL_AUTO(type(User), func(get_name, property("user_name")), func(set_name, property()))
+         * is_property(get_t<0, member_list<User>>{}) -> true
+         * \endcode
          */
         template <typename MemberDescriptor>
         constexpr bool is_property(MemberDescriptor d) noexcept
@@ -2506,6 +2945,11 @@ namespace refl
          *
          * @see refl::attr::property
          * @see refl::descriptor::is_property
+         *
+         * \code{.cpp}
+         * REFL_AUTO(type(User), func(get_name, property("user_name")), func(set_name, property()))
+         * *get_property(get_t<0, member_list<User>>{}).friendly_name -> "user_name"
+         * \endcode
          */
         template <typename FunctionDescriptor>
         constexpr attr::property get_property(FunctionDescriptor d) noexcept
@@ -2524,7 +2968,13 @@ namespace refl
         } // namespace detail
 
         /**
-         * Checks if T is a readable property or a field.
+         * Checks if T is a 0-arg const-qualified member function with a property attribute or a field.
+         *
+         * \code{.cpp}
+         * REFL_AUTO(type(User), func(get_name, property()), func(set_name, property()))
+         * is_readable(get_t<0, member_list<User>>{}) -> true
+         * is_readable(get_t<1, member_list<User>>{}) -> false
+         * \endcode
          */
         template <typename MemberDescriptor>
         constexpr bool is_readable(MemberDescriptor) noexcept
@@ -2545,7 +2995,14 @@ namespace refl
         }
 
         /**
-         * Checks if T is a writable property or a non-const field.
+         * Checks if T is a 1-arg non-const-qualified member function with a property attribute or a non-const field.
+         *
+         * \code{.cpp}
+         * struct User { std::string get_name() const; }
+         * REFL_AUTO(type(User), func(get_name, property()), func(set_name, property()))
+         * is_writable(get_t<0, member_list<User>>{}) -> false
+         * is_writable(get_t<1, member_list<User>>{}) -> true
+         * \endcode
          */
         template <typename MemberDescriptor>
         constexpr bool is_writable(const MemberDescriptor) noexcept
@@ -2574,8 +3031,14 @@ namespace refl
         /**
          * Checks if a type has a bases attribute.
          *
+         * @deprecated Use has_base_types in combination with reflect_types instead.
          * @see refl::attr::bases
          * @see refl::descriptor::get_bases
+         *
+         * \code{.cpp}
+         * REFL_AUTO(type(Dog, bases<Animal>))
+         * has_bases(reflect<Dog>()) -> true
+         * \endcode
          */
         template <typename TypeDescriptor>
         [[deprecated]] constexpr auto has_bases(TypeDescriptor t) noexcept
@@ -2588,8 +3051,14 @@ namespace refl
          * Returns a list of the type_descriptor<T>s of the base types of the target,
          * as specified by the bases<A, B, ...> attribute.
          *
+         * @deprecated Use get_base_types in combination with reflect_types instead.
          * @see refl::attr::bases
          * @see refl::descriptor::has_bases
+         *
+         * \code{.cpp}
+         * REFL_AUTO(type(Dog, bases<Animal>))
+         * get_bases(reflect<Dog>()) -> type_list<type_descriptor<Animal>>
+         * \endcode
          */
         template <typename TypeDescriptor>
         [[deprecated]] constexpr auto get_bases(TypeDescriptor t) noexcept
@@ -2604,6 +3073,10 @@ namespace refl
 
         /**
          * Returns the unqualified name of the type, discarding the namespace and typenames (if a template type).
+         *
+         * \code{.cpp}
+         * get_simple_name(reflect<std::vector<float>>()) -> "vector"
+         * \endcode
          */
         template <typename TypeDescriptor>
         constexpr auto get_simple_name(TypeDescriptor t)
@@ -2621,6 +3094,11 @@ namespace refl
 
         /**
          * Returns the debug name of T (In the form of 'declaring_type::member_name') as a const_string.
+         *
+         * \code{.cpp}
+         * REFL_AUTO(type(Point), field(x), field(y))
+         * get_debug_name_const(get_t<0, member_list<Point>>{}) -> "Point::x"
+         * \endcode
          */
         template <typename MemberDescriptor>
         constexpr auto get_debug_name_const(MemberDescriptor d)
@@ -2631,6 +3109,10 @@ namespace refl
 
         /**
          * Returns the debug name of T. (In the form of 'declaring_type::member_name').
+         * \code{.cpp}
+         * REFL_AUTO(type(Point), field(x), field(y))
+         * get_debug_name(get_t<0, member_list<Point>>{}) -> "Point::x"
+         * \endcode
          */
         template <typename MemberDescriptor>
         const char* get_debug_name(MemberDescriptor d)
@@ -2718,6 +3200,27 @@ namespace refl
         /**
          * Returns the display name of T.
          * Uses the friendly_name of the property attribute, or the normalized name if no friendly_name was provided.
+         *
+         * \code{.cpp}
+         * struct Foo {
+         *   int get_foo() const;
+         *   int GetFoo() const;
+         *   int get_non_const() /missing const/;
+         *   int get_custom() const;
+         * };
+         * REFL_AUTO(
+         *   type(Foo),
+         *   func(get_foo, property()),
+         *   func(GetFoo, property()),
+         *   func(get_non_const, property()),
+         *   func(get_custom, property("value")),
+         * )
+         *
+         * get_display_name(get_t<0, member_list<Foo>>{}) -> "foo"
+         * get_display_name(get_t<1, member_list<Foo>>{}) -> "Foo"
+         * get_display_name(get_t<2, member_list<Foo>>{}) -> "get_non_const"
+         * get_display_name(get_t<3, member_list<Foo>>{}) -> "value"
+         * \endcode
          */
         template <typename Descriptor>
         const char* get_display_name(Descriptor d) noexcept
@@ -2892,7 +3395,7 @@ namespace refl
          * Users should inherit from this class and specify an invoke_impl(Member member, Args&&... args) function.
          *
          * # Examples:
-         * ```
+         * \code{.cpp}
          * template <typename T>
          * struct dummy_proxy : refl::runtime::proxy<dummy_proxy<T>, T> {
          *     template <typename Member, typename Self, typename... Args>
@@ -2901,7 +3404,7 @@ namespace refl
          *          return 0;
          *     }
          * };
-         * ```
+         * \endcode
          */
         template <typename Derived, typename Target>
         struct REFL_DETAIL_FORCE_EBO proxy

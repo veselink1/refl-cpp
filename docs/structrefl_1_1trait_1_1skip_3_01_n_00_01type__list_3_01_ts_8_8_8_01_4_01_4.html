@@ -96,13 +96,19 @@ $(document).ready(function(){initNavTree('structrefl_1_1trait_1_1skip_3_01_n_00_
 </div><!--header-->
 <div class="contents">
 
+<p>Skips the first N types in the provided type_list.  
+ <a href="structrefl_1_1trait_1_1skip_3_01_n_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="refl_8hpp_source.html">refl.hpp</a>&gt;</code></p>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;size_t N, typename... Ts&gt;<br />
 struct refl::trait::skip&lt; N, type_list&lt; Ts... &gt; &gt;</h3>
 
-<p>Skips the first N types in the provided type_list. Provides a member typedef equivalent to the resuling type_list. </p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<p>Skips the first N types in the provided type_list. </p>
+<p>Provides a member typedef equivalent to the resuling type_list.</p>
+<div class="fragment"><div class="line"><span class="keyword">typename</span> skip&lt;1, type_list&lt;int, float, double&gt;&gt;::type -&gt; type_list&lt;float, double&gt;</div>
+<div class="line"><span class="keyword">typename</span> skip&lt;0, type_list&lt;int, float, double&gt;&gt;::type -&gt; type_list&lt;int, float, double&gt;</div>
+</div><!-- fragment --> </div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li><a class="el" href="refl_8hpp_source.html">refl.hpp</a></li>
 </ul>
 </div><!-- contents -->

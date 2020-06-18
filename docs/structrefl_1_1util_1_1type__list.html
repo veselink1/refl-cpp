@@ -99,23 +99,28 @@ $(document).ready(function(){initNavTree('structrefl_1_1util_1_1type__list.html'
 </div><!--header-->
 <div class="contents">
 
+<p>Represents a compile-time list of types provided as variadic template parameters.  
+ <a href="structrefl_1_1util_1_1type__list.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="refl_8hpp_source.html">refl.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:ac0814fc38f041e46d2ab9258213910f3"><td class="memItemLeft" align="right" valign="top">static constexpr intptr_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1type__list.html#ac0814fc38f041e46d2ab9258213910f3">size</a> = sizeof...(Ts)</td></tr>
+<tr class="memdesc:ac0814fc38f041e46d2ab9258213910f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of types in this <a class="el" href="structrefl_1_1util_1_1type__list.html" title="Represents a compile-time list of types provided as variadic template parameters.">type_list</a>.  <a href="structrefl_1_1util_1_1type__list.html#ac0814fc38f041e46d2ab9258213910f3">More...</a><br /></td></tr>
 <tr class="separator:ac0814fc38f041e46d2ab9258213910f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename... Ts&gt;<br />
 struct refl::util::type_list&lt; Ts &gt;</h3>
 
-<p>Represents a compile-time list of types provided as variadic template parameters. <a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a> is an empty TrivialType. Instances of it can freely be created to communicate the list of represented types. type_lists support many standard operations that are implicitly available with ADL-lookup. <a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a> is used by refl-cpp mostly to represent the list of refl::field_descriptor, refl::function_descriptor specializations that allow the compile-time reflection of a type's members.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacerefl_1_1util.html#a19919596cdd45c858d891c91a7826b22">refl::util::for_each</a> </dd>
+<p>Represents a compile-time list of types provided as variadic template parameters. </p>
+<p><a class="el" href="structrefl_1_1util_1_1type__list.html" title="Represents a compile-time list of types provided as variadic template parameters.">type_list</a> is an empty TrivialType. Instances of it can freely be created to communicate the list of represented types. type_lists support many standard operations that are implicitly available with ADL-lookup. <a class="el" href="structrefl_1_1util_1_1type__list.html" title="Represents a compile-time list of types provided as variadic template parameters.">type_list</a> is used by refl-cpp mostly to represent the list of refl::field_descriptor, refl::function_descriptor specializations that allow the compile-time reflection of a type's members.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacerefl_1_1util.html#a19919596cdd45c858d891c91a7826b22" title="Applies function F to each type in the type_list.">refl::util::for_each</a> </dd>
 <dd>
-<a class="el" href="namespacerefl_1_1util.html#af69ca2ba2b0353b7d3433f6a77b62902">refl::util::map_to_array</a> </dd>
+<a class="el" href="namespacerefl_1_1util.html#af69ca2ba2b0353b7d3433f6a77b62902" title="Applies function F to each type in the type_list, aggregating the results in an array.">refl::util::map_to_array</a> </dd>
 <dd>
-<a class="el" href="namespacerefl_1_1util.html#adb5bb478ef1cc5966e9df7c9b10b5dd3">refl::util::map_to_tuple</a> </dd>
+<a class="el" href="namespacerefl_1_1util.html#adb5bb478ef1cc5966e9df7c9b10b5dd3" title="Applies function F to each type in the type_list, aggregating the results in a tuple.">refl::util::map_to_tuple</a> </dd>
 <dd>
 refl::member_list</dd></dl>
 <h1><a class="anchor" id="autotoc_md70"></a>
@@ -143,7 +148,8 @@ template&lt;typename... Ts&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>The number of types in this <a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a> </p>
+
+<p>The number of types in this <a class="el" href="structrefl_1_1util_1_1type__list.html" title="Represents a compile-time list of types provided as variadic template parameters.">type_list</a>. </p>
 
 </div>
 </div>
@@ -152,7 +158,7 @@ template&lt;typename... Ts&gt; </div>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespacerefl_1_1util_html_a19919596cdd45c858d891c91a7826b22"><div class="ttname"><a href="namespacerefl_1_1util.html#a19919596cdd45c858d891c91a7826b22">refl::util::for_each</a></div><div class="ttdeci">constexpr void for_each(type_list&lt; Ts... &gt; list, F &amp;&amp;f)</div><div class="ttdef"><b>Definition:</b> refl.hpp:1736</div></div>
+<div class="ttc" id="anamespacerefl_1_1util_html_a19919596cdd45c858d891c91a7826b22"><div class="ttname"><a href="namespacerefl_1_1util.html#a19919596cdd45c858d891c91a7826b22">refl::util::for_each</a></div><div class="ttdeci">constexpr void for_each(type_list&lt; Ts... &gt; list, F &amp;&amp;f)</div><div class="ttdoc">Applies function F to each type in the type_list.</div><div class="ttdef"><b>Definition:</b> refl.hpp:1517</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

@@ -99,21 +99,25 @@ $(document).ready(function(){initNavTree('structrefl_1_1trait_1_1filter_3_01_pre
 </div><!--header-->
 <div class="contents">
 
+<p>Filters a type_list according to a predicate template.  
+ <a href="structrefl_1_1trait_1_1filter_3_01_predicate_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="refl_8hpp_source.html">refl.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:aabb8d172070c69e43d418850c765343f"><td class="memItemLeft" align="right" valign="top">typedef detail::filter&lt; Predicate &gt;::template apply&lt; <a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt; Ts... &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1trait_1_1filter_3_01_predicate_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html#aabb8d172070c69e43d418850c765343f">type</a></td></tr>
-<tr class="separator:aabb8d172070c69e43d418850c765343f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb3370c903a75a6e3cc0d41fdc3c70bc"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1trait_1_1filter_3_01_predicate_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html#adb3370c903a75a6e3cc0d41fdc3c70bc">type</a> = typename detail::filter_impl&lt; Predicate, Ts... &gt;::<a class="el" href="structrefl_1_1trait_1_1filter_3_01_predicate_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html#adb3370c903a75a6e3cc0d41fdc3c70bc">type</a></td></tr>
+<tr class="separator:adb3370c903a75a6e3cc0d41fdc3c70bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;template&lt; typename &gt; typename Predicate, typename... Ts&gt;<br />
 struct refl::trait::filter&lt; Predicate, type_list&lt; Ts... &gt; &gt;</h3>
 
 <p>Filters a type_list according to a predicate template. </p>
-</div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="aabb8d172070c69e43d418850c765343f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aabb8d172070c69e43d418850c765343f">&#9670;&nbsp;</a></span>type</h2>
+<div class="fragment"><div class="line"><span class="keyword">typename</span> filter&lt;std::is_reference, type_list&lt;int, float&amp;, double&gt;&gt;<a class="code" href="structrefl_1_1trait_1_1filter_3_01_predicate_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html#adb3370c903a75a6e3cc0d41fdc3c70bc">::type</a> -&gt; type_list&lt;float&amp;&gt;</div>
+</div><!-- fragment --> </div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="adb3370c903a75a6e3cc0d41fdc3c70bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb3370c903a75a6e3cc0d41fdc3c70bc">&#9670;&nbsp;</a></span>type</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -121,7 +125,7 @@ struct refl::trait::filter&lt; Predicate, type_list&lt; Ts... &gt; &gt;</h3>
 template&lt;template&lt; typename &gt; typename Predicate, typename... Ts&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef detail::filter&lt;Predicate&gt;::template apply&lt;<a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt;Ts...&gt; &gt; <a class="el" href="structrefl_1_1trait_1_1filter.html">refl::trait::filter</a>&lt; Predicate, <a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt; Ts... &gt; &gt;::<a class="el" href="structrefl_1_1trait_1_1filter_3_01_predicate_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html#aabb8d172070c69e43d418850c765343f">type</a></td>
+          <td class="memname">using refl::trait::filter&lt; Predicate, <a class="el" href="structrefl_1_1util_1_1type__list.html">type_list</a>&lt; Ts... &gt; &gt;::<a class="el" href="structrefl_1_1trait_1_1filter_3_01_predicate_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html#adb3370c903a75a6e3cc0d41fdc3c70bc">type</a> =  typename detail::filter_impl&lt;Predicate, Ts...&gt;::<a class="el" href="structrefl_1_1trait_1_1filter_3_01_predicate_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html#adb3370c903a75a6e3cc0d41fdc3c70bc">type</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -133,6 +137,7 @@ template&lt;template&lt; typename &gt; typename Predicate, typename... Ts&gt; </
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="astructrefl_1_1trait_1_1filter_3_01_predicate_00_01type__list_3_01_ts_8_8_8_01_4_01_4_html_adb3370c903a75a6e3cc0d41fdc3c70bc"><div class="ttname"><a href="structrefl_1_1trait_1_1filter_3_01_predicate_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html#adb3370c903a75a6e3cc0d41fdc3c70bc">refl::trait::filter&lt; Predicate, type_list&lt; Ts... &gt; &gt;::type</a></div><div class="ttdeci">typename detail::filter_impl&lt; Predicate, Ts... &gt;::type type</div><div class="ttdef"><b>Definition:</b> refl.hpp:1100</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

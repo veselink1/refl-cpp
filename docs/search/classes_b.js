@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['skip_205',['skip',['../structrefl_1_1trait_1_1skip.html',1,'refl::trait']]],
-  ['skip_3c_20n_2c_20type_5flist_3c_20ts_2e_2e_2e_20_3e_20_3e_206',['skip&lt; N, type_list&lt; Ts... &gt; &gt;',['../structrefl_1_1trait_1_1skip_3_01_n_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html',1,'refl::trait']]]
+  ['type_231',['type',['../structrefl_1_1attr_1_1usage_1_1type.html',1,'refl::attr::usage']]],
+  ['type_5fdescriptor_232',['type_descriptor',['../classrefl_1_1descriptor_1_1type__descriptor.html',1,'refl::descriptor']]],
+  ['type_5flist_233',['type_list',['../structrefl_1_1util_1_1type__list.html',1,'refl::util']]],
+  ['type_5flist_3c_20t_20_3e_234',['type_list&lt; T &gt;',['../structrefl_1_1util_1_1type__list_3_01_t_01_4.html',1,'refl::util']]]
 ];

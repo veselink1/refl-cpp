@@ -266,7 +266,7 @@ Custom Attributes</h2>
 <div class="line">    func(getArea, property(<span class="stringliteral">&quot;area&quot;</span>), Serializable())</div>
 <div class="line">)</div>
 </div><!-- fragment --><p>The presence of custom attributes can be detected using <a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1descriptor.html#af47d9eca02998b834a0d827aa2be2252"><code>refl::descriptor::has_attribute&lt;T&gt;</code></a>. </p><div class="fragment"><div class="line"><span class="keyword">using</span> <a class="code" href="namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e">refl::reflect</a>;</div>
-<div class="line"><span class="keyword">using</span> <a class="code" href="namespacerefl_1_1descriptor.html#af47d9eca02998b834a0d827aa2be2252">refl::descriptor::has_attribute</a>;</div>
+<div class="line"><span class="keyword">using</span> <a class="code" href="namespacerefl_1_1descriptor.html#a024d98e2fa7e18a1d7ece243549cde68">refl::descriptor::has_attribute</a>;</div>
 <div class="line"> </div>
 <div class="line"><a class="code" href="namespacerefl_1_1util.html#a19919596cdd45c858d891c91a7826b22">for_each</a>(reflect&lt;Circle&gt;().members, [](<span class="keyword">auto</span> member) {</div>
 <div class="line">    <span class="keywordflow">if</span> constexpr (has_attribute&lt;Serializable&gt;(member)) {</div>
@@ -313,16 +313,16 @@ Printing debug output</h1>
 <div class="line">    func(getArea, property(<span class="stringliteral">&quot;area&quot;</span>))</div>
 <div class="line">)</div>
 <div class="line"> </div>
-<div class="line">using <a class="code" href="namespacerefl.html">refl</a>::runtime::<a class="code" href="namespacerefl_1_1runtime.html#a130a8f415fe4bcb35bef941e71711a73">debug</a>;</div>
+<div class="line">using <a class="code" href="namespacerefl.html">refl</a>::runtime::<a class="code" href="namespacerefl_1_1runtime.html#a06e1996b05966eac4f282b6656169d6a">debug</a>;</div>
 <div class="line"> </div>
 <div class="line">Circle c(2.0);</div>
 <div class="line"> </div>
-<div class="line"><a class="code" href="namespacerefl_1_1runtime.html#a130a8f415fe4bcb35bef941e71711a73">debug</a>(std::cout, c);</div>
+<div class="line"><a class="code" href="namespacerefl_1_1runtime.html#a06e1996b05966eac4f282b6656169d6a">debug</a>(std::cout, c);</div>
 <div class="line"><span class="comment">/* Output: {</span></div>
 <div class="line"><span class="comment">  radius = (double)2,</span></div>
 <div class="line"><span class="comment">  area = (double)19.7392</span></div>
 <div class="line"><span class="comment">} */</span></div>
-<div class="line"><a class="code" href="namespacerefl_1_1runtime.html#a130a8f415fe4bcb35bef941e71711a73">debug</a>(std::cout, c, <span class="comment">/* compact */</span> true);</div>
+<div class="line"><a class="code" href="namespacerefl_1_1runtime.html#a06e1996b05966eac4f282b6656169d6a">debug</a>(std::cout, c, <span class="comment">/* compact */</span> true);</div>
 <div class="line"><span class="comment">/* Output: { radius = 2, area = 19.7392 } */</span></div>
 </div><!-- fragment --><p>While <a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#a1edadcdb602a1e96beedbdeeca801701"><code>debug</code></a> outputs to a <code>std::ostream</code>, a <code>std::string</code> result can also be obtained by <a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#aa31714a8d8acc6824a58850336fa43ae"><code>debug_str</code></a>.</p>
 <h1><a class="anchor" id="autotoc_md22"></a>
@@ -361,15 +361,15 @@ Examples Guide</h1>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespacerefl_1_1util_html_a6685e65aeb830a5e27dc8e4f2085ce27"><div class="ttname"><a href="namespacerefl_1_1util.html#a6685e65aeb830a5e27dc8e4f2085ce27">refl::util::find_one</a></div><div class="ttdeci">constexpr auto find_one(type_list&lt; Ts... &gt; list, F &amp;&amp;f)</div><div class="ttdef"><b>Definition:</b> refl.hpp:1833</div></div>
-<div class="ttc" id="astructrefl_1_1attr_1_1usage_1_1member_html"><div class="ttname"><a href="structrefl_1_1attr_1_1usage_1_1member.html">refl::attr::usage::member</a></div><div class="ttdef"><b>Definition:</b> refl.hpp:1166</div></div>
+<div class="ttc" id="anamespacerefl_1_1util_html_a6685e65aeb830a5e27dc8e4f2085ce27"><div class="ttname"><a href="namespacerefl_1_1util.html#a6685e65aeb830a5e27dc8e4f2085ce27">refl::util::find_one</a></div><div class="ttdeci">constexpr auto find_one(type_list&lt; Ts... &gt; list, F &amp;&amp;f)</div><div class="ttdoc">Returns the only instance that matches the constexpr predicate.</div><div class="ttdef"><b>Definition:</b> refl.hpp:1622</div></div>
+<div class="ttc" id="astructrefl_1_1attr_1_1usage_1_1member_html"><div class="ttname"><a href="structrefl_1_1attr_1_1usage_1_1member.html">refl::attr::usage::member</a></div><div class="ttdoc">Specifies that an attribute type inheriting from this type can only be used with REFL_FUNC or REFL_FI...</div><div class="ttdef"><b>Definition:</b> refl.hpp:1836</div></div>
 <div class="ttc" id="anamespacerefl_html"><div class="ttname"><a href="namespacerefl.html">refl</a></div><div class="ttdoc">The top-level refl-cpp namespace It contains a few core refl-cpp namespaces and directly exposes core...</div><div class="ttdef"><b>Definition:</b> refl.hpp:76</div></div>
-<div class="ttc" id="astructrefl_1_1runtime_1_1proxy_html"><div class="ttname"><a href="structrefl_1_1runtime_1_1proxy.html">refl::runtime::proxy</a></div><div class="ttdoc">A proxy object that has a static interface identical to the reflected functions and fields of the tar...</div><div class="ttdef"><b>Definition:</b> refl.hpp:2413</div></div>
-<div class="ttc" id="anamespacerefl_1_1descriptor_html_af47d9eca02998b834a0d827aa2be2252"><div class="ttname"><a href="namespacerefl_1_1descriptor.html#af47d9eca02998b834a0d827aa2be2252">refl::descriptor::has_attribute</a></div><div class="ttdeci">constexpr bool has_attribute(const T) noexcept</div><div class="ttdef"><b>Definition:</b> refl.hpp:2055</div></div>
-<div class="ttc" id="anamespacerefl_html_ae95fbc2d63a7db5ce4d8a4dcca3d637e"><div class="ttname"><a href="namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e">refl::reflect</a></div><div class="ttdeci">constexpr type_descriptor&lt; T &gt; reflect() noexcept</div><div class="ttdef"><b>Definition:</b> refl.hpp:1581</div></div>
-<div class="ttc" id="anamespacerefl_1_1runtime_html_a0831da0114fa506579224ce219d0ab50"><div class="ttname"><a href="namespacerefl_1_1runtime.html#a0831da0114fa506579224ce219d0ab50">refl::runtime::invoke</a></div><div class="ttdeci">U invoke(T &amp;&amp;target, const char *name, Args &amp;&amp;... args)</div><div class="ttdef"><b>Definition:</b> refl.hpp:2674</div></div>
-<div class="ttc" id="anamespacerefl_1_1runtime_html_a130a8f415fe4bcb35bef941e71711a73"><div class="ttname"><a href="namespacerefl_1_1runtime.html#a130a8f415fe4bcb35bef941e71711a73">refl::runtime::debug</a></div><div class="ttdeci">void debug(std::ostream &amp;os, const T &amp;value, bool compact=false)</div></div>
-<div class="ttc" id="anamespacerefl_1_1util_html_a19919596cdd45c858d891c91a7826b22"><div class="ttname"><a href="namespacerefl_1_1util.html#a19919596cdd45c858d891c91a7826b22">refl::util::for_each</a></div><div class="ttdeci">constexpr void for_each(type_list&lt; Ts... &gt; list, F &amp;&amp;f)</div><div class="ttdef"><b>Definition:</b> refl.hpp:1736</div></div>
+<div class="ttc" id="astructrefl_1_1runtime_1_1proxy_html"><div class="ttname"><a href="structrefl_1_1runtime_1_1proxy.html">refl::runtime::proxy</a></div><div class="ttdoc">A proxy object that has a static interface identical to the reflected functions and fields of the tar...</div><div class="ttdef"><b>Definition:</b> refl.hpp:3410</div></div>
+<div class="ttc" id="anamespacerefl_html_ae95fbc2d63a7db5ce4d8a4dcca3d637e"><div class="ttname"><a href="namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e">refl::reflect</a></div><div class="ttdeci">constexpr type_descriptor&lt; T &gt; reflect() noexcept</div><div class="ttdoc">Returns the type descriptor for the type T.</div><div class="ttdef"><b>Definition:</b> refl.hpp:3257</div></div>
+<div class="ttc" id="anamespacerefl_1_1runtime_html_a0831da0114fa506579224ce219d0ab50"><div class="ttname"><a href="namespacerefl_1_1runtime.html#a0831da0114fa506579224ce219d0ab50">refl::runtime::invoke</a></div><div class="ttdeci">U invoke(T &amp;&amp;target, const char *name, Args &amp;&amp;... args)</div><div class="ttdoc">Invokes the specified member with the provided arguments.</div><div class="ttdef"><b>Definition:</b> refl.hpp:3673</div></div>
+<div class="ttc" id="anamespacerefl_1_1descriptor_html_a024d98e2fa7e18a1d7ece243549cde68"><div class="ttname"><a href="namespacerefl_1_1descriptor.html#a024d98e2fa7e18a1d7ece243549cde68">refl::descriptor::has_attribute</a></div><div class="ttdeci">constexpr bool has_attribute(Descriptor) noexcept</div><div class="ttdoc">Checks whether T has an attribute of type A.</div><div class="ttdef"><b>Definition:</b> refl.hpp:2874</div></div>
+<div class="ttc" id="anamespacerefl_1_1runtime_html_a06e1996b05966eac4f282b6656169d6a"><div class="ttname"><a href="namespacerefl_1_1runtime.html#a06e1996b05966eac4f282b6656169d6a">refl::runtime::debug</a></div><div class="ttdeci">void debug(std::basic_ostream&lt; CharT &gt; &amp;os, const T &amp;value, bool compact=false)</div></div>
+<div class="ttc" id="anamespacerefl_1_1util_html_a19919596cdd45c858d891c91a7826b22"><div class="ttname"><a href="namespacerefl_1_1util.html#a19919596cdd45c858d891c91a7826b22">refl::util::for_each</a></div><div class="ttdeci">constexpr void for_each(type_list&lt; Ts... &gt; list, F &amp;&amp;f)</div><div class="ttdoc">Applies function F to each type in the type_list.</div><div class="ttdef"><b>Definition:</b> refl.hpp:1517</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

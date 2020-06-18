@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['value_153',['value',['../structrefl_1_1trait_1_1is__proxy.html#a50e3e48d3a4a9893b363b731d02be31e',1,'refl::trait::is_proxy']]],
-  ['value_5ftype_154',['value_type',['../classrefl_1_1descriptor_1_1field__descriptor.html#afcc7c5c7e2ee1a67cab3a6b526d092d2',1,'refl::descriptor::field_descriptor']]]
+  ['unique_184',['unique',['../structrefl_1_1trait_1_1unique.html',1,'refl::trait']]],
+  ['unique_5ft_185',['unique_t',['../namespacerefl_1_1trait.html#ace2b39ac60915978d350f5921c7e5a47',1,'refl::trait']]],
+  ['unreflect_5ftypes_186',['unreflect_types',['../namespacerefl_1_1util.html#ad67a3c06ac31131661f1fb1cee670fbc',1,'refl::util']]]
 ];

@@ -192,13 +192,15 @@ TEST_CASE( "descriptors" ) {
         REQUIRE( !is_resolved(f_td{}) );
         REQUIRE( !f_td::is_resolved );
 
-// #if defined(__clang__) || defined(_MSC_VER)
-        // gcc has bug which prevents resolve from working (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71487)
-        REQUIRE( descriptor::resolve<int(Foo::*)(Foo)>(f_td{}) == nullptr );
-        REQUIRE( f_td::resolve<int(Foo::*)(Foo)>() == nullptr );
+#if defined(__clang__) || defined(_MSC_VER)
+        // gcc has bug which prevents SFIANE for kicking in for resolve (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=71487)
+        REQUIRE( !descriptor::can_resolve<int(Foo::*)(Foo)>(f_td{}) );
+        REQUIRE( !f_td::can_resolve<int(Foo::*)(Foo)>() );
         REQUIRE( descriptor::resolve<void(Foo::*)()>(f_td{}) != nullptr );
         REQUIRE( f_td::resolve<void(Foo::*)()>() != nullptr );
-// #endif
+        REQUIRE( descriptor::can_resolve<void(Foo::*)()>(f_td{}) );
+        REQUIRE( f_td::can_resolve<void(Foo::*)()>() );
+#endif
 
         using g_td = trait::get_t<4, member_list<Foo>>;
         REQUIRE( g_td::is_resolved );

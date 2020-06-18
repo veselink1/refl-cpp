@@ -101,45 +101,66 @@ $(document).ready(function(){initNavTree('structrefl_1_1util_1_1const__string.ht
 </div><!--header-->
 <div class="contents">
 
+<p>Represents a compile-time string.  
+ <a href="structrefl_1_1util_1_1const__string.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="refl_8hpp_source.html">refl.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac378ca52c38cc6ccc04cab0b73b1f805"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#ac378ca52c38cc6ccc04cab0b73b1f805">const_string</a> () noexcept</td></tr>
+<tr class="memdesc:ac378ca52c38cc6ccc04cab0b73b1f805"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an empty <a class="el" href="structrefl_1_1util_1_1const__string.html" title="Represents a compile-time string.">const_string</a>.  <a href="structrefl_1_1util_1_1const__string.html#ac378ca52c38cc6ccc04cab0b73b1f805">More...</a><br /></td></tr>
 <tr class="separator:ac378ca52c38cc6ccc04cab0b73b1f805"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ae4b17a4b57f0542f63ae01734f1d86"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#a5ae4b17a4b57f0542f63ae01734f1d86">const_string</a> (const <a class="el" href="structrefl_1_1util_1_1const__string.html">const_string</a>&lt; N &gt; &amp;other) noexcept</td></tr>
+<tr class="memdesc:a5ae4b17a4b57f0542f63ae01734f1d86"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a copy of a <a class="el" href="structrefl_1_1util_1_1const__string.html" title="Represents a compile-time string.">const_string</a>.  <a href="structrefl_1_1util_1_1const__string.html#a5ae4b17a4b57f0542f63ae01734f1d86">More...</a><br /></td></tr>
 <tr class="separator:a5ae4b17a4b57f0542f63ae01734f1d86"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd5ad22466e3c3513257bde29683e0e4"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#abd5ad22466e3c3513257bde29683e0e4">const_string</a> (const char(&amp;<a class="el" href="structrefl_1_1util_1_1const__string.html#a8ee1a2f4b8fd6d71b7556661f379426a">data</a>)[N+1]) noexcept</td></tr>
+<tr class="memdesc:abd5ad22466e3c3513257bde29683e0e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a <a class="el" href="structrefl_1_1util_1_1const__string.html" title="Represents a compile-time string.">const_string</a> by copying the contents of data.  <a href="structrefl_1_1util_1_1const__string.html#abd5ad22466e3c3513257bde29683e0e4">More...</a><br /></td></tr>
 <tr class="separator:abd5ad22466e3c3513257bde29683e0e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f8b7b47319025b4007367b285849fbd"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#a8f8b7b47319025b4007367b285849fbd">operator const char *</a> () const noexcept</td></tr>
+<tr class="memdesc:a8f8b7b47319025b4007367b285849fbd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicitly converts to const char*.  <a href="structrefl_1_1util_1_1const__string.html#a8f8b7b47319025b4007367b285849fbd">More...</a><br /></td></tr>
 <tr class="separator:a8f8b7b47319025b4007367b285849fbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a824c47b1e7641a471b30a519d0a99f74"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#a824c47b1e7641a471b30a519d0a99f74">operator std::string</a> () const noexcept</td></tr>
+<tr class="memdesc:a824c47b1e7641a471b30a519d0a99f74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Explicitly converts to std::string.  <a href="structrefl_1_1util_1_1const__string.html#a824c47b1e7641a471b30a519d0a99f74">More...</a><br /></td></tr>
 <tr class="separator:a824c47b1e7641a471b30a519d0a99f74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a465086c5ae8e245358ce44ed8154c986"><td class="memItemLeft" align="right" valign="top">constexpr const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#a465086c5ae8e245358ce44ed8154c986">c_str</a> () const noexcept</td></tr>
+<tr class="memdesc:a465086c5ae8e245358ce44ed8154c986"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer to the contained zero-terminated string.  <a href="structrefl_1_1util_1_1const__string.html#a465086c5ae8e245358ce44ed8154c986">More...</a><br /></td></tr>
 <tr class="separator:a465086c5ae8e245358ce44ed8154c986"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25bdf3f17b20a34f25f4bd7b624c6aa7"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#a25bdf3f17b20a34f25f4bd7b624c6aa7">str</a> () const noexcept</td></tr>
+<tr class="memdesc:a25bdf3f17b20a34f25f4bd7b624c6aa7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the contained string as an std::string.  <a href="structrefl_1_1util_1_1const__string.html#a25bdf3f17b20a34f25f4bd7b624c6aa7">More...</a><br /></td></tr>
 <tr class="separator:a25bdf3f17b20a34f25f4bd7b624c6aa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac43d0430fdf61b1fb9fe62bb61457d68"><td class="memTemplParams" colspan="2">template&lt;size_t Pos, size_t Count = npos&gt; </td></tr>
 <tr class="memitem:ac43d0430fdf61b1fb9fe62bb61457d68"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#ac43d0430fdf61b1fb9fe62bb61457d68">substr</a> () const noexcept</td></tr>
+<tr class="memdesc:ac43d0430fdf61b1fb9fe62bb61457d68"><td class="mdescLeft">&#160;</td><td class="mdescRight">A constexpr version of std::string::substr.  <a href="structrefl_1_1util_1_1const__string.html#ac43d0430fdf61b1fb9fe62bb61457d68">More...</a><br /></td></tr>
 <tr class="separator:ac43d0430fdf61b1fb9fe62bb61457d68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a90d93009e7ae4bccec928c9342b197af"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#a90d93009e7ae4bccec928c9342b197af">find</a> (char ch, size_t pos=0) const noexcept</td></tr>
+<tr class="memdesc:a90d93009e7ae4bccec928c9342b197af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Searches the string for the first occurrence of the character and returns its position.  <a href="structrefl_1_1util_1_1const__string.html#a90d93009e7ae4bccec928c9342b197af">More...</a><br /></td></tr>
+<tr class="separator:a90d93009e7ae4bccec928c9342b197af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c2eae7ebfae9fcc1716d7872ebb2574"><td class="memItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#a7c2eae7ebfae9fcc1716d7872ebb2574">rfind</a> (char ch, size_t pos=<a class="el" href="structrefl_1_1util_1_1const__string.html#abad5b68a7c03fcccc05acb4468edb0e6">npos</a>) const noexcept</td></tr>
+<tr class="memdesc:a7c2eae7ebfae9fcc1716d7872ebb2574"><td class="mdescLeft">&#160;</td><td class="mdescRight">Searches the string for the last occurrence of the character and returns its position.  <a href="structrefl_1_1util_1_1const__string.html#a7c2eae7ebfae9fcc1716d7872ebb2574">More...</a><br /></td></tr>
+<tr class="separator:a7c2eae7ebfae9fcc1716d7872ebb2574"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a8ee1a2f4b8fd6d71b7556661f379426a"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#a8ee1a2f4b8fd6d71b7556661f379426a">data</a> [N+1]</td></tr>
+<tr class="memdesc:a8ee1a2f4b8fd6d71b7556661f379426a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The statically-sized character buffer used for storing the string.  <a href="structrefl_1_1util_1_1const__string.html#a8ee1a2f4b8fd6d71b7556661f379426a">More...</a><br /></td></tr>
 <tr class="separator:a8ee1a2f4b8fd6d71b7556661f379426a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:abad5b68a7c03fcccc05acb4468edb0e6"><td class="memItemLeft" align="right" valign="top">static constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#abad5b68a7c03fcccc05acb4468edb0e6">npos</a> = static_cast&lt;size_t&gt;(-1)</td></tr>
+<tr class="memdesc:abad5b68a7c03fcccc05acb4468edb0e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The largest positive value size_t can hold.  <a href="structrefl_1_1util_1_1const__string.html#abad5b68a7c03fcccc05acb4468edb0e6">More...</a><br /></td></tr>
 <tr class="separator:abad5b68a7c03fcccc05acb4468edb0e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a426d87f33a7778a82e1169bd9de752e0"><td class="memItemLeft" align="right" valign="top">static constexpr size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html#a426d87f33a7778a82e1169bd9de752e0">size</a> = N</td></tr>
+<tr class="memdesc:a426d87f33a7778a82e1169bd9de752e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The length of the string excluding the terminating '\0' character.  <a href="structrefl_1_1util_1_1const__string.html#a426d87f33a7778a82e1169bd9de752e0">More...</a><br /></td></tr>
 <tr class="separator:a426d87f33a7778a82e1169bd9de752e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;size_t N&gt;<br />
 struct refl::util::const_string&lt; N &gt;</h3>
 
-<p>Represents a compile-time string. Used in refl-cpp for representing names of reflected types and members. Supports constexpr concatenation and substring, and is explicitly-convertible to const char* and std::string. REFL_MAKE_CONST_STRING can be used to create an instance from a literal string.</p>
+<p>Represents a compile-time string. </p>
+<p>Used in refl-cpp for representing names of reflected types and members. Supports constexpr concatenation and substring, and is explicitly-convertible to const char* and std::string. REFL_MAKE_CONST_STRING can be used to create an instance from a literal string.</p>
 <p>@typeparam &lt;N&gt; The length of the string excluding the terminating '\0' character. </p><dl class="section see"><dt>See also</dt><dd>refl::descriptor::base_member_descriptor::name </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac378ca52c38cc6ccc04cab0b73b1f805"></a>
@@ -166,7 +187,8 @@ template&lt;size_t N&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Creates an empty <a class="el" href="structrefl_1_1util_1_1const__string.html">const_string</a>. </p>
+
+<p>Creates an empty <a class="el" href="structrefl_1_1util_1_1const__string.html" title="Represents a compile-time string.">const_string</a>. </p>
 
 </div>
 </div>
@@ -195,7 +217,8 @@ template&lt;size_t N&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Creates a copy of a <a class="el" href="structrefl_1_1util_1_1const__string.html">const_string</a>. </p>
+
+<p>Creates a copy of a <a class="el" href="structrefl_1_1util_1_1const__string.html" title="Represents a compile-time string.">const_string</a>. </p>
 
 </div>
 </div>
@@ -224,7 +247,8 @@ template&lt;size_t N&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Creates a <a class="el" href="structrefl_1_1util_1_1const__string.html">const_string</a> by copying the contents of data. </p>
+
+<p>Creates a <a class="el" href="structrefl_1_1util_1_1const__string.html" title="Represents a compile-time string.">const_string</a> by copying the contents of data. </p>
 
 </div>
 </div>
@@ -253,8 +277,51 @@ template&lt;size_t N&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
 <p>Returns a pointer to the contained zero-terminated string. </p>
 
+</div>
+</div>
+<a id="a90d93009e7ae4bccec928c9342b197af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a90d93009e7ae4bccec928c9342b197af">&#9670;&nbsp;</a></span>find()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;size_t N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto <a class="el" href="structrefl_1_1util_1_1const__string.html">refl::util::const_string</a>&lt; N &gt;::find </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>ch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>pos</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Searches the string for the first occurrence of the character and returns its position. </p>
+<div class="fragment"><div class="line"><a class="code" href="namespacerefl_1_1util.html#a4902f2250ab00bb4884b348893fb7641">make_const_string</a>(<span class="stringliteral">&quot;Hello, World!&quot;</span>).find(<span class="charliteral">&#39;e&#39;</span>) -&gt; 1</div>
+<div class="line"><a class="code" href="namespacerefl_1_1util.html#a4902f2250ab00bb4884b348893fb7641">make_const_string</a>(<span class="stringliteral">&quot;Hello, World!&quot;</span>).find(<span class="charliteral">&#39;z&#39;</span>) -&gt; <span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(-1)</div>
+</div><!-- fragment --> 
 </div>
 </div>
 <a id="a8f8b7b47319025b4007367b285849fbd"></a>
@@ -281,6 +348,7 @@ template&lt;size_t N&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
 <p>Explicitly converts to const char*. </p>
 
 </div>
@@ -309,8 +377,51 @@ template&lt;size_t N&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
 <p>Explicitly converts to std::string. </p>
 
+</div>
+</div>
+<a id="a7c2eae7ebfae9fcc1716d7872ebb2574"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c2eae7ebfae9fcc1716d7872ebb2574">&#9670;&nbsp;</a></span>rfind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;size_t N&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr auto <a class="el" href="structrefl_1_1util_1_1const__string.html">refl::util::const_string</a>&lt; N &gt;::rfind </td>
+          <td>(</td>
+          <td class="paramtype">char&#160;</td>
+          <td class="paramname"><em>ch</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>pos</em> = <code><a class="el" href="structrefl_1_1util_1_1const__string.html#abad5b68a7c03fcccc05acb4468edb0e6">npos</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Searches the string for the last occurrence of the character and returns its position. </p>
+<div class="fragment"><div class="line"><a class="code" href="namespacerefl_1_1util.html#a4902f2250ab00bb4884b348893fb7641">make_const_string</a>(<span class="stringliteral">&quot;Hello, World!&quot;</span>).rfind(<span class="charliteral">&#39;o&#39;</span>) -&gt; 8</div>
+<div class="line"><a class="code" href="namespacerefl_1_1util.html#a4902f2250ab00bb4884b348893fb7641">make_const_string</a>(<span class="stringliteral">&quot;Hello, World!&quot;</span>).rfind(<span class="charliteral">&#39;z&#39;</span>) -&gt; <span class="keyword">static_cast&lt;</span><span class="keywordtype">size_t</span><span class="keyword">&gt;</span>(-1)</div>
+</div><!-- fragment --> 
 </div>
 </div>
 <a id="a25bdf3f17b20a34f25f4bd7b624c6aa7"></a>
@@ -337,6 +448,7 @@ template&lt;size_t N&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
 <p>Returns the contained string as an std::string. </p>
 
 </div>
@@ -367,8 +479,11 @@ template&lt;size_t Pos, size_t Count = npos&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>A constexpr version of std::string::substr. </p>
 
+<p>A constexpr version of std::string::substr. </p>
+<div class="fragment"><div class="line"><a class="code" href="namespacerefl_1_1util.html#a4902f2250ab00bb4884b348893fb7641">make_const_string</a>(<span class="stringliteral">&quot;Hello, World!&quot;</span>).template substr&lt;0, 4&gt;() -&gt; (const_string&lt;4&gt;) <span class="stringliteral">&quot;Hell&quot;</span></div>
+<div class="line"><a class="code" href="namespacerefl_1_1util.html#a4902f2250ab00bb4884b348893fb7641">make_const_string</a>(<span class="stringliteral">&quot;Hello, World!&quot;</span>).template substr&lt;1, 4&gt;() -&gt; (const_string&lt;3&gt;) <span class="stringliteral">&quot;ell&quot;</span></div>
+</div><!-- fragment --> 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
@@ -385,6 +500,7 @@ template&lt;size_t N&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
 <p>The statically-sized character buffer used for storing the string. </p>
 
 </div>
@@ -410,6 +526,7 @@ template&lt;size_t N&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
 <p>The largest positive value size_t can hold. </p>
 
 </div>
@@ -435,6 +552,7 @@ template&lt;size_t N&gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
+
 <p>The length of the string excluding the terminating '\0' character. </p>
 
 </div>
@@ -444,6 +562,7 @@ template&lt;size_t N&gt; </div>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="anamespacerefl_1_1util_html_a4902f2250ab00bb4884b348893fb7641"><div class="ttname"><a href="namespacerefl_1_1util.html#a4902f2250ab00bb4884b348893fb7641">refl::util::make_const_string</a></div><div class="ttdeci">constexpr const_string&lt; 0 &gt; make_const_string() noexcept</div><div class="ttdoc">Creates an empty instance of const_string&lt;N&gt;</div><div class="ttdef"><b>Definition:</b> refl.hpp:257</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

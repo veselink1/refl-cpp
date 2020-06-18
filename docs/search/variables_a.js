@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['write_282',['write',['../structrefl_1_1attr_1_1debug.html#a58a9c166189b75b1d482fc2f7e0336d9',1,'refl::attr::debug']]]
+  ['value_342',['value',['../structrefl_1_1trait_1_1is__proxy.html#a50e3e48d3a4a9893b363b731d02be31e',1,'refl::trait::is_proxy']]]
 ];

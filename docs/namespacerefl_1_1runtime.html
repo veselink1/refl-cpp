@@ -93,7 +93,8 @@ $(document).ready(function(){initNavTree('namespacerefl_1_1runtime.html',''); in
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">refl::runtime Namespace Reference</div>  </div>
 </div><!--header-->
@@ -110,40 +111,51 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a130a8f415fe4bcb35bef941e71711a73"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a130a8f415fe4bcb35bef941e71711a73"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1runtime.html#a130a8f415fe4bcb35bef941e71711a73">debug</a> (std::ostream &amp;os, const T &amp;value, bool compact=false)</td></tr>
-<tr class="separator:a130a8f415fe4bcb35bef941e71711a73"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85e59f180bc9d09b31f5849de9e756bc"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a85e59f180bc9d09b31f5849de9e756bc"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1runtime.html#a85e59f180bc9d09b31f5849de9e756bc">debug</a> (std::ostream &amp;os, const T &amp;value, [[maybe_unused]] bool compact)</td></tr>
-<tr class="separator:a85e59f180bc9d09b31f5849de9e756bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acdd4c244b7e4e4e271fa159ad2531397"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
-<tr class="memitem:acdd4c244b7e4e4e271fa159ad2531397"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1runtime.html#acdd4c244b7e4e4e271fa159ad2531397">debug_all</a> (std::ostream &amp;os, const Ts &amp;... values)</td></tr>
-<tr class="separator:acdd4c244b7e4e4e271fa159ad2531397"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa31714a8d8acc6824a58850336fa43ae"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
-<tr class="memitem:aa31714a8d8acc6824a58850336fa43ae"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1runtime.html#aa31714a8d8acc6824a58850336fa43ae">debug_str</a> (const T &amp;value, bool compact=false)</td></tr>
-<tr class="separator:aa31714a8d8acc6824a58850336fa43ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ade7f7a2ee76218ab3cde2b4a44d6a0f9"><td class="memTemplParams" colspan="2">template&lt;typename... Ts&gt; </td></tr>
-<tr class="memitem:ade7f7a2ee76218ab3cde2b4a44d6a0f9"><td class="memTemplItemLeft" align="right" valign="top">std::string&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1runtime.html#ade7f7a2ee76218ab3cde2b4a44d6a0f9">debug_all_str</a> (const Ts &amp;... values)</td></tr>
-<tr class="separator:ade7f7a2ee76218ab3cde2b4a44d6a0f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06e1996b05966eac4f282b6656169d6a"><td class="memTemplParams" colspan="2">template&lt;typename CharT , typename T &gt; </td></tr>
+<tr class="memitem:a06e1996b05966eac4f282b6656169d6a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1runtime.html#a06e1996b05966eac4f282b6656169d6a">debug</a> (std::basic_ostream&lt; CharT &gt; &amp;os, const T &amp;value, bool compact=false)</td></tr>
+<tr class="separator:a06e1996b05966eac4f282b6656169d6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3ba25f8e5e09bd30234c28839ec6d7c"><td class="memTemplParams" colspan="2">template&lt;typename CharT , typename T &gt; </td></tr>
+<tr class="memitem:ad3ba25f8e5e09bd30234c28839ec6d7c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1runtime.html#ad3ba25f8e5e09bd30234c28839ec6d7c">debug</a> (std::basic_ostream&lt; CharT &gt; &amp;os, const T &amp;value, [[maybe_unused]] bool compact)</td></tr>
+<tr class="memdesc:ad3ba25f8e5e09bd30234c28839ec6d7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the debug representation of value to the given std::ostream.  <a href="namespacerefl_1_1runtime.html#ad3ba25f8e5e09bd30234c28839ec6d7c">More...</a><br /></td></tr>
+<tr class="separator:ad3ba25f8e5e09bd30234c28839ec6d7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab63a0044074e3c5a78f8e8a2662783aa"><td class="memTemplParams" colspan="2">template&lt;typename CharT , typename... Ts&gt; </td></tr>
+<tr class="memitem:ab63a0044074e3c5a78f8e8a2662783aa"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1runtime.html#ab63a0044074e3c5a78f8e8a2662783aa">debug_all</a> (std::basic_ostream&lt; CharT &gt; &amp;os, const Ts &amp;... values)</td></tr>
+<tr class="memdesc:ab63a0044074e3c5a78f8e8a2662783aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the compact debug representation of the provided values to the given std::ostream.  <a href="namespacerefl_1_1runtime.html#ab63a0044074e3c5a78f8e8a2662783aa">More...</a><br /></td></tr>
+<tr class="separator:ab63a0044074e3c5a78f8e8a2662783aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add62a33c7bf6980c9e6d6e5a8977540e"><td class="memTemplParams" colspan="2">template&lt;typename CharT  = char, typename T &gt; </td></tr>
+<tr class="memitem:add62a33c7bf6980c9e6d6e5a8977540e"><td class="memTemplItemLeft" align="right" valign="top">std::basic_string&lt; CharT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1runtime.html#add62a33c7bf6980c9e6d6e5a8977540e">debug_str</a> (const T &amp;value, bool compact=false)</td></tr>
+<tr class="memdesc:add62a33c7bf6980c9e6d6e5a8977540e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the debug representation of the provided value to an std::string and returns it.  <a href="namespacerefl_1_1runtime.html#add62a33c7bf6980c9e6d6e5a8977540e">More...</a><br /></td></tr>
+<tr class="separator:add62a33c7bf6980c9e6d6e5a8977540e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57bcab18d57d392f64fea2a46717d47b"><td class="memTemplParams" colspan="2">template&lt;typename CharT  = char, typename... Ts&gt; </td></tr>
+<tr class="memitem:a57bcab18d57d392f64fea2a46717d47b"><td class="memTemplItemLeft" align="right" valign="top">std::basic_string&lt; CharT &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1runtime.html#a57bcab18d57d392f64fea2a46717d47b">debug_all_str</a> (const Ts &amp;... values)</td></tr>
+<tr class="memdesc:a57bcab18d57d392f64fea2a46717d47b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes the compact debug representation of the provided values to an std::string and returns it.  <a href="namespacerefl_1_1runtime.html#a57bcab18d57d392f64fea2a46717d47b">More...</a><br /></td></tr>
+<tr class="separator:a57bcab18d57d392f64fea2a46717d47b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0831da0114fa506579224ce219d0ab50"><td class="memTemplParams" colspan="2">template&lt;typename U , typename T , typename... Args&gt; </td></tr>
 <tr class="memitem:a0831da0114fa506579224ce219d0ab50"><td class="memTemplItemLeft" align="right" valign="top">U&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1runtime.html#a0831da0114fa506579224ce219d0ab50">invoke</a> (T &amp;&amp;target, const char *name, Args &amp;&amp;... args)</td></tr>
+<tr class="memdesc:a0831da0114fa506579224ce219d0ab50"><td class="mdescLeft">&#160;</td><td class="mdescRight">Invokes the specified member with the provided arguments.  <a href="namespacerefl_1_1runtime.html#a0831da0114fa506579224ce219d0ab50">More...</a><br /></td></tr>
 <tr class="separator:a0831da0114fa506579224ce219d0ab50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a10ea7c32cad8eb5cc0512f774a65da04"><td class="memTemplParams" colspan="2">template&lt;typename Derived , typename Target &gt; </td></tr>
+<tr class="memitem:a10ea7c32cad8eb5cc0512f774a65da04"><td class="memTemplItemLeft" align="right" valign="top">struct <a class="el" href="refl_8hpp.html#adc29b89a87a223da5f194d5918ba94f5">REFL_DETAIL_FORCE_EBO</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1runtime.html#a10ea7c32cad8eb5cc0512f774a65da04">proxy</a></td></tr>
+<tr class="separator:a10ea7c32cad8eb5cc0512f774a65da04"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains utilities that can have runtime-overhead (like proxy, debug, invoke) </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="a85e59f180bc9d09b31f5849de9e756bc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a85e59f180bc9d09b31f5849de9e756bc">&#9670;&nbsp;</a></span>debug() <span class="overload">[1/2]</span></h2>
+<a id="ad3ba25f8e5e09bd30234c28839ec6d7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3ba25f8e5e09bd30234c28839ec6d7c">&#9670;&nbsp;</a></span>debug() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T &gt; </div>
+template&lt;typename CharT , typename T &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void refl::runtime::debug </td>
           <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramtype">std::basic_ostream&lt; CharT &gt; &amp;&#160;</td>
           <td class="paramname"><em>os</em>, </td>
         </tr>
         <tr>
@@ -165,22 +177,24 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Writes the debug representation of value to the given std::ostream. Calls the function specified by the debug&lt;F&gt; attribute whenever possible, before falling back to recursively interating the members and printing them. Takes an optional arguments specifying whether to print a compact representation. The compact representation contains no newlines. </p>
+
+<p>Writes the debug representation of value to the given std::ostream. </p>
+<p>Calls the function specified by the debug&lt;F&gt; attribute whenever possible, before falling back to recursively interating the members and printing them. Takes an optional arguments specifying whether to print a compact representation. The compact representation contains no newlines. </p>
 
 </div>
 </div>
-<a id="a130a8f415fe4bcb35bef941e71711a73"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a130a8f415fe4bcb35bef941e71711a73">&#9670;&nbsp;</a></span>debug() <span class="overload">[2/2]</span></h2>
+<a id="a06e1996b05966eac4f282b6656169d6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06e1996b05966eac4f282b6656169d6a">&#9670;&nbsp;</a></span>debug() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T &gt; </div>
+template&lt;typename CharT , typename T &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void refl::runtime::debug </td>
           <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramtype">std::basic_ostream&lt; CharT &gt; &amp;&#160;</td>
           <td class="paramname"><em>os</em>, </td>
         </tr>
         <tr>
@@ -205,18 +219,18 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="acdd4c244b7e4e4e271fa159ad2531397"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acdd4c244b7e4e4e271fa159ad2531397">&#9670;&nbsp;</a></span>debug_all()</h2>
+<a id="ab63a0044074e3c5a78f8e8a2662783aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab63a0044074e3c5a78f8e8a2662783aa">&#9670;&nbsp;</a></span>debug_all()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename... Ts&gt; </div>
+template&lt;typename CharT , typename... Ts&gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">void refl::runtime::debug_all </td>
           <td>(</td>
-          <td class="paramtype">std::ostream &amp;&#160;</td>
+          <td class="paramtype">std::basic_ostream&lt; CharT &gt; &amp;&#160;</td>
           <td class="paramname"><em>os</em>, </td>
         </tr>
         <tr>
@@ -232,20 +246,21 @@ template&lt;typename... Ts&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
 <p>Writes the compact debug representation of the provided values to the given std::ostream. </p>
 
 </div>
 </div>
-<a id="ade7f7a2ee76218ab3cde2b4a44d6a0f9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ade7f7a2ee76218ab3cde2b4a44d6a0f9">&#9670;&nbsp;</a></span>debug_all_str()</h2>
+<a id="a57bcab18d57d392f64fea2a46717d47b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57bcab18d57d392f64fea2a46717d47b">&#9670;&nbsp;</a></span>debug_all_str()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename... Ts&gt; </div>
+template&lt;typename CharT  = char, typename... Ts&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::string refl::runtime::debug_all_str </td>
+          <td class="memname">std::basic_string&lt;CharT&gt; refl::runtime::debug_all_str </td>
           <td>(</td>
           <td class="paramtype">const Ts &amp;...&#160;</td>
           <td class="paramname"><em>values</em></td><td>)</td>
@@ -253,20 +268,21 @@ template&lt;typename... Ts&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
+
 <p>Writes the compact debug representation of the provided values to an std::string and returns it. </p>
 
 </div>
 </div>
-<a id="aa31714a8d8acc6824a58850336fa43ae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa31714a8d8acc6824a58850336fa43ae">&#9670;&nbsp;</a></span>debug_str()</h2>
+<a id="add62a33c7bf6980c9e6d6e5a8977540e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add62a33c7bf6980c9e6d6e5a8977540e">&#9670;&nbsp;</a></span>debug_str()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename T &gt; </div>
+template&lt;typename CharT  = char, typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::string refl::runtime::debug_str </td>
+          <td class="memname">std::basic_string&lt;CharT&gt; refl::runtime::debug_str </td>
           <td>(</td>
           <td class="paramtype">const T &amp;&#160;</td>
           <td class="paramname"><em>value</em>, </td>
@@ -284,7 +300,9 @@ template&lt;typename T &gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Writes the debug representation of the provided value to an std::string and returns it. Takes an optional arguments specifying whether to print a compact representation. The compact representation contains no newlines. </p>
+
+<p>Writes the debug representation of the provided value to an std::string and returns it. </p>
+<p>Takes an optional arguments specifying whether to print a compact representation. The compact representation contains no newlines. </p>
 
 </div>
 </div>
@@ -321,7 +339,26 @@ template&lt;typename U , typename T , typename... Args&gt; </div>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Invokes the specified member with the provided arguments. When used with a member that is a field, the function gets or sets the value of the field. The list of members is initially filtered by the type of the arguments provided. THe filtered list is then searched at runtime by member name for the specified member and that member is then invoked by operator(). If no match is found, an std::runtime_error is thrown. </p>
+
+<p>Invokes the specified member with the provided arguments. </p>
+<p>When used with a member that is a field, the function gets or sets the value of the field. The list of members is initially filtered by the type of the arguments provided. THe filtered list is then searched at runtime by member name for the specified member and that member is then invoked by operator(). If no match is found, an std::runtime_error is thrown. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="a10ea7c32cad8eb5cc0512f774a65da04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10ea7c32cad8eb5cc0512f774a65da04">&#9670;&nbsp;</a></span>proxy</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Derived , typename Target &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">struct <a class="el" href="refl_8hpp.html#adc29b89a87a223da5f194d5918ba94f5">REFL_DETAIL_FORCE_EBO</a> <a class="el" href="structrefl_1_1runtime_1_1proxy.html">refl::runtime::proxy</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>

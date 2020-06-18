@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['filter_5ft_288',['filter_t',['../namespacerefl_1_1trait.html#afb7c8b735416e75efa6443d59fe46493',1,'refl::trait']]],
-  ['first_289',['first',['../namespacerefl_1_1trait.html#ab4aae36e6ff8c6d3adb2cc91ba985e80',1,'refl::trait']]],
-  ['first_5ft_290',['first_t',['../namespacerefl_1_1trait.html#a8c142f0b5a366ee8b67c0009fa01c9d2',1,'refl::trait']]]
+  ['declared_5fbase_5ftypes_350',['declared_base_types',['../classrefl_1_1descriptor_1_1type__descriptor.html#ac15c7097cb5c702c83802465cd364c3c',1,'refl::descriptor::type_descriptor']]],
+  ['declared_5fmember_5flist_351',['declared_member_list',['../namespacerefl_1_1descriptor.html#a8c50bc8b2fa157709ed2453246d0f9a0',1,'refl::descriptor']]],
+  ['declared_5fmember_5ftypes_352',['declared_member_types',['../classrefl_1_1descriptor_1_1type__descriptor.html#a0974752f92b74a055bc9d8335d493fdf',1,'refl::descriptor::type_descriptor']]],
+  ['declaring_5ftype_353',['declaring_type',['../classrefl_1_1descriptor_1_1member__descriptor__base.html#af70beb1e0da54d076535cd8fb3dd5381',1,'refl::descriptor::member_descriptor_base']]]
 ];

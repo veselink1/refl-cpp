@@ -53,6 +53,7 @@ var NAVTREE =
       [ "Examples Guide", "md__introduction.html#autotoc_md24", null ]
     ] ],
     [ "README", "md__r_e_a_d_m_e.html", null ],
+    [ "Deprecated List", "deprecated.html", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -86,7 +87,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"structrefl_1_1trait_1_1is__member.html"
+"structrefl_1_1attr_1_1property.html#a8c45f77ef5159115250f2294bd37d296"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

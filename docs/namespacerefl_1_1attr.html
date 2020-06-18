@@ -111,10 +111,13 @@ Namespaces</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1attr_1_1base__types.html">base_types</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to specify the base types of the target type.  <a href="structrefl_1_1attr_1_1base__types.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1attr_1_1debug.html">debug</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to specify how a type should be displayed in debugging contexts.  <a href="structrefl_1_1attr_1_1debug.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1attr_1_1property.html">property</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Used to decorate a function that serves as a property.  <a href="structrefl_1_1attr_1_1property.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -122,14 +125,14 @@ Classes</h2></td></tr>
 <p>Contains the definitions of the built-in attributes which are implicitly available in macro context as well as the <a class="el" href="namespacerefl_1_1attr_1_1usage.html" title="Contains a number of constraints applicable to refl-cpp attributes.">attr::usage</a> namespace which contains constraints for user-provieded attributes.</p>
 <h1><a class="anchor" id="autotoc_md71"></a>
 Examples</h1>
-<div class="fragment"><div class="line"><a class="code" href="refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71">REFL_TYPE</a>(Point, <a class="code" href="namespacerefl_1_1runtime.html#a130a8f415fe4bcb35bef941e71711a73">debug</a>(custom_printer))</div>
+<div class="fragment"><div class="line"><a class="code" href="refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71">REFL_TYPE</a>(Point, <a class="code" href="namespacerefl_1_1runtime.html#a06e1996b05966eac4f282b6656169d6a">debug</a>(custom_printer))</div>
 <div class="line">    REFL_FIELD(x)</div>
 <div class="line">    REFL_FIELD(y)</div>
 <div class="line">REFL_END</div>
 </div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="arefl_8hpp_html_a2d90ffbabd9fc8cc17579fc33d919d71"><div class="ttname"><a href="refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71">REFL_TYPE</a></div><div class="ttdeci">#define REFL_TYPE(TypeName,...)</div><div class="ttdef"><b>Definition:</b> refl.hpp:2811</div></div>
-<div class="ttc" id="anamespacerefl_1_1runtime_html_a130a8f415fe4bcb35bef941e71711a73"><div class="ttname"><a href="namespacerefl_1_1runtime.html#a130a8f415fe4bcb35bef941e71711a73">refl::runtime::debug</a></div><div class="ttdeci">void debug(std::ostream &amp;os, const T &amp;value, bool compact=false)</div></div>
+<div class="ttc" id="anamespacerefl_1_1runtime_html_a06e1996b05966eac4f282b6656169d6a"><div class="ttname"><a href="namespacerefl_1_1runtime.html#a06e1996b05966eac4f282b6656169d6a">refl::runtime::debug</a></div><div class="ttdeci">void debug(std::basic_ostream&lt; CharT &gt; &amp;os, const T &amp;value, bool compact=false)</div></div>
+<div class="ttc" id="arefl_8hpp_html_a2d90ffbabd9fc8cc17579fc33d919d71"><div class="ttname"><a href="refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71">REFL_TYPE</a></div><div class="ttdeci">#define REFL_TYPE(TypeName,...)</div><div class="ttdoc">Creates reflection information for a specified type.</div><div class="ttdef"><b>Definition:</b> refl.hpp:3867</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

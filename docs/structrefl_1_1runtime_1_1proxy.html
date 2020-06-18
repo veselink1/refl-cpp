@@ -127,7 +127,7 @@ Examples:</h1>
 <div class="line"><span class="keyword">struct </span>dummy_proxy : <a class="code" href="structrefl_1_1runtime_1_1proxy.html">refl::runtime::proxy</a>&lt;dummy_proxy&lt;T&gt;, T&gt; {</div>
 <div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Member, <span class="keyword">typename</span> Self, <span class="keyword">typename</span>... Args&gt;</div>
 <div class="line">    <span class="keyword">static</span> <span class="keywordtype">int</span> invoke_impl(Self&amp;&amp; <span class="keyword">self</span>, Args&amp;&amp;... args) {</div>
-<div class="line">         std::cout &lt;&lt; <a class="code" href="namespacerefl_1_1descriptor.html#a489a58f1df6e126e10534e783585c921">get_debug_name</a>(Member()) &lt;&lt; <span class="stringliteral">&quot; called with &quot;</span> &lt;&lt; <span class="keyword">sizeof</span>...(Args) &lt;&lt; <span class="stringliteral">&quot; parameters!\n&quot;</span>;</div>
+<div class="line">         std::cout &lt;&lt; <a class="code" href="namespacerefl_1_1descriptor.html#af888ff528516ddbb240168f59e2427e4">get_debug_name</a>(Member()) &lt;&lt; <span class="stringliteral">&quot; called with &quot;</span> &lt;&lt; <span class="keyword">sizeof</span>...(Args) &lt;&lt; <span class="stringliteral">&quot; parameters!\n&quot;</span>;</div>
 <div class="line">         <span class="keywordflow">return</span> 0;</div>
 <div class="line">    }</div>
 <div class="line">};</div>
@@ -181,8 +181,8 @@ template&lt;typename Derived , typename Target &gt; </div>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespacerefl_1_1descriptor_html_a489a58f1df6e126e10534e783585c921"><div class="ttname"><a href="namespacerefl_1_1descriptor.html#a489a58f1df6e126e10534e783585c921">refl::descriptor::get_debug_name</a></div><div class="ttdeci">const char * get_debug_name(const T &amp;t)</div><div class="ttdef"><b>Definition:</b> refl.hpp:2199</div></div>
-<div class="ttc" id="astructrefl_1_1runtime_1_1proxy_html"><div class="ttname"><a href="structrefl_1_1runtime_1_1proxy.html">refl::runtime::proxy</a></div><div class="ttdoc">A proxy object that has a static interface identical to the reflected functions and fields of the tar...</div><div class="ttdef"><b>Definition:</b> refl.hpp:2413</div></div>
+<div class="ttc" id="anamespacerefl_1_1descriptor_html_af888ff528516ddbb240168f59e2427e4"><div class="ttname"><a href="namespacerefl_1_1descriptor.html#af888ff528516ddbb240168f59e2427e4">refl::descriptor::get_debug_name</a></div><div class="ttdeci">const char * get_debug_name(MemberDescriptor d)</div><div class="ttdoc">Returns the debug name of T.</div><div class="ttdef"><b>Definition:</b> refl.hpp:3118</div></div>
+<div class="ttc" id="astructrefl_1_1runtime_1_1proxy_html"><div class="ttname"><a href="structrefl_1_1runtime_1_1proxy.html">refl::runtime::proxy</a></div><div class="ttdoc">A proxy object that has a static interface identical to the reflected functions and fields of the tar...</div><div class="ttdef"><b>Definition:</b> refl.hpp:3410</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

@@ -96,13 +96,19 @@ $(document).ready(function(){initNavTree('structrefl_1_1trait_1_1is__instance__o
 </div><!--header-->
 <div class="contents">
 
+<p>Detects whther the type U is a template specialization of T.  
+ <a href="structrefl_1_1trait_1_1is__instance__of.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="refl_8hpp_source.html">refl.hpp</a>&gt;</code></p>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;template&lt; typename... &gt;typename T, typename U&gt;<br />
 struct refl::trait::is_instance_of&lt; T, U &gt;</h3>
 
-<p>Detects whther the type U is a template specialization of T. (e.g. <a class="el" href="structrefl_1_1trait_1_1is__instance__of.html">is_instance_of</a>&lt;std::vector&lt;&gt;, std::vector&lt;int&gt;&gt;) Inherits from std::bool_constant&lt;&gt;. </p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<p>Detects whther the type U is a template specialization of T. </p>
+<p>(e.g. <a class="el" href="structrefl_1_1trait_1_1is__instance__of.html" title="Detects whther the type U is a template specialization of T.">is_instance_of</a>&lt;std::vector&lt;&gt;, std::vector&lt;int&gt;&gt;) Inherits from std::bool_constant&lt;&gt;.</p>
+<div class="fragment"><div class="line">is_instance_of&lt;type_list, type_list&lt;int&gt;&gt;::value -&gt; <span class="keyword">true</span></div>
+<div class="line">is_instance_of&lt;type_list, std::tuple&lt;int&gt;&gt;::value -&gt; <span class="keyword">false</span></div>
+</div><!-- fragment --> </div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li><a class="el" href="refl_8hpp_source.html">refl.hpp</a></li>
 </ul>
 </div><!-- contents -->

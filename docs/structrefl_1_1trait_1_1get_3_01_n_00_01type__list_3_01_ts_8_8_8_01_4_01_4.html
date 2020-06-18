@@ -96,13 +96,18 @@ $(document).ready(function(){initNavTree('structrefl_1_1trait_1_1get_3_01_n_00_0
 </div><!--header-->
 <div class="contents">
 
+<p>Provides a member typedef type which is the N-th type in the provided type_list.  
+ <a href="structrefl_1_1trait_1_1get_3_01_n_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="refl_8hpp_source.html">refl.hpp</a>&gt;</code></p>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;size_t N, typename... Ts&gt;<br />
 struct refl::trait::get&lt; N, type_list&lt; Ts... &gt; &gt;</h3>
 
-<p>Provides a member typedef named type which is eqiuvalent to the N-th type of the provided type_list. </p>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
+<p>Provides a member typedef type which is the N-th type in the provided type_list. </p>
+<div class="fragment"><div class="line"><span class="keyword">typename</span> get&lt;0, type_list&lt;int, float&gt;&gt;::type -&gt; <span class="keywordtype">int</span></div>
+<div class="line"><span class="keyword">typename</span> get&lt;1, type_list&lt;int, float&gt;&gt;::type -&gt; <span class="keywordtype">float</span></div>
+</div><!-- fragment --> </div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li><a class="el" href="refl_8hpp_source.html">refl.hpp</a></li>
 </ul>
 </div><!-- contents -->
