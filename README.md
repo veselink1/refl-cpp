@@ -9,7 +9,7 @@
 
 </center>
 
-## refl-cpp v0.10.0 [[Documentation](https://veselink1.github.io/refl-cpp/md__introduction.html)]
+## refl-cpp v0.11.0 [[Documentation](https://veselink1.github.io/refl-cpp/md__introduction.html)]
 
 A compile-time reflection library for modern C++ with support for overloads, templates, attributes and proxies
 
@@ -145,6 +145,32 @@ REFL_FUNC(Function, Attribute...)
 `Patch` denotes a version which fixed a bug or does not include major new features.
 
 ---
+### v0.11.0
+  - Much improved support for inheritance ([#27](https://github.com/veselink1/refl-cpp/issues/27), [#28](https://github.com/veselink1/refl-cpp/issues/28))
+    - `refl::type_descriptor::declared_bases` lists base types declared via the `bases<...>` attribute
+    - `refl::type_descriptor::bases` lists base types declared via the `bases<...>` attribute as well as inherited members
+    - `refl::type_descriptor::members` now includes declared and inherited members (when base types are specified via `bases<...>` attribute)
+    - `refl::type_descriptor::declared_members` preserves the old behavior
+    - `refl::attr::bases<...>` types are now validated (via `std::is_base_of`)
+  - Added `refl::descriptor::get_simple_name`, which strips namespace and template declarations from the type name (`std::vector<int>` -> `vector`)
+  - Added free function equivalents of members of `_descriptor` types for symmetry purposes (and might allow for more optimal implementation in the future)
+  - Added `refl::const_string::find/rfind` for searching chars in const_strings
+  - Added `refl::make_const_string(char)` overload
+  - Added `refl::type_list<T>` specialization which exposes `typedef T type` and a synonym `refl::type_tag<T>`
+  - `refl::trait::concat` now support an arbitrary number of `type_list`s as type arguments
+  - Added `refl::trait::as_tuple` (similar to `as_type_list` but for `std::tuple`)
+  - Added `refl::trait::reverse`
+  - Added `refl::util::reflect_types`/`refl::util::unreflect_types` to quickly create a list of `type_descriptor`s from a list of types and then back
+  - Introduced support for different types of `std::basic_ostream` in `attr::debug` and `util::debug` (up to the user to take advantage of)
+  - Built-in support for `std::string_view`
+  - More type assertions in `descriptor::` utilities
+  - Simplification of some `trait::` types (should lead to better compile-times)
+  - Made unit tests more comprehensive
+  - Fixed incorrect `refl::util::identity` implementation for rvalues
+  - Fixed static function invocation with `operator()/invoke`
+  - Fixed `refl::util::debug` for `std::tuple` [#26](https://github.com/veselink1/refl-cpp/issues/26)
+  - Deprecated `refl::descriptor::get_bases` in favor of `refl::descriptor::get_base_types`
+
 ### v0.10.0
   - Introduced automatic property name normalization in `get_display_name` for properties with no `friendly_name`. Example: `get_display_name(get_foo) -> "foo"`
   - Added built-in reflection support for `std::string_view` [#23](https://github.com/veselink1/refl-cpp/issues/23)
@@ -156,7 +182,6 @@ REFL_FUNC(Function, Attribute...)
   - Removed filtering by `const_string` utils [#21](https://github.com/veselink1/refl-cpp/issues/21). Suggested workaround: use predicate variants
   - Removed refl-ht support
   - Code cleanup [#24](https://github.com/veselink1/refl-cpp/issues/24), [#20](https://github.com/veselink1/refl-cpp/issues/20)
-
 
 ### v0.9.1
   - Bugfix for `refl::descriptor::get_bases` for clang [#19](https://github.com/veselink1/refl-cpp/issues/19)
