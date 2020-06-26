@@ -6,6 +6,7 @@
 [![CircleCI](https://circleci.com/gh/veselink1/refl-cpp.svg?style=shield)](https://circleci.com/gh/veselink1/refl-cpp)
 [![Gitter](https://badges.gitter.im/refl-cpp/community.svg)](https://gitter.im/refl-cpp/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Patrons](https://img.shields.io/liberapay/patrons/veselink1.svg?logo=liberapay)](https://liberapay.com/veselink1/donate)
+[![AUR version](https://img.shields.io/aur/version/refl-cpp?logo=arch-linux)](https://aur.archlinux.org/packages/refl-cpp)
 
 </center>
 
