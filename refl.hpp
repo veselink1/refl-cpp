@@ -3471,12 +3471,12 @@ namespace refl::detail
         REFL_DETAIL_MEMBER_COMMON(function, FunctionName_, __VA_ARGS__) \
         public: \
         template <typename Self, typename... Args> \
-        static constexpr auto auto_resolve(::refl::type_tag<Self>, ::refl::type_list<Args...>) -> ::std::remove_reference_t<decltype( \
-            ::refl::detail::resolve_pointer< \
-                type, \
-                decltype(::std::declval<Self>().FunctionName_(::std::declval<Args>()...)) \
-            >(&type::FunctionName_, ::std::declval<Self>(), ::std::declval<Args>()...))> \
-        { return &type::FunctionName_; } \
+        static constexpr auto auto_resolve(::refl::type_tag<Self>, ::refl::type_list<Args...>, ::std::void_t<decltype(::std::declval<Self>().FunctionName_(::std::declval<Args>()...))>* = nullptr) \
+        { \
+            using return_t = decltype(::std::declval<Self>().FunctionName_(::std::declval<Args>()...)); \
+            using ptr_t = ::std::remove_reference_t<decltype(::refl::detail::resolve_pointer<type, return_t>(&type::FunctionName_, ::std::declval<Self>(), ::std::declval<Args>()...))>; \
+            return static_cast<ptr_t>(&type::FunctionName_); \
+        } \
         \
         template <typename Dummy, typename Pointer = decltype(&::refl::detail::head_t<type, Dummy>::FunctionName_)> \
         static constexpr auto resolve() -> decltype(Pointer(&type::FunctionName_)) \
