@@ -1,7 +1,11 @@
 /**
- * This example illustrates an example usage scenario for 
+ * ***README***
+ * This example illustrates an example usage scenario for
  * refl-cpp: Performing fast type-erased deserialization (from XML)
- * with the minimum possible amount of runtime overhead. 
+ * with the minimum possible amount of runtime overhead.
+ * A custom runtime reflection system is implemented here (see UiElementMetadata).
+ * It is then used to, at runtime, create instances of the reflected types and
+ * initialize their properties with values read from XML.
  */
 #include "refl.hpp"
 #include <iostream>
@@ -12,7 +16,7 @@
 using UiElementProperties = std::unordered_map<std::string, std::string>;
 using UiElementCreator = std::any(*)(const UiElementProperties&);
 
-enum class UiPropertyType 
+enum class UiPropertyType
 {
     Default = 0b0,
     Required = 0b1,
@@ -39,7 +43,7 @@ struct UiProperty : refl::attr::usage::field
     }
 };
 
-UiElementProperties parse_properties(std::string str) 
+UiElementProperties parse_properties(std::string str)
 {
     static const std::basic_regex<char> propRegex(R"raw(\s*(\w+)="([\s\S]*)")raw");
     UiElementProperties props;
@@ -50,17 +54,17 @@ UiElementProperties parse_properties(std::string str)
         auto&& propValue = matches[2];
         props.insert({ propName.str(), propValue.str() });
         str = matches.suffix().str();
-    }   
+    }
 
     return props;
 }
 
-class UiElementMetadata 
+class UiElementMetadata
 {
 public:
 
     template <typename T>
-    static UiElementMetadata create_metadata() 
+    static UiElementMetadata create_metadata()
     {
         constexpr auto type = refl::reflect<T>();
         UiElementMetadata md;
@@ -74,7 +78,7 @@ public:
         return creator_(props);
     }
 
-    std::string_view name() const 
+    std::string_view name() const
     {
         return name_;
     }
@@ -82,7 +86,7 @@ public:
 private:
 
     std::string name_;
-    UiElementCreator creator_;  
+    UiElementCreator creator_;
 
     template <typename T>
     static std::any create_untyped(const UiElementProperties& props)
@@ -109,23 +113,23 @@ private:
 
 };
 
-class UiElementRegistry 
+class UiElementRegistry
 {
 public:
 
-    static UiElementRegistry& get() 
+    static UiElementRegistry& get()
     {
         static UiElementRegistry instance;
         return instance;
     }
 
-    UiElementMetadata find(std::string_view elementName) const 
+    UiElementMetadata find(std::string_view elementName) const
     {
-        auto iter = std::find_if(metadata.begin(), metadata.end(), [&](auto&& x) { 
-            return x.name() == elementName; 
+        auto iter = std::find_if(metadata.begin(), metadata.end(), [&](auto&& x) {
+            return x.name() == elementName;
         });
         if (iter == metadata.end()) {
-            throw std::runtime_error("UiElement not found"); 
+            throw std::runtime_error("UiElement not found");
         }
         return *iter;
     }
@@ -144,7 +148,7 @@ private:
 
 };
 
-class ParsingError : public std::runtime_error 
+class ParsingError : public std::runtime_error
 {
     using std::runtime_error::runtime_error;
 };
@@ -154,17 +158,17 @@ class ParsingError : public std::runtime_error
 #define MY_CONCAT(A, B) MY_CONCAT_(A, B)
 #define UI_ELEMENT_REGISTER(TypeName) static int MY_CONCAT(_global_dummy_, __COUNTER__) = (UiElementRegistry::get().register_type<TypeName>(), 0)
 
-enum class Orientation 
+enum class Orientation
 {
     Horizontal,
     Vertical,
 };
 
-Orientation parse_orientation(std::string_view str) 
+Orientation parse_orientation(std::string_view str)
 {
     if (str == "horizontal") {
         return Orientation::Horizontal;
-    } 
+    }
     else if (str == "vertical") {
         return Orientation::Vertical;
     }
@@ -173,7 +177,7 @@ Orientation parse_orientation(std::string_view str)
     }
 }
 
-void debug_orientation(std::ostream& os, Orientation value) 
+void debug_orientation(std::ostream& os, Orientation value)
 {
     os << (value == Orientation::Horizontal ? "Horizontal" : "Vertical");
 }
@@ -181,12 +185,12 @@ void debug_orientation(std::ostream& os, Orientation value)
 REFL_TYPE(Orientation, debug{ debug_orientation })
 REFL_END
 
-struct StackPanel 
+struct StackPanel
 {
     Orientation orientation;
     std::string content;
 
-    static std::string parse_content(std::string_view content) 
+    static std::string parse_content(std::string_view content)
     {
         return content.data();
     }
@@ -219,7 +223,7 @@ int main()
         auto&& tagName = matches[1];
         auto&& attributes = matches[2];
         auto&& content = matches[3];
-        
+
         std::cout << "Matches: ";
         for (size_t i = 1; i < matches.size(); i++) {
             auto&& match = matches[i];
@@ -229,7 +233,7 @@ int main()
 
         UiElementProperties props = parse_properties(attributes.str());
         props["content"] = content;
-        
+
         UiElementMetadata metadata = UiElementRegistry::get().find(tagName.str());
         std::any element = metadata.create_instance(props);
 
@@ -241,6 +245,6 @@ int main()
         std::cout << '\n';
         view = matches.suffix().str();
     }
-    
+
     std::cout << std::endl;
 }

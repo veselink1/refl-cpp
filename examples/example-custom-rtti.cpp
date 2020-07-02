@@ -1,3 +1,11 @@
+/**
+ * ***README***
+ * This example showcases how a runtime reflection system can be implemented on
+ * top of refl-cpp (here only the name of the type is being stored, but this can be extended).
+ *
+ * We are storing the runtime information in TypeInfo. TypeInfo also has a factory method called
+ * Get<T>, which creates an instance of TypeInfo by using metadata from refl-cpp.
+ */
 #include <cassert>
 #include "refl.hpp"
 

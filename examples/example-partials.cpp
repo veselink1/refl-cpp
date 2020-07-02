@@ -1,3 +1,14 @@
+/**
+ * ***README***
+ * This example showcases how proxies can be used to augment a type to create useful
+ * utility types. Here we define a "partial" proxy type, which like all proxies,
+ * has member functions with equivalent names to the members of the target, but interestingly,
+ * those member accesstors return std::optionals. This can be useful to provide partial
+ * values of an object.
+ *
+ * Take a look at the update() function below to see how
+ * such partial objects can be used to selectively set a whole object's members.
+ */
 #include "refl.hpp"
 #include <iostream>
 #include <optional>
@@ -33,18 +44,6 @@ struct optional_member_predicate
 };
 
 template <typename T>
-struct as_tuple;
-
-template <template <typename...> typename T, typename... Ts>
-struct as_tuple<T<Ts...>>
-{
-    using type = std::tuple<Ts...>;
-};
-
-template <typename T>
-using as_tuple_t = typename as_tuple<T>::type;
-
-template <typename T>
 class partial : public refl::runtime::proxy<partial<T>, T>
 {
 public:
@@ -77,7 +76,7 @@ public:
 private:
 
     using opt_member_list = refl::trait::map_t<make_optional_member, refl::member_list<T>>;
-    as_tuple_t<opt_member_list> opt_member_tuple;
+    refl::trait::as_tuple_t<opt_member_list> opt_member_tuple;
 
     template <typename Member>
     using find_optional_by_member = refl::trait::first_t<

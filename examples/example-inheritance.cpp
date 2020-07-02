@@ -1,3 +1,11 @@
+
+/**
+ * ***README***
+ * This example showcases the new inheritance-related features introduced in v0.11.0.
+ * Here we have a simple single-inheritance heirarchy (but multiple inheritance is also supported).
+ * The base type Animal, defined a function in its metadata declaration. This metadata is then inherited
+ * by the derived classes of the Animal class. The base class of a class is specified with a bases<> attribute.
+ */
 #include <iostream>
 #include "refl.hpp"
 

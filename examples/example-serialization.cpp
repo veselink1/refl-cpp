@@ -1,3 +1,10 @@
+/**
+ * ***README***
+ * In this very simple example we define a custom attribute
+ * called serializable and our own serialization routine which
+ * detects the presence of this attribute and selectively serializes
+ * the members of the provided value.
+ */
 #include <iostream>
 #include <cstring>
 #include <string>
