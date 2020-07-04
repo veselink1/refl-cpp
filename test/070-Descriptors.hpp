@@ -175,7 +175,9 @@ TEST_CASE( "descriptors" ) {
         REQUIRE( is_field(y_member) );
         REQUIRE( !is_function(y_member) );
         REQUIRE( get_display_name(y_member) == "y"s );
+        REQUIRE( get_display_name_const(y_member) == "y" );
         REQUIRE( get_debug_name(y_member) == "Foo::y"s );
+        REQUIRE( get_debug_name_const(y_member) == "Foo::y" );
         REQUIRE( invoke(y_member, Foo{}) == 0 );
         REQUIRE( y_member(Foo{}) == 0 );
         REQUIRE( std::is_same_v<trait::get_t<3, member_list<Foo>>::return_type<Foo, int>, void> );

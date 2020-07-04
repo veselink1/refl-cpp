@@ -1292,6 +1292,93 @@ namespace refl
 
         namespace detail
         {
+            template <typename T, ptrdiff_t N, typename... Ts>
+            constexpr ptrdiff_t index_of() noexcept
+            {
+                if constexpr (sizeof...(Ts) <= N) return -1;
+                else if constexpr (std::is_same_v<T, trait::get_t<N, type_list<Ts...>>>) return N;
+                else return index_of<T, N + 1, Ts...>();
+            }
+
+            template <typename T, ptrdiff_t N, typename... Ts>
+            constexpr ptrdiff_t index_of_base() noexcept
+            {
+                if constexpr (sizeof...(Ts) <= N) return -1;
+                else if constexpr (std::is_base_of_v<T, trait::get_t<N, type_list<Ts...>>>) return N;
+                else return index_of_base<T, N + 1, Ts...>();
+            }
+
+            template <template<typename...> typename T, ptrdiff_t N, typename... Ts>
+            constexpr ptrdiff_t index_of_instance() noexcept
+            {
+                if constexpr (sizeof...(Ts) <= N) return -1;
+                else if constexpr (is_instance_of_v<T, trait::get_t<N, type_list<Ts...>>>) return N;
+                else return index_of_instance<T, N + 1, Ts...>();
+            }
+        } // namespace detail
+
+        /// \private
+        template <typename, typename>
+        struct index_of;
+
+        /**
+         * The index of the type in the type list, -1 if it doesn't exist.
+         * @see contains
+         */
+        template <typename T, typename... Ts>
+        struct index_of<T, type_list<Ts...>> : std::integral_constant<ptrdiff_t, detail::index_of<T, 0, Ts...>()>
+        {
+        };
+
+        /**
+         * The index of the type in the type list, -1 if it doesn't exist.
+         * @see index_of
+         */
+        template <typename T, typename TypeList>
+        static constexpr ptrdiff_t index_of_v = index_of<T, TypeList>::value;
+
+        /// \private
+        template <typename, typename>
+        struct index_of_base;
+
+        /**
+         * The index of the type in the type list that is derived from T, -1 if it doesn't exist.
+         * @see contains_base
+         */
+        template <typename T, typename... Ts>
+        struct index_of_base<T, type_list<Ts...>> : std::integral_constant<ptrdiff_t, detail::index_of_base<T, 0, Ts...>()>
+        {
+        };
+
+        /**
+         * The index of the type in the type list that is derived from T, -1 if it doesn't exist.
+         * @see index_of_base
+         */
+        template <typename T, typename TypeList>
+        static constexpr ptrdiff_t index_of_base_v = index_of_base<T, TypeList>::value;
+
+        /// \private
+        template <template<typename...> typename, typename>
+        struct index_of_instance;
+
+        /**
+         * The index of the type in the type list that is a template instance of T, -1 if it doesn't exist.
+         * @see contains_instance
+         */
+        template <template<typename...> typename T, typename... Ts>
+        struct index_of_instance<T, type_list<Ts...>> : std::integral_constant<ptrdiff_t, detail::index_of_instance<T, 0, Ts...>()>
+        {
+        };
+
+        /**
+         * The index of the type in the type list that is a template instance of T, -1 if it doesn't exist.
+         * @see index_of_instance
+         */
+        template <template<typename...> typename T, typename TypeList>
+        static constexpr ptrdiff_t index_of_instance_v = index_of_instance<T, TypeList>::value;
+
+        namespace detail
+        {
             template <typename, typename>
             struct unique_impl;
 
@@ -1684,33 +1771,6 @@ namespace refl
             return f(Ts{}...);
         }
 
-        namespace detail
-        {
-            template <template<typename...> typename T, ptrdiff_t N, typename... Ts>
-            constexpr ptrdiff_t index_of_template() noexcept
-            {
-                if constexpr (sizeof...(Ts) <= N)
-                {
-                    return -1;
-                }
-                else if constexpr (trait::is_instance_of_v<T, trait::get_t<N, type_list<Ts...>>>)
-                {
-                    return N;
-                }
-                else
-                {
-                    return index_of_template<T, N + 1, Ts...>();
-                }
-            }
-
-            template <template<typename...> typename T, typename... Ts>
-            constexpr ptrdiff_t index_of_template() noexcept
-            {
-                if constexpr (!(... || trait::is_instance_of_v<T, Ts>)) return -1;
-                return index_of_template<T, 0, Ts...>();
-            }
-        }
-
         /** A synonym for std::get<N>(tuple). */
         template <size_t N, typename... Ts>
         constexpr auto& get(std::tuple<Ts...>& ts) noexcept
@@ -1744,7 +1804,7 @@ namespace refl
         constexpr auto& get_instance(std::tuple<Ts...>& ts) noexcept
         {
             static_assert((... || trait::is_instance_of_v<T, Ts>), "The tuple does not contain a type that is a template instance of T!");
-            constexpr size_t idx = static_cast<size_t>(detail::index_of_template<T, Ts...>());
+            constexpr size_t idx = static_cast<size_t>(trait::index_of_instance_v<T, type_list<Ts...>>);
             return std::get<idx>(ts);
         }
 
@@ -1753,7 +1813,7 @@ namespace refl
         constexpr const auto& get_instance(const std::tuple<Ts...>& ts) noexcept
         {
             static_assert((... || trait::is_instance_of_v<T, Ts>), "The tuple does not contain a type that is a template instance of T!");
-            constexpr size_t idx = static_cast<size_t>(detail::index_of_template<T, Ts...>());
+            constexpr size_t idx = static_cast<size_t>(trait::index_of_instance_v<T, type_list<Ts...>>);
             return std::get<idx>(ts);
         }
 
@@ -3005,7 +3065,7 @@ namespace refl
          * \endcode
          */
         template <typename MemberDescriptor>
-        constexpr bool is_writable(const MemberDescriptor) noexcept
+        constexpr bool is_writable(MemberDescriptor) noexcept
         {
             static_assert(trait::is_member_v<MemberDescriptor>);
             if constexpr (trait::is_property_v<MemberDescriptor>) {
@@ -3185,14 +3245,19 @@ namespace refl
             }
 
             template <typename T>
-            std::string get_display_name(const T t) noexcept
+            constexpr auto get_display_name(const T t) noexcept
             {
                 if constexpr (trait::is_property_v<T>) {
                     auto&& friendly_name = util::get<attr::property>(t.attributes).friendly_name;
-                    return friendly_name ? *friendly_name : detail::normalize_accessor_name(t).str();
+                    if constexpr (friendly_name) {
+                        return REFL_MAKE_CONST_STRING(*friendly_name);
+                    }
+                    else {
+                        return detail::normalize_accessor_name(t);
+                    }
                 }
                 else {
-                    return t.name.str();
+                    return t.name;
                 }
             }
         } // namespace detail
@@ -3230,6 +3295,17 @@ namespace refl
             return name.c_str();
         }
 
+        /**
+         * Returns the display name of T as a const_string<N>.
+         * Uses the friendly_name of the property attribute, or the normalized name if no friendly_name was provided.
+         * @see get_display_name
+         */
+        template <typename Descriptor>
+        constexpr auto get_display_name_const(Descriptor d) noexcept
+        {
+            static_assert(trait::is_descriptor_v<Descriptor>);
+            return detail::get_display_name(d);
+        }
     } // namespace descriptor
 
     using descriptor::member_list;

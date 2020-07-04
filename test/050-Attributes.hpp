@@ -94,6 +94,10 @@ TEST_CASE( "attributes" ) {
             REQUIRE( get_display_name(find_one(member_list<NormalizedProps>(), [](auto m) { return m.name == "get_foo"; })) == "foo"s );
             REQUIRE( get_display_name(find_one(member_list<NormalizedProps>(), [](auto m) { return m.name == "getFoo"; })) == "foo"s );
             REQUIRE( get_display_name(find_one(member_list<NormalizedProps>(), [](auto m) { return m.name == "GetFoo"; })) == "Foo"s );
+
+            REQUIRE( get_display_name_const(find_one(member_list<NormalizedProps>(), [](auto m) { return m.name == "get_foo"; })) == "foo" );
+            REQUIRE( get_display_name_const(find_one(member_list<NormalizedProps>(), [](auto m) { return m.name == "getFoo"; })) == "foo" );
+            REQUIRE( get_display_name_const(find_one(member_list<NormalizedProps>(), [](auto m) { return m.name == "GetFoo"; })) == "Foo" );
         }
 
     }

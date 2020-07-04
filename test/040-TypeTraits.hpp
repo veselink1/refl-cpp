@@ -116,12 +116,19 @@ TEST_CASE( "type traits" ) {
     SECTION( "contains" ) {
         REQUIRE( trait::contains_v<int, type_list<int, float>>);
         REQUIRE( !trait::contains_v<int, type_list<float, double>>);
+
+        REQUIRE( trait::index_of_v<int, type_list<int, float>> == 0 );
+        REQUIRE( trait::index_of_v<int, type_list<float, double>> == -1 );
     }
 
     SECTION( "contains_instance" ) {
         REQUIRE( trait::contains_instance_v<std::tuple, type_list<int, std::tuple<float>>> );
         REQUIRE( !trait::contains_instance_v<std::tuple, type_list<int, float>> );
         REQUIRE( !trait::contains_instance_v<attr::debug, trait::get_t<0, member_list<A>>::attribute_types> );
+
+        REQUIRE( trait::index_of_instance_v<std::tuple, type_list<int, std::tuple<float>>> == 1 );
+        REQUIRE( trait::index_of_instance_v<std::tuple, type_list<int, float>> == -1 );
+        REQUIRE( trait::index_of_instance_v<attr::debug, trait::get_t<0, member_list<A>>::attribute_types> == -1 );
     }
 
     SECTION( "contains_base" ) {
@@ -130,6 +137,10 @@ TEST_CASE( "type traits" ) {
         REQUIRE( trait::contains_base_v<A, type_list<int, A>> );
         REQUIRE( trait::contains_base_v<A, type_list<int, B>> );
         REQUIRE( !trait::contains_base_v<A, type_list<int, float>> );
+
+        REQUIRE( trait::index_of_base_v<A, type_list<int, A>> == 1 );
+        REQUIRE( trait::index_of_base_v<A, type_list<int, B>> == 1 );
+        REQUIRE( trait::index_of_base_v<A, type_list<int, float>> == -1 );
     }
 
 }
