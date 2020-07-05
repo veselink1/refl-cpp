@@ -1519,14 +1519,25 @@ namespace refl
 
         namespace detail
         {
+            template <typename F, typename T>
+            constexpr auto invoke_optional_index(F&& f, T&& t, size_t idx, int) -> decltype(f(std::forward<T>(t), idx))
+            {
+                return f(std::forward<T>(t), idx);
+            }
+
+            template <typename F, typename T>
+            constexpr auto invoke_optional_index(F&& f, T&& t, size_t, ...) -> decltype(f(std::forward<T>(t)))
+            {
+                return f(std::forward<T>(t));
+            }
+
             template <typename F, typename... Carry>
             constexpr auto eval_in_order_to_tuple(type_list<>, std::index_sequence<>, F&&, Carry&&... carry)
             {
                 if constexpr (sizeof...(Carry) == 0) return std::tuple<>{};
                 else return std::make_tuple(std::forward<Carry>(carry)...);
             }
-
-            // This whole jazzy workaround is needed since C++ does not specify
+            // This workaround is needed since C++ does not specify
             // the order in which function arguments are evaluated and this leads
             // to incorrect order of evaluation (noticeable when using indexes).
             // Otherwise we could simply do std::make_tuple(f(Ts{}, Idx)...).
@@ -1535,24 +1546,14 @@ namespace refl
             {
                 static_assert(std::is_trivial_v<T>, "Argument is a non-trivial type!");
 
-                if constexpr (std::is_invocable_v<F, T, size_t>) {
-                    return eval_in_order_to_tuple(
-                        type_list<Ts...>{},
-                        std::index_sequence<Idx...>{},
-                        std::forward<F>(f),
-                        std::forward<Carry>(carry)..., // carry the previous results over
-                        f(T{}, I) // pass the current result after them
-                    );
-                }
-                else {
-                    return eval_in_order_to_tuple(
-                        type_list<Ts...>{},
-                        std::index_sequence<Idx...>{},
-                        std::forward<F>(f),
-                        std::forward<Carry>(carry)..., // carry the previous results over
-                        f(T{}) // pass the current result after them
-                    );
-                }
+                auto&& result = invoke_optional_index(f, T{}, I, 0);
+                return eval_in_order_to_tuple(
+                    type_list<Ts...>{},
+                    std::index_sequence<Idx...>{},
+                    std::forward<F>(f),
+                    std::forward<Carry>(carry)..., // carry the previous results over
+                    std::forward<decltype(result)>(result) // pass the current result after them
+                );
             }
         }
 
@@ -1603,9 +1604,9 @@ namespace refl
         template <typename F, typename... Ts>
         constexpr void for_each(type_list<Ts...> list, F&& f)
         {
-            map_to_tuple(list, [&](auto&&... args) -> decltype(f(std::forward<decltype(args)>(args)...), 0)
+            map_to_tuple(list, [&](auto&& val, size_t idx)
             {
-                f(std::forward<decltype(args)>(args)...);
+                detail::invoke_optional_index(f, std::forward<decltype(val)>(val), idx, 0);
                 return 0;
             });
         }
@@ -3306,6 +3307,89 @@ namespace refl
             static_assert(trait::is_descriptor_v<Descriptor>);
             return detail::get_display_name(d);
         }
+
+        /**
+         * Checks if there exists a member that has the same display name as the one provied and is writable.
+         * For getter methods with a property attribute, the return value will be true if there exists a
+         * reflected setter method with a property with the same display name (property name normalization applies automatically).
+         * For fields, returns true only if the field is writable.
+         */
+        template <typename ReadableMember>
+        constexpr auto has_writer(ReadableMember member)
+        {
+            static_assert(is_writable(member) || is_property(member));
+            if constexpr (is_writable(member)) {
+                return true;
+            }
+            else {
+                return contains(get_declarator(member).members, [](auto m) {
+                    return is_property(m) && is_writable(m) && get_display_name_const(m) == get_display_name_const(ReadableMember{});
+                });
+            }
+        }
+
+        /**
+         * Checks if there exists a member that has the same display name as the one provied and is readable.
+         * For setter methods with a property attribute, the return value will be true if there exists a
+         * reflected getter method with a property with the same display name (property name normalization applies automatically).
+         * For fields, returns true.
+         */
+        template <typename WritableMember>
+        constexpr auto has_reader(WritableMember member)
+        {
+            static_assert(is_readable(member) || is_property(member));
+            if constexpr (is_readable(member)) {
+                return true;
+            }
+            else {
+                return contains(get_declarator(member).members, [](auto m) {
+                    return is_property(m) && is_readable(m) && get_display_name_const(m) == get_display_name_const(WritableMember{});
+                });
+            }
+        }
+
+        /**
+         * Returns a member that has the same display name as the one provied and is writable.
+         * For getter methods with a property attribute, the return value will the
+         * reflected setter method with a property with the same display name (property name normalization applies automatically).
+         * For fields, returns the same descriptor if writable.
+         */
+        template <typename ReadableMember>
+        constexpr auto get_writer(ReadableMember member)
+        {
+            static_assert(is_writable(member) || is_property(member));
+            if constexpr (is_writable(member)) {
+                return member;
+            }
+            else {
+                static_assert(has_writer(member));
+                return find_one(get_declarator(member).members, [](auto m) {
+                    return is_property(m) && is_writable(m) && get_display_name_const(m) == get_display_name_const(ReadableMember{});
+                });
+            }
+        }
+
+        /**
+         * Returns a member that has the same display name as the one provied and is readable.
+         * For setter methods with a property attribute, the return value will be a
+         * reflected getter method with a property with the same display name (property name normalization applies automatically).
+         * For fields, returns the same descriptor.
+         */
+        template <typename WritableMember>
+        constexpr auto get_reader(WritableMember member)
+        {
+            static_assert(is_readable(member) || is_property(member));
+            if constexpr (is_readable(member)) {
+                return member;
+            }
+            else {
+                static_assert(has_reader(member));
+                return find_one(get_declarator(member).members, [](auto m) {
+                    return is_property(m) && is_readable(m) && get_display_name_const(m) == get_display_name_const(WritableMember{});
+                });
+            }
+        }
+
     } // namespace descriptor
 
     using descriptor::member_list;

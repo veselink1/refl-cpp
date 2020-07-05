@@ -16,7 +16,7 @@ REFL_AUTO(
     type(A),
     field(x),
     func(f)
-);
+)
 
 TEST_CASE( "type traits" ) {
 

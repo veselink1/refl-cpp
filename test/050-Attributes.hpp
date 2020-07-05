@@ -98,6 +98,15 @@ TEST_CASE( "attributes" ) {
             REQUIRE( get_display_name_const(find_one(member_list<NormalizedProps>(), [](auto m) { return m.name == "get_foo"; })) == "foo" );
             REQUIRE( get_display_name_const(find_one(member_list<NormalizedProps>(), [](auto m) { return m.name == "getFoo"; })) == "foo" );
             REQUIRE( get_display_name_const(find_one(member_list<NormalizedProps>(), [](auto m) { return m.name == "GetFoo"; })) == "Foo" );
+
+            constexpr auto get_x = find_one(member_list<Derived>(), [](auto m) { return m.name == "get_x"; });
+            constexpr auto set_x = find_one(member_list<Derived>(), [](auto m) { return m.name == "set_x"; });
+
+            REQUIRE( std::is_same_v<decltype(get_reader(get_x)), std::remove_cv_t<decltype(get_x)>> );
+            REQUIRE( std::is_same_v<decltype(get_writer(get_x)), std::remove_cv_t<decltype(set_x)>> );
+
+            REQUIRE( std::is_same_v<decltype(get_reader(set_x)), std::remove_cv_t<decltype(get_x)>> );
+            REQUIRE( std::is_same_v<decltype(get_writer(set_x)), std::remove_cv_t<decltype(set_x)>> );
         }
 
     }

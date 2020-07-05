@@ -178,6 +178,8 @@ TEST_CASE( "descriptors" ) {
         REQUIRE( get_display_name_const(y_member) == "y" );
         REQUIRE( get_debug_name(y_member) == "Foo::y"s );
         REQUIRE( get_debug_name_const(y_member) == "Foo::y" );
+        REQUIRE( std::is_same_v<decltype(get_reader(y_member)), std::remove_cv_t<decltype(y_member)>> );
+        REQUIRE( std::is_same_v<decltype(get_writer(y_member)), std::remove_cv_t<decltype(y_member)>> );
         REQUIRE( invoke(y_member, Foo{}) == 0 );
         REQUIRE( y_member(Foo{}) == 0 );
         REQUIRE( std::is_same_v<trait::get_t<3, member_list<Foo>>::return_type<Foo, int>, void> );
