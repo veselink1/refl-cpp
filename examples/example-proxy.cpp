@@ -56,14 +56,14 @@ struct value_proxy : refl::runtime::proxy<value_proxy<T>, T>
         refl::runtime::debug_all(std::cout, args...);
         std::cout << '\n';
 
-        if constexpr (is_readable(member) || is_writable(member)) {
+        if constexpr (is_field(member)) {
             static_assert(sizeof...(Args) <= 1, "Invalid number of arguments provided for property!");
             // One argument means that this is a setter-style method.
             if constexpr (sizeof...(Args) == 1) {
                 // Check if the value is writable.
                 static_assert(is_writable(member));
                 // Assign the value. Use identity to instruct that there is only a single argument.
-                member(self.target) = refl::util::identity(std::forward<Args>(args)...);
+                member(self.target, std::forward<Args>(args)...);
             }
             // Zero arguments means a get method.
             else {
@@ -90,10 +90,7 @@ namespace model
     };
 }
 
-REFL_TYPE(model::User)
-    REFL_FIELD(id)
-    REFL_FIELD(email)
-REFL_END
+REFL_AUTO(type(model::User), field(id), field(email))
 
 // User will now have the interface { auto id(args...); auto email(args...); }
 // The extact types of arguments and the return type of the members will be deduced

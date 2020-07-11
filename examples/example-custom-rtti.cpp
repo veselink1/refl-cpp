@@ -36,8 +36,8 @@ private:
 
     // given a type_descriptor, we construct a TypeInfo
     // with all the metadata we care about (currently only name)
-    template <typename T>
-    TypeInfo(const refl::type_descriptor<T>& td)
+    template <typename T, typename... Fields>
+    TypeInfo(refl::type_descriptor<T> td)
         : name_(td.name)
     {
     }
@@ -71,8 +71,7 @@ public:
 };
 
 // create refl-cpp metadata
-REFL_TYPE(Actor)
-REFL_END
+REFL_AUTO(type(Actor))
 
 // inherit reflectable type
 class Pawn : public Actor
@@ -86,8 +85,7 @@ public:
     }
 };
 
-REFL_TYPE(Pawn)
-REFL_END
+REFL_AUTO(type(Pawn))
 
 class FirstPersonController : public Pawn
 {
@@ -95,13 +93,17 @@ public:
     // again, override GetTypeInfo with proper impl
     MYLIB_REFLECTABLE()
 
+    int health = 100;
+
     virtual ~FirstPersonController() noexcept
     {
     }
 };
 
-REFL_TYPE(FirstPersonController)
-REFL_END
+REFL_AUTO(
+    type(FirstPersonController),
+    field(health)
+)
 
 int main()
 {

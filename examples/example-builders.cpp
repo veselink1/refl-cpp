@@ -67,7 +67,7 @@ struct User
     }
 };
 
-REFL_AUTO // New experimental syntax
+REFL_AUTO
 (
     type(User),
     field(id),

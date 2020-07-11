@@ -182,8 +182,7 @@ void debug_orientation(std::ostream& os, Orientation value)
     os << (value == Orientation::Horizontal ? "Horizontal" : "Vertical");
 }
 
-REFL_TYPE(Orientation, debug{ debug_orientation })
-REFL_END
+REFL_AUTO(type(Orientation, debug{ debug_orientation }))
 
 struct StackPanel
 {
@@ -196,10 +195,11 @@ struct StackPanel
     }
 };
 
-REFL_TYPE(StackPanel)
-    REFL_FIELD(orientation, UiProperty(&parse_orientation))
-    REFL_FIELD(content, UiProperty(UiPropertyType::RequiredContent, &StackPanel::parse_content))
-REFL_END
+REFL_AUTO(
+    type(StackPanel),
+    field(orientation, UiProperty(&parse_orientation)),
+    field(content, UiProperty(UiPropertyType::RequiredContent, &StackPanel::parse_content))
+)
 
 UI_ELEMENT_REGISTER(StackPanel);
 
