@@ -3641,11 +3641,14 @@ namespace refl
             template <typename CharT, typename T>
             constexpr bool is_ostream_printable_v{ decltype(is_ostream_printable_test<CharT, T>(0))::value };
 
-            int next_depth(int depth)
+            namespace
             {
-                return depth == -1 || depth > 8
-                    ? -1
-                    : depth + 1;
+                int next_depth(int depth)
+                {
+                    return depth == -1 || depth > 8
+                        ? -1
+                        : depth + 1;
+                }
             }
 
             template <typename CharT>
