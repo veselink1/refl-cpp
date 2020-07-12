@@ -26,7 +26,6 @@
 #include <stddef.h> // size_t
 #include <cstring>
 #include <array>
-#include <memory>
 #include <utility> // std::move, std::forward
 #include <optional>
 #include <tuple>
@@ -34,6 +33,21 @@
 #include <ostream>
 #include <sstream>
 #include <iomanip> // std::quoted
+
+namespace std
+{
+    template <typename T, typename Deleter>
+    class unique_ptr;
+
+    template <typename T>
+    class shared_ptr;
+
+    template <typename T>
+    class weak_ptr;
+
+    template <typename T>
+    class complex;
+} // namespace std
 
 #ifdef _MSC_VER
 // Disable VS warning for "Not enough arguments for macro"
@@ -4293,6 +4307,18 @@ namespace refl::detail
             runtime::debug(os, t.lock().get(), true);
         }
     };
+
+    struct write_complex
+    {
+        template <typename CharT, typename T>
+        void operator()(std::basic_ostream<CharT>& os, const std::complex<T>& t) const
+        {
+            runtime::debug(os, t.real());
+            os << CharT('+');
+            runtime::debug(os, t.imag());
+            os << CharT('i');
+        }
+    };
 } // namespace refl::detail
 
 // Custom reflection information for
@@ -4348,7 +4374,17 @@ REFL_TEMPLATE(
     debug{ refl::detail::write_pair() })
 REFL_END
 
-#endif // REFL_NO_STD_SUPPORT
+#ifndef REFL_NO_STD_COMPLEX
+
+REFL_TEMPLATE(
+    (typename T),
+    (std::complex<T>),
+    debug{ refl::detail::write_complex() })
+REFL_END
+
+#endif // !REFL_NO_STD_COMPLEX
+
+#endif // !REFL_NO_STD_SUPPORT
 
 #ifndef REFL_NO_AUTO_MACRO
 

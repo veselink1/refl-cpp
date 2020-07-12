@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include <complex>
 
 using namespace refl;
 
@@ -58,6 +59,11 @@ TEST_CASE( "built-in support for standard types" ) {
 
     SECTION( "std::shared_ptr" ) {
         REQUIRE(is_reflectable<std::shared_ptr<int>>());
+    }
+
+    SECTION( "std::complex" ) {
+        REQUIRE(is_reflectable<std::complex<double>>());
+        REQUIRE(runtime::debug_str(std::complex<double>(5.0, 1.0)) == "5+1i");
     }
 
 }
