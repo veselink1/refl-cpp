@@ -353,3 +353,6 @@ refl-cpp provides a range of type-transforming operations in the [`refl::trait`]
 
 - XML-based GUI with strongly-types properties - [example-binding.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-binding.cpp)
     Shows how to implement a system for reading XML resources describing a UI for an imaginary GUI system with refl-cpp
+
+- Struct of Arrays - [example-struct-of-arrays.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-binding.cpp)
+    Shows how to programatically create a struct of arrays for a given type.
