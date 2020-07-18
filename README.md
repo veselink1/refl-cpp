@@ -10,7 +10,7 @@
 
 </center>
 
-## refl-cpp v0.11.0 [[Documentation](https://veselink1.github.io/refl-cpp/md__introduction.html)]
+## refl-cpp v0.12.0 [[Documentation](https://veselink1.github.io/refl-cpp/md__introduction.html)]
 
 A compile-time reflection library for modern C++ with support for overloads, templates, attributes and proxies
 
@@ -146,6 +146,13 @@ REFL_FUNC(Function, Attribute...)
 `Patch` denotes a version which fixed a bug or does not include major new features.
 
 ---
+### v0.12.0
+  - Added `std::complex` support metadata. Disable with `REFL_NO_STD_COMPLEX`.
+  - Added `refl::descriptor::get_reader`/`get_writer` utilities for getter/setter properties.
+  - Added `refl::trait::index_of` for finding index of type in a `type_list`.
+  - Added `refl::descriptor::get_display_name_const` as `const_string` alternative to `get_display_name`.
+  - Fixed #33 (by [james-conrad](https://github.com/james-conrad))
+
 ### v0.11.0
   - Much improved support for inheritance ([#27](https://github.com/veselink1/refl-cpp/issues/27), [#28](https://github.com/veselink1/refl-cpp/issues/28))
     - `refl::type_descriptor::declared_bases` lists base types declared via the `bases<...>` attribute

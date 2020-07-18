@@ -105,7 +105,6 @@ $(document).ready(function(){initNavTree('refl_8hpp.html',''); initResizable(); 
 <div class="textblock"><code>#include &lt;stddef.h&gt;</code><br />
 <code>#include &lt;cstring&gt;</code><br />
 <code>#include &lt;array&gt;</code><br />
-<code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;utility&gt;</code><br />
 <code>#include &lt;optional&gt;</code><br />
 <code>#include &lt;tuple&gt;</code><br />
@@ -118,6 +117,14 @@ $(document).ready(function(){initNavTree('refl_8hpp.html',''); initResizable(); 
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstd_1_1unique__ptr.html">std::unique_ptr&lt; T, Deleter &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstd_1_1shared__ptr.html">std::shared_ptr&lt; T &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstd_1_1weak__ptr.html">std::weak_ptr&lt; T &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstd_1_1complex.html">std::complex&lt; T &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1util_1_1const__string.html">refl::util::const_string&lt; N &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a compile-time string.  <a href="structrefl_1_1util_1_1const__string.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -198,6 +205,15 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1trait_1_1contains__base_3_01_t_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html">refl::trait::contains_base&lt; T, type_list&lt; Ts... &gt; &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks whether a type deriving from T is contained in the list of types.  <a href="structrefl_1_1trait_1_1contains__base_3_01_t_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1trait_1_1index__of_3_01_t_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html">refl::trait::index_of&lt; T, type_list&lt; Ts... &gt; &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The index of the type in the type list, -1 if it doesn't exist.  <a href="structrefl_1_1trait_1_1index__of_3_01_t_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1trait_1_1index__of__base_3_01_t_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html">refl::trait::index_of_base&lt; T, type_list&lt; Ts... &gt; &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The index of the type in the type list that is derived from T, -1 if it doesn't exist.  <a href="structrefl_1_1trait_1_1index__of__base_3_01_t_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1trait_1_1index__of__instance_3_01_t_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html">refl::trait::index_of_instance&lt; T, type_list&lt; Ts... &gt; &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The index of the type in the type list that is a template instance of T, -1 if it doesn't exist.  <a href="structrefl_1_1trait_1_1index__of__instance_3_01_t_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structrefl_1_1trait_1_1unique.html">refl::trait::unique&lt; T &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a new list containing the repeating elements in the source list only once.  <a href="structrefl_1_1trait_1_1unique.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -265,6 +281,8 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
+<tr class="memitem:namespacestd"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestd.html">std</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:namespacerefl"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacerefl.html">refl</a></td></tr>
 <tr class="memdesc:namespacerefl"><td class="mdescLeft">&#160;</td><td class="mdescRight">The top-level refl-cpp namespace It contains a few core refl-cpp namespaces and directly exposes core classes and functions. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -686,10 +704,10 @@ Functions</h2></td></tr>
 <tr class="memitem:aa68bedab33d684ee5ee4ead24c5586ab"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1descriptor.html#aa68bedab33d684ee5ee4ead24c5586ab">refl::descriptor::is_readable</a> (MemberDescriptor) noexcept</td></tr>
 <tr class="memdesc:aa68bedab33d684ee5ee4ead24c5586ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if T is a 0-arg const-qualified member function with a property attribute or a field.  <a href="namespacerefl_1_1descriptor.html#aa68bedab33d684ee5ee4ead24c5586ab">More...</a><br /></td></tr>
 <tr class="separator:aa68bedab33d684ee5ee4ead24c5586ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18e891ae0f5efe69a652dfc31dbc28c6"><td class="memTemplParams" colspan="2">template&lt;typename MemberDescriptor &gt; </td></tr>
-<tr class="memitem:a18e891ae0f5efe69a652dfc31dbc28c6"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1descriptor.html#a18e891ae0f5efe69a652dfc31dbc28c6">refl::descriptor::is_writable</a> (const MemberDescriptor) noexcept</td></tr>
-<tr class="memdesc:a18e891ae0f5efe69a652dfc31dbc28c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if T is a 1-arg non-const-qualified member function with a property attribute or a non-const field.  <a href="namespacerefl_1_1descriptor.html#a18e891ae0f5efe69a652dfc31dbc28c6">More...</a><br /></td></tr>
-<tr class="separator:a18e891ae0f5efe69a652dfc31dbc28c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a925e8cb99d6199fe03edeb5109958f8d"><td class="memTemplParams" colspan="2">template&lt;typename MemberDescriptor &gt; </td></tr>
+<tr class="memitem:a925e8cb99d6199fe03edeb5109958f8d"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1descriptor.html#a925e8cb99d6199fe03edeb5109958f8d">refl::descriptor::is_writable</a> (MemberDescriptor) noexcept</td></tr>
+<tr class="memdesc:a925e8cb99d6199fe03edeb5109958f8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if T is a 1-arg non-const-qualified member function with a property attribute or a non-const field.  <a href="namespacerefl_1_1descriptor.html#a925e8cb99d6199fe03edeb5109958f8d">More...</a><br /></td></tr>
+<tr class="separator:a925e8cb99d6199fe03edeb5109958f8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac00126ab409dbc1a5445d37832876fe2"><td class="memTemplParams" colspan="2">template&lt;typename TypeDescriptor &gt; </td></tr>
 <tr class="memitem:ac00126ab409dbc1a5445d37832876fe2"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1descriptor.html#ac00126ab409dbc1a5445d37832876fe2">refl::descriptor::has_bases</a> (TypeDescriptor t) noexcept</td></tr>
 <tr class="memdesc:ac00126ab409dbc1a5445d37832876fe2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if a type has a bases attribute.  <a href="namespacerefl_1_1descriptor.html#ac00126ab409dbc1a5445d37832876fe2">More...</a><br /></td></tr>
@@ -714,6 +732,26 @@ Functions</h2></td></tr>
 <tr class="memitem:a9f021ce9c4ef95ab4313aefb8f4f3588"><td class="memTemplItemLeft" align="right" valign="top">const char *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1descriptor.html#a9f021ce9c4ef95ab4313aefb8f4f3588">refl::descriptor::get_display_name</a> (Descriptor d) noexcept</td></tr>
 <tr class="memdesc:a9f021ce9c4ef95ab4313aefb8f4f3588"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the display name of T.  <a href="namespacerefl_1_1descriptor.html#a9f021ce9c4ef95ab4313aefb8f4f3588">More...</a><br /></td></tr>
 <tr class="separator:a9f021ce9c4ef95ab4313aefb8f4f3588"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7cb65ca47183b468df2b8429dc5dea61"><td class="memTemplParams" colspan="2">template&lt;typename Descriptor &gt; </td></tr>
+<tr class="memitem:a7cb65ca47183b468df2b8429dc5dea61"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1descriptor.html#a7cb65ca47183b468df2b8429dc5dea61">refl::descriptor::get_display_name_const</a> (Descriptor d) noexcept</td></tr>
+<tr class="memdesc:a7cb65ca47183b468df2b8429dc5dea61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the display name of T as a const_string&lt;N&gt;.  <a href="namespacerefl_1_1descriptor.html#a7cb65ca47183b468df2b8429dc5dea61">More...</a><br /></td></tr>
+<tr class="separator:a7cb65ca47183b468df2b8429dc5dea61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a435c850ae43e86f333a9c19b0f24580c"><td class="memTemplParams" colspan="2">template&lt;typename ReadableMember &gt; </td></tr>
+<tr class="memitem:a435c850ae43e86f333a9c19b0f24580c"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1descriptor.html#a435c850ae43e86f333a9c19b0f24580c">refl::descriptor::has_writer</a> (ReadableMember member)</td></tr>
+<tr class="memdesc:a435c850ae43e86f333a9c19b0f24580c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if there exists a member that has the same display name as the one provied and is writable.  <a href="namespacerefl_1_1descriptor.html#a435c850ae43e86f333a9c19b0f24580c">More...</a><br /></td></tr>
+<tr class="separator:a435c850ae43e86f333a9c19b0f24580c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9505e8a9ccb0bf419927d27f3ff20f3"><td class="memTemplParams" colspan="2">template&lt;typename WritableMember &gt; </td></tr>
+<tr class="memitem:ac9505e8a9ccb0bf419927d27f3ff20f3"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1descriptor.html#ac9505e8a9ccb0bf419927d27f3ff20f3">refl::descriptor::has_reader</a> (WritableMember member)</td></tr>
+<tr class="memdesc:ac9505e8a9ccb0bf419927d27f3ff20f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if there exists a member that has the same display name as the one provied and is readable.  <a href="namespacerefl_1_1descriptor.html#ac9505e8a9ccb0bf419927d27f3ff20f3">More...</a><br /></td></tr>
+<tr class="separator:ac9505e8a9ccb0bf419927d27f3ff20f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4cc337624b45bd2d5f9b27d6811fafd"><td class="memTemplParams" colspan="2">template&lt;typename ReadableMember &gt; </td></tr>
+<tr class="memitem:ad4cc337624b45bd2d5f9b27d6811fafd"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1descriptor.html#ad4cc337624b45bd2d5f9b27d6811fafd">refl::descriptor::get_writer</a> (ReadableMember member)</td></tr>
+<tr class="memdesc:ad4cc337624b45bd2d5f9b27d6811fafd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a member that has the same display name as the one provied and is writable.  <a href="namespacerefl_1_1descriptor.html#ad4cc337624b45bd2d5f9b27d6811fafd">More...</a><br /></td></tr>
+<tr class="separator:ad4cc337624b45bd2d5f9b27d6811fafd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3690f579517cc28e9d2eacb3d095fdbb"><td class="memTemplParams" colspan="2">template&lt;typename WritableMember &gt; </td></tr>
+<tr class="memitem:a3690f579517cc28e9d2eacb3d095fdbb"><td class="memTemplItemLeft" align="right" valign="top">constexpr auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl_1_1descriptor.html#a3690f579517cc28e9d2eacb3d095fdbb">refl::descriptor::get_reader</a> (WritableMember member)</td></tr>
+<tr class="memdesc:a3690f579517cc28e9d2eacb3d095fdbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a member that has the same display name as the one provied and is readable.  <a href="namespacerefl_1_1descriptor.html#a3690f579517cc28e9d2eacb3d095fdbb">More...</a><br /></td></tr>
+<tr class="separator:a3690f579517cc28e9d2eacb3d095fdbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12e0f11daf60216683e454102d247300"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a12e0f11daf60216683e454102d247300"><td class="memTemplItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacerefl.html#a12e0f11daf60216683e454102d247300">refl::is_reflectable</a> () noexcept</td></tr>
 <tr class="memdesc:a12e0f11daf60216683e454102d247300"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the type T is reflectable.  <a href="namespacerefl.html#a12e0f11daf60216683e454102d247300">More...</a><br /></td></tr>
@@ -964,7 +1002,7 @@ Variables</h2></td></tr>
 </div><!-- fragment -->
 <p>Creates reflection information for a specified type template. </p>
 <p>Takes an optional attribute list. TemplateDeclaration must be a panenthesis-enclosed list declaring the template parameters. (e.g. (typename A, typename B)). TypeName must be the fully-specialized type name and should also be enclosed in panenthesis. (e.g. (MyType&lt;A, B&gt;)) This macro must only be expanded in the global namespace.</p>
-<h1><a class="anchor" id="autotoc_md70"></a>
+<h1><a class="anchor" id="autotoc_md71"></a>
 Examples:</h1>
 <div class="fragment"><div class="line"><a class="code" href="refl_8hpp.html#a832b795bfa32d4130b04e9e33635c507">REFL_TEMPLATE</a>((<span class="keyword">typename</span> T), (std::vector&lt;T&gt;))</div>
 <div class="line">...</div>
@@ -1002,7 +1040,7 @@ Examples:</h1>
 </div><!-- fragment -->
 <p>Creates reflection information for a specified type. </p>
 <p>Takes an optional attribute list. This macro must only be expanded in the global namespace.</p>
-<h1><a class="anchor" id="autotoc_md69"></a>
+<h1><a class="anchor" id="autotoc_md70"></a>
 Examples:</h1>
 <div class="fragment"><div class="line"><a class="code" href="refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71">REFL_TYPE</a>(Point)</div>
 <div class="line">...</div>
@@ -1012,11 +1050,11 @@ Examples:</h1>
 </div>
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="arefl_8hpp_html_a832b795bfa32d4130b04e9e33635c507"><div class="ttname"><a href="refl_8hpp.html#a832b795bfa32d4130b04e9e33635c507">REFL_TEMPLATE</a></div><div class="ttdeci">#define REFL_TEMPLATE(TemplateDeclaration, TypeName,...)</div><div class="ttdoc">Creates reflection information for a specified type template.</div><div class="ttdef"><b>Definition:</b> refl.hpp:3884</div></div>
-<div class="ttc" id="arefl_8hpp_html_a4e6ab98a732ec684223ddfd0734f260f"><div class="ttname"><a href="refl_8hpp.html#a4e6ab98a732ec684223ddfd0734f260f">REFL_DETAIL_GROUP</a></div><div class="ttdeci">#define REFL_DETAIL_GROUP(...)</div><div class="ttdoc">Used to group input containing commas (e.g.</div><div class="ttdef"><b>Definition:</b> refl.hpp:3835</div></div>
-<div class="ttc" id="arefl_8hpp_html_ac16abdfd738e4366eb239e904b90e930"><div class="ttname"><a href="refl_8hpp.html#ac16abdfd738e4366eb239e904b90e930">REFL_DETAIL_STR</a></div><div class="ttdeci">#define REFL_DETAIL_STR(...)</div><div class="ttdoc">Used to stringify input separated by commas (e.g.</div><div class="ttdef"><b>Definition:</b> refl.hpp:3833</div></div>
-<div class="ttc" id="anamespacerefl_1_1util_html_af82b6c46a048b294ba533f7552d59bbf"><div class="ttname"><a href="namespacerefl_1_1util.html#af82b6c46a048b294ba533f7552d59bbf">refl::util::make_const_string</a></div><div class="ttdeci">constexpr const_string&lt; 1 &gt; make_const_string(char ch) noexcept</div><div class="ttdoc">Creates an instance of const_string&lt;N&gt;</div><div class="ttdef"><b>Definition:</b> refl.hpp:278</div></div>
-<div class="ttc" id="arefl_8hpp_html_a2d90ffbabd9fc8cc17579fc33d919d71"><div class="ttname"><a href="refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71">REFL_TYPE</a></div><div class="ttdeci">#define REFL_TYPE(TypeName,...)</div><div class="ttdoc">Creates reflection information for a specified type.</div><div class="ttdef"><b>Definition:</b> refl.hpp:3867</div></div>
+<div class="ttc" id="arefl_8hpp_html_a832b795bfa32d4130b04e9e33635c507"><div class="ttname"><a href="refl_8hpp.html#a832b795bfa32d4130b04e9e33635c507">REFL_TEMPLATE</a></div><div class="ttdeci">#define REFL_TEMPLATE(TemplateDeclaration, TypeName,...)</div><div class="ttdoc">Creates reflection information for a specified type template.</div><div class="ttdef"><b>Definition:</b> refl.hpp:4061</div></div>
+<div class="ttc" id="arefl_8hpp_html_a4e6ab98a732ec684223ddfd0734f260f"><div class="ttname"><a href="refl_8hpp.html#a4e6ab98a732ec684223ddfd0734f260f">REFL_DETAIL_GROUP</a></div><div class="ttdeci">#define REFL_DETAIL_GROUP(...)</div><div class="ttdoc">Used to group input containing commas (e.g.</div><div class="ttdef"><b>Definition:</b> refl.hpp:4012</div></div>
+<div class="ttc" id="arefl_8hpp_html_ac16abdfd738e4366eb239e904b90e930"><div class="ttname"><a href="refl_8hpp.html#ac16abdfd738e4366eb239e904b90e930">REFL_DETAIL_STR</a></div><div class="ttdeci">#define REFL_DETAIL_STR(...)</div><div class="ttdoc">Used to stringify input separated by commas (e.g.</div><div class="ttdef"><b>Definition:</b> refl.hpp:4010</div></div>
+<div class="ttc" id="anamespacerefl_1_1util_html_af82b6c46a048b294ba533f7552d59bbf"><div class="ttname"><a href="namespacerefl_1_1util.html#af82b6c46a048b294ba533f7552d59bbf">refl::util::make_const_string</a></div><div class="ttdeci">constexpr const_string&lt; 1 &gt; make_const_string(char ch) noexcept</div><div class="ttdoc">Creates an instance of const_string&lt;N&gt;</div><div class="ttdef"><b>Definition:</b> refl.hpp:292</div></div>
+<div class="ttc" id="arefl_8hpp_html_a2d90ffbabd9fc8cc17579fc33d919d71"><div class="ttname"><a href="refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71">REFL_TYPE</a></div><div class="ttdeci">#define REFL_TYPE(TypeName,...)</div><div class="ttdoc">Creates reflection information for a specified type.</div><div class="ttdef"><b>Definition:</b> refl.hpp:4044</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

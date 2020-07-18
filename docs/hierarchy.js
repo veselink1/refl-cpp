@@ -5,6 +5,7 @@ var hierarchy =
     [ "bool_constant", null, [
       [ "refl::trait::is_property< T >", "structrefl_1_1trait_1_1is__property.html", null ]
     ] ],
+    [ "std::complex< T >", "classstd_1_1complex.html", null ],
     [ "refl::trait::concat<... >", "structrefl_1_1trait_1_1concat.html", null ],
     [ "refl::trait::concat< concat< TypeList1, TypeList2 >::type, TypeLists... >", "structrefl_1_1trait_1_1concat.html", null ],
     [ "refl::trait::concat< TypeList, type_list< T > >", "structrefl_1_1trait_1_1concat.html", [
@@ -35,7 +36,6 @@ var hierarchy =
         [ "refl::trait::is_instance< T >", "structrefl_1_1trait_1_1is__instance.html", null ]
       ] ]
     ] ],
-    [ "refl::member::field", "structrefl_1_1member_1_1field.html", null ],
     [ "refl::attr::usage::field", "structrefl_1_1attr_1_1usage_1_1field.html", [
       [ "refl::attr::usage::member", "structrefl_1_1attr_1_1usage_1_1member.html", [
         [ "refl::attr::usage::any", "structrefl_1_1attr_1_1usage_1_1any.html", [
@@ -43,6 +43,7 @@ var hierarchy =
         ] ]
       ] ]
     ] ],
+    [ "refl::member::field", "structrefl_1_1member_1_1field.html", null ],
     [ "refl::descriptor::field_descriptor< T, N >", "classrefl_1_1descriptor_1_1field__descriptor.html", null ],
     [ "field_proxies", null, [
       [ "refl::runtime::proxy< Derived, Target >", "structrefl_1_1runtime_1_1proxy.html", null ]
@@ -59,6 +60,11 @@ var hierarchy =
     ] ],
     [ "refl::trait::detail::get< N, Ts... >", null, [
       [ "refl::trait::get< N, type_list< Ts... > >", "structrefl_1_1trait_1_1get_3_01_n_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html", null ]
+    ] ],
+    [ "integral_constant", null, [
+      [ "refl::trait::index_of< T, type_list< Ts... > >", "structrefl_1_1trait_1_1index__of_3_01_t_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html", null ],
+      [ "refl::trait::index_of_base< T, type_list< Ts... > >", "structrefl_1_1trait_1_1index__of__base_3_01_t_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html", null ],
+      [ "refl::trait::index_of_instance< T, type_list< Ts... > >", "structrefl_1_1trait_1_1index__of__instance_3_01_t_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html", null ]
     ] ],
     [ "is_container_test", null, [
       [ "refl::trait::is_container< T >", "structrefl_1_1trait_1_1is__container.html", null ]
@@ -77,6 +83,7 @@ var hierarchy =
     [ "refl::trait::detail::reverse_impl< type_list<>, TypeList >", null, [
       [ "refl::trait::reverse< TypeList >", "structrefl_1_1trait_1_1reverse.html", null ]
     ] ],
+    [ "std::shared_ptr< T >", "classstd_1_1shared__ptr.html", null ],
     [ "refl::trait::detail::skip< N, Ts... >", null, [
       [ "refl::trait::skip< N, type_list< Ts... > >", "structrefl_1_1trait_1_1skip_3_01_n_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html", null ]
     ] ],
@@ -89,5 +96,7 @@ var hierarchy =
     [ "refl::util::type_list< T >", "structrefl_1_1util_1_1type__list_3_01_t_01_4.html", null ],
     [ "refl::trait::detail::unique_impl< type_list<>, T >", null, [
       [ "refl::trait::unique< T >", "structrefl_1_1trait_1_1unique.html", null ]
-    ] ]
+    ] ],
+    [ "std::unique_ptr< T, Deleter >", "classstd_1_1unique__ptr.html", null ],
+    [ "std::weak_ptr< T >", "classstd_1_1weak__ptr.html", null ]
 ];
