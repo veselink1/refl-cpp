@@ -3657,7 +3657,7 @@ namespace refl
 
             namespace
             {
-                int next_depth(int depth)
+                [[maybe_unused]] int next_depth(int depth)
                 {
                     return depth == -1 || depth > 8
                         ? -1
