@@ -4213,7 +4213,7 @@ namespace refl::detail
         void operator()(std::basic_ostream<CharT>& os, std::basic_string_view<CharT, Traits> str) const
         {
             // some vers of clang dont have std::quoted(string_view) overload
-            if (!*str.end()) { // no copy needed when null-terminated
+            if (!str.back()) { // no copy needed when null-terminated
                 os << std::quoted(str.data());
             }
             else {
