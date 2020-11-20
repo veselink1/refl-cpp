@@ -1329,6 +1329,11 @@ namespace refl
                 else if constexpr (is_instance_of_v<T, trait::get_t<N, type_list<Ts...>>>) return N;
                 else return index_of_instance<T, N + 1, Ts...>();
             }
+
+            // This variable template was introduced to fix the build on VS2017, which
+            // chokes when invoking index_of_instance() directly from struct index_of_instance.
+            template <template<typename...> typename T, ptrdiff_t N, typename... Ts>
+            static constexpr ptrdiff_t index_of_instance_v = index_of_instance<T, N, Ts...>();
         } // namespace detail
 
         /// \private
@@ -1380,7 +1385,7 @@ namespace refl
          * @see contains_instance
          */
         template <template<typename...> typename T, typename... Ts>
-        struct index_of_instance<T, type_list<Ts...>> : std::integral_constant<ptrdiff_t, detail::index_of_instance<T, 0, Ts...>()>
+        struct index_of_instance<T, type_list<Ts...>> : std::integral_constant<ptrdiff_t, detail::index_of_instance_v<T, 0, Ts...>>
         {
         };
 
@@ -3263,9 +3268,8 @@ namespace refl
             constexpr auto get_display_name(const T t) noexcept
             {
                 if constexpr (trait::is_property_v<T>) {
-                    auto&& friendly_name = util::get<attr::property>(t.attributes).friendly_name;
-                    if constexpr (friendly_name) {
-                        return REFL_MAKE_CONST_STRING(*friendly_name);
+                    if constexpr (util::get<attr::property>(t.attributes).friendly_name) {
+                        return REFL_MAKE_CONST_STRING(*util::get<attr::property>(t.attributes).friendly_name);
                     }
                     else {
                         return detail::normalize_accessor_name(t);
