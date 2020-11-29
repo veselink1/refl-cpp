@@ -10,7 +10,7 @@
 
 </center>
 
-## refl-cpp v0.12.0 [[Documentation](https://veselink1.github.io/refl-cpp/md__introduction.html)]
+## refl-cpp v0.12.1 [[Documentation](https://veselink1.github.io/refl-cpp/md__introduction.html)]
 
 A compile-time reflection library for modern C++ with support for overloads, templates, attributes and proxies
 
@@ -146,6 +146,11 @@ REFL_FUNC(Function, Attribute...)
 `Patch` denotes a version which fixed a bug or does not include major new features.
 
 ---
+### v0.12.1
+  - Fixed broken build on Visual Studio 2017 [#39](https://github.com/veselink1/refl-cpp/issues/39) (9b6aa1a)
+  - Fixed out-of-bounds read in `refl::runtime::debug` implementation for `basic_string_view` (93351ac)
+  - Fixed unused function warning for `refl::runtime::detail::next_depth` #36 (by [oberrich](https://github.com/oberrich))
+
 ### v0.12.0
   - Added `std::complex` support metadata. Disable with `REFL_NO_STD_COMPLEX`.
   - Added `refl::descriptor::get_reader`/`get_writer` utilities for getter/setter properties.

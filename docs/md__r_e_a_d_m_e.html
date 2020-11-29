@@ -96,7 +96,7 @@ $(document).ready(function(){initNavTree('md__r_e_a_d_m_e.html',''); initResizab
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><center> <object type="image/svg+xml" data="https://raw.githubusercontent.com/veselink1/refl-cpp/master/branding/logo.svg?sanitize=true" style="pointer-events: none; max-width: 100%;" height="140">refl-cpp Logo</object></center><center><a href="https://github.com/veselink1/refl-cpp/graphs/contributors"><object type="image/svg+xml" data="https://img.shields.io/github/contributors/veselink1/refl-cpp.svg" style="pointer-events: none;">Contributors</object></a> <a href="https://github.com/veselink1/refl-cpp/pulse"><object type="image/svg+xml" data="https://img.shields.io/github/commit-activity/m/veselink1/refl-cpp.svg" style="pointer-events: none;">Activity</object></a> <a href="https://circleci.com/gh/veselink1/refl-cpp"><object type="image/svg+xml" data="https://circleci.com/gh/veselink1/refl-cpp.svg?style=shield" style="pointer-events: none;">CircleCI</object></a> <a href="https://gitter.im/refl-cpp/community?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge"><object type="image/svg+xml" data="https://badges.gitter.im/refl-cpp/community.svg" style="pointer-events: none;">Gitter</object></a> <a href="https://liberapay.com/veselink1/donate"><object type="image/svg+xml" data="https://img.shields.io/liberapay/patrons/veselink1.svg?logo=liberapay" style="pointer-events: none;">Patrons</object></a> <a href="https://aur.archlinux.org/packages/refl-cpp"><img src="https://img.shields.io/aur/version/refl-cpp?logo=arch-linux" alt="AUR version" class="inline"/></a></center><center></center><h2><a class="anchor" id="autotoc_md25"></a>
-refl-cpp v0.12.0 [&lt;a href="https://veselink1.github.io/refl-cpp/md__introduction.html"&gt;Documentation&lt;/a&gt;]</h2>
+refl-cpp v0.12.1 [&lt;a href="https://veselink1.github.io/refl-cpp/md__introduction.html"&gt;Documentation&lt;/a&gt;]</h2>
 <p>A compile-time reflection library for modern C++ with support for overloads, templates, attributes and proxies</p>
 <h2><a class="anchor" id="autotoc_md26"></a>
 Introduction</h2>
@@ -214,6 +214,13 @@ Changelog</h2>
 <p><code>Patch</code> denotes a version which fixed a bug or does not include major new features.</p>
 <hr  />
  <h3><a class="anchor" id="autotoc_md40"></a>
+v0.12.1</h3>
+<ul>
+<li>Fixed broken build on Visual Studio 2017 <a href="https://github.com/veselink1/refl-cpp/issues/39">#39</a> (9b6aa1a)</li>
+<li>Fixed out-of-bounds read in <code><a class="el" href="namespacerefl_1_1runtime.html#a06e1996b05966eac4f282b6656169d6a">refl::runtime::debug</a></code> implementation for <code>basic_string_view</code> (93351ac)</li>
+<li>Fixed unused function warning for <code>refl::runtime::detail::next_depth</code> #36 (by <a href="https://github.com/oberrich">oberrich</a>)</li>
+</ul>
+<h3><a class="anchor" id="autotoc_md41"></a>
 v0.12.0</h3>
 <ul>
 <li>Added <code><a class="el" href="classstd_1_1complex.html">std::complex</a></code> support metadata. Disable with <code>REFL_NO_STD_COMPLEX</code>.</li>
@@ -222,7 +229,7 @@ v0.12.0</h3>
 <li>Added <code><a class="el" href="namespacerefl_1_1descriptor.html#a7cb65ca47183b468df2b8429dc5dea61" title="Returns the display name of T as a const_string&lt;N&gt;.">refl::descriptor::get_display_name_const</a></code> as <code>const_string</code> alternative to <code>get_display_name</code>.</li>
 <li>Fixed #33 (by <a href="https://github.com/james-conrad">james-conrad</a>)</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md41"></a>
+<h3><a class="anchor" id="autotoc_md42"></a>
 v0.11.0</h3>
 <ul>
 <li>Much improved support for inheritance (<a href="https://github.com/veselink1/refl-cpp/issues/27">#27</a>, <a href="https://github.com/veselink1/refl-cpp/issues/28">#28</a>)<ul>
@@ -252,7 +259,7 @@ v0.11.0</h3>
 <li>Fixed <code>refl::util::debug</code> for <code>std::tuple</code> <a href="https://github.com/veselink1/refl-cpp/issues/26">#26</a></li>
 <li>Deprecated <code><a class="el" href="namespacerefl_1_1descriptor.html#a725c882cfae058b70d50517fe134a938" title="Returns a list of the type_descriptor&lt;T&gt;s of the base types of the target, as specified by the bases&lt;...">refl::descriptor::get_bases</a></code> in favor of <code><a class="el" href="namespacerefl_1_1descriptor.html#afc445cfd9be739891c2b6731047cf144" title="Returns a type_list of the declared and inherited base types of the type.">refl::descriptor::get_base_types</a></code></li>
 </ul>
-<h3><a class="anchor" id="autotoc_md42"></a>
+<h3><a class="anchor" id="autotoc_md43"></a>
 v0.10.0</h3>
 <ul>
 <li>Introduced automatic property name normalization in <code>get_display_name</code> for properties with no <code>friendly_name</code>. Example: <code>get_display_name(get_foo) -&gt; "foo"</code></li>
@@ -266,12 +273,12 @@ v0.10.0</h3>
 <li>Removed refl-ht support</li>
 <li>Code cleanup <a href="https://github.com/veselink1/refl-cpp/issues/24">#24</a>, <a href="https://github.com/veselink1/refl-cpp/issues/20">#20</a></li>
 </ul>
-<h3><a class="anchor" id="autotoc_md43"></a>
+<h3><a class="anchor" id="autotoc_md44"></a>
 v0.9.1</h3>
 <ul>
 <li>Bugfix for <code><a class="el" href="namespacerefl_1_1descriptor.html#a725c882cfae058b70d50517fe134a938" title="Returns a list of the type_descriptor&lt;T&gt;s of the base types of the target, as specified by the bases&lt;...">refl::descriptor::get_bases</a></code> for clang <a href="https://github.com/veselink1/refl-cpp/issues/19">#19</a></li>
 </ul>
-<h3><a class="anchor" id="autotoc_md44"></a>
+<h3><a class="anchor" id="autotoc_md45"></a>
 v0.9.0</h3>
 <ul>
 <li>Introduced <code><a class="el" href="namespacerefl_1_1descriptor.html#a725c882cfae058b70d50517fe134a938" title="Returns a list of the type_descriptor&lt;T&gt;s of the base types of the target, as specified by the bases&lt;...">refl::descriptor::get_bases</a></code> (as well as <code><a class="el" href="namespacerefl_1_1descriptor.html#ac00126ab409dbc1a5445d37832876fe2" title="Checks if a type has a bases attribute.">refl::descriptor::has_bases</a></code>) to inspect a type's declared base types (see <a href="https://github.com/veselink1/refl-cpp/blob/master/examples/example-inheritance.cpp">example-inheritance.cpp</a>)</li>
@@ -279,23 +286,23 @@ v0.9.0</h3>
 <li>Renamed <code>refl::descriptor::get_property_info</code> to <code><a class="el" href="namespacerefl_1_1descriptor.html#aadb1bb89c2469071ced6551ca3b9b8fd" title="Gets the property attribute.">refl::descriptor::get_property</a></code> to match the attribute name and its trait-based counterparts.</li>
 <li>Discontinued <a href="https://github.com/veselink1/refl-ht">refl-ht</a> - the preprocessor for refl-cpp, due to unfixable bugs and lack of time/interest.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md45"></a>
+<h3><a class="anchor" id="autotoc_md46"></a>
 v0.8.2</h3>
 <ul>
 <li>CV-qualifiers are now properly removed from attribute objects (previously, the values in the backing <code>std::tuple&lt;...&gt;</code> were sometimes cv-qualified).</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md46"></a>
+<h3><a class="anchor" id="autotoc_md47"></a>
 v0.8.1</h3>
 <ul>
 <li>Fixed a bug that prevented the compilation of <code><a class="el" href="namespacerefl_1_1descriptor.html#a9f021ce9c4ef95ab4313aefb8f4f3588" title="Returns the display name of T.">refl::descriptor::get_display_name()</a></code> in some compilers (thanks to <a href="https://github.com/ticelo">ticelo</a>)</li>
 <li>Removed improper usage of <code>[[maybe_unused]]</code> that caused warnings under clang.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md47"></a>
+<h3><a class="anchor" id="autotoc_md48"></a>
 v0.8.0</h3>
 <ul>
 <li>Added the ability to create <code>refl::const_string&lt;N&gt;</code> instances from <code>const char*</code> which allows using c-strings (<code>const char*</code>) values from attributes together with <code>const_string&lt;N&gt;</code> and in <code>constexpr</code> context possible. That feature is exposed by the <code><a class="el" href="refl_8hpp.html#a2cb939da062920a29a38dff73aaf0968" title="Converts a compile-time available const char* value to a const_string&lt;N&gt;.">REFL_MAKE_CONST_STRING(CString)</a></code> macro. Important: <code>CString</code> must be a <a href="https://en.cppreference.com/w/cpp/language/constant_expression#Core_constant_expressions">Core constant expression</a>. The macro is necessary to avoid the duplication of the provided expression and currently expands to ~ <code>detail::copy_from_unsized&lt;detail::strlen(CString)&gt;(CString)</code>. (another thanks to <a href="https://github.com/Siapran">Siapran</a> for contributing the implementation for the <code>constexpr length()</code> function.)</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md48"></a>
+<h3><a class="anchor" id="autotoc_md49"></a>
 v0.7.0</h3>
 <ul>
 <li>Added <code>constexpr const_string::substr&lt;Pos, [Count]&gt;()</code></li>
@@ -306,38 +313,38 @@ v0.7.0</h3>
 <li>Removed: <code>util::get&lt;N&gt;(const type_list&lt;Ts...&gt;&amp;)</code>. Use <code>trait::get_t&lt;N, type_list&lt;Ts...&gt;&gt;</code> instead. This is part of a move towards minimizing the duplication between the <code>trait::</code> and <code>util::</code> namespaces.</li>
 <li>Added two new examples: <a href="https://github.com/veselink1/refl-cpp/blob/master/examples/example-binding.cpp">example-binding.cpp</a> and <a href="https://github.com/veselink1/refl-cpp/blob/master/examples/example-dao.cpp">example-dao.cpp</a> to present some of the new things introduced in this release. (example-dao.cpp based on work by <a href="https://github.com/Siapran">Siapran</a>)</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md49"></a>
+<h3><a class="anchor" id="autotoc_md50"></a>
 v0.6.5</h3>
 <ul>
 <li>Fixed multiple unused X warnings (fixed by <a href="https://github.com/Siapran">Siapran</a>) #12</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md50"></a>
+<h3><a class="anchor" id="autotoc_md51"></a>
 v0.6.4</h3>
 <ul>
 <li>Bugfix: usage of incorrect bound in <code>operator+(const_string&lt;N&gt;, const_string&lt;M&gt;)</code> (fixed by <a href="https://github.com/Siapran">Siapran</a>) #11</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md51"></a>
+<h3><a class="anchor" id="autotoc_md52"></a>
 v0.6.3</h3>
 <ul>
 <li>Bugfix: clang errors during compilation of reflected overloaded member functions (since 0.6.0)</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md52"></a>
+<h3><a class="anchor" id="autotoc_md53"></a>
 v0.6.2</h3>
 <ul>
 <li>Bugfix: Compiler error in clang: <a class="el" href="structrefl_1_1attr_1_1property.html" title="Used to decorate a function that serves as a property.">refl::attr::property</a>'s implicitly-declared default constructor is deleted due to N3797 §8.5/7 <a href="https://github.com/veselink1/refl-cpp/issues/9">#9</a></li>
 </ul>
-<h3><a class="anchor" id="autotoc_md53"></a>
+<h3><a class="anchor" id="autotoc_md54"></a>
 v0.6.1</h3>
 <ul>
 <li>Bugfix: const_string::operator std::string() was incorrectly marked as constexpr which caused compilation failure in non-C++20-compliant compilers</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md54"></a>
+<h3><a class="anchor" id="autotoc_md55"></a>
 v0.6.0</h3>
 <ul>
 <li>Changed: property() is now only usable on function members / use contract based checks for functions and fields (is_readable/writable)</li>
 <li>Removed: read_only, write_only, read_write access modifiers for property() attributes (rw-detection now based on contract).</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md55"></a>
+<h3><a class="anchor" id="autotoc_md56"></a>
 v0.5.2</h3>
 <ul>
 <li>Added: <code>type_descriptor&lt;T&gt;::type</code> as an alias for <code>T</code>.</li>
@@ -347,13 +354,13 @@ v0.5.2</h3>
 <li>Added: <code>util::get&lt;size_t N&gt;(type_list&lt;Ts...&gt;&amp;&amp;)</code> which zero-initializes and returns the type at the N-th position.</li>
 <li>Added: <code>util::get&lt;size_t N&gt;(Tuple&amp;&amp;)</code> as an alias for <code>std::get&lt;N&gt;</code>.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md56"></a>
+<h3><a class="anchor" id="autotoc_md57"></a>
 v0.5.1</h3>
 <ul>
 <li>Bugfix: The REFL_AUTO macro was not working properly in MSVC and led to Internal compiler errors</li>
 <li>Changed: As a result of the related bugfix, the REFL_AUTO macro has been stabilized and its use is now recommended</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md57"></a>
+<h3><a class="anchor" id="autotoc_md58"></a>
 v0.5.0</h3>
 <ul>
 <li>Removed deprecated macros <code>$refl(...)</code>, <code>REFL_UNSTABLE(...)</code>, <code>REFL_DEPRECATED(...)</code></li>
@@ -362,19 +369,19 @@ v0.5.0</h3>
 <li>Removed refl::descriptor::make_invoker (which was not deprecated but is now obsolete.) Simply replace make_invoker(x) with x.</li>
 <li>The defaulted constructor for <code><a class="el" href="structrefl_1_1util_1_1const__string.html" title="Represents a compile-time string.">refl::util::const_string</a>&lt;N&gt;</code> was replaced by a user-declared default constructor which now always zero-initializes the string buffer.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md58"></a>
+<h3><a class="anchor" id="autotoc_md59"></a>
 v0.4.2</h3>
 <ul>
 <li>Added: <code>trait::is_type[_v]</code>, <code>descriptor::is_type(const T&amp;)</code> for checking whether a type is a type_descriptor&lt;T&gt; instance.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md59"></a>
+<h3><a class="anchor" id="autotoc_md60"></a>
 v0.4.1</h3>
 <ul>
 <li><code>trait::as_type_list</code> now supports reference type in place of <code>T&lt;Ts...&gt;</code> (e.g. <code>std::tuple&lt;Ts...&gt;&amp;</code> -&gt; <code>type_list&lt;Ts...&gt;</code>).</li>
 <li><code>refl::attr::access_type::{read, write}</code> now deprecated, replaced by <code>{read_only, write_only}</code> (Note: implicitly-usable <code>read_only</code>, <code>write_only</code> constants in attribute (in <code>REFL_...</code> macros) context remain unchanged)</li>
 <li><code>refl::descriptor::field_descriptor::operator()</code> now supports acting as a setter. <code>refl::descriptor::make_invoker</code> is now no longer needed and marked as deprecated.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md60"></a>
+<h3><a class="anchor" id="autotoc_md61"></a>
 v0.4.0</h3>
 <ul>
 <li>Renamed: <code>trait::filter</code> to <code>trait::filter_t</code>, replaced by <code>struct trait::filter { typedef ... type; }</code> to follow preset convention</li>
@@ -385,12 +392,12 @@ v0.4.0</h3>
 <li>Bugfix: faulty implementation of <code>util::to_tuple</code></li>
 <li>Bugfix: <code>trait::contains_base</code> was working the other way around (checking for presense of base of a specified type, instead of checking for a derived type with a specified base)</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md61"></a>
+<h3><a class="anchor" id="autotoc_md62"></a>
 v0.3.5</h3>
 <ul>
 <li>Bugfix: <code>type_info__&lt;T*&gt;</code> has name defined as <code>char[N]</code> instead of <code>const_string&lt;N&gt;</code></li>
 </ul>
-<h3><a class="anchor" id="autotoc_md62"></a>
+<h3><a class="anchor" id="autotoc_md63"></a>
 v0.3.4</h3>
 <ul>
 <li>added new experimental syntax for metadata declaration that makes use of variadic macro expansion (can be disabled with <code>REFL_NO_VARIADICS</code>) <div class="fragment"><div class="line">REFL_AUTO</div>
@@ -404,43 +411,43 @@ v0.3.4</h3>
 <div class="line">) <span class="comment">// REFL_END appended automatically</span></div>
 </div><!-- fragment --></li>
 </ul>
-<h3><a class="anchor" id="autotoc_md63"></a>
+<h3><a class="anchor" id="autotoc_md64"></a>
 v0.3.3</h3>
 <ul>
 <li><code><a class="el" href="structrefl_1_1util_1_1const__string.html" title="Represents a compile-time string.">refl::util::const_string</a>&lt;N&gt;</code> can now be directly compared for equality with <code>char[M]</code></li>
 <li><code><a class="el" href="structrefl_1_1util_1_1const__string.html" title="Represents a compile-time string.">refl::util::const_string</a>&lt;N&gt;</code> can now be concatenated with <code>char[M]</code></li>
 </ul>
-<h3><a class="anchor" id="autotoc_md64"></a>
+<h3><a class="anchor" id="autotoc_md65"></a>
 v0.3.2</h3>
 <ul>
 <li><code><a class="el" href="namespacerefl_1_1runtime.html#a06e1996b05966eac4f282b6656169d6a">refl::runtime::debug</a></code> now captures values of member invocations by universal references (previous implementations required a copy of the value)</li>
 <li><code><a class="el" href="namespacerefl_1_1runtime.html#a06e1996b05966eac4f282b6656169d6a">refl::runtime::debug</a></code> now does not require the members of composites to be reflectable. (members that cannot be printed get replaced with <code>&lt;?&gt;</code>).</li>
 <li><code><a class="el" href="structrefl_1_1trait_1_1is__reflectable.html" title="Checks whether there is reflection metadata for the type T.">refl::trait::is_reflectable</a></code> now discards cv-qualifiers -&gt; all cv-qualified types are now also reflectable.</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md65"></a>
+<h3><a class="anchor" id="autotoc_md66"></a>
 v0.3.1</h3>
 <ul>
 <li><code><a class="el" href="namespacerefl_1_1descriptor.html#a925e8cb99d6199fe03edeb5109958f8d" title="Checks if T is a 1-arg non-const-qualified member function with a property attribute or a non-const f...">refl::descriptor::is_writable</a></code> now correctly supports field descriptors</li>
 <li>most of <code><a class="el" href="refl_8hpp.html">refl.hpp</a></code> is now not included when <code>REFL_PREPROCESSOR</code> is defined (optimization for refl-ht)</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md66"></a>
+<h3><a class="anchor" id="autotoc_md67"></a>
 v0.3.0</h3>
 <ul>
 <li>added new <code>REFL(...)</code> macro for annotation of reflectable members (replaces <code>$refl(...)</code>)</li>
 <li><code>$refl(...)</code> macro usage now deprecated</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md67"></a>
+<h3><a class="anchor" id="autotoc_md68"></a>
 v0.2.1</h3>
 <ul>
 <li>added support for <a href="https://github.com/veselink1/refl-ht">refl-ht</a> (the refl-cpp header tool)</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md68"></a>
+<h3><a class="anchor" id="autotoc_md69"></a>
 v0.2.0</h3>
 <ul>
 <li>added <code><a class="el" href="namespacerefl_1_1util.html#ab78f978c331cb63b1450c0adbf093998" title="Returns true if any item in the list matches the predicate.">refl::util::contains</a>(type_list&lt;...&gt;, [predicate]), <a class="el" href="namespacerefl_1_1util.html#ab78f978c331cb63b1450c0adbf093998" title="Returns true if any item in the list matches the predicate.">refl::util::contains</a>(type_list&lt;...&gt;, const_string&lt;N&gt;)</code></li>
 <li>removed <code>refl::attr::is_readable/is_writable</code> (use <code><a class="el" href="namespacerefl_1_1descriptor.html#aa68bedab33d684ee5ee4ead24c5586ab" title="Checks if T is a 0-arg const-qualified member function with a property attribute or a field.">refl::descriptor::is_readable</a>/is_writable</code> instead; reason: lack of support for fields that lack a property attribute)</li>
 </ul>
-<h3><a class="anchor" id="autotoc_md69"></a>
+<h3><a class="anchor" id="autotoc_md70"></a>
 v0.1.2</h3>
 <ul>
 <li><code><a class="el" href="structrefl_1_1runtime_1_1proxy.html" title="A proxy object that has a static interface identical to the reflected functions and fields of the tar...">refl::runtime::proxy</a>&lt;Derived, Target&gt;</code> can now delegate field 'invocations'. (Methods with names matching those of the reflected fields are created.)</li>
@@ -451,11 +458,11 @@ v0.1.2</h3>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespacerefl_1_1descriptor_html_aa68bedab33d684ee5ee4ead24c5586ab"><div class="ttname"><a href="namespacerefl_1_1descriptor.html#aa68bedab33d684ee5ee4ead24c5586ab">refl::descriptor::is_readable</a></div><div class="ttdeci">constexpr bool is_readable(MemberDescriptor) noexcept</div><div class="ttdoc">Checks if T is a 0-arg const-qualified member function with a property attribute or a field.</div><div class="ttdef"><b>Definition:</b> refl.hpp:3055</div></div>
-<div class="ttc" id="arefl_8hpp_html_a832b795bfa32d4130b04e9e33635c507"><div class="ttname"><a href="refl_8hpp.html#a832b795bfa32d4130b04e9e33635c507">REFL_TEMPLATE</a></div><div class="ttdeci">#define REFL_TEMPLATE(TemplateDeclaration, TypeName,...)</div><div class="ttdoc">Creates reflection information for a specified type template.</div><div class="ttdef"><b>Definition:</b> refl.hpp:4061</div></div>
-<div class="ttc" id="anamespacerefl_html_ae95fbc2d63a7db5ce4d8a4dcca3d637e"><div class="ttname"><a href="namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e">refl::reflect</a></div><div class="ttdeci">constexpr type_descriptor&lt; T &gt; reflect() noexcept</div><div class="ttdoc">Returns the type descriptor for the type T.</div><div class="ttdef"><b>Definition:</b> refl.hpp:3431</div></div>
-<div class="ttc" id="anamespacerefl_1_1util_html_adb5bb478ef1cc5966e9df7c9b10b5dd3"><div class="ttname"><a href="namespacerefl_1_1util.html#adb5bb478ef1cc5966e9df7c9b10b5dd3">refl::util::map_to_tuple</a></div><div class="ttdeci">constexpr auto map_to_tuple(type_list&lt; Ts... &gt; list, F &amp;&amp;f)</div><div class="ttdoc">Applies function F to each type in the type_list, aggregating the results in a tuple.</div><div class="ttdef"><b>Definition:</b> refl.hpp:1586</div></div>
-<div class="ttc" id="arefl_8hpp_html_a2d90ffbabd9fc8cc17579fc33d919d71"><div class="ttname"><a href="refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71">REFL_TYPE</a></div><div class="ttdeci">#define REFL_TYPE(TypeName,...)</div><div class="ttdoc">Creates reflection information for a specified type.</div><div class="ttdef"><b>Definition:</b> refl.hpp:4044</div></div>
+<div class="ttc" id="anamespacerefl_1_1descriptor_html_aa68bedab33d684ee5ee4ead24c5586ab"><div class="ttname"><a href="namespacerefl_1_1descriptor.html#aa68bedab33d684ee5ee4ead24c5586ab">refl::descriptor::is_readable</a></div><div class="ttdeci">constexpr bool is_readable(MemberDescriptor) noexcept</div><div class="ttdoc">Checks if T is a 0-arg const-qualified member function with a property attribute or a field.</div><div class="ttdef"><b>Definition:</b> refl.hpp:3060</div></div>
+<div class="ttc" id="arefl_8hpp_html_a832b795bfa32d4130b04e9e33635c507"><div class="ttname"><a href="refl_8hpp.html#a832b795bfa32d4130b04e9e33635c507">REFL_TEMPLATE</a></div><div class="ttdeci">#define REFL_TEMPLATE(TemplateDeclaration, TypeName,...)</div><div class="ttdoc">Creates reflection information for a specified type template.</div><div class="ttdef"><b>Definition:</b> refl.hpp:4065</div></div>
+<div class="ttc" id="anamespacerefl_html_ae95fbc2d63a7db5ce4d8a4dcca3d637e"><div class="ttname"><a href="namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e">refl::reflect</a></div><div class="ttdeci">constexpr type_descriptor&lt; T &gt; reflect() noexcept</div><div class="ttdoc">Returns the type descriptor for the type T.</div><div class="ttdef"><b>Definition:</b> refl.hpp:3435</div></div>
+<div class="ttc" id="anamespacerefl_1_1util_html_adb5bb478ef1cc5966e9df7c9b10b5dd3"><div class="ttname"><a href="namespacerefl_1_1util.html#adb5bb478ef1cc5966e9df7c9b10b5dd3">refl::util::map_to_tuple</a></div><div class="ttdeci">constexpr auto map_to_tuple(type_list&lt; Ts... &gt; list, F &amp;&amp;f)</div><div class="ttdoc">Applies function F to each type in the type_list, aggregating the results in a tuple.</div><div class="ttdef"><b>Definition:</b> refl.hpp:1591</div></div>
+<div class="ttc" id="arefl_8hpp_html_a2d90ffbabd9fc8cc17579fc33d919d71"><div class="ttname"><a href="refl_8hpp.html#a2d90ffbabd9fc8cc17579fc33d919d71">REFL_TYPE</a></div><div class="ttdeci">#define REFL_TYPE(TypeName,...)</div><div class="ttdoc">Creates reflection information for a specified type.</div><div class="ttdef"><b>Definition:</b> refl.hpp:4048</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
