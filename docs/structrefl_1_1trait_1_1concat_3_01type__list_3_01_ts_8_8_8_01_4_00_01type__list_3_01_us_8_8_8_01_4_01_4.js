@@ -1,4 +1,0 @@
-var structrefl_1_1trait_1_1concat_3_01type__list_3_01_ts_8_8_8_01_4_00_01type__list_3_01_us_8_8_8_01_4_01_4 =
-[
-    [ "type", "structrefl_1_1trait_1_1concat_3_01type__list_3_01_ts_8_8_8_01_4_00_01type__list_3_01_us_8_8_8_01_4_01_4.html#add54985c94907c26977b2efe16ded0e4", null ]
-];

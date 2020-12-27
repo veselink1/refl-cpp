@@ -1,17 +1,18 @@
 /*
-@licstart  The following is the entire license notice for the
+@ @licstart  The following is the entire license notice for the
 JavaScript code in this file.
 
-Copyright (C) 1997-2019 by Dimitri van Heesch
+Copyright (C) 1997-2017 by Dimitri van Heesch
 
 This program is free software; you can redistribute it and/or modify
-it under the terms of version 2 of the GNU General Public License as published by
-the Free Software Foundation
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along
 with this program; if not, write to the Free Software Foundation, Inc.,
@@ -23,36 +24,10 @@ for the JavaScript code in this file
 var NAVTREE =
 [
   [ "refl-cpp", "index.html", [
-    [ "Contributor Covenant Code of Conduct", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html", [
-      [ "Our Pledge", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md1", null ],
-      [ "Our Standards", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md2", null ],
-      [ "Our Responsibilities", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md3", null ],
-      [ "Scope", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md4", null ],
-      [ "Enforcement", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md5", null ],
-      [ "Attribution", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md6", null ]
-    ] ],
-    [ "Introduction to refl-cpp", "md__introduction.html", [
-      [ "Introduction", "md__introduction.html#autotoc_md8", null ],
-      [ "Basics", "md__introduction.html#autotoc_md9", null ],
-      [ "Type metadata", "md__introduction.html#autotoc_md10", null ],
-      [ "Field metadata", "md__introduction.html#autotoc_md11", null ],
-      [ "Function metadata", "md__introduction.html#autotoc_md12", null ],
-      [ "Custom Attributes", "md__introduction.html#autotoc_md13", [
-        [ "Properties", "md__introduction.html#autotoc_md14", null ],
-        [ "Base Types", "md__introduction.html#autotoc_md15", null ],
-        [ "Debug Formatter", "md__introduction.html#autotoc_md16", null ],
-        [ "Custom Attributes", "md__introduction.html#autotoc_md17", null ]
-      ] ],
-      [ "Proxies", "md__introduction.html#autotoc_md18", null ],
-      [ "Runtime Utilities", "md__introduction.html#autotoc_md19", [
-        [ "Invoking a member by name at runtime", "md__introduction.html#autotoc_md20", null ]
-      ] ],
-      [ "Printing debug output", "md__introduction.html#autotoc_md21", null ],
-      [ "Utility library", "md__introduction.html#autotoc_md22", null ],
-      [ "Type-level operations", "md__introduction.html#autotoc_md23", null ],
-      [ "Examples Guide", "md__introduction.html#autotoc_md24", null ]
-    ] ],
-    [ "README", "md__r_e_a_d_m_e.html", null ],
+    [ "Changelog", "md__c_h_a_n_g_e_l_o_g.html", null ],
+    [ "Contributor Covenant Code of Conduct", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html", null ],
+    [ "Introduction to refl-cpp", "md__i_n_t_r_o_d_u_c_t_i_o_n.html", null ],
+    [ "refl-cpp v0.12.1", "md__r_e_a_d_m_e.html", null ],
     [ "Deprecated List", "deprecated.html", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
@@ -87,7 +62,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"refl_8hpp.html#af7db9918de2fd9e0d34caf4b6a5c1f77"
+"structrefl_1_1util_1_1const__string.html#a8ee1a2f4b8fd6d71b7556661f379426a"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

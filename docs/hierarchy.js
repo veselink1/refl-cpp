@@ -8,6 +8,9 @@ var hierarchy =
     [ "std::complex< T >", "classstd_1_1complex.html", null ],
     [ "refl::trait::concat<... >", "structrefl_1_1trait_1_1concat.html", null ],
     [ "refl::trait::concat< concat< TypeList1, TypeList2 >::type, TypeLists... >", "structrefl_1_1trait_1_1concat.html", null ],
+    [ "refl::trait::concat< type_list< T >, TypeList >", "structrefl_1_1trait_1_1concat.html", [
+      [ "refl::trait::prepend< T, TypeList >", "structrefl_1_1trait_1_1prepend.html", null ]
+    ] ],
     [ "refl::trait::concat< TypeList, type_list< T > >", "structrefl_1_1trait_1_1concat.html", [
       [ "refl::trait::append< T, TypeList >", "structrefl_1_1trait_1_1append.html", null ]
     ] ],
@@ -44,7 +47,6 @@ var hierarchy =
       ] ]
     ] ],
     [ "refl::member::field", "structrefl_1_1member_1_1field.html", null ],
-    [ "refl::descriptor::field_descriptor< T, N >", "classrefl_1_1descriptor_1_1field__descriptor.html", null ],
     [ "field_proxies", null, [
       [ "refl::runtime::proxy< Derived, Target >", "structrefl_1_1runtime_1_1proxy.html", null ]
     ] ],
@@ -54,7 +56,6 @@ var hierarchy =
       [ "refl::attr::usage::member", "structrefl_1_1attr_1_1usage_1_1member.html", null ]
     ] ],
     [ "refl::member::function", "structrefl_1_1member_1_1function.html", null ],
-    [ "refl::descriptor::function_descriptor< T, N >", "classrefl_1_1descriptor_1_1function__descriptor.html", null ],
     [ "function_proxies", null, [
       [ "refl::runtime::proxy< Derived, Target >", "structrefl_1_1runtime_1_1proxy.html", null ]
     ] ],
@@ -74,11 +75,13 @@ var hierarchy =
       [ "refl::trait::is_reflectable< T >", "structrefl_1_1trait_1_1is__reflectable.html", null ]
     ] ],
     [ "refl::trait::map< Mapper, type_list< Ts... > >", "structrefl_1_1trait_1_1map_3_01_mapper_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html", null ],
-    [ "refl::descriptor::member_descriptor_base< T, N >", "classrefl_1_1descriptor_1_1member__descriptor__base.html", null ],
+    [ "refl::descriptor::member_descriptor_base< T, N >", "classrefl_1_1descriptor_1_1member__descriptor__base.html", [
+      [ "refl::descriptor::field_descriptor< T, N >", "classrefl_1_1descriptor_1_1field__descriptor.html", null ],
+      [ "refl::descriptor::function_descriptor< T, N >", "classrefl_1_1descriptor_1_1function__descriptor.html", null ]
+    ] ],
     [ "member_type_test", null, [
       [ "refl::trait::is_member< T >", "structrefl_1_1trait_1_1is__member.html", null ]
     ] ],
-    [ "refl::trait::prepend< T, TypeList >", "structrefl_1_1trait_1_1prepend.html", null ],
     [ "refl::trait::remove_qualifiers< T >", "structrefl_1_1trait_1_1remove__qualifiers.html", null ],
     [ "refl::trait::detail::reverse_impl< type_list<>, TypeList >", null, [
       [ "refl::trait::reverse< TypeList >", "structrefl_1_1trait_1_1reverse.html", null ]

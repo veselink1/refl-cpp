@@ -91,7 +91,6 @@ function initResizable()
       }
       collapsedWidth=width;
     }
-    (document.getElementById(location.hash.slice(1))||document.body).scrollIntoView();
   }
 
   function collapseExpand()
@@ -132,6 +131,6 @@ function initResizable()
   var _preventDefault = function(evt) { evt.preventDefault(); };
   $("#splitbar").bind("dragstart", _preventDefault).bind("selectstart", _preventDefault);
   $(".ui-resizable-handle").dblclick(collapseExpand);
-  $(window).on('load',resizeHeight);
+  $(window).load(resizeHeight);
 }
 /* @license-end */
