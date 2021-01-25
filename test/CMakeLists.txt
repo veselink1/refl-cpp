@@ -32,5 +32,10 @@ add_executable(refl-cpp-test ${sources})
 target_link_libraries(refl-cpp-test PRIVATE refl-cpp::refl-cpp)
 target_compile_features(refl-cpp-test PRIVATE cxx_std_17)
 target_include_directories(refl-cpp-test PRIVATE "${PROJECT_SOURCE_DIR}")
+set_property(
+    SOURCE 010-TestCase.cpp
+    APPEND PROPERTY
+    COMPILE_DEFINITIONS CATCH_CONFIG_MAIN
+)
 
 add_test(NAME all_tests COMMAND refl-cpp-test)
