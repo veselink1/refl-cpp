@@ -4149,7 +4149,7 @@ namespace refl::detail
 /********************************/
 
 #define REFL_DETAIL_PRIMITIVE(TypeName) \
-    REFL_TYPE(TypeName) \
+    REFL_TYPE(TypeName,) \
     REFL_END
 
     // Char types.
