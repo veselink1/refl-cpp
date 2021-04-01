@@ -6,15 +6,29 @@ jobs:
             - image: gcc:latest
         steps:
             - checkout
-            - run: cp refl.hpp test/ && g++ -std=c++17 test/010-TestCase.cpp
-            - run: ./a.out
+            - run: |
+                wget https://github.com/Kitware/CMake/releases/download/v3.19.0/cmake-3.19.0-Linux-x86_64.sh \
+                    -q -O /tmp/cmake-install.sh \
+                    && chmod u+x /tmp/cmake-install.sh \
+                    && mkdir /tmp/cmake \
+                    && /tmp/cmake-install.sh --skip-license --prefix=/tmp/cmake \
+                    && rm /tmp/cmake-install.sh
+            - run: CXX=g++ /tmp/cmake/bin/cmake -Drefl-cpp_DEVELOPER_MODE=ON . && make
+            - run: ./test/refl-cpp-test
     build_clang_latest_cpp17:
         docker:
             - image: centos/llvm-toolset-7-centos7:latest
         steps:
             - checkout
-            - run: cp refl.hpp test/ && clang++ -std=c++17 test/010-TestCase.cpp
-            - run: ./a.out
+            - run: |
+                wget https://github.com/Kitware/CMake/releases/download/v3.19.0/cmake-3.19.0-Linux-x86_64.sh \
+                    -q -O /tmp/cmake-install.sh \
+                    && chmod u+x /tmp/cmake-install.sh \
+                    && mkdir /tmp/cmake \
+                    && /tmp/cmake-install.sh --skip-license --prefix=/tmp/cmake \
+                    && rm /tmp/cmake-install.sh
+            - run: CXX=clang++ /tmp/cmake/bin/cmake -Drefl-cpp_DEVELOPER_MODE=ON . && make
+            - run: ./test/refl-cpp-test
 
 # Orchestrate or schedule a set of jobs
 workflows:
