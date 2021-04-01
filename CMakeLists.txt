@@ -68,3 +68,21 @@ install(
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
   include(CPack)
 endif()
+
+# ---- Developer mode ----
+
+if(NOT refl-cpp_DEVELOPER_MODE)
+  return()
+elseif(NOT PROJECT_IS_TOP_LEVEL)
+  message(AUTHOR_WARNING "Developer mode is for developers of refl-cpp")
+endif()
+
+include(CTest)
+if(BUILD_TESTING)
+  add_subdirectory(test)
+endif()
+
+option(BUILD_EXAMPLES "Build the examples tree." ON)
+if(BUILD_EXAMPLES)
+  add_subdirectory(examples)
+endif()

@@ -2,13 +2,9 @@ cmake_minimum_required(VERSION 3.14)
 
 project(refl-cpp-tests CXX)
 
-# ---- Dependencies ----
-
-set(refl-cpp_INCLUDE_WITHOUT_SYSTEM YES CACHE INTERNAL "")
-
-include(FetchContent)
-FetchContent_Declare(refl-cpp SOURCE_DIR "${PROJECT_SOURCE_DIR}/..")
-FetchContent_MakeAvailable(refl-cpp)
+if(refl-cpp_TEST_USE_INSTALLED)
+  find_package(refl-cpp REQUIRED)
+endif()
 
 # ---- Test ----
 

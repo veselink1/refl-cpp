@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.14)
 
 project(refl-cpp-examples CXX)
 
-include(FetchContent)
-FetchContent_Declare(refl-cpp SOURCE_DIR "${PROJECT_SOURCE_DIR}/..")
-FetchContent_MakeAvailable(refl-cpp)
+if(refl-cpp_EXAMPLES_USE_INSTALLED)
+  find_package(refl-cpp REQUIRED)
+endif()
 
 set(
     examples
