@@ -34,6 +34,13 @@
 #include <sstream>
 #include <iomanip> // std::quoted
 
+#if defined(__APPLE__)
+
+#include <memory>
+#include <complex>
+
+#else
+
 namespace std
 {
     template <typename T, typename Deleter>
@@ -48,6 +55,8 @@ namespace std
     template <typename T>
     class complex;
 } // namespace std
+
+#endif
 
 #ifdef _MSC_VER
 // Disable VS warning for "Not enough arguments for macro"
