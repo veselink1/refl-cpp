@@ -8,13 +8,7 @@ project(
     LANGUAGES CXX
 )
 
-# ---- Warning guard ----
-
-# Protect dependents from this project's warnings if the guard isn't disabled
-set(refl-cpp_warning_guard SYSTEM)
-if(refl-cpp_INCLUDE_WITHOUT_SYSTEM)
-  set(refl-cpp_warning_guard "")
-endif()
+include(cmake/variables.cmake)
 
 # ---- Declare library ----
 
