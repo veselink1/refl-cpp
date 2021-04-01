@@ -95,7 +95,10 @@ static_assert(!checkNonNegaive(c3));
 - Minimum language standard: C++17
 
 ## Usage
-- refl-cpp is packaged as a single-header library. `#include "refl.hpp"` like any other header.
+- refl-cpp can be included as a CMake dependecy (3.14+ required) or as a [single-header library](https://github.com/veselink1/refl-cpp/blob/master/include/refl.hpp).
+
+## For developers
+Run CMake with `-Drefl-cpp_DEVELOPER_MODE=ON` flag. You may also want to setup a custom preset for a more convenient developer experience ([see this comment](https://github.com/veselink1/refl-cpp/pull/44#issuecomment-811878328) on #44).
 
 ## Contributing
 - Issue tracker - [refl-cpp/issues](https://github.com/veselink1/refl-cpp/issues)
