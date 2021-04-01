@@ -26,48 +26,7 @@ target_compile_features(refl-cpp INTERFACE cxx_std_17)
 
 # ---- Install ----
 
-include(CMakePackageConfigHelpers)
-include(GNUInstallDirs)
-
-set(refl-cpp_include_directory "${CMAKE_INSTALL_INCLUDEDIR}/refl-cpp")
-
-install(
-    DIRECTORY "${PROJECT_SOURCE_DIR}/include/"
-    DESTINATION "${refl-cpp_include_directory}"
-    COMPONENT refl-cpp_Development
-)
-
-install(
-    TARGETS refl-cpp
-    EXPORT refl-cppTargets
-    INCLUDES DESTINATION "${refl-cpp_include_directory}"
-)
-
-write_basic_package_version_file(
-    refl-cpp-config-version.cmake
-    COMPATIBILITY SameMajorVersion
-    ARCH_INDEPENDENT
-)
-
-set(refl-cpp_install_cmakedir "${CMAKE_INSTALL_LIBDIR}/cmake/refl-cpp")
-
-install(
-    FILES "${PROJECT_BINARY_DIR}/refl-cpp-config-version.cmake"
-    DESTINATION "${refl-cpp_install_cmakedir}"
-    COMPONENT refl-cpp_Development
-)
-
-install(
-    EXPORT refl-cppTargets
-    FILE refl-cpp-config.cmake
-    NAMESPACE refl-cpp::
-    DESTINATION "${refl-cpp_install_cmakedir}"
-    COMPONENT refl-cpp_Development
-)
-
-if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
-  include(CPack)
-endif()
+include(cmake/install-rules.cmake)
 
 # ---- Developer mode ----
 
