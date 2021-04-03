@@ -26,7 +26,7 @@ Some nice things refl-cpp supports out-of-the-box:
 - **template functions** - template function for which the template parameters can be inferred from the arguments are also supported
 - **template types** - uses template specialization to encode metadata for types; template types are perfectly-well supported
 
-## Code Example (see on [Compiler Explorer](https://godbolt.org/z/xGqo8e))
+## Code Example (see on [Compiler Explorer](https://godbolt.org/z/1G35xhqo8))
 A basic example showcasing how refl-cpp can be use to convert an arbitrary type to a tuple at compile-time
 ```cpp
 // Custom attribute to mark fields for validation
@@ -54,7 +54,7 @@ REFL_AUTO(
 )
 
 template <typename T>
-constexpr bool checkNonNegaive(const T& obj) {
+constexpr bool checkNonNegative(const T& obj) {
     // Get the type descriptor for T
     constexpr auto type = refl::reflect<T>();
     // Get the compile-time refl::type_list<...> of member descriptors
@@ -71,7 +71,7 @@ constexpr bool checkNonNegaive(const T& obj) {
             return value < 0;
         }
         // Recursively check the value of the member
-        else if (!checkNonNegaive(value)) {
+        else if (!checkNonNegative(value)) {
             return true;
         }
         return false;
@@ -82,13 +82,13 @@ constexpr bool checkNonNegaive(const T& obj) {
 
 // These all run at compile-time
 constexpr Circle c1{ {0., 5.}, 100. };
-static_assert(checkNonNegaive(c1));
+static_assert(checkNonNegative(c1));
 
 constexpr Circle c2{ {0., 5.}, -100. };
-static_assert(!checkNonNegaive(c2));
+static_assert(!checkNonNegative(c2));
 
 constexpr Circle c3{ {0., -5.}, 100. };
-static_assert(!checkNonNegaive(c3));
+static_assert(!checkNonNegative(c3));
 ```
 
 ## Requirements
