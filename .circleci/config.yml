@@ -1,34 +1,55 @@
 version: 2.1
 
 executors:
-  gcc:
+  gcc8:
     docker:
-    - image: teeks99/gcc-ubuntu:10
+    - image: ubuntu:18.04
       environment:
-        CXX: g++-10
-        CC: gcc-10
-  clang:
+        CXX_PACKAGE: g++-8
+        CXX: /usr/bin/g++-8
+        CC: /usr/bin/gcc-8
+  gcc5:
     docker:
-    - image: teeks99/clang-ubuntu:5
+    - image: ubuntu:18.04
       environment:
+        CXX_PACKAGE: g++-5
+        CXX: /usr/bin/g++-5
+        CC: /usr/bin/gcc-5
+  clang10:
+    docker:
+    - image: ubuntu:18.04
+      environment:
+        CXX_PACKAGE: clang-10
+        CXX: clang++-10
+        CC: clang-10
+        CONFIG_FLAGS: -D CMAKE_CXX_EXTENSIONS=OFF
+  clang5:
+    docker:
+    - image: ubuntu:18.04
+      environment:
+        CXX_PACKAGE: clang-5.0
         CXX: clang++-5.0
         CC: clang-5.0
         CONFIG_FLAGS: -D CMAKE_CXX_EXTENSIONS=OFF
 
 commands:
-  add_cmake_apt_repo:
+  install_core_packages:
     steps:
     - run: apt-get update -qq
-    - run: apt-get install -y lsb-release apt-transport-https ca-certificates
-        gnupg software-properties-common wget
+    - run: apt-get install -y --no-install-recommends git lsb-release
+        apt-transport-https ca-certificates gnupg software-properties-common
+        wget
+  add_cmake_apt_repo:
+    steps:
     - run: wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc
         2>/dev/null | gpg --dearmor - > /etc/apt/trusted.gpg.d/kitware.gpg
     - run: apt-add-repository
         "deb https://apt.kitware.com/ubuntu/ $(lsb_release -sc) main"
-  install_packages:
+  install_build_packages:
     steps:
-    - run: apt-get update -qq
-    - run: apt-get install -y cmake ninja-build git
+    - run: apt-get install -y --no-install-recommends $CXX_PACKAGE cmake
+        ninja-build
+
   configure:
     parameters:
       build_type: { type: string }
@@ -51,10 +72,9 @@ jobs:
       build_type: { type: string }
     executor: <<parameters.docker>>
     steps:
-    - when:
-        condition: { equal: [clang, <<parameters.docker>>] }
-        steps: [add_cmake_apt_repo]
-    - install_packages
+    - install_core_packages
+    - add_cmake_apt_repo
+    - install_build_packages
     - checkout
     - configure: { build_type: <<parameters.build_type>> }
     - build
@@ -66,5 +86,5 @@ workflows:
     - build_latest_cpp17:
         matrix:
           parameters:
-            docker: [gcc, clang]
+            docker: [gcc5, gcc8, clang5, clang10]
             build_type: [Release]
