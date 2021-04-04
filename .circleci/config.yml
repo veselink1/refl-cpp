@@ -7,14 +7,23 @@ executors:
       environment: { CXX: g++-10, CC: gcc-10 }
   clang:
     docker:
-    - image: teeks99/clang-ubuntu:12
-      environment: { CXX: clang++-12, CC: clang-12 }
+    - image: teeks99/clang-ubuntu:5
+      environment: { CXX: clang++-5.0, CC: clang-5.0 }
 
 commands:
+  add_cmake_apt_repo:
+    steps:
+    - run: apt-get update -qq
+    - run: apt-get install -y lsb-release apt-transport-https ca-certificates
+        gnupg software-properties-common wget
+    - run: wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc
+        2>/dev/null | gpg --dearmor - > /etc/apt/trusted.gpg.d/kitware.gpg
+    - run: apt-add-repository
+        "deb https://apt.kitware.com/ubuntu/ $(lsb_release -sc) main"
   install_packages:
     steps:
     - run: apt-get update -qq
-    - run: apt-get install -y cmake ninja-build
+    - run: apt-get install -y cmake ninja-build git
   configure:
     parameters:
       build_type: { type: string }
@@ -33,10 +42,13 @@ commands:
 jobs:
   build_latest_cpp17:
     parameters:
-      docker: { type: executor }
+      docker: { type: string }
       build_type: { type: string }
     executor: <<parameters.docker>>
     steps:
+    - when:
+        condition: { equal: [clang, <<parameters.docker>>] }
+        steps: [add_cmake_apt_repo]
     - install_packages
     - checkout
     - configure: { build_type: <<parameters.build_type>> }
