@@ -8,6 +8,7 @@ project(
     LANGUAGES CXX
 )
 
+include(cmake/in-source-guard.cmake)
 include(cmake/variables.cmake)
 
 # ---- Declare library ----
