@@ -4,11 +4,16 @@ executors:
   gcc:
     docker:
     - image: teeks99/gcc-ubuntu:10
-      environment: { CXX: g++-10, CC: gcc-10 }
+      environment:
+        CXX: g++-10
+        CC: gcc-10
   clang:
     docker:
     - image: teeks99/clang-ubuntu:5
-      environment: { CXX: clang++-5.0, CC: clang-5.0 }
+      environment:
+        CXX: clang++-5.0
+        CC: clang-5.0
+        CONFIG_FLAGS: -D CMAKE_CXX_EXTENSIONS=OFF
 
 commands:
   add_cmake_apt_repo:
@@ -28,7 +33,7 @@ commands:
     parameters:
       build_type: { type: string }
     steps:
-    - run: cmake -S . -B build -G Ninja
+    - run: cmake -S . -B build -G Ninja $CONFIG_FLAGS
         -D CMAKE_BUILD_TYPE=<<parameters.build_type>>
   build:
     steps:
