@@ -31,16 +31,6 @@
 *.out
 *.app
 
-# Build Files
-**/CMakeFiles/
-**/CMakeCache.txt
-**cmake_install.cmake
-compile_commands.json
-Makefile
-**CTestTestfile.cmake
-test/**.cmake
-/cmake-build-debug/
-
 # Annoying OS Generated Files
 .DS_Store
 .DS_Store?
@@ -58,4 +48,3 @@ Thumbs.db
 .vscode/
 language.settings.xml
 **/**.swp
-
