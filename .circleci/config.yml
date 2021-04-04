@@ -8,13 +8,13 @@ executors:
         CXX_PACKAGE: g++-8
         CXX: /usr/bin/g++-8
         CC: /usr/bin/gcc-8
-  gcc5:
+  gcc7:
     docker:
     - image: ubuntu:18.04
       environment:
-        CXX_PACKAGE: g++-5
-        CXX: /usr/bin/g++-5
-        CC: /usr/bin/gcc-5
+        CXX_PACKAGE: g++-7
+        CXX: /usr/bin/g++-7
+        CC: /usr/bin/gcc-7
   clang10:
     docker:
     - image: ubuntu:18.04
@@ -86,5 +86,5 @@ workflows:
     - build_latest_cpp17:
         matrix:
           parameters:
-            docker: [gcc5, gcc8, clang5, clang10]
+            docker: [gcc7, gcc8, clang5, clang10]
             build_type: [Release]
