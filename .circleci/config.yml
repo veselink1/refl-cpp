@@ -1,38 +1,90 @@
-# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-jobs:
-    build_gcc_latest_cpp17:
-        docker:
-            - image: gcc:latest
-        steps:
-            - checkout
-            - run: |
-                wget https://github.com/Kitware/CMake/releases/download/v3.19.0/cmake-3.19.0-Linux-x86_64.sh \
-                    -q -O /tmp/cmake-install.sh \
-                    && chmod u+x /tmp/cmake-install.sh \
-                    && mkdir /tmp/cmake \
-                    && /tmp/cmake-install.sh --skip-license --prefix=/tmp/cmake \
-                    && rm /tmp/cmake-install.sh
-            - run: CXX=g++ /tmp/cmake/bin/cmake -Drefl-cpp_DEVELOPER_MODE=ON . && make
-            - run: ./test/refl-cpp-test
-    build_clang_latest_cpp17:
-        docker:
-            - image: centos/llvm-toolset-7-centos7:latest
-        steps:
-            - checkout
-            - run: |
-                wget https://github.com/Kitware/CMake/releases/download/v3.19.0/cmake-3.19.0-Linux-x86_64.sh \
-                    -q -O /tmp/cmake-install.sh \
-                    && chmod u+x /tmp/cmake-install.sh \
-                    && mkdir /tmp/cmake \
-                    && /tmp/cmake-install.sh --skip-license --prefix=/tmp/cmake \
-                    && rm /tmp/cmake-install.sh
-            - run: CXX=clang++ /tmp/cmake/bin/cmake -Drefl-cpp_DEVELOPER_MODE=ON . && make
-            - run: ./test/refl-cpp-test
 
-# Orchestrate or schedule a set of jobs
+executors:
+  gcc8:
+    docker:
+    - image: ubuntu:18.04
+      environment:
+        CXX_PACKAGE: g++-8
+        CXX: /usr/bin/g++-8
+        CC: /usr/bin/gcc-8
+  gcc7:
+    docker:
+    - image: ubuntu:18.04
+      environment:
+        CXX_PACKAGE: g++-7
+        CXX: /usr/bin/g++-7
+        CC: /usr/bin/gcc-7
+  clang10:
+    docker:
+    - image: ubuntu:18.04
+      environment:
+        CXX_PACKAGE: clang-10
+        CXX: clang++-10
+        CC: clang-10
+        CONFIG_FLAGS: -D CMAKE_CXX_EXTENSIONS=OFF
+  clang5:
+    docker:
+    - image: ubuntu:18.04
+      environment:
+        CXX_PACKAGE: clang-5.0
+        CXX: clang++-5.0
+        CC: clang-5.0
+        CONFIG_FLAGS: -D CMAKE_CXX_EXTENSIONS=OFF
+
+commands:
+  install_core_packages:
+    steps:
+    - run: apt-get update -qq
+    - run: apt-get install -y --no-install-recommends git lsb-release
+        apt-transport-https ca-certificates gnupg software-properties-common
+        wget
+  add_cmake_apt_repo:
+    steps:
+    - run: wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc
+        2>/dev/null | gpg --dearmor - > /etc/apt/trusted.gpg.d/kitware.gpg
+    - run: apt-add-repository
+        "deb https://apt.kitware.com/ubuntu/ $(lsb_release -sc) main"
+  install_build_packages:
+    steps:
+    - run: apt-get install -y --no-install-recommends $CXX_PACKAGE cmake
+        ninja-build
+
+  configure:
+    parameters:
+      build_type: { type: string }
+    steps:
+    - run: cmake -S . -B build -G Ninja $CONFIG_FLAGS
+        -D CMAKE_BUILD_TYPE=<<parameters.build_type>>
+  build:
+    steps:
+    - run: cmake --build build
+  test:
+    steps:
+    - run:
+        command: ctest --output-on-failure
+        working_directory: build
+
+jobs:
+  build_latest_cpp17:
+    parameters:
+      docker: { type: string }
+      build_type: { type: string }
+    executor: <<parameters.docker>>
+    steps:
+    - install_core_packages
+    - add_cmake_apt_repo
+    - install_build_packages
+    - checkout
+    - configure: { build_type: <<parameters.build_type>> }
+    - build
+    - test
+
 workflows:
-    build_and_test:
-        jobs:
-            - build_gcc_latest_cpp17
-            - build_clang_latest_cpp17
+  build_and_test:
+    jobs:
+    - build_latest_cpp17:
+        matrix:
+          parameters:
+            docker: [gcc7, gcc8, clang5, clang10]
+            build_type: [Release]
