@@ -3865,31 +3865,53 @@ namespace refl
             using type = std::remove_reference_t<T>;
             static_assert(refl::trait::is_reflectable_v<type>, "Unsupported type!");
             typedef type_descriptor<type> type_descriptor;
+            bool found{ false };
+            if constexpr (!std::is_void_v<U>) {
 
             std::optional<U> result;
+                for_each(type_descriptor::members, [&](auto member) {
+                    using member_t = decltype(member);
+                    if (found) return;
 
-            bool found{ false };
-            for_each(type_descriptor::members, [&](auto member) {
-                using member_t = decltype(member);
-                if (found) return;
-
-                if constexpr (std::is_invocable_r_v<U, decltype(member), T, Args...>) {
-                    if constexpr (trait::is_member_v<member_t>) {
-                        if (std::strcmp(member.name.c_str(), name) == 0) {
-                            result.emplace(member(target, std::forward<Args>(args)...));
-                            found = true;
+                    if constexpr (std::is_invocable_r_v<U, decltype(member), T, Args...>) {
+                        if constexpr (trait::is_member_v<member_t>) {
+                            if (std::strcmp(member.name.c_str(), name) == 0) {
+                                result.emplace(member(target, std::forward<Args>(args)...));
+                                found = true;
+                            }
                         }
                     }
-                }
-            });
+                });
 
-            if (found) {
-                return std::move(*result);
-            }
-            else {
-                throw std::runtime_error(std::string("The member ")
-                    + type_descriptor::name.str() + "::" + name
-                    + " is not compatible with the provided parameters or return type, is not reflected or does not exist!");
+                if (found) {
+                    return std::move(*result);
+                }
+                else {
+                    throw std::runtime_error(std::string("The member ")
+                        + type_descriptor::name.str() + "::" + name
+                        + " is not compatible with the provided parameters or return type, is not reflected or does not exist!");
+                }
+            } else {
+                for_each(type_descriptor::members, [&](auto member) {
+                    using member_t = decltype(member);
+                    if (found) return;
+
+                    if constexpr (std::is_invocable_r_v<U, decltype(member), T, Args...>) {
+                        if constexpr (trait::is_member_v<member_t>) {
+                            if (std::strcmp(member.name.c_str(), name) == 0) {
+                                member(target, std::forward<Args>(args)...);
+                                found = true;
+                            }
+                        }
+                    }
+                });
+
+                if (!found)
+                {
+                    throw std::runtime_error(std::string("The member ")
+                        + type_descriptor::name.str() + "::" + name
+                        + " is not compatible with the provided parameters or return type, is not reflected or does not exist!");
+                }
             }
         }
 
