@@ -204,7 +204,7 @@ namespace refl
             constexpr auto substr() const noexcept
             {
                 static_assert(Pos <= N);
-                constexpr size_t NewSize = std::min(Count, N - Pos);
+                constexpr size_t NewSize = (std::min)(Count, N - Pos);
 
                 char buf[NewSize + 1]{};
                 for (size_t i = 0; i < NewSize; i++) {
