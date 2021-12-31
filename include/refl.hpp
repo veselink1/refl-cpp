@@ -3306,6 +3306,12 @@ namespace refl
                     return t.name;
                 }
             }
+
+            template <template <typename, size_t> typename MemberDescriptor, typename T, size_t N>
+            constexpr size_t get_member_index(MemberDescriptor<T, N>) noexcept
+            {
+                return N;
+            }
         } // namespace detail
 
         /**
@@ -3367,9 +3373,36 @@ namespace refl
                 return true;
             }
             else {
-                return contains(get_declarator(member).members, [](auto m) {
+                constexpr auto match = [](auto m) {
                     return is_property(m) && is_writable(m) && get_display_name_const(m) == get_display_name_const(ReadableMember{});
-                });
+                };
+
+                using member_types = typename type_descriptor<typename ReadableMember::declaring_type>::member_types;
+                constexpr auto member_index = detail::get_member_index(member);
+
+                // Optimisation for the getter defined after setter pattern.
+                if constexpr (member_index != 0) {
+                    using likely_match = trait::get_t<member_index - 1, member_types>;
+                    if constexpr (match(likely_match{})) {
+                        return true;
+                    }
+                }
+
+                // Optimisation for the getter defined after setter pattern.
+                if constexpr (member_index != member_types::size - 1) {
+                    using likely_match = trait::get_t<member_index + 1, member_types>;
+                    if constexpr (match(likely_match{})) {
+                        return true;
+                    }
+                }
+                else {
+#ifdef REFL_DISALLOW_SEARCH_FOR_RW
+                    static_assert(member_index == (size_t)-1,
+                        "REFL_DISALLOW_SEARCH_FOR_RW is defined. Make sure your property getters and setter are defined one after the other!");
+#endif
+                    // Fallback to a slow linear search.
+                    return contains(member_types{}, match);
+                }
             }
         }
 
@@ -3387,9 +3420,36 @@ namespace refl
                 return true;
             }
             else {
-                return contains(get_declarator(member).members, [](auto m) {
+                                constexpr auto match = [](auto m) {
                     return is_property(m) && is_readable(m) && get_display_name_const(m) == get_display_name_const(WritableMember{});
-                });
+                };
+
+                using member_types = typename type_descriptor<typename WritableMember::declaring_type>::member_types;
+                constexpr auto member_index = detail::get_member_index(member);
+
+                // Optimisation for the getter defined after setter pattern.
+                if constexpr (member_index != member_types::size - 1) {
+                    using likely_match = trait::get_t<member_index + 1, member_types>;
+                    if constexpr (match(likely_match{})) {
+                        return likely_match{};
+                    }
+                }
+
+                // Optimisation for the getter defined after setter pattern.
+                if constexpr (member_index != 0) {
+                    using likely_match = trait::get_t<member_index - 1, member_types>;
+                    if constexpr (match(likely_match{})) {
+                        return likely_match{};
+                    }
+                }
+                else {
+#ifdef REFL_DISALLOW_SEARCH_FOR_RW
+                    static_assert(member_index == (size_t)-1,
+                        "REFL_DISALLOW_SEARCH_FOR_RW is defined. Make sure your property getters and setter are defined one after the other!");
+#endif
+                    // Fallback to a slow linear search.
+                    return contains(member_types{}, match);
+                }
             }
         }
 
@@ -3407,10 +3467,37 @@ namespace refl
                 return member;
             }
             else {
-                static_assert(has_writer(member));
-                return find_one(get_declarator(member).members, [](auto m) {
+                constexpr auto match = [](auto m) {
                     return is_property(m) && is_writable(m) && get_display_name_const(m) == get_display_name_const(ReadableMember{});
-                });
+                };
+
+                using member_types = typename type_descriptor<typename ReadableMember::declaring_type>::member_types;
+                constexpr auto member_index = detail::get_member_index(member);
+
+                // Optimisation for the getter defined after setter pattern.
+                if constexpr (member_index != 0) {
+                    using likely_match = trait::get_t<member_index - 1, member_types>;
+                    if constexpr (match(likely_match{})) {
+                        return likely_match{};
+                    }
+                }
+
+                // Optimisation for the getter defined after setter pattern.
+                if constexpr (member_index != member_types::size - 1) {
+                    using likely_match = trait::get_t<member_index + 1, member_types>;
+                    if constexpr (match(likely_match{})) {
+                        return likely_match{};
+                    }
+                }
+                else {
+#ifdef REFL_DISALLOW_SEARCH_FOR_RW
+                    static_assert(member_index == (size_t)-1,
+                        "REFL_DISALLOW_SEARCH_FOR_RW is defined. Make sure your property getters and setter are defined one after the other!");
+#endif
+                    // Fallback to a slow linear search.
+                    static_assert(has_writer(member));
+                    return find_one(member_types{}, match);
+                }
             }
         }
 
@@ -3428,10 +3515,37 @@ namespace refl
                 return member;
             }
             else {
-                static_assert(has_reader(member));
-                return find_one(get_declarator(member).members, [](auto m) {
+                constexpr auto match = [](auto m) {
                     return is_property(m) && is_readable(m) && get_display_name_const(m) == get_display_name_const(WritableMember{});
-                });
+                };
+
+                using member_types = typename type_descriptor<typename WritableMember::declaring_type>::member_types;
+                constexpr auto member_index = detail::get_member_index(member);
+
+                // Optimisation for the getter defined after setter pattern.
+                if constexpr (member_index != member_types::size - 1) {
+                    using likely_match = trait::get_t<member_index + 1, member_types>;
+                    if constexpr (match(likely_match{})) {
+                        return likely_match{};
+                    }
+                }
+
+                // Optimisation for the getter defined after setter pattern.
+                if constexpr (member_index != 0) {
+                    using likely_match = trait::get_t<member_index - 1, member_types>;
+                    if constexpr (match(likely_match{})) {
+                        return likely_match{};
+                    }
+                }
+                else {
+#ifdef REFL_DISALLOW_SEARCH_FOR_RW
+                    static_assert(member_index == (size_t)-1,
+                        "REFL_DISALLOW_SEARCH_FOR_RW is defined. Make sure your property getters and setter are defined one after the other!");
+#endif
+                    // Fallback to a slow linear search.
+                    static_assert(has_reader(member));
+                    return find_one(member_types{}, match);
+                }
             }
         }
 
