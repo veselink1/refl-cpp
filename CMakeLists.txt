@@ -46,3 +46,8 @@ option(BUILD_EXAMPLES "Build the examples tree." ON)
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
+
+option(BUILD_BENCHES "Build the bench tree." OFF)
+if(BUILD_BENCHES)
+  add_subdirectory(bench)
+endif()
