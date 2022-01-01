@@ -3312,6 +3312,14 @@ namespace refl
             {
                 return N;
             }
+
+            // Compilers only instantiate templates once per set of template parameters.
+            // Since each lambda is it's distinct type, and since we end up filtering
+            // by these predicates in several places in the codebase, it is better to have
+            // these lamdas defined here, to increase the likelihood that a template
+            // instantiation of `util::filter` can be reused.
+            static constexpr auto is_readable_f = [](auto m) { return is_readable(m); };
+            static constexpr auto is_writable_f = [](auto m) { return is_writable(m); };
         } // namespace detail
 
         /**
@@ -3377,7 +3385,7 @@ namespace refl
                     return is_property(m) && is_writable(m) && get_display_name_const(m) == get_display_name_const(ReadableMember{});
                 };
 
-                using member_types = typename type_descriptor<typename ReadableMember::declaring_type>::member_types;
+                using member_types = typename type_descriptor<typename ReadableMember::declaring_type>::declared_member_types;
                 constexpr auto member_index = detail::get_member_index(member);
 
                 // Optimisation for the getter defined after setter pattern.
@@ -3401,7 +3409,11 @@ namespace refl
                         "REFL_DISALLOW_SEARCH_FOR_RW is defined. Make sure your property getters and setter are defined one after the other!");
 #endif
                     // Fallback to a slow linear search.
-                    return contains(member_types{}, match);
+                    using property_types = typename trait::filter_t<trait::is_property, member_types>;
+                    constexpr auto writable_properties = filter(property_types{}, detail::is_writable_f);
+                    return contains(writable_properties, [](auto m) {
+                        return get_display_name_const(m) == get_display_name_const(ReadableMember{});
+                    });
                 }
             }
         }
@@ -3420,11 +3432,11 @@ namespace refl
                 return true;
             }
             else {
-                                constexpr auto match = [](auto m) {
+                constexpr auto match = [](auto m) {
                     return is_property(m) && is_readable(m) && get_display_name_const(m) == get_display_name_const(WritableMember{});
                 };
 
-                using member_types = typename type_descriptor<typename WritableMember::declaring_type>::member_types;
+                using member_types = typename type_descriptor<typename WritableMember::declaring_type>::declared_member_types;
                 constexpr auto member_index = detail::get_member_index(member);
 
                 // Optimisation for the getter defined after setter pattern.
@@ -3448,7 +3460,11 @@ namespace refl
                         "REFL_DISALLOW_SEARCH_FOR_RW is defined. Make sure your property getters and setter are defined one after the other!");
 #endif
                     // Fallback to a slow linear search.
-                    return contains(member_types{}, match);
+                    using property_types = typename trait::filter_t<trait::is_property, member_types>;
+                    constexpr auto readable_properties = filter(property_types{}, detail::is_readable_f);
+                    return contains(readable_properties, [](auto m) {
+                        return get_display_name_const(m) == get_display_name_const(WritableMember{});
+                    });
                 }
             }
         }
@@ -3471,7 +3487,7 @@ namespace refl
                     return is_property(m) && is_writable(m) && get_display_name_const(m) == get_display_name_const(ReadableMember{});
                 };
 
-                using member_types = typename type_descriptor<typename ReadableMember::declaring_type>::member_types;
+                using member_types = typename type_descriptor<typename ReadableMember::declaring_type>::declared_member_types;
                 constexpr auto member_index = detail::get_member_index(member);
 
                 // Optimisation for the getter defined after setter pattern.
@@ -3496,7 +3512,11 @@ namespace refl
 #endif
                     // Fallback to a slow linear search.
                     static_assert(has_writer(member));
-                    return find_one(member_types{}, match);
+                    using property_types = typename trait::filter_t<trait::is_property, member_types>;
+                    constexpr auto writable_properties = filter(property_types{}, detail::is_writable_f);
+                    return find_one(writable_properties, [](auto m) {
+                        return get_display_name_const(m) == get_display_name_const(ReadableMember{});
+                    });
                 }
             }
         }
@@ -3519,7 +3539,7 @@ namespace refl
                     return is_property(m) && is_readable(m) && get_display_name_const(m) == get_display_name_const(WritableMember{});
                 };
 
-                using member_types = typename type_descriptor<typename WritableMember::declaring_type>::member_types;
+                using member_types = typename type_descriptor<typename WritableMember::declaring_type>::declared_member_types;
                 constexpr auto member_index = detail::get_member_index(member);
 
                 // Optimisation for the getter defined after setter pattern.
@@ -3544,7 +3564,11 @@ namespace refl
 #endif
                     // Fallback to a slow linear search.
                     static_assert(has_reader(member));
-                    return find_one(member_types{}, match);
+                    using property_types = typename trait::filter_t<trait::is_property, member_types>;
+                    constexpr auto readable_properties = filter(property_types{}, detail::is_readable_f);
+                    return find_one(readable_properties, [](auto m) {
+                        return get_display_name_const(m) == get_display_name_const(WritableMember{});
+                    });
                 }
             }
         }
