@@ -9,6 +9,7 @@ endif()
 set(
     benches
     large-pod
+    large-pod-search
 )
 
 foreach(bench IN LISTS benches)
