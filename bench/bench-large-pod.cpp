@@ -5,6 +5,7 @@
  *
  * This benchmark should help diagnose and (try to) optimise these routines.
  */
+#define REFL_DISALLOW_SEARCH_FOR_RW
 #include "refl.hpp"
 
 template<class T>
