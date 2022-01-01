@@ -1565,6 +1565,7 @@ namespace refl
                 if constexpr (sizeof...(Carry) == 0) return std::tuple<>{};
                 else return std::make_tuple(std::forward<Carry>(carry)...);
             }
+
             // This workaround is needed since C++ does not specify
             // the order in which function arguments are evaluated and this leads
             // to incorrect order of evaluation (noticeable when using indexes).
@@ -1581,6 +1582,27 @@ namespace refl
                     std::forward<F>(f),
                     std::forward<Carry>(carry)..., // carry the previous results over
                     std::forward<decltype(result)>(result) // pass the current result after them
+                );
+            }
+
+            template <typename F>
+            constexpr void eval_in_order(type_list<>, std::index_sequence<>, F&& f)
+            {
+            }
+
+            // This workaround is needed since C++ does not specify
+            // the order in which function arguments are evaluated and this leads
+            // to incorrect order of evaluation (noticeable when using indexes).
+            template <typename F, typename T, typename... Ts, size_t I, size_t... Idx>
+            constexpr void eval_in_order(type_list<T, Ts...>, std::index_sequence<I, Idx...>, F&& f)
+            {
+                static_assert(std::is_trivial_v<T>, "Argument is a non-trivial type!");
+
+                invoke_optional_index(f, T{}, I, 0);
+                return eval_in_order(
+                    type_list<Ts...>{},
+                    std::index_sequence<Idx...>{},
+                    std::forward<F>(f)
                 );
             }
         }
@@ -1632,11 +1654,7 @@ namespace refl
         template <typename F, typename... Ts>
         constexpr void for_each(type_list<Ts...> list, F&& f)
         {
-            map_to_tuple(list, [&](auto&& val, size_t idx)
-            {
-                detail::invoke_optional_index(f, std::forward<decltype(val)>(val), idx, 0);
-                return 0;
-            });
+            detail::eval_in_order(list, std::make_index_sequence<sizeof...(Ts)>{}, std::forward<F>(f));
         }
 
         /*
