@@ -1699,22 +1699,30 @@ namespace refl
 
         namespace detail
         {
-            template <typename F, typename... Carry>
-            constexpr auto filter(const F&, type_list<>, type_list<Carry...> carry)
-            {
-                return carry;
-            }
+            template <typename, bool...>
+            struct apply_mask;
 
-            template <typename F, typename T, typename... Ts, typename... Carry>
-            constexpr auto filter(F f, type_list<T, Ts...>, type_list<Carry...>)
+            template <>
+            struct apply_mask<type_list<>>
             {
-                static_assert(std::is_trivial_v<T>, "Argument is a non-trivial type!");
-                if constexpr (f(T{})) {
-                    return filter(f, type_list<Ts...>{}, type_list<Carry..., T>{});
-                }
-                else {
-                    return filter(f, type_list<Ts...>{}, type_list<Carry...>{});
-                }
+                using type = type_list<>;
+            };
+
+            template <typename T, typename... Ts, bool... Bs>
+            struct apply_mask<type_list<T, Ts...>, true, Bs...>
+            {
+                using type = trait::append_t<T, typename apply_mask<type_list<Ts...>, Bs...>::type>;
+            };
+
+            template <typename T, typename... Ts, bool... Bs>
+            struct apply_mask<type_list<T, Ts...>, false, Bs...> : apply_mask<type_list<Ts...>, Bs...>
+            {
+            };
+
+            template <typename F, typename... Ts>
+            constexpr auto filter(F f, type_list<Ts...>)
+            {
+                return typename apply_mask<type_list<Ts...>, f(Ts{})...>::type{};
             }
         }
 
@@ -1732,7 +1740,7 @@ namespace refl
         template <typename F, typename... Ts>
         constexpr auto filter(type_list<Ts...> list, F&& f)
         {
-            return decltype(detail::filter(std::forward<F>(f), list, type_list<>{}))();
+            return decltype(detail::filter(std::forward<F>(f), list))();
         }
 
         /**
@@ -1742,7 +1750,7 @@ namespace refl
         template <typename F, typename... Ts>
         constexpr auto find_first(type_list<Ts...> list, F&& f)
         {
-            using result_list = decltype(detail::filter(std::forward<F>(f), list, type_list<>{}));
+            using result_list = decltype(detail::filter(std::forward<F>(f), list));
             static_assert(result_list::size != 0, "find_first did not match anything!");
             return trait::get_t<0, result_list>{};
         }
@@ -1755,7 +1763,7 @@ namespace refl
         template <typename F, typename... Ts>
         constexpr auto find_one(type_list<Ts...> list, F&& f)
         {
-            using result_list = decltype(detail::filter(std::forward<F>(f), list, type_list<>{}));
+            using result_list = decltype(detail::filter(std::forward<F>(f), list));
             static_assert(result_list::size != 0, "find_one did not match anything!");
             static_assert(result_list::size == 1, "Cannot resolve multiple matches in find_one!");
             return trait::get_t<0, result_list>{};
@@ -1768,7 +1776,7 @@ namespace refl
         template <typename F, typename T, typename... Ts>
         constexpr bool contains(type_list<T, Ts...> list, F&& f)
         {
-            using result_list = decltype(detail::filter(std::forward<F>(f), list, type_list<>{}));
+            using result_list = decltype(detail::filter(std::forward<F>(f), list));
             return result_list::size > 0;
         }
 
@@ -3330,7 +3338,7 @@ namespace refl
             static constexpr bool has_reader_search(WritableMember)
             {
 #ifdef REFL_DISALLOW_SEARCH_FOR_RW
-                static_assert(member_index == (size_t)-1,
+                static_assert(WritableMember::name.data[0] == 0,
                     "REFL_DISALLOW_SEARCH_FOR_RW is defined. Make sure your property getters and setter are defined one after the other!");
 #endif
                 using member_types = typename type_descriptor<typename WritableMember::declaring_type>::declared_member_types;
@@ -3344,7 +3352,7 @@ namespace refl
             static constexpr bool has_writer_search(ReadableMember)
             {
 #ifdef REFL_DISALLOW_SEARCH_FOR_RW
-                static_assert(member_index == (size_t)-1,
+                static_assert(ReadableMember::name.data[0] == 0,
                     "REFL_DISALLOW_SEARCH_FOR_RW is defined. Make sure your property getters and setter are defined one after the other!");
 #endif
                 using member_types = typename type_descriptor<typename ReadableMember::declaring_type>::declared_member_types;
@@ -3358,7 +3366,7 @@ namespace refl
             static constexpr auto get_reader_search(WritableMember)
             {
 #ifdef REFL_DISALLOW_SEARCH_FOR_RW
-                static_assert(member_index == (size_t)-1,
+                static_assert(WritableMember::name.data[0] == 0,
                     "REFL_DISALLOW_SEARCH_FOR_RW is defined. Make sure your property getters and setter are defined one after the other!");
 #endif
                 using member_types = typename type_descriptor<typename WritableMember::declaring_type>::declared_member_types;
@@ -3372,7 +3380,7 @@ namespace refl
             static constexpr auto get_writer_search(ReadableMember)
             {
 #ifdef REFL_DISALLOW_SEARCH_FOR_RW
-                static_assert(member_index == (size_t)-1,
+                static_assert(ReadableMember::name.data[0] == 0,
                     "REFL_DISALLOW_SEARCH_FOR_RW is defined. Make sure your property getters and setter are defined one after the other!");
 #endif
                 using member_types = typename type_descriptor<typename ReadableMember::declaring_type>::declared_member_types;
@@ -3455,9 +3463,6 @@ namespace refl
                     if constexpr (match(likely_match{})) {
                         return true;
                     }
-                    else {
-                        return detail::has_writer_search(member);
-                    }
                 }
 
                 // Optimisation for the getter defined after setter pattern.
@@ -3502,9 +3507,6 @@ namespace refl
                     using likely_match = trait::get_t<member_index + 1, member_types>;
                     if constexpr (match(likely_match{})) {
                         return likely_match{};
-                    }
-                    else {
-                        return detail::has_reader_search(member);
                     }
                 }
 
@@ -3551,9 +3553,6 @@ namespace refl
                     if constexpr (match(likely_match{})) {
                         return likely_match{};
                     }
-                    else {
-                        return detail::get_writer_search(member);
-                    }
                 }
 
                 // Optimisation for the getter defined after setter pattern.
@@ -3598,9 +3597,6 @@ namespace refl
                     using likely_match = trait::get_t<member_index + 1, member_types>;
                     if constexpr (match(likely_match{})) {
                         return likely_match{};
-                    }
-                    else {
-                        return detail::get_reader_search(member);
                     }
                 }
 
