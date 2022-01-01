@@ -3318,8 +3318,69 @@ namespace refl
             // by these predicates in several places in the codebase, it is better to have
             // these lamdas defined here, to increase the likelihood that a template
             // instantiation of `util::filter` can be reused.
-            static constexpr auto is_readable_f = [](auto m) { return is_readable(m); };
-            static constexpr auto is_writable_f = [](auto m) { return is_writable(m); };
+            static constexpr auto is_readable_p = [](auto m) { return is_readable(m); };
+            static constexpr auto is_writable_p = [](auto m) { return is_writable(m); };
+
+            template <typename Member>
+            static constexpr auto display_name_equals_p = [](auto m) {
+                return get_display_name_const(m) == get_display_name_const(Member{});
+            };
+
+            template <typename WritableMember>
+            static constexpr bool has_reader_search(WritableMember)
+            {
+#ifdef REFL_DISALLOW_SEARCH_FOR_RW
+                static_assert(member_index == (size_t)-1,
+                    "REFL_DISALLOW_SEARCH_FOR_RW is defined. Make sure your property getters and setter are defined one after the other!");
+#endif
+                using member_types = typename type_descriptor<typename WritableMember::declaring_type>::declared_member_types;
+                // Fallback to a slow linear search.
+                using property_types = typename trait::filter_t<trait::is_property, member_types>;
+                constexpr auto readable_properties = filter(property_types{}, detail::is_readable_p);
+                return contains(readable_properties, display_name_equals_p<WritableMember>);
+            }
+
+            template <typename ReadableMember>
+            static constexpr bool has_writer_search(ReadableMember)
+            {
+#ifdef REFL_DISALLOW_SEARCH_FOR_RW
+                static_assert(member_index == (size_t)-1,
+                    "REFL_DISALLOW_SEARCH_FOR_RW is defined. Make sure your property getters and setter are defined one after the other!");
+#endif
+                using member_types = typename type_descriptor<typename ReadableMember::declaring_type>::declared_member_types;
+                // Fallback to a slow linear search.
+                using property_types = typename trait::filter_t<trait::is_property, member_types>;
+                constexpr auto writable_properties = filter(property_types{}, detail::is_writable_p);
+                return contains(writable_properties, display_name_equals_p<ReadableMember>);
+            }
+
+            template <typename WritableMember>
+            static constexpr auto get_reader_search(WritableMember)
+            {
+#ifdef REFL_DISALLOW_SEARCH_FOR_RW
+                static_assert(member_index == (size_t)-1,
+                    "REFL_DISALLOW_SEARCH_FOR_RW is defined. Make sure your property getters and setter are defined one after the other!");
+#endif
+                using member_types = typename type_descriptor<typename WritableMember::declaring_type>::declared_member_types;
+                // Fallback to a slow linear search.
+                using property_types = typename trait::filter_t<trait::is_property, member_types>;
+                constexpr auto readable_properties = filter(property_types{}, detail::is_readable_p);
+                return find_one(readable_properties, display_name_equals_p<WritableMember>);
+            }
+
+            template <typename ReadableMember>
+            static constexpr auto get_writer_search(ReadableMember)
+            {
+#ifdef REFL_DISALLOW_SEARCH_FOR_RW
+                static_assert(member_index == (size_t)-1,
+                    "REFL_DISALLOW_SEARCH_FOR_RW is defined. Make sure your property getters and setter are defined one after the other!");
+#endif
+                using member_types = typename type_descriptor<typename ReadableMember::declaring_type>::declared_member_types;
+                // Fallback to a slow linear search.
+                using property_types = typename trait::filter_t<trait::is_property, member_types>;
+                constexpr auto writable_properties = filter(property_types{}, detail::is_writable_p);
+                return find_one(writable_properties, display_name_equals_p<ReadableMember>);
+            }
         } // namespace detail
 
         /**
@@ -3374,7 +3435,7 @@ namespace refl
          * For fields, returns true only if the field is writable.
          */
         template <typename ReadableMember>
-        constexpr auto has_writer(ReadableMember member)
+        constexpr bool has_writer(ReadableMember member)
         {
             static_assert(is_writable(member) || is_property(member));
             if constexpr (is_writable(member)) {
@@ -3394,6 +3455,9 @@ namespace refl
                     if constexpr (match(likely_match{})) {
                         return true;
                     }
+                    else {
+                        return detail::has_writer_search(member);
+                    }
                 }
 
                 // Optimisation for the getter defined after setter pattern.
@@ -3402,18 +3466,12 @@ namespace refl
                     if constexpr (match(likely_match{})) {
                         return true;
                     }
+                    else {
+                        return detail::has_writer_search(member);
+                    }
                 }
                 else {
-#ifdef REFL_DISALLOW_SEARCH_FOR_RW
-                    static_assert(member_index == (size_t)-1,
-                        "REFL_DISALLOW_SEARCH_FOR_RW is defined. Make sure your property getters and setter are defined one after the other!");
-#endif
-                    // Fallback to a slow linear search.
-                    using property_types = typename trait::filter_t<trait::is_property, member_types>;
-                    constexpr auto writable_properties = filter(property_types{}, detail::is_writable_f);
-                    return contains(writable_properties, [](auto m) {
-                        return get_display_name_const(m) == get_display_name_const(ReadableMember{});
-                    });
+                    return detail::has_writer_search(member);
                 }
             }
         }
@@ -3425,7 +3483,7 @@ namespace refl
          * For fields, returns true.
          */
         template <typename WritableMember>
-        constexpr auto has_reader(WritableMember member)
+        constexpr bool has_reader(WritableMember member)
         {
             static_assert(is_readable(member) || is_property(member));
             if constexpr (is_readable(member)) {
@@ -3445,6 +3503,9 @@ namespace refl
                     if constexpr (match(likely_match{})) {
                         return likely_match{};
                     }
+                    else {
+                        return detail::has_reader_search(member);
+                    }
                 }
 
                 // Optimisation for the getter defined after setter pattern.
@@ -3453,18 +3514,12 @@ namespace refl
                     if constexpr (match(likely_match{})) {
                         return likely_match{};
                     }
+                    else {
+                        return detail::has_reader_search(member);
+                    }
                 }
                 else {
-#ifdef REFL_DISALLOW_SEARCH_FOR_RW
-                    static_assert(member_index == (size_t)-1,
-                        "REFL_DISALLOW_SEARCH_FOR_RW is defined. Make sure your property getters and setter are defined one after the other!");
-#endif
-                    // Fallback to a slow linear search.
-                    using property_types = typename trait::filter_t<trait::is_property, member_types>;
-                    constexpr auto readable_properties = filter(property_types{}, detail::is_readable_f);
-                    return contains(readable_properties, [](auto m) {
-                        return get_display_name_const(m) == get_display_name_const(WritableMember{});
-                    });
+                    return detail::has_reader_search(member);
                 }
             }
         }
@@ -3496,6 +3551,9 @@ namespace refl
                     if constexpr (match(likely_match{})) {
                         return likely_match{};
                     }
+                    else {
+                        return detail::get_writer_search(member);
+                    }
                 }
 
                 // Optimisation for the getter defined after setter pattern.
@@ -3504,19 +3562,12 @@ namespace refl
                     if constexpr (match(likely_match{})) {
                         return likely_match{};
                     }
+                    else {
+                        return detail::get_writer_search(member);
+                    }
                 }
                 else {
-#ifdef REFL_DISALLOW_SEARCH_FOR_RW
-                    static_assert(member_index == (size_t)-1,
-                        "REFL_DISALLOW_SEARCH_FOR_RW is defined. Make sure your property getters and setter are defined one after the other!");
-#endif
-                    // Fallback to a slow linear search.
-                    static_assert(has_writer(member));
-                    using property_types = typename trait::filter_t<trait::is_property, member_types>;
-                    constexpr auto writable_properties = filter(property_types{}, detail::is_writable_f);
-                    return find_one(writable_properties, [](auto m) {
-                        return get_display_name_const(m) == get_display_name_const(ReadableMember{});
-                    });
+                    return detail::get_writer_search(member);
                 }
             }
         }
@@ -3548,6 +3599,9 @@ namespace refl
                     if constexpr (match(likely_match{})) {
                         return likely_match{};
                     }
+                    else {
+                        return detail::get_reader_search(member);
+                    }
                 }
 
                 // Optimisation for the getter defined after setter pattern.
@@ -3556,19 +3610,12 @@ namespace refl
                     if constexpr (match(likely_match{})) {
                         return likely_match{};
                     }
+                    else {
+                        return detail::get_reader_search(member);
+                    }
                 }
                 else {
-#ifdef REFL_DISALLOW_SEARCH_FOR_RW
-                    static_assert(member_index == (size_t)-1,
-                        "REFL_DISALLOW_SEARCH_FOR_RW is defined. Make sure your property getters and setter are defined one after the other!");
-#endif
-                    // Fallback to a slow linear search.
-                    static_assert(has_reader(member));
-                    using property_types = typename trait::filter_t<trait::is_property, member_types>;
-                    constexpr auto readable_properties = filter(property_types{}, detail::is_readable_f);
-                    return find_one(readable_properties, [](auto m) {
-                        return get_display_name_const(m) == get_display_name_const(WritableMember{});
-                    });
+                    return detail::get_reader_search(member);
                 }
             }
         }
