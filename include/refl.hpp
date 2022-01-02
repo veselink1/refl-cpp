@@ -1775,8 +1775,8 @@ namespace refl
          * Returns true if any item in the list matches the predicate.
          * Calling f(Ts{})... should be valid in a constexpr context.
          */
-        template <typename F, typename T, typename... Ts>
-        constexpr bool contains(type_list<T, Ts...> list, F&& f)
+        template <typename F, typename... Ts>
+        constexpr bool contains(type_list<Ts...> list, F&& f)
         {
             using result_list = decltype(detail::filter(std::forward<F>(f), list));
             return result_list::size > 0;
