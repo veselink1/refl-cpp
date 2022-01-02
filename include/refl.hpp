@@ -1586,7 +1586,7 @@ namespace refl
             }
 
             template <typename F>
-            constexpr void eval_in_order(type_list<>, std::index_sequence<>, F&& f)
+            constexpr void eval_in_order(type_list<>, std::index_sequence<>, [[maybe_unused]]F&& f)
             {
             }
 
