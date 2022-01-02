@@ -1,4 +1,13 @@
 # Changelog
+### v0.12.2
+  - Much faster `for_each` and `(has|get)_(reader|writer)` [c197d35](https://github.com/veselink1/refl-cpp/commit/c197d35b09b1eeaca94f98b227fbea1562945195) and [#60](https://github.com/veselink1/refl-cpp/issues/60)
+  - Fixed `get_display_name_const` on MSVC [#53](https://github.com/veselink1/refl-cpp/issues/53) (thanks @rpatters1)
+  - Added CMake support [#44](https://github.com/veselink1/refl-cpp/issues/44) (thanks @friendlyanon)
+  - Moved header file to include/refl.hpp [#44](https://github.com/veselink1/refl-cpp/issues/44) (thanks @friendlyanon)
+  - Fixed builds on on Apple, with xCode 12.3 and set(CMAKE_CXX_STANDARD 17) [#43](https://github.com/veselink1/refl-cpp/issues/43) (thanks @michaelahughes)
+
+  > NOTE: This version does not contain any breaking changes at the source level (as is clear by the patch version increment). However, this version adds CMake support and this required the `refl.hpp` source file to be moved to a standard location `include/refl.hpp`. If you are consuming refl-cpp as a single-header library, you can continue to do so.
+
 ### v0.12.1
   - Fixed broken build on Visual Studio 2017 [#39](https://github.com/veselink1/refl-cpp/issues/39) (9b6aa1a)
   - Fixed out-of-bounds read in `refl::runtime::debug` implementation for `basic_string_view` (93351ac)
