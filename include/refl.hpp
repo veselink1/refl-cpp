@@ -3508,7 +3508,7 @@ namespace refl
                 if constexpr (member_index != member_types::size - 1) {
                     using likely_match = trait::get_t<member_index + 1, member_types>;
                     if constexpr (match(likely_match{})) {
-                        return likely_match{};
+                        return true;
                     }
                 }
 
@@ -3516,7 +3516,7 @@ namespace refl
                 if constexpr (member_index != 0) {
                     using likely_match = trait::get_t<member_index - 1, member_types>;
                     if constexpr (match(likely_match{})) {
-                        return likely_match{};
+                        return true;
                     }
                     else {
                         return detail::has_reader_search(member);
@@ -3541,7 +3541,7 @@ namespace refl
             if constexpr (is_writable(member)) {
                 return member;
             }
-            else {
+            else if constexpr (has_writer(member)) {
                 constexpr auto match = [](auto m) {
                     return is_property(m) && is_writable(m) && get_display_name_const(m) == get_display_name_const(ReadableMember{});
                 };
@@ -3571,6 +3571,9 @@ namespace refl
                     return detail::get_writer_search(member);
                 }
             }
+            else {
+                static_assert(has_writer(member), "The property is not writable (could not find a setter method)!");
+            }
         }
 
         /**
@@ -3586,7 +3589,7 @@ namespace refl
             if constexpr (is_readable(member)) {
                 return member;
             }
-            else {
+            else if constexpr (has_reader(member)) {
                 constexpr auto match = [](auto m) {
                     return is_property(m) && is_readable(m) && get_display_name_const(m) == get_display_name_const(WritableMember{});
                 };
@@ -3615,6 +3618,9 @@ namespace refl
                 else {
                     return detail::get_reader_search(member);
                 }
+            }
+            else {
+                static_assert(has_reader(member), "The property is not readable (could not find a getter method)!");
             }
         }
 
