@@ -58,7 +58,7 @@ REFL_AUTO(
 )
 
 struct SingleWriteOnlyProp {
-    void set_foo() { }
+    void set_foo(int) { }
 };
 
 REFL_AUTO(
@@ -68,7 +68,7 @@ REFL_AUTO(
 
 struct SingleReadWriteProp {
     int get_foo() const { return 0; }
-    void set_foo() { }
+    void set_foo(int) { }
 };
 
 REFL_AUTO(
@@ -79,9 +79,9 @@ REFL_AUTO(
 
 struct UnorderedProperties {
     int get_foo() const { return 0; }
-    void set_foo() { }
+    void set_foo(int) { }
     int get_bar() const { return 0; }
-    void set_baz() { }
+    void set_baz(int) { }
 };
 
 // Getter and setter not on consecutive lines.
@@ -154,21 +154,58 @@ TEST_CASE( "attributes" ) {
             REQUIRE( std::is_same_v<decltype(get_writer(set_x)), std::remove_cv_t<decltype(set_x)>> );
 
             REQUIRE( has_reader(function_descriptor<SingleReadOnlyProp, 0>{}) );
+            REQUIRE( std::is_same_v<
+                decltype(get_reader(function_descriptor<SingleReadOnlyProp, 0>{})),
+                function_descriptor<SingleReadOnlyProp, 0>> );
             REQUIRE( !has_writer(function_descriptor<SingleReadOnlyProp, 0>{}) );
 
             REQUIRE( has_writer(function_descriptor<SingleWriteOnlyProp, 0>{}) );
+            REQUIRE( std::is_same_v<
+                decltype(get_writer(function_descriptor<SingleWriteOnlyProp, 0>{})),
+                function_descriptor<SingleWriteOnlyProp, 0>> );
             REQUIRE( !has_reader(function_descriptor<SingleWriteOnlyProp, 0>{}) );
 
-            REQUIRE( has_writer(function_descriptor<SingleReadWriteProp, 0>{}) );
-            REQUIRE( has_reader(function_descriptor<SingleReadWriteProp, 0>{}) );
-            REQUIRE( has_writer(function_descriptor<SingleReadWriteProp, 1>{}) );
-            REQUIRE( has_reader(function_descriptor<SingleReadWriteProp, 1>{}) );
+            // Test SingleReadWriteProp
+            constexpr auto get_foo = find_one(member_list<SingleReadWriteProp>(), [](auto m) { return m.name == "get_foo"; });
+            constexpr auto set_foo = find_one(member_list<SingleReadWriteProp>(), [](auto m) { return m.name == "set_foo"; });
 
-            REQUIRE( has_writer(function_descriptor<SingleReadWriteProp, 0>{}) );
-            REQUIRE( has_reader(function_descriptor<SingleReadWriteProp, 0>{}) );
+            REQUIRE( has_writer(get_foo) );
+            REQUIRE( has_reader(get_foo) );
+            REQUIRE( has_writer(set_foo) );
+            REQUIRE( has_reader(set_foo) );
+            REQUIRE( std::is_same_v<
+                decltype(get_reader(get_foo)),
+                std::remove_const_t<decltype(get_foo)>> );
+            REQUIRE( std::is_same_v<
+                decltype(get_writer(get_foo)),
+                std::remove_const_t<decltype(set_foo)>> );
+            REQUIRE( std::is_same_v<
+                decltype(get_writer(set_foo)),
+                std::remove_const_t<decltype(set_foo)>> );
+            REQUIRE( std::is_same_v<
+                decltype(get_reader(set_foo)),
+                std::remove_const_t<decltype(get_foo)>> );
 
-            REQUIRE( has_writer(function_descriptor<UnorderedProperties, 0>{}) );
-            REQUIRE( has_reader(function_descriptor<UnorderedProperties, 0>{}) );
+            // Test UnorderedProperties
+            constexpr auto get_foo_u = find_one(member_list<UnorderedProperties>(), [](auto m) { return m.name == "get_foo"; });
+            constexpr auto set_foo_u = find_one(member_list<UnorderedProperties>(), [](auto m) { return m.name == "set_foo"; });
+
+            REQUIRE( has_writer(get_foo_u) );
+            REQUIRE( has_reader(get_foo_u) );
+            REQUIRE( has_writer(set_foo_u) );
+            REQUIRE( has_reader(set_foo_u) );
+            REQUIRE( std::is_same_v<
+                decltype(get_reader(get_foo_u)),
+                std::remove_const_t<decltype(get_foo_u)>> );
+            REQUIRE( std::is_same_v<
+                decltype(get_writer(get_foo_u)),
+                std::remove_const_t<decltype(set_foo_u)>> );
+            REQUIRE( std::is_same_v<
+                decltype(get_writer(set_foo_u)),
+                std::remove_const_t<decltype(set_foo_u)>> );
+            REQUIRE( std::is_same_v<
+                decltype(get_reader(set_foo_u)),
+                std::remove_const_t<decltype(get_foo_u)>> );
         }
 
     }
