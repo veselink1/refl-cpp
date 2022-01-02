@@ -22,6 +22,9 @@ This macro generated the necessary metadata needed for compile-time reflection t
 
 ## Two macro styles
 The two types are functionally-equivalent, in fact, Type 1 is directly transformed into Type 2 macros via preprocessor magic. Type 1 is more succint, but generates worse stack traces.
+
+> NOTE: Type 1 has a hard-limit of 100 members. This is not something that can be substantially increased due to compiler limits on the number of macro arguments.
+
 ### Type 1
 ```cpp
 // Example
