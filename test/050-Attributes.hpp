@@ -48,6 +48,51 @@ REFL_AUTO(
     func(Get_Foo, property())
 )
 
+struct SingleReadOnlyProp {
+    int get_foo() const { return 0; }
+};
+
+REFL_AUTO(
+    type(SingleReadOnlyProp),
+    func(get_foo, property())
+)
+
+struct SingleWriteOnlyProp {
+    void set_foo() { }
+};
+
+REFL_AUTO(
+    type(SingleWriteOnlyProp),
+    func(set_foo, property())
+)
+
+struct SingleReadWriteProp {
+    int get_foo() const { return 0; }
+    void set_foo() { }
+};
+
+REFL_AUTO(
+    type(SingleReadWriteProp),
+    func(get_foo, property()),
+    func(set_foo, property())
+)
+
+struct UnorderedProperties {
+    int get_foo() const { return 0; }
+    void set_foo() { }
+    int get_bar() const { return 0; }
+    void set_baz() { }
+};
+
+// Getter and setter not on consecutive lines.
+REFL_AUTO(
+    type(UnorderedProperties),
+    func(get_foo, property()),
+    func(get_bar, property()),
+    func(set_foo, property()),
+    func(set_baz, property())
+)
+
 TEST_CASE( "attributes" ) {
 
     SECTION( "usage tags" ) {
@@ -107,6 +152,23 @@ TEST_CASE( "attributes" ) {
 
             REQUIRE( std::is_same_v<decltype(get_reader(set_x)), std::remove_cv_t<decltype(get_x)>> );
             REQUIRE( std::is_same_v<decltype(get_writer(set_x)), std::remove_cv_t<decltype(set_x)>> );
+
+            REQUIRE( has_reader(function_descriptor<SingleReadOnlyProp, 0>{}) );
+            REQUIRE( !has_writer(function_descriptor<SingleReadOnlyProp, 0>{}) );
+
+            REQUIRE( has_writer(function_descriptor<SingleWriteOnlyProp, 0>{}) );
+            REQUIRE( !has_reader(function_descriptor<SingleWriteOnlyProp, 0>{}) );
+
+            REQUIRE( has_writer(function_descriptor<SingleReadWriteProp, 0>{}) );
+            REQUIRE( has_reader(function_descriptor<SingleReadWriteProp, 0>{}) );
+            REQUIRE( has_writer(function_descriptor<SingleReadWriteProp, 1>{}) );
+            REQUIRE( has_reader(function_descriptor<SingleReadWriteProp, 1>{}) );
+
+            REQUIRE( has_writer(function_descriptor<SingleReadWriteProp, 0>{}) );
+            REQUIRE( has_reader(function_descriptor<SingleReadWriteProp, 0>{}) );
+
+            REQUIRE( has_writer(function_descriptor<UnorderedProperties, 0>{}) );
+            REQUIRE( has_reader(function_descriptor<UnorderedProperties, 0>{}) );
         }
 
     }
