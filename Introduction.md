@@ -1,4 +1,25 @@
 # Introduction to refl-cpp
+## Table of Contents
+- [Basics](#basics)
+- [Metadata definitions](#metadata-definitions)
+    - [Declarative style](#declarative-style)
+    - [Procedural style](#procedural-style)
+- [Type descriptors](#type-descriptors)
+- [Field descriptors](#field-descriptors)
+- [Function descriptors](#function-descriptors)
+- [Attributes](#custom-attributes)
+    - [Properties](#properties)
+    - [Base types](#base-types)
+    - [Debug formatter](#debug-formatter)
+    - [Custom attributes](#custom-attributes)
+- [Proxies](#proxies)
+- [Compile-time utilities](#compile-time-utilities)
+    - [Functional interaface](#functional-interface)
+    - [Metaprogramming](#metaprogramming)
+- [Runtime utilities](#runtime-utilities)
+    - [Invoking a member by name at runtime](#invoking-a-member-by-name-at-runtime)
+    - [Printing debug output](#printing-debug-output)
+
 ## Basics
 refl-cpp relies on the user to properly specify type metadata through the use of the `REFL_AUTO` macro.
 
@@ -11,70 +32,49 @@ struct A {
 
 REFL_AUTO(
     type(A),
-    field(foo),
-    func(bar)
+    field(foo, my::custom_attribute("foofoo")),
+    func(bar, property(), my::custom_attribute("barbar"))
 )
 ```
 
-This macro generated the necessary metadata needed for compile-time reflection to work. The metadata is encoded in the type system via generated type specializations which is why there is currently no other way that using a macro. See [example-macro.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-macro.cpp) for what the output of the macro looks like. (NOTE: It is a lot, but remember that compilers only validate and produce code for templates once they are used, until then the metadata is just token soup that gets optimized out from the resulting binary)
+This macro generated the necessary metadata needed for compile-time reflection to work. The metadata is encoded in the type system via generated type specializations which is why there is currently no other way that using a macro. See [example-macro.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-macro.cpp) for what the output of the macro looks like. 
+
+> NOTE: This is a lot of code, but remember that compilers only validate and produce code for templates once they are used, until then the metadata is just token soup that never reaches code-gen.
 
 - The metadata should be available before it is first requested, and should ideally be put right after the definition of the target type (forward declarations won't work).
 
-## Two macro styles
-The two types are functionally-equivalent, in fact, Type 1 is directly transformed into Type 2 macros via preprocessor magic. Type 1 is more succint, but generates worse stack traces.
+# Metadata definitions
+There are two supported macro styles. The declarative style is directly transformed into procedural style macros via preprocessor magic. The declarative style is more succint, but generates longer error messages. The declarative style also has a hard-limit of 100 members. This is not something that can be substantially increased due to compiler limits on the number of macro arguments.
 
-> NOTE: Type 1 has a hard-limit of 100 members. This is not something that can be substantially increased due to compiler limits on the number of macro arguments.
-
-### Type 1
+## Declarative style
 ```cpp
-// Example
 REFL_AUTO(
-    type(Point)
-    field(x)
-    field(y)
+  type(Fully-Qualified-Type, Attribute...),
+  field(Member-Name, Attribute...),
+  func(Member-Name, Attribute...)
 )
 
-// Describes a type and all of its members
 REFL_AUTO(
-  type(Name, Attribute...),
-  field(Name, Attribute...),
-  func(Name, Attribute...)
+  template((Template-Parameter-List), (Fully-Qualified-Type), Attribute...),
+  field(Member-Name, Attribute...),
+  func(Member-Name, Attribute...)
 )
 ```
-### Type 2
+
+## Procedural style
 ```
-// Example
-REFL_TYPE(Point)
-    REFL_FIELD(x)
-    REFL_FIELD(y)
+REFL_TYPE(Fully-Qualified-Type, Attribute...)
+    REFL_FIELD(Member-Name, Attribute...)
+    REFL_FUNC(Member-Name, Attribute...)
 REFL_END
 
-// Starts the declaration of Type's metadata.
-// Must be followed by one of: REFL_END, REFL_FIELD, REFL_FUNC.
-// Example: REFL_TYPE(Dog, bases<Animal>)
-REFL_TYPE(Type, Attributes...)
-
-// Starts the declaration of Type's metadata.
-// Must be followed by one of: REFL_END, REFL_FIELD, REFL_FUNC.
-// Example: REFL_TEMPLATE((typename K, typename V), (std::pair<K, V>))
-REFL_TEMPLATE((typename... Ts), (Type<Ts...>)), Attributes...)
-
-// End the declaration of Type's metadata.
-// Does not have an argument list
+REFL_TEMPLATE((Template-Parameter-List), (Fully-Qualified-Type), Attribute...)
+    REFL_FIELD(Member-Name, Attribute...)
+    REFL_FUNC(Member-Name, Attribute...)
 REFL_END
-
-// Describes a field.
-// Example: REFL_FIELD(first_name, property{ "Value" })
-REFL_FIELD(Field, Attributes...)
-
-// Describes a function.
-// Example: REFL_FUNC(first_name, property{ "Size" })
-REFL_FUNC(Function, Attribute...)
-
-// NOTE: None of the macros above need a terminating semi-colon (;)
 ```
 
-## Type metadata
+# Type descriptors
 refl-cpp exposes access to the metadata through the [`type_descriptor<T>`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1type__descriptor.html) type. All of the metadata is stored in static fields on the corresponding specialization of that type, but for convenience, objects of the metadata types are typically used in many places, and can be obtained through calling the trivial constructor or through the [`reflect<T>`](https://veselink1.github.io/refl-cpp/namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e) family of functions.
 
 ```cpp
@@ -102,7 +102,7 @@ Custom attributes are stored in a constexpr `std::tuple` which is exposed throug
 
 * Since the type `A` has no members and no attributes defined, `members` and `attribute` are of type `type_list<>`, an empty list of types, and `std::tuple<>`, an empty tuple, respectively.
 
-## Field metadata
+# Field descriptors
 Let's use a the following simple Point type definition to demonstrate how field reflection works.
 
 ```cpp
@@ -164,7 +164,7 @@ As with [`type_descriptor<T>`](https://veselink1.github.io/refl-cpp/classrefl_1_
 
 * Since the field `Point::x` in this example has no custom attributes associated with it, the `field.attributes` in the example above will be generated as `static constexpr std::tuple<>{}`.
 
-## Function metadata
+# Function descriptors
 We will be using the following type definition for the below examples.
 
 ```cpp
@@ -215,10 +215,10 @@ func.invoke(c); // -> the result of c.getRadius()
 
 Function descriptors can be tricky as they represent a "group" of functions with the same name. Overload resolution is done by the [`resolve`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a7f8b63e35466c3c2887f601272d9f0a0) or [`invoke`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a5f6c4091c03a8fb9d5f6459c686ea655) functions of [`function_descriptor<T, N>`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html). Only when the function is not overloaded is [`pointer`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a6e18ad19be31eb26acfe1e84fd320c36) available (`nullptr` otherwise). A call to [`resolve`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a7f8b63e35466c3c2887f601272d9f0a0) is needed to get a pointer to a specific overload. A call to [`resolve`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a7f8b63e35466c3c2887f601272d9f0a0) is **not** needed to [`invoke`](https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a5f6c4091c03a8fb9d5f6459c686ea655) the target function. The `(*this)` object must be passed as the first argument when a member function is invoked. When invoking a static function, simply provide the arguments as usual.
 
-## Custom Attributes
+# Custom Attributes
 refl-cpp allows the association of compile-time values with reflectable items. Those are referred to as attributes. There are 3 built-in attributes, which can all be found in the [`refl::attr`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1attr.html) namespace.
 
-### Properties
+## Properties
 [`property`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1property.html) (usage: function) - used to specify that a function call corresponds to an object property
 
 ```cpp
@@ -233,7 +233,7 @@ Built-in support for properties includes:
 - [`refl::descriptor::is_property`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1descriptor.html#acc8c814d7bd04ba0cf4386e49e469a3b) - checks whether the function is marked with the `property` attribute
 - [`refl::descriptor::get_display_name`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1descriptor.html#aa7c9753a84fecf4d9c62ce5b5063fb47) - returns the [`friendly_name`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1property.html#a8c45f77ef5159115250f2294bd37d296) set on the property, if present, otherwise the name of the member itself
 
-### Base Types
+## Base types
 [`base_types`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1base__types.html) (usage: type) - used to specify the base types of the target. The `bases<Ts...>` template variable can be used in place of `base_types<Ts...>{}`
 ```cpp
 REFL_AUTO(
@@ -246,12 +246,12 @@ Built-in support for base types includes:
 - [`refl::descriptor::get_bases`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1descriptor.html#a5ca7ae3c51dbe88ffa332c310eac9f11) - returns a [`type_list`](https://veselink1.github.io/refl-cpp/structrefl_1_1util_1_1type__list.html) of the type descriptors of the base classes (Important: Fails when there is no [`base_types`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1base__types.html) attribute)
 - [`refl::descriptor::has_bases`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1descriptor.html#a079a7d252e99cd446ec275b218c461d1) - checks whether the target type has a [`base_types`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1base__types.html) attribute
 
-### Debug Formatter
+## Debug Formatter
 [`debug<F>`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1debug.html) (usage: any) - used to specify a function to be used when constructing the debug representation of an object by [`refl::runtime::debug`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#a1edadcdb602a1e96beedbdeeca801701)
 
 All attributes specify what targets they can be used with. That is done by inheriting from one or more of the marker types found in [`refl::attr::usage`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1attr_1_1usage.html). These include [`field`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1usage_1_1field.html), [`function`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1usage_1_1field.html), [`type`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1usage_1_1type.html), [`member`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1usage_1_1member.html) (`field` or `function`), [`any`](https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1usage_1_1any.html) (`member` or `type`).
 
-### Custom Attributes
+## Custom Attributes
 
 Custom attributes can be created by inheriting from one of the usage strategies:
 ```cpp
@@ -285,7 +285,7 @@ Values can be obtained using [`refl::descriptor::get_attribute<T>`](https://vese
 
 **NOTE: Most of the descriptor-related functions in `refl::descriptor` which take a descriptor parameter can be used without being imported into the current namespace thanks to ADL-lookup (example: `get_display_name` is not explictly imported above)**
 
-## Proxies
+# Proxies
 
 The powerful proxy functionality provided by [`refl::runtime::proxy<Derived, Target>`](https://veselink1.github.io/refl-cpp/structrefl_1_1runtime_1_1proxy.html) in refl-cpp allows the user to transform existing types.
 
@@ -310,10 +310,38 @@ This is a very powerful and extremely low-overhead, but also complicated feature
 
 See the examples below for how to build a generic builder pattern and POD wrapper types using proxies.
 
-## Runtime Utilities
+# Compile-time utilities
+## Functional interface
+All utility functions are contained in the [`refl::util`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html) namespace. Some of the most useful utility functions include:
+- [`for_each`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html#a19919596cdd45c858d891c91a7826b22) - Applies function F to each type in the type_list. F can optionally take an index of type size_t.
+- [`map_to_tuple(type_list<Ts...>, F&& f)`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html#af69ca2ba2b0353b7d3433f6a77b62902) - Applies function F to each type in the type_list, aggregating the results in a tuple. F can optionally take an index of type size_t.
+- [`get_instance<T>(std::tuple<Ts...>& ts)`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html#a0aec187f4a301c7f995ac65e17fa029a) - Returns the value of type U, where U is a template instance of T.
+
+**NOTE: Most of the utility functions in `refl::util` which take a `type_list<...>` parameter can be used without being imported into the current namespace thanks to ADL-lookup**
+
+Example:
+```cpp
+for_each(refl::reflect<Circle>(), [](auto m) {});
+```
+
+## Metaprogramming
+refl-cpp provides a range of type-transforming operations in the [`refl::trait`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1trait.html) namespace. Some of the most commonly used type traits are:
+- [`get<N, type_list<Ts...>>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1get.html)
+- [`is_container<T>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1is__container.html)
+- [`is_reflectable<T>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1is__reflectable.html)
+- [`is_proxy<T>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1is__proxy.html)
+- [`as_type_list<T<Ts...>>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1as__type__list.html)
+- [`contains<T, type_list<Ts...>>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1contains.html)
+- [`map<Mapper, type_list<Ts...>>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1map_3_01_mapper_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html)
+- [`filter<Predicate, type_list<Ts...>>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1filter_3_01_predicate_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html)
+
+`[trait]_t` and `[trait]_v` typedefs and constexpr variables are provided where appropriate.
+
+
+# Runtime utilities
 Utilities incurring runtime penalty are contained in the [`refl::runtime`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html) namespace. That make it clear when some overhead can be expected.
 
-### Invoking a member by name at runtime
+## Invoking a member by name at runtime
 [`refl::runtime::invoke`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#a0831da0114fa506579224ce219d0ab50) can invoke a member (function or field) on the provided object by taking the name of the member as a `const char*`. [`invoke`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#a0831da0114fa506579224ce219d0ab50) compiles into very efficient code, but is not as fast a directly invoking a member due to the needed string comparison.  This can be useful when generating bindings for external tools and languages. [`invoke`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#a0831da0114fa506579224ce219d0ab50) filters members by argument and returns types *before* doing the string comparison, which often reduces the number of comparisons required substantially.
 
 ```cpp
@@ -347,29 +375,3 @@ debug(std::cout, c, /* compact */ true);
 ```
 
 While [`debug`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#a1edadcdb602a1e96beedbdeeca801701) outputs to a `std::ostream`, a `std::string` result can also be obtained by [`debug_str`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#aa31714a8d8acc6824a58850336fa43ae).
-
-## Utility library
-All utility functions are contained in the [`refl::util`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html) namespace. Some of the most useful utility functions include:
-- [`for_each`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html#a19919596cdd45c858d891c91a7826b22) - Applies function F to each type in the type_list. F can optionally take an index of type size_t.
-- [`map_to_tuple(type_list<Ts...>, F&& f)`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html#af69ca2ba2b0353b7d3433f6a77b62902) - Applies function F to each type in the type_list, aggregating the results in a tuple. F can optionally take an index of type size_t.
-- [`get_instance<T>(std::tuple<Ts...>& ts)`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html#a0aec187f4a301c7f995ac65e17fa029a) - Returns the value of type U, where U is a template instance of T.
-
-**NOTE: Most of the utility functions in `refl::util` which take a `type_list<...>` parameter can be used without being imported into the current namespace thanks to ADL-lookup**
-
-Example:
-```cpp
-for_each(refl::reflect<Circle>(), [](auto m) {});
-```
-
-## Type-level operations
-refl-cpp provides a range of type-transforming operations in the [`refl::trait`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1trait.html) namespace. Some of the most commonly used type traits are:
-- [`get<N, type_list<Ts...>>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1get.html)
-- [`is_container<T>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1is__container.html)
-- [`is_reflectable<T>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1is__reflectable.html)
-- [`is_proxy<T>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1is__proxy.html)
-- [`as_type_list<T<Ts...>>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1as__type__list.html)
-- [`contains<T, type_list<Ts...>>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1contains.html)
-- [`map<Mapper, type_list<Ts...>>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1map_3_01_mapper_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html)
-- [`filter<Predicate, type_list<Ts...>>`](https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1filter_3_01_predicate_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html)
-
-`[trait]_t` and `[trait]_v` typedefs and constexpr variables are provided where appropriate.
