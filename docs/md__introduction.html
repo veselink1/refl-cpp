@@ -96,6 +96,37 @@ $(document).ready(function(){initNavTree('md__introduction.html',''); initResiza
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><h1><a class="anchor" id="autotoc_md41"></a>
+Table of Contents</h1>
+<ul>
+<li><a href="#basics">Basics</a></li>
+<li><a href="#metadata-definitions">Metadata definitions</a><ul>
+<li><a href="#declarative-style">Declarative style</a></li>
+<li><a href="#procedural-style">Procedural style</a></li>
+</ul>
+</li>
+<li><a href="#type-descriptors">Type descriptors</a></li>
+<li><a href="#field-descriptors">Field descriptors</a></li>
+<li><a href="#function-descriptors">Function descriptors</a></li>
+<li><a href="#custom-attributes">Attributes</a><ul>
+<li><a href="#properties">Properties</a></li>
+<li><a href="#base-types">Base types</a></li>
+<li><a href="#debug-formatter">Debug formatter</a></li>
+<li><a href="#custom-attributes">Custom attributes</a></li>
+</ul>
+</li>
+<li><a href="#proxies">Proxies</a></li>
+<li><a href="#compile-time-utilities">Compile-time utilities</a><ul>
+<li><a href="#functional-interface">Functional interaface</a></li>
+<li><a href="#metaprogramming">Metaprogramming</a></li>
+</ul>
+</li>
+<li><a href="#runtime-utilities">Runtime utilities</a><ul>
+<li><a href="#invoking-a-member-by-name-at-runtime">Invoking a member by name at runtime</a></li>
+<li><a href="#printing-debug-output">Printing debug output</a></li>
+</ul>
+</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md42"></a>
 Basics</h1>
 <p>refl-cpp relies on the user to properly specify type metadata through the use of the <code>REFL_AUTO</code> macro.</p>
 <div class="fragment"><div class="line"><span class="keyword">struct </span>A {</div>
@@ -106,67 +137,45 @@ Basics</h1>
 <div class="line"> </div>
 <div class="line">REFL_AUTO(</div>
 <div class="line">    type(A),</div>
-<div class="line">    field(foo),</div>
-<div class="line">    func(bar)</div>
+<div class="line">    field(foo, my::custom_attribute(<span class="stringliteral">&quot;foofoo&quot;</span>)),</div>
+<div class="line">    func(bar, property(), my::custom_attribute(<span class="stringliteral">&quot;barbar&quot;</span>))</div>
 <div class="line">)</div>
-</div><!-- fragment --><p>This macro generated the necessary metadata needed for compile-time reflection to work. The metadata is encoded in the type system via generated type specializations which is why there is currently no other way that using a macro. See <a href="https://github.com/veselink1/refl-cpp/blob/master/examples/example-macro.cpp">example-macro.cpp</a> for what the output of the macro looks like. (NOTE: It is a lot, but remember that compilers only validate and produce code for templates once they are used, until then the metadata is just token soup that gets optimized out from the resulting binary)</p>
+</div><!-- fragment --><p>This macro generated the necessary metadata needed for compile-time reflection to work. The metadata is encoded in the type system via generated type specializations which is why there is currently no other way that using a macro. See <a href="https://github.com/veselink1/refl-cpp/blob/master/examples/example-macro.cpp">example-macro.cpp</a> for what the output of the macro looks like.</p>
+<blockquote class="doxtable">
+<p>NOTE: This is a lot of code, but remember that compilers only validate and produce code for templates once they are used, until then the metadata is just token soup that never reaches code-gen. </p>
+</blockquote>
 <ul>
 <li>The metadata should be available before it is first requested, and should ideally be put right after the definition of the target type (forward declarations won't work).</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md42"></a>
-Two macro styles</h1>
-<p>The two types are functionally-equivalent, in fact, Type 1 is directly transformed into Type 2 macros via preprocessor magic. Type 1 is more succint, but generates worse stack traces.</p>
-<blockquote class="doxtable">
-<p>NOTE: Type 1 has a hard-limit of 100 members. This is not something that can be substantially increased due to compiler limits on the number of macro arguments. </p>
-</blockquote>
-<h2><a class="anchor" id="autotoc_md43"></a>
-Type 1</h2>
-<div class="fragment"><div class="line"><span class="comment">// Example</span></div>
-<div class="line">REFL_AUTO(</div>
-<div class="line">    type(Point)</div>
-<div class="line">    field(x)</div>
-<div class="line">    field(y)</div>
+<h1><a class="anchor" id="autotoc_md43"></a>
+Metadata definitions</h1>
+<p>There are two supported macro styles. The declarative style is directly transformed into procedural style macros via preprocessor magic. The declarative style is more succint, but generates longer error messages. The declarative style also has a hard-limit of 100 members. This is not something that can be substantially increased due to compiler limits on the number of macro arguments.</p>
+<h2><a class="anchor" id="autotoc_md44"></a>
+Declarative style</h2>
+<div class="fragment"><div class="line">REFL_AUTO(</div>
+<div class="line">  type(Fully-Qualified-Type, Attribute...),</div>
+<div class="line">  field(Member-Name, Attribute...),</div>
+<div class="line">  func(Member-Name, Attribute...)</div>
 <div class="line">)</div>
 <div class="line"> </div>
-<div class="line"><span class="comment">// Describes a type and all of its members</span></div>
 <div class="line">REFL_AUTO(</div>
-<div class="line">  type(Name, Attribute...),</div>
-<div class="line">  field(Name, Attribute...),</div>
-<div class="line">  func(Name, Attribute...)</div>
+<div class="line">  template((Template-Parameter-List), (Fully-Qualified-Type), Attribute...),</div>
+<div class="line">  field(Member-Name, Attribute...),</div>
+<div class="line">  func(Member-Name, Attribute...)</div>
 <div class="line">)</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md44"></a>
-Type 2</h2>
-<div class="fragment"><div class="line">// Example</div>
-<div class="line">REFL_TYPE(Point)</div>
-<div class="line">    REFL_FIELD(x)</div>
-<div class="line">    REFL_FIELD(y)</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md45"></a>
+Procedural style</h2>
+<div class="fragment"><div class="line">REFL_TYPE(Fully-Qualified-Type, Attribute...)</div>
+<div class="line">    REFL_FIELD(Member-Name, Attribute...)</div>
+<div class="line">    REFL_FUNC(Member-Name, Attribute...)</div>
 <div class="line">REFL_END</div>
 <div class="line"> </div>
-<div class="line">// Starts the declaration of Type&#39;s metadata.</div>
-<div class="line">// Must be followed by one of: REFL_END, REFL_FIELD, REFL_FUNC.</div>
-<div class="line">// Example: REFL_TYPE(Dog, bases&lt;Animal&gt;)</div>
-<div class="line">REFL_TYPE(Type, Attributes...)</div>
-<div class="line"> </div>
-<div class="line">// Starts the declaration of Type&#39;s metadata.</div>
-<div class="line">// Must be followed by one of: REFL_END, REFL_FIELD, REFL_FUNC.</div>
-<div class="line">// Example: REFL_TEMPLATE((typename K, typename V), (std::pair&lt;K, V&gt;))</div>
-<div class="line">REFL_TEMPLATE((typename... Ts), (Type&lt;Ts...&gt;)), Attributes...)</div>
-<div class="line"> </div>
-<div class="line">// End the declaration of Type&#39;s metadata.</div>
-<div class="line">// Does not have an argument list</div>
+<div class="line">REFL_TEMPLATE((Template-Parameter-List), (Fully-Qualified-Type), Attribute...)</div>
+<div class="line">    REFL_FIELD(Member-Name, Attribute...)</div>
+<div class="line">    REFL_FUNC(Member-Name, Attribute...)</div>
 <div class="line">REFL_END</div>
-<div class="line"> </div>
-<div class="line">// Describes a field.</div>
-<div class="line">// Example: REFL_FIELD(first_name, property{ &quot;Value&quot; })</div>
-<div class="line">REFL_FIELD(Field, Attributes...)</div>
-<div class="line"> </div>
-<div class="line">// Describes a function.</div>
-<div class="line">// Example: REFL_FUNC(first_name, property{ &quot;Size&quot; })</div>
-<div class="line">REFL_FUNC(Function, Attribute...)</div>
-<div class="line"> </div>
-<div class="line">// NOTE: None of the macros above need a terminating semi-colon (;)</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md45"></a>
-Type metadata</h1>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md46"></a>
+Type descriptors</h1>
 <p>refl-cpp exposes access to the metadata through the <a href="https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1type__descriptor.html"><code>type_descriptor&lt;T&gt;</code></a> type. All of the metadata is stored in static fields on the corresponding specialization of that type, but for convenience, objects of the metadata types are typically used in many places, and can be obtained through calling the trivial constructor or through the <a href="https://veselink1.github.io/refl-cpp/namespacerefl.html#ae95fbc2d63a7db5ce4d8a4dcca3d637e"><code>reflect&lt;T&gt;</code></a> family of functions.</p>
 <div class="fragment"><div class="line"><span class="comment">// continued from previous example</span></div>
 <div class="line"><span class="keyword">using</span> refl::reflect;</div>
@@ -184,8 +193,8 @@ Type metadata</h1>
 <ul>
 <li>Since the type <code>A</code> has no members and no attributes defined, <code>members</code> and <code>attribute</code> are of type <code>type_list&lt;&gt;</code>, an empty list of types, and <code>std::tuple&lt;&gt;</code>, an empty tuple, respectively.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md46"></a>
-Field metadata</h1>
+<h1><a class="anchor" id="autotoc_md47"></a>
+Field descriptors</h1>
 <p>Let's use a the following simple Point type definition to demonstrate how field reflection works.</p>
 <div class="fragment"><div class="line"><span class="keyword">struct </span>Point {</div>
 <div class="line">    <span class="keywordtype">int</span> x;</div>
@@ -231,8 +240,8 @@ Field metadata</h1>
 <ul>
 <li>Since the field <code>Point::x</code> in this example has no custom attributes associated with it, the <code>field.attributes</code> in the example above will be generated as <code>static constexpr std::tuple&lt;&gt;{}</code>.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md47"></a>
-Function metadata</h1>
+<h1><a class="anchor" id="autotoc_md48"></a>
+Function descriptors</h1>
 <p>We will be using the following type definition for the below examples.</p>
 <div class="fragment"><div class="line"><span class="keyword">class </span>Circle {</div>
 <div class="line">    <span class="keywordtype">double</span> r;</div>
@@ -269,10 +278,10 @@ Function metadata</h1>
 <div class="line">Circle c(2.0);</div>
 <div class="line">func.invoke(c); <span class="comment">// -&gt; the result of c.getRadius()</span></div>
 </div><!-- fragment --><p>Function descriptors can be tricky as they represent a "group" of functions with the same name. Overload resolution is done by the <a href="https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a7f8b63e35466c3c2887f601272d9f0a0"><code>resolve</code></a> or <a href="https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a5f6c4091c03a8fb9d5f6459c686ea655"><code>invoke</code></a> functions of <a href="https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html"><code>function_descriptor&lt;T, N&gt;</code></a>. Only when the function is not overloaded is <a href="https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a6e18ad19be31eb26acfe1e84fd320c36"><code>pointer</code></a> available (<code>nullptr</code> otherwise). A call to <a href="https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a7f8b63e35466c3c2887f601272d9f0a0"><code>resolve</code></a> is needed to get a pointer to a specific overload. A call to <a href="https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a7f8b63e35466c3c2887f601272d9f0a0"><code>resolve</code></a> is <b>not</b> needed to <a href="https://veselink1.github.io/refl-cpp/classrefl_1_1descriptor_1_1function__descriptor.html#a5f6c4091c03a8fb9d5f6459c686ea655"><code>invoke</code></a> the target function. The <code>(*this)</code> object must be passed as the first argument when a member function is invoked. When invoking a static function, simply provide the arguments as usual.</p>
-<h1><a class="anchor" id="autotoc_md48"></a>
+<h1><a class="anchor" id="autotoc_md49"></a>
 Custom Attributes</h1>
 <p>refl-cpp allows the association of compile-time values with reflectable items. Those are referred to as attributes. There are 3 built-in attributes, which can all be found in the <a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1attr.html"><code>refl::attr</code></a> namespace.</p>
-<h2><a class="anchor" id="autotoc_md49"></a>
+<h2><a class="anchor" id="autotoc_md50"></a>
 Properties</h2>
 <p><a href="https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1property.html"><code>property</code></a> (usage: function) - used to specify that a function call corresponds to an object property</p>
 <div class="fragment"><div class="line">RELF_AUTO(</div>
@@ -284,8 +293,8 @@ Properties</h2>
 <li><a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1descriptor.html#acc8c814d7bd04ba0cf4386e49e469a3b"><code>refl::descriptor::is_property</code></a> - checks whether the function is marked with the <code>property</code> attribute</li>
 <li><a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1descriptor.html#aa7c9753a84fecf4d9c62ce5b5063fb47"><code>refl::descriptor::get_display_name</code></a> - returns the <a href="https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1property.html#a8c45f77ef5159115250f2294bd37d296"><code>friendly_name</code></a> set on the property, if present, otherwise the name of the member itself</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md50"></a>
-Base Types</h2>
+<h2><a class="anchor" id="autotoc_md51"></a>
+Base types</h2>
 <p><a href="https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1base__types.html"><code>base_types</code></a> (usage: type) - used to specify the base types of the target. The <code>bases&lt;Ts...&gt;</code> template variable can be used in place of <code>base_types&lt;Ts...&gt;{}</code> </p><div class="fragment"><div class="line">REFL_AUTO(</div>
 <div class="line">    type(Circle, bases&lt;Shape&gt;),</div>
 <div class="line">    <span class="comment">/* ... */</span></div>
@@ -294,11 +303,11 @@ Base Types</h2>
 <li><a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1descriptor.html#a5ca7ae3c51dbe88ffa332c310eac9f11"><code>refl::descriptor::get_bases</code></a> - returns a <a href="https://veselink1.github.io/refl-cpp/structrefl_1_1util_1_1type__list.html"><code>type_list</code></a> of the type descriptors of the base classes (Important: Fails when there is no <a href="https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1base__types.html"><code>base_types</code></a> attribute)</li>
 <li><a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1descriptor.html#a079a7d252e99cd446ec275b218c461d1"><code>refl::descriptor::has_bases</code></a> - checks whether the target type has a <a href="https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1base__types.html"><code>base_types</code></a> attribute</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md51"></a>
+<h2><a class="anchor" id="autotoc_md52"></a>
 Debug Formatter</h2>
 <p><a href="https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1debug.html"><code>debug&lt;F&gt;</code></a> (usage: any) - used to specify a function to be used when constructing the debug representation of an object by <a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#a1edadcdb602a1e96beedbdeeca801701"><code>refl::runtime::debug</code></a></p>
 <p>All attributes specify what targets they can be used with. That is done by inheriting from one or more of the marker types found in <a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1attr_1_1usage.html"><code>refl::attr::usage</code></a>. These include <a href="https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1usage_1_1field.html"><code>field</code></a>, <a href="https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1usage_1_1field.html"><code>function</code></a>, <a href="https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1usage_1_1type.html"><code>type</code></a>, <a href="https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1usage_1_1member.html"><code>member</code></a> (<code>field</code> or <code>function</code>), <a href="https://veselink1.github.io/refl-cpp/structrefl_1_1attr_1_1usage_1_1any.html"><code>any</code></a> (<code>member</code> or <code>type</code>).</p>
-<h2><a class="anchor" id="autotoc_md52"></a>
+<h2><a class="anchor" id="autotoc_md53"></a>
 Custom Attributes</h2>
 <p>Custom attributes can be created by inheriting from one of the usage strategies: </p><div class="fragment"><div class="line"><span class="keyword">struct </span>Serializable : refl::attr::usage::member</div>
 <div class="line">{</div>
@@ -318,7 +327,7 @@ Custom Attributes</h2>
 <div class="line">});</div>
 </div><!-- fragment --><p>Values can be obtained using <a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1descriptor.html#a2e9e9b85233f7f13fe09cb4fd6bbc6f6"><code>refl::descriptor::get_attribute&lt;T&gt;</code></a>.</p>
 <p><b>NOTE: Most of the descriptor-related functions in <code>refl::descriptor</code> which take a descriptor parameter can be used without being imported into the current namespace thanks to ADL-lookup (example: <code>get_display_name</code> is not explictly imported above)</b></p>
-<h1><a class="anchor" id="autotoc_md53"></a>
+<h1><a class="anchor" id="autotoc_md54"></a>
 Proxies</h1>
 <p>The powerful proxy functionality provided by <a href="https://veselink1.github.io/refl-cpp/structrefl_1_1runtime_1_1proxy.html"><code>refl::runtime::proxy&lt;Derived, Target&gt;</code></a> in refl-cpp allows the user to transform existing types.</p>
 <div class="fragment"><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
@@ -337,18 +346,42 @@ Proxies</h1>
 <div class="line"><span class="comment">// prints &quot;Calling Circle::getRadius&quot; to stdout</span></div>
 </div><!-- fragment --><p>This is a very powerful and extremely low-overhead, but also complicated feature. Delegating calls to <code>invoke_impl</code> is done at compile-time with no runtime penalty. Arguments are passed using perfect forwarding.</p>
 <p>See the examples below for how to build a generic builder pattern and POD wrapper types using proxies.</p>
-<h1><a class="anchor" id="autotoc_md54"></a>
-Runtime Utilities</h1>
+<h1><a class="anchor" id="autotoc_md55"></a>
+Compile-time utilities</h1>
+<h2><a class="anchor" id="autotoc_md56"></a>
+Functional interface</h2>
+<p>All utility functions are contained in the <a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html"><code>refl::util</code></a> namespace. Some of the most useful utility functions include:</p><ul>
+<li><a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html#a19919596cdd45c858d891c91a7826b22"><code>for_each</code></a> - Applies function F to each type in the type_list. F can optionally take an index of type size_t.</li>
+<li><a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html#af69ca2ba2b0353b7d3433f6a77b62902"><code>map_to_tuple(type_list&lt;Ts...&gt;, F&amp;&amp; f)</code></a> - Applies function F to each type in the type_list, aggregating the results in a tuple. F can optionally take an index of type size_t.</li>
+<li><a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html#a0aec187f4a301c7f995ac65e17fa029a"><code>get_instance&lt;T&gt;(std::tuple&lt;Ts...&gt;&amp; ts)</code></a> - Returns the value of type U, where U is a template instance of T.</li>
+</ul>
+<p><b>NOTE: Most of the utility functions in <code>refl::util</code> which take a <code>type_list&lt;...&gt;</code> parameter can be used without being imported into the current namespace thanks to ADL-lookup</b></p>
+<p>Example: </p><div class="fragment"><div class="line">for_each(refl::reflect&lt;Circle&gt;(), [](<span class="keyword">auto</span> m) {});</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md57"></a>
+Metaprogramming</h2>
+<p>refl-cpp provides a range of type-transforming operations in the <a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1trait.html"><code>refl::trait</code></a> namespace. Some of the most commonly used type traits are:</p><ul>
+<li><a href="https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1get.html"><code>get&lt;N, type_list&lt;Ts...&gt;&gt;</code></a></li>
+<li><a href="https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1is__container.html"><code>is_container&lt;T&gt;</code></a></li>
+<li><a href="https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1is__reflectable.html"><code>is_reflectable&lt;T&gt;</code></a></li>
+<li><a href="https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1is__proxy.html"><code>is_proxy&lt;T&gt;</code></a></li>
+<li><a href="https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1as__type__list.html"><code>as_type_list&lt;T&lt;Ts...&gt;&gt;</code></a></li>
+<li><a href="https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1contains.html"><code>contains&lt;T, type_list&lt;Ts...&gt;&gt;</code></a></li>
+<li><a href="https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1map_3_01_mapper_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html"><code>map&lt;Mapper, type_list&lt;Ts...&gt;&gt;</code></a></li>
+<li><a href="https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1filter_3_01_predicate_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html"><code>filter&lt;Predicate, type_list&lt;Ts...&gt;&gt;</code></a></li>
+</ul>
+<p><code>[trait]_t</code> and <code>[trait]_v</code> typedefs and constexpr variables are provided where appropriate.</p>
+<h1><a class="anchor" id="autotoc_md58"></a>
+Runtime utilities</h1>
 <p>Utilities incurring runtime penalty are contained in the <a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html"><code>refl::runtime</code></a> namespace. That make it clear when some overhead can be expected.</p>
-<h2><a class="anchor" id="autotoc_md55"></a>
+<h2><a class="anchor" id="autotoc_md59"></a>
 Invoking a member by name at runtime</h2>
 <p><a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#a0831da0114fa506579224ce219d0ab50"><code>refl::runtime::invoke</code></a> can invoke a member (function or field) on the provided object by taking the name of the member as a <code>const char*</code>. <a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#a0831da0114fa506579224ce219d0ab50"><code>invoke</code></a> compiles into very efficient code, but is not as fast a directly invoking a member due to the needed string comparison. This can be useful when generating bindings for external tools and languages. <a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#a0831da0114fa506579224ce219d0ab50"><code>invoke</code></a> filters members by argument and returns types <em>before</em> doing the string comparison, which often reduces the number of comparisons required substantially.</p>
 <div class="fragment"><div class="line"><span class="keyword">using</span> refl::runtime::invoke;</div>
 <div class="line"> </div>
 <div class="line">Circle c;</div>
 <div class="line"><span class="keywordtype">double</span> rad = invoke&lt;double&gt;(c, <span class="stringliteral">&quot;getRadius&quot;</span>); <span class="comment">// calls c.getRadius(), returns double</span></div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md56"></a>
-Printing debug output</h1>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md60"></a>
+Printing debug output</h2>
 <p>refl-cpp can automatically generate a debug representation for your types based on the type metadata it is provided.</p>
 <div class="fragment"><div class="line">REFL_AUTO(</div>
 <div class="line">    type(Circle),</div>
@@ -367,29 +400,7 @@ Printing debug output</h1>
 <div class="line"><span class="comment">} */</span></div>
 <div class="line">debug(std::cout, c, <span class="comment">/* compact */</span> true);</div>
 <div class="line"><span class="comment">/* Output: { radius = 2, area = 19.7392 } */</span></div>
-</div><!-- fragment --><p>While <a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#a1edadcdb602a1e96beedbdeeca801701"><code>debug</code></a> outputs to a <code>std::ostream</code>, a <code>std::string</code> result can also be obtained by <a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#aa31714a8d8acc6824a58850336fa43ae"><code>debug_str</code></a>.</p>
-<h1><a class="anchor" id="autotoc_md57"></a>
-Utility library</h1>
-<p>All utility functions are contained in the <a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html"><code>refl::util</code></a> namespace. Some of the most useful utility functions include:</p><ul>
-<li><a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html#a19919596cdd45c858d891c91a7826b22"><code>for_each</code></a> - Applies function F to each type in the type_list. F can optionally take an index of type size_t.</li>
-<li><a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html#af69ca2ba2b0353b7d3433f6a77b62902"><code>map_to_tuple(type_list&lt;Ts...&gt;, F&amp;&amp; f)</code></a> - Applies function F to each type in the type_list, aggregating the results in a tuple. F can optionally take an index of type size_t.</li>
-<li><a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html#a0aec187f4a301c7f995ac65e17fa029a"><code>get_instance&lt;T&gt;(std::tuple&lt;Ts...&gt;&amp; ts)</code></a> - Returns the value of type U, where U is a template instance of T.</li>
-</ul>
-<p><b>NOTE: Most of the utility functions in <code>refl::util</code> which take a <code>type_list&lt;...&gt;</code> parameter can be used without being imported into the current namespace thanks to ADL-lookup</b></p>
-<p>Example: </p><div class="fragment"><div class="line">for_each(refl::reflect&lt;Circle&gt;(), [](<span class="keyword">auto</span> m) {});</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md58"></a>
-Type-level operations</h1>
-<p>refl-cpp provides a range of type-transforming operations in the <a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1trait.html"><code>refl::trait</code></a> namespace. Some of the most commonly used type traits are:</p><ul>
-<li><a href="https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1get.html"><code>get&lt;N, type_list&lt;Ts...&gt;&gt;</code></a></li>
-<li><a href="https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1is__container.html"><code>is_container&lt;T&gt;</code></a></li>
-<li><a href="https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1is__reflectable.html"><code>is_reflectable&lt;T&gt;</code></a></li>
-<li><a href="https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1is__proxy.html"><code>is_proxy&lt;T&gt;</code></a></li>
-<li><a href="https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1as__type__list.html"><code>as_type_list&lt;T&lt;Ts...&gt;&gt;</code></a></li>
-<li><a href="https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1contains.html"><code>contains&lt;T, type_list&lt;Ts...&gt;&gt;</code></a></li>
-<li><a href="https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1map_3_01_mapper_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html"><code>map&lt;Mapper, type_list&lt;Ts...&gt;&gt;</code></a></li>
-<li><a href="https://veselink1.github.io/refl-cpp/structrefl_1_1trait_1_1filter_3_01_predicate_00_01type__list_3_01_ts_8_8_8_01_4_01_4.html"><code>filter&lt;Predicate, type_list&lt;Ts...&gt;&gt;</code></a></li>
-</ul>
-<p><code>[trait]_t</code> and <code>[trait]_v</code> typedefs and constexpr variables are provided where appropriate. </p>
+</div><!-- fragment --><p>While <a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#a1edadcdb602a1e96beedbdeeca801701"><code>debug</code></a> outputs to a <code>std::ostream</code>, a <code>std::string</code> result can also be obtained by <a href="https://veselink1.github.io/refl-cpp/namespacerefl_1_1runtime.html#aa31714a8d8acc6824a58850336fa43ae"><code>debug_str</code></a>. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 </div><!-- doc-content -->

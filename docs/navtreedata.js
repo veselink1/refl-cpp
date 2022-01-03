@@ -33,8 +33,9 @@ var NAVTREE =
       [ "Attribution", "md__c_o_d_e__o_f__c_o_n_d_u_c_t.html#autotoc_md39", null ]
     ] ],
     [ "Introduction to refl-cpp", "md__introduction.html", [
-      [ "Basics", "md__introduction.html#autotoc_md41", null ],
-      [ "Two macro styles", "md__introduction.html#autotoc_md42", [
+      [ "Table of Contents", "md__introduction.html#autotoc_md41", null ],
+      [ "Basics", "md__introduction.html#autotoc_md42", null ],
+      [ "Metadata definitions", "md__introduction.html#autotoc_md43", [
         [ "v0.12.2", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md1", null ],
         [ "v0.12.1", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md2", null ],
         [ "v0.12.0", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md3", null ],
@@ -67,35 +68,45 @@ var NAVTREE =
         [ "v0.2.1", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md30", null ],
         [ "v0.2.0", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md31", null ],
         [ "v0.1.2", "md__c_h_a_n_g_e_l_o_g.html#autotoc_md32", null ],
-        [ "Type 1", "md__introduction.html#autotoc_md43", null ],
-        [ "Type 2", "md__introduction.html#autotoc_md44", null ]
+        [ "Declarative style", "md__introduction.html#autotoc_md44", null ],
+        [ "Procedural style", "md__introduction.html#autotoc_md45", null ]
       ] ],
-      [ "Type metadata", "md__introduction.html#autotoc_md45", null ],
-      [ "Field metadata", "md__introduction.html#autotoc_md46", null ],
-      [ "Function metadata", "md__introduction.html#autotoc_md47", null ],
-      [ "Custom Attributes", "md__introduction.html#autotoc_md48", [
-        [ "Properties", "md__introduction.html#autotoc_md49", null ],
-        [ "Base Types", "md__introduction.html#autotoc_md50", null ],
-        [ "Debug Formatter", "md__introduction.html#autotoc_md51", null ],
-        [ "Custom Attributes", "md__introduction.html#autotoc_md52", null ]
+      [ "Type descriptors", "md__introduction.html#autotoc_md46", null ],
+      [ "Field descriptors", "md__introduction.html#autotoc_md47", null ],
+      [ "Function descriptors", "md__introduction.html#autotoc_md48", null ],
+      [ "Custom Attributes", "md__introduction.html#autotoc_md49", [
+        [ "Properties", "md__introduction.html#autotoc_md50", null ],
+        [ "Base types", "md__introduction.html#autotoc_md51", null ],
+        [ "Debug Formatter", "md__introduction.html#autotoc_md52", null ],
+        [ "Custom Attributes", "md__introduction.html#autotoc_md53", null ]
       ] ],
-      [ "Proxies", "md__introduction.html#autotoc_md53", null ],
-      [ "Runtime Utilities", "md__introduction.html#autotoc_md54", [
-        [ "Invoking a member by name at runtime", "md__introduction.html#autotoc_md55", null ]
+      [ "Proxies", "md__introduction.html#autotoc_md54", null ],
+      [ "Compile-time utilities", "md__introduction.html#autotoc_md55", [
+        [ "Functional interface", "md__introduction.html#autotoc_md56", null ],
+        [ "Metaprogramming", "md__introduction.html#autotoc_md57", null ]
       ] ],
-      [ "Printing debug output", "md__introduction.html#autotoc_md56", null ],
-      [ "Utility library", "md__introduction.html#autotoc_md57", null ],
-      [ "Type-level operations", "md__introduction.html#autotoc_md58", null ]
+      [ "Runtime utilities", "md__introduction.html#autotoc_md58", [
+        [ "Invoking a member by name at runtime", "md__introduction.html#autotoc_md59", null ],
+        [ "Printing debug output", "md__introduction.html#autotoc_md60", null ]
+      ] ]
     ] ],
-    [ "refl-cpp v0.12.2", "md__r_e_a_d_m_e.html", [
-      [ "<a href=\"https://veselink1.github.io/refl-cpp/md__r_e_a_d_m_e.html\">Documentation</a>", "md__r_e_a_d_m_e.html#autotoc_md60", null ],
-      [ "Introduction", "md__r_e_a_d_m_e.html#autotoc_md61", null ],
-      [ "Examples", "md__r_e_a_d_m_e.html#autotoc_md62", null ],
-      [ "Usage", "md__r_e_a_d_m_e.html#autotoc_md63", null ],
-      [ "Packages", "md__r_e_a_d_m_e.html#autotoc_md64", null ],
-      [ "Requirements", "md__r_e_a_d_m_e.html#autotoc_md65", null ],
-      [ "Contributing", "md__r_e_a_d_m_e.html#autotoc_md66", null ],
-      [ "License", "md__r_e_a_d_m_e.html#autotoc_md67", null ]
+    [ "README", "md__r_e_a_d_m_e.html", [
+      [ "Table of Contents", "md__r_e_a_d_m_e.html#autotoc_md61", null ],
+      [ "Introduction", "md__r_e_a_d_m_e.html#autotoc_md63", [
+        [ "Examples", "md__r_e_a_d_m_e.html#autotoc_md64", null ],
+        [ "Motivation", "md__r_e_a_d_m_e.html#autotoc_md65", null ],
+        [ "Performance", "md__r_e_a_d_m_e.html#autotoc_md66", null ]
+      ] ],
+      [ "Integration", "md__r_e_a_d_m_e.html#autotoc_md67", [
+        [ "Requirements", "md__r_e_a_d_m_e.html#autotoc_md68", null ],
+        [ "Single-header library", "md__r_e_a_d_m_e.html#autotoc_md69", null ],
+        [ "CMake", "md__r_e_a_d_m_e.html#autotoc_md70", null ],
+        [ "Packages", "md__r_e_a_d_m_e.html#autotoc_md71", null ]
+      ] ],
+      [ "Documentation", "md__r_e_a_d_m_e.html#autotoc_md72", null ],
+      [ "Testing", "md__r_e_a_d_m_e.html#autotoc_md73", null ],
+      [ "Contributors", "md__r_e_a_d_m_e.html#autotoc_md74", null ],
+      [ "License", "md__r_e_a_d_m_e.html#autotoc_md75", null ]
     ] ],
     [ "File Members", "globals.html", [
       [ "All", "globals.html", null ],
