@@ -1,7 +1,3 @@
-# refl-cpp v0.12.2
-## [Documentation](https://veselink1.github.io/refl-cpp/md__r_e_a_d_m_e.html)
-
-<center>
 <img src="https://raw.githubusercontent.com/veselink1/refl-cpp/master/branding/logo.svg?sanitize=true" alt="refl-cpp Logo" style="max-width: 100%;" height="140">
 
 [![Contributors](https://img.shields.io/github/contributors/veselink1/refl-cpp.svg)](https://github.com/veselink1/refl-cpp/graphs/contributors)
@@ -11,20 +7,42 @@
 [![AUR version](https://img.shields.io/aur/version/refl-cpp?logo=arch-linux)](https://aur.archlinux.org/packages/refl-cpp)
 [![Donate via PayPal](https://shields.io/badge/Donate-gold?logo=paypal&style=flat)](https://www.paypal.com/donate/?hosted_button_id=TTR5538T85QJE)
 
-</center>
 
-refl-cpp encodes type metadata in the type system to allow compile-time reflection via constexpr and template metaprogramming in C++17
+[Documentation](https://veselink1.github.io/refl-cpp/md__r_e_a_d_m_e.html)
 
-## Introduction
+refl-cpp is a header-only library which provides compile-time reflection and introspection capabilities to C++. By encoding type metadata in the type system, refl-cpp allows you to process types and their fields and functions via constexpr and template metaprogramming. 
 
-refl-cpp aims to provide a generic static reflection system that can be extended to suit your needs. **Runtime reflection** can also be implemented on top of the existing system for when needed (see the examples).
+**Using refl-cpp in your project?** I want to hear about it: contact me by email (see my profile), open an issue or add the [#refl-cpp](https://github.com/topics/refl-cpp) tag to your topics!
+
+**Have a question?** Try asking in the [Gitter channel](https://gitter.im/refl-cpp/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge).
+
+**Want to support refl-cpp?** Consider making a [donation](https://www.paypal.com/donate/?hosted_button_id=TTR5538T85QJE).
+
+# Table of Contents
+- [Introduction](#introduction)
+    - [Examples](#examples)
+    - [Motivation](#motivation)
+    - [Performance](#performance)
+- [Integration](#integration)
+    - [Requirements](#requirements)
+    - [CMake](#cmake)
+    - [Packages](#packages)
+- [Documentation](#documentation)
+- [Testing](#testing)
+- [Contributors](#contributors)
+- [License](#license)
+
+---
+# Introduction
+
+refl-cpp aims to provide a generic reflection system that is flexible enough to suit your needs while maintaining a relatively small API surface. 
 
 Some nice things refl-cpp supports out-of-the-box:
-- **custom attributes** - encodes type-level and member-level attributes as a constexpr std::tuple associated with that item
-- **proxy types** - builds configurable generic types with identical member functions that can be hooked into to wrap or extend functionality
-- **overloaded functions** - wraps member functions in generic variadic templates
-- **template functions** - template function for which the template parameters can be inferred from the arguments are also supported
-- **template types** - uses template specialization to encode metadata for types; template types are perfectly-well supported
+- **custom attributes** - constexpr `std::tuple`s associated with types and member descriptors
+- **proxy types** - build generic `proxy<T>` types with the same members as `T` that can be used to wrap or extend functionality
+- **overloaded functions** - you only declare your overloaded function once - refl-cpp knows how to work with it
+- **template types** - use reflection with your containers and other templates; template types are perfectly-well supported
+- **template functions** - refl-cpp also works with template functions, when the template parameters can be inferred from the function parameters
 
 ## Examples
 
@@ -55,23 +73,45 @@ Some nice things refl-cpp supports out-of-the-box:
 - **Generate a struct of `std::optional` members** - [example-partials.cpp](https://github.com/veselink1/refl-cpp/blob/master/examples/example-partials.cpp) - [View in Compiler Explorer](https://godbolt.org/#z:OYLghAFBqd5QCxAYwPYBMCmBRdBLAF1QCcAaPECAMzwBtMA7AQwFtMQByARg9KtQYEAysib0QXACx8BBAKoBnTAAUAHpwAMvAFYTStJg1DIApACYAQuYukl9ZATwDKjdAGFUtAK4sGIABz%2BpK4AMngMmAByPgBGmMQSZqQADqgKhE4MHt6%2BAUGp6Y4CYRHRLHEJXEl2mA6ZQgRMxATZPn6Btpj2RQwNTQQlUbHxibaNza25HQrjA%2BFD5SNVAJS2qF7EyOwcAPQAVHsmGgCCANR75wcAStjHACIAstgHhyfnpwAqCHgKp5iqrGS9FOCgQqAA7qIlL8weDTsliKhVHhML9RAxTnFTl4lOhTkRTkwvMA2IJCfiAJ7JTD41CnZDETBMAg0nGYKheWhHM4XLyOWiECmU6kKAB0pwAEvEaeCaVgaBFyeYzMl%2BngxMr4YjVEKCFTMKRTuDvsgEKcBQBrGliWhapEohSkbnvBBMX5sRbEU4chh1AS/cGEM2YACOXjwADcxIwCKdmGxfgSCAgaR6Kr9UFR8Sn8U1gJgCIaYnzTuEWYyZuFgLQKU63hdk2lU5hPYTkFsFDMSL9GQQNhiZugQCBUMkemIxZ9vmjDJjWUoObaCQjUBG8Fh4WqNfXTlHvKjTpnCRjUDFtLUCKLna8eZ8mFbybRUKgLYTY8nWcl0MzMBBlt6vF9Ho5yfOECSUGlYWvEEvFNTdmnVW1T3PBwZwxLE2TxcCugvSMuiFJRYyYI0wWBZCLzADh3RbdMr3rHZuXMABmcJkG8DcTCYtwEAIAhkgUEAdh2YgmHBUVgCDLxiyUTZZBjUU0BYHYI1RLpwgtLhhPZWgAFpkGSZIdhYN1yx2Vj2MwLSqFoUUEAMzjsEYswWN9CzTk4twnBmRlWAcpyXLYrwOK40dxy5JjHJObl9hvd5FEwPFA2TfERMIYdjOSAB9d86RXNcNy7ET82FGl%2BC9D9TjTeI6J5BiThZFggR/dyuL1al4xpB4aPiPyTm82DY2Mq1MtCzIxEywqmHzRiAHYrDeU5FpxKtsQYLBiBrKtsv1Fq7lOLA2La38us9Ew5rOu4IEHYcDtoPcPLQBgZhKjrThOiobtqAxiC2o7zAANgcv9lmWTj5rORbsXSIwSt2kECCHEcxzG8K3EZazhwIVKCGHRkWFXTBMrDMQ8BoeIFGyjzAPWzajG26k/IisHZruZmopOGLoLOFcdRIvA4MKg8V2pBCDyPCrxnzd8drdeHEdGgQJxq846uOBqmpZFq3CO16Pl6442LdX5VQQsRThAeEpIFZBTnR2hccAxw2GHHmKQ8k3HA1Li9Yiw0fci44zvB5Irf5kBGIWxahNOAAxFFaHQX5DDxYX4j1U4pfLMVnUhmZmX5%2Bl/RZVQEUJPk6Sq4hfk4vaaFocsIDt9LuuITKBRmDz/aDi7DRMABWKw%2B8uokCUr/8g9tgt%2B1LCmfO/GJ6AgMf3LMQHV9OV0KfBH6G7HsH3Jmu5QaY8Gc6W6HgEqlu25%2BWMa7l3GWwJzLkAjSmuNuo6l5bhRj8ck%2BI4QyjjsT4IlkgZwLOWekNps6R3xC2DWNIPI61YJ1FuhoUFsFOEILoVAMH6g6qKIhpxjjEGAAofWkN4b5xtp/fUEAR6oH/OECML5CZ4EarQCAODaBUABgDEEuDQZwO7nAqhedHDIEykbNOEAfiZTnkwBex0W7d0PiDNmQCqGTz7MQAcuDRTqwMJrKWHl3o9Qin%2BTRVCLqAKodHD4YDBG8XiNA2gtBYFaKMc1ZBBDUFvXQS9fxPC8FBKwQANTEF4TAlDc6NEkbuVA65SwMFYcNDhQJuG4P4evOwoTIn7hyf9XcUTMDCK0aIrR4j4n82kZ2WR8jt6ECUYvcxxA1FH2PuDbRkNlow0zvEbKcM6HUmgAWBRTJ1oQDaR0jRACxG5wMd4kxBYPIDNbgQIG48mJ7WuiAMq4ImjoA8gU6JQM9zRK6WfA%2BrN2ZeIQcYpBrU/FYJmUzOBjCBFSysSI86CzFqPRmP8Uu6QABehNYzrlUHDJuIAsZMDSiAcIWBVAjSoJlCMZjAmVxvh3Jm8yqlxJoXUmSBA5HoGhWAMA98dJcCuf8nR09YV8joMOUxXEoVA2/I0elFTD52Mhssp52sXloNOu8rRgKiLly%2BQWP8hcnqbN%2Bd0npCqgUly9GCiFpYKUwu0pjbGw5kX/DRRirFnpDQ4vbps/FKqekSNqTI5o5LKXUp2acWlvLVWMr0ZPDGIAWX2xAOyzyFKuXMiYF6yGti7kIkjD%2BcOdyqF9Mvjiya%2BZcV33dbC%2BFiKMrvzcENQmCtmC0AmkQIqBor6ekzYzU%2BcCc2GpAG6bKXggQQo8mmitU1CbWocvtCNmiWZDvqg8nxzz2r%2BK7icVhyS23ct/HrdeksCyGilfBT2qMu65PWJsMps07XehIJlJkporq7q2KKSujp3ID34UPBh5dq0VHHn8wl58Vo4qOsMr6X894Eu9VK4FXpGFGh3q4%2B%2BUtMpNN3i3KNPTQOhQxaUuGCgL2YEMWOlZNrC3Xz%2BpY%2BD2jSanAgEhi5ZSD6Hu9TB%2BIEAV2FnOGR0phGbH8t%2BUfIdbHA59SxgNU4FhnwWgPdyEOC8w4CsWgJl8EB117O8lWARjgCD0DXUXB%2BIB5NGAESPMEZAUmxlVPmX%2B1yqEWyU/QTKdHCD0FWGXRsrdH32ds4Z1ElmXPGeVdcmN3HJVqbk1jBTy7rO/n/OuievZp7mcJvvbzVDZ14kItlYLMm/MI2HJp4AAjyOvosPiYLmU4bkZi1x65sm0saYC1p9eOmSDyrC3NH1GIaut2K7crR8XnHSL5LplLir1MZay8xyjdndMFfvkVk%2BNyJP6c3EZuranwtT19e5zKrXrkdcS%2B5uRZJsvDZW4V0pa3Y0/SjCyRNWj/M/RhlF1bAG4mIwyyN491jIZllm65zjrMCXchuDHEImVjhyA%2BAAeQgNcr%2BUmLSrGuT6ZAVnlNVtTs0CkwNDSw6uuMqLhokd6lRzDwCcPmvY8RCLXHIM0cE4xwQLr9niejjTij8n%2BPfQQHc3T0njPbPo82z2m9OPOfcnKdyN7xlwg/MDm%2BqhkPMSCbB2YMwHxgvKl7vL443WSDK9OBoXl1yPaIQ8pD/tevxoxEEyOi75W0Alg8h5FeZgouHizMb20cQyo0kSw7%2B%2BmobdcQ3YhTKpuXyGOS8sUU5GRrEDl2YDyDBORPjHH5eX2y3C28ov3NwDA093cWs7gPgnRQe%2BS8qSImA4SK4R8qQjeyrdZpT775UDujzO8JFQKBheEdw291xW3ufA8WmDwjv8YfSkR6jzHuPoVE9mGT6njg6fM9z%2B%2B3A6v6xa%2B24b8Fx3MuXxzjd9iL8469pd7r24bf/eovyp96ftPfcM9Z8PfOn8EA%2B/Y63GWvvVfLer61uv%2BXjesx94t5QKP6axe7y4/6%2B594D6Lwz6%2B43536L71oW6Iw14QGn57KuDhSnyHwcCrD2wcB9y8B%2BAcBaCkCoCcAp6WDWAgjoYrxMQ8CkA4wkG4GrAWggB9z%2BCij/R9xcAaB8H%2BAzQaBMTy5CH6CcCSBEGaC8DkEcC8ACQaCMFSGrBwCwAwCIAoCoCNR0DxDkCUCKTJDaEJDAC8FJB1xZyUAxBSGkAxDhBNAUicAMGKSkgEDA4MA1hWFYDGRGDiDMGkD4CMh1AqQCS%2BH/C1B8jbCkFlhdBWECgxAiTEAUgeBYAOG8ABYsApGrDWRTQKDhIojgjA7tQpEyCCAiDRgSDSD8CCDxRqBWG6BcD6CGDGDWDWD6B4AxACSQCrAlrBE6SDg1ymBUGWBcAzQerA5mByE4R%2Bh%2BAQCuCTB%2BD1GhDzBlAfT1EFAZACBzF6BrE9CDDLFLCdDdD1CzCbH1E1BTF9DNC7HDCVBjD9AnG3GXFLHXESCrBoYbBbB6BYyYDbA8B4GcCEGkDEGkEyGqD%2BD/Q6T/SSAZztinC8GihmAkaUFWCWCGi4CEAkB0H1GnAeBaH0BejMR0qpFKGsEgD0GigcGrx9wACcVJGgXATEfcTE/gwhYhHAEhpA6RfcChQJ0hnAchIAChTBWgyhahEASAq%2BIchYFAKWuJ%2BxCU6JNxlRwgog4gQQSp1R6gvh28TAyQGRrJAJPJZBnAwOfIkpW%2BoJ4JkJ0JNscJCJEAOJBheJmJywRJzB5OKYTA60lAfxbJvAnJ3JVhMh/JgpxJpAbBkgXAooTEkg/gNJVJVQVJ/0M0M0NJrJTEkhvhQZihbpPp4xgJgZfJ2ZwpqwKkVcmQIAkgQAA%3D%3D%3D)
     Uses the proxy feature to create a generic type `partial<T>` which wraps all members of `T` in `std::optional`
 
-## Usage
-- As a [single-header library](https://github.com/veselink1/refl-cpp/blob/master/include/refl.hpp)
-- As a CMake dependecy (3.14+ required, thanks @friendlyanon)
+## Motivation
+I started developing refl-cpp during my final year in high-school. I was supposed to be studying for exams, but I had just read the original [Static Reflection (2017)](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2017/p0194r3.html) proposal, and after realising that it wasn't coming anytime soon, I decided that I had to try to cram as many of those features at possible into a compile-time library.
+
+The library has grown and changed a lot since the early days, but even after several years, I still haven't seen another reflection library that supports constexpr and template metaprogramming. With other libraries, you often have to walk a metadata structure at runtime, invoke function pointers, and use type-erasure. With refl-cpp, you process the type metadata at compile-time, via [`for_each`](https://veselink1.github.io/refl-cpp/namespacerefl_1_1util.html#a19919596cdd45c858d891c91a7826b22) loops, all the types are there, and the compiler can often inline everything and generate the same code that you would have hand-written. 
+
+## Performance
+All utility functions in refl-cpp are constexpr (except the ones in `refl::runtime`). Compilers will generally inline all loops and other constructs (when using `-O2`) and generate code that runs just as fast as if it was hand-written. 
+
+Thanks to some special compile-time optimisations, type metadata is generally not instantiated (no code-gen needs to happen) when the types themselves are not used in reflection. With 0.12.2, there have also been some major reductions in compilation time when using properties [#60](https://github.com/veselink1/refl-cpp/pull/60). 
+
+That being said, a word of caution: I have observed that after around the 250 reflected members mark, compilation times start to grow rapidly. If your codebase contains lots of huge classes (+250 functions), and you *need* to have all of them reflected with `refl-cpp`, this might be a deal breaker - benchmark before using.
+
+# Integration
+
+## Requirements
+- Minimum language standard: C++17
+
+## Single-header library
+To use refl-cpp as a single-header library, copy [`include/refl.hpp`](https://github.com/veselink1/refl-cpp/blob/master/include/refl.hpp) to your include directory. 
+
+## CMake
+You can also consume refl-cpp as a CMake dependecy (3.14+ required, thanks @friendlyanon).
 
 ## Packages
 - `vcpkg install refl-cpp` (thanks @Vennor)
 - `conan install refl-cpp`
 - AUR (thanks @otreblan)
 
-## Requirements
-- Minimum language standard: C++17
+# Documentation
+The [online documentation](https://veselink1.github.io/refl-cpp/md__r_e_a_d_m_e.html) is built with Doxygen. Run `doxygen Doxyfile` in `docs/` to update it.
 
-## Contributing
+# Testing
+Run CMake with `-Drefl-cpp_DEVELOPER_MODE=ON` and make the `refl-cpp-tests` target. 
+
+# Contributors
 Run CMake with `-Drefl-cpp_DEVELOPER_MODE=ON` flag. You may also want to setup a custom preset for a more convenient developer experience ([see this comment](https://github.com/veselink1/refl-cpp/pull/44#issuecomment-811878328) on #44).
 - Issue tracker - [refl-cpp/issues](https://github.com/veselink1/refl-cpp/issues)
 - Source code - [refl-cpp](https://github.com/veselink1/refl-cpp)
 - Contributors - [refl-cpp/contributors.md](https://github.com/veselink1/refl-cpp/blob/master/contributors.md)
 
-## License
+# License
 - MIT License (for more details, see the [license file](https://github.com/veselink1/refl-cpp/blob/master/LICENSE))
