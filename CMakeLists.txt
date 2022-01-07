@@ -24,7 +24,11 @@ target_include_directories(
 )
 
 target_compile_features(refl-cpp INTERFACE cxx_std_17)
-
+if (MSVC)
+  add_compile_options(/W4)
+else()
+  add_compile_options(-Wall -Wextra -pedantic)
+endif()
 # ---- Install ----
 
 include(cmake/install-rules.cmake)
