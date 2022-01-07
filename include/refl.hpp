@@ -1712,7 +1712,7 @@ namespace refl
             struct apply_mask<type_list<T, Ts...>, true, Bs...>
             {
                 static_assert(std::is_trivial_v<T>, "Argument is a non-trivial type!");
-                using type = trait::append_t<T, typename apply_mask<type_list<Ts...>, Bs...>::type>;
+                using type = trait::prepend_t<T, typename apply_mask<type_list<Ts...>, Bs...>::type>;
             };
 
             template <typename T, typename... Ts, bool... Bs>

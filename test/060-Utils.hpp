@@ -76,6 +76,14 @@ TEST_CASE( "utilities" ) {
         REQUIRE( flt.size == 1 );
     }
 
+    SECTION( "filter order" ) {
+        REQUIRE( std::is_same_v<refl::trait::get_t<0, decltype(type_list<int, float>{})>, int> );
+        constexpr type_list<int, float> flt = util::filter(type_list<int, float>{}, [](auto ) { return true; });
+        REQUIRE( flt.size == 2 );
+        constexpr int first = find_first(type_list<int, float>{}, [](auto ) { return true; });
+        REQUIRE( std::is_same_v<decltype(first), const int> );
+    }
+
     SECTION( "contains" ) {
         constexpr bool con = util::contains(type_list<int, float>{}, [](auto x) {
             return std::is_same_v<decltype(x), float>;
