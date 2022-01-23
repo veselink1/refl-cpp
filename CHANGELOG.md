@@ -1,4 +1,7 @@
 # Changelog
+### v0.12.3
+  - Fixed inverted order of `refl::util::filter()` and its users [#65](https://github.com/veselink1/refl-cpp/issues/65) (thanks @RalphSteinhagen)
+
 ### v0.12.2
   - Much faster `for_each` and `(has|get)_(reader|writer)` [c197d35](https://github.com/veselink1/refl-cpp/commit/c197d35b09b1eeaca94f98b227fbea1562945195) and [#60](https://github.com/veselink1/refl-cpp/issues/60)
   - Fixed `get_display_name_const` on MSVC [#53](https://github.com/veselink1/refl-cpp/issues/53) (thanks @rpatters1)
