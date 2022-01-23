@@ -1722,7 +1722,7 @@ namespace refl
             };
 
             template <typename F, typename... Ts>
-            constexpr auto filter(F f, type_list<Ts...>)
+            constexpr auto filter([[maybe_unused]] F f, type_list<Ts...>)
             {
                 return typename apply_mask<type_list<Ts...>, f(Ts{})...>::type{};
             }
@@ -3452,7 +3452,7 @@ namespace refl
                 return true;
             }
             else {
-                constexpr auto match = [](auto m) {
+                [[maybe_unused]] constexpr auto match = [](auto m) {
                     return is_property(m) && is_writable(m) && get_display_name_const(m) == get_display_name_const(ReadableMember{});
                 };
 
@@ -3497,7 +3497,7 @@ namespace refl
                 return true;
             }
             else {
-                constexpr auto match = [](auto m) {
+                [[maybe_unused]] constexpr auto match = [](auto m) {
                     return is_property(m) && is_readable(m) && get_display_name_const(m) == get_display_name_const(WritableMember{});
                 };
 
@@ -4360,34 +4360,34 @@ namespace refl::detail
     REFL_END
 
     // Char types.
-    REFL_DETAIL_PRIMITIVE(char);
-    REFL_DETAIL_PRIMITIVE(wchar_t);
-    REFL_DETAIL_PRIMITIVE(char16_t);
-    REFL_DETAIL_PRIMITIVE(char32_t);
+    REFL_DETAIL_PRIMITIVE(char)
+    REFL_DETAIL_PRIMITIVE(wchar_t)
+    REFL_DETAIL_PRIMITIVE(char16_t)
+    REFL_DETAIL_PRIMITIVE(char32_t)
 #ifdef __cpp_lib_char8_t
-    REFL_DETAIL_PRIMITIVE(char8_t);
+    REFL_DETAIL_PRIMITIVE(char8_t)
 #endif
 
     // Integral types.
-    REFL_DETAIL_PRIMITIVE(bool);
-    REFL_DETAIL_PRIMITIVE(signed char);
-    REFL_DETAIL_PRIMITIVE(unsigned char);
-    REFL_DETAIL_PRIMITIVE(signed short);
-    REFL_DETAIL_PRIMITIVE(unsigned short);
-    REFL_DETAIL_PRIMITIVE(signed int);
-    REFL_DETAIL_PRIMITIVE(unsigned int);
-    REFL_DETAIL_PRIMITIVE(signed long);
-    REFL_DETAIL_PRIMITIVE(unsigned long);
-    REFL_DETAIL_PRIMITIVE(signed long long);
-    REFL_DETAIL_PRIMITIVE(unsigned long long);
+    REFL_DETAIL_PRIMITIVE(bool)
+    REFL_DETAIL_PRIMITIVE(signed char)
+    REFL_DETAIL_PRIMITIVE(unsigned char)
+    REFL_DETAIL_PRIMITIVE(signed short)
+    REFL_DETAIL_PRIMITIVE(unsigned short)
+    REFL_DETAIL_PRIMITIVE(signed int)
+    REFL_DETAIL_PRIMITIVE(unsigned int)
+    REFL_DETAIL_PRIMITIVE(signed long)
+    REFL_DETAIL_PRIMITIVE(unsigned long)
+    REFL_DETAIL_PRIMITIVE(signed long long)
+    REFL_DETAIL_PRIMITIVE(unsigned long long)
 
     // Floating point types.
-    REFL_DETAIL_PRIMITIVE(float);
-    REFL_DETAIL_PRIMITIVE(double);
-    REFL_DETAIL_PRIMITIVE(long double);
+    REFL_DETAIL_PRIMITIVE(float)
+    REFL_DETAIL_PRIMITIVE(double)
+    REFL_DETAIL_PRIMITIVE(long double)
 
     // Other types.
-    REFL_DETAIL_PRIMITIVE(decltype(nullptr));
+    REFL_DETAIL_PRIMITIVE(decltype(nullptr))
 
     // Void type.
     REFL_TYPE(void)

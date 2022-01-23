@@ -19,9 +19,9 @@ namespace ns
     };
 }
 
-REFL_AUTO(type(ns::InNamespace), field(x));
+REFL_AUTO(type(ns::InNamespace), field(x))
 
-REFL_AUTO(template((typename T), (ns::TemplateInNamespace<T>)), field(x));
+REFL_AUTO(template((typename T), (ns::TemplateInNamespace<T>)), field(x))
 
 struct FooBaseBase {};
 

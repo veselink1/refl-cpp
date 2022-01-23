@@ -5,7 +5,7 @@
 using namespace refl;
 
 struct Base {};
-REFL_AUTO(type(Base));
+REFL_AUTO(type(Base))
 
 struct Derived : public Base {
     int x;
