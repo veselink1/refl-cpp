@@ -2627,10 +2627,10 @@ namespace refl
          * \endcode
          */
         template <typename Descriptor>
-        constexpr auto get_name(Descriptor d) noexcept
+        constexpr auto const& get_name(Descriptor) noexcept
         {
             static_assert(trait::is_descriptor_v<Descriptor>);
-            return d.name;
+            return Descriptor::name;
         }
 
         /**
@@ -2644,10 +2644,10 @@ namespace refl
          * \endcode
          */
         template <typename Descriptor>
-        constexpr const auto& get_attributes(Descriptor d) noexcept
+        constexpr const auto& get_attributes(Descriptor) noexcept
         {
             static_assert(trait::is_descriptor_v<Descriptor>);
-            return d.attributes;
+            return Descriptor::attributes;
         }
 
         /**
@@ -2661,10 +2661,10 @@ namespace refl
          * \endcode
          */
         template <typename Descriptor>
-        constexpr auto get_attribute_types(Descriptor d) noexcept
+        constexpr auto get_attribute_types(Descriptor) noexcept
         {
             static_assert(trait::is_descriptor_v<Descriptor>);
-            return trait::as_type_list_t<std::remove_cv_t<decltype(d.attributes)>>{};
+            return trait::as_type_list_t<std::remove_cv_t<decltype(Descriptor::attributes)>>{};
         }
 
         /**
@@ -2684,10 +2684,10 @@ namespace refl
          * \endcode
          */
         template <typename TypeDescriptor>
-        constexpr auto get_declared_base_types(TypeDescriptor t) noexcept
+        constexpr auto const& get_declared_base_types(TypeDescriptor) noexcept
         {
             static_assert(trait::is_type_v<TypeDescriptor>);
-            return t.declared_bases;
+            return TypeDescriptor::declared_bases;
         }
 
         /**
@@ -2707,10 +2707,10 @@ namespace refl
          * \endcode
          */
         template <typename TypeDescriptor>
-        constexpr auto get_base_types(TypeDescriptor t) noexcept
+        constexpr auto const& get_base_types(TypeDescriptor) noexcept
         {
             static_assert(trait::is_type_v<TypeDescriptor>);
-            return t.bases;
+            return TypeDescriptor::bases;
         }
 
         /**
@@ -2728,10 +2728,10 @@ namespace refl
          * \endcode
          */
         template <typename TypeDescriptor>
-        constexpr auto get_declared_members(TypeDescriptor t) noexcept
+        constexpr auto const& get_declared_members(TypeDescriptor) noexcept
         {
             static_assert(trait::is_type_v<TypeDescriptor>);
-            return t.declared_members;
+            return TypeDescriptor::declared_members;
         }
 
         /**
@@ -2749,10 +2749,10 @@ namespace refl
          * \endcode
          */
         template <typename TypeDescriptor>
-        constexpr auto get_members(TypeDescriptor t) noexcept
+        constexpr auto const& get_members(TypeDescriptor) noexcept
         {
             static_assert(trait::is_type_v<TypeDescriptor>);
-            return t.members;
+            return TypeDescriptor::members;
         }
 
         /**
@@ -2767,10 +2767,10 @@ namespace refl
          * \endcode
          */
         template <typename MemberDescriptor>
-        constexpr auto get_declarator(MemberDescriptor d) noexcept
+        constexpr auto const& get_declarator(MemberDescriptor) noexcept
         {
             static_assert(trait::is_member_v<MemberDescriptor>);
-            return d.declarator;
+            return MemberDescriptor::declarator;
         }
 
         /**
@@ -2792,10 +2792,10 @@ namespace refl
          * \endcode
          */
         template <typename MemberDescriptor>
-        constexpr auto get_pointer(MemberDescriptor d) noexcept
+        constexpr auto const& get_pointer(MemberDescriptor) noexcept
         {
             static_assert(trait::is_member_v<MemberDescriptor>);
-            return d.pointer;
+            return MemberDescriptor::pointer;
         }
 
         /**
@@ -2835,10 +2835,10 @@ namespace refl
          * \endcode
          */
         template <typename FieldDescriptor>
-        constexpr auto is_static(FieldDescriptor d) noexcept
+        constexpr auto const& is_static(FieldDescriptor) noexcept
         {
             static_assert(trait::is_field_v<FieldDescriptor>);
-            return d.is_static;
+            return FieldDescriptor::is_static;
         }
 
         /**
@@ -2855,10 +2855,10 @@ namespace refl
          * \endcode
          */
         template <typename FieldDescriptor>
-        constexpr auto is_const(FieldDescriptor d) noexcept
+        constexpr auto is_const(FieldDescriptor) noexcept
         {
             static_assert(trait::is_field_v<FieldDescriptor>);
-            return d.is_const;
+            return FieldDescriptor::is_const;
         }
 
         /**
@@ -2883,10 +2883,10 @@ namespace refl
          * \endcode
          */
         template <typename FunctionDescriptor>
-        constexpr auto is_resolved(FunctionDescriptor d) noexcept
+        constexpr auto const& is_resolved(FunctionDescriptor) noexcept
         {
             static_assert(trait::is_function_v<FunctionDescriptor>);
-            return d.is_resolved;
+            return FunctionDescriptor::is_resolved;
         }
 
         /**
@@ -2905,10 +2905,10 @@ namespace refl
          * \endcode
          */
         template <typename Pointer, typename FunctionDescriptor>
-        constexpr auto can_resolve(FunctionDescriptor d) noexcept
+        constexpr auto can_resolve(FunctionDescriptor) noexcept
         {
             static_assert(trait::is_function_v<FunctionDescriptor>);
-            return d.template can_resolve<Pointer>();
+            return FunctionDescriptor::template can_resolve<Pointer>();
         }
 
         /**
@@ -2926,10 +2926,10 @@ namespace refl
          * \endcode
          */
         template <typename Pointer, typename FunctionDescriptor>
-        constexpr auto resolve(FunctionDescriptor d) noexcept
+        constexpr auto resolve(FunctionDescriptor) noexcept
         {
             static_assert(trait::is_function_v<FunctionDescriptor>);
-            return d.template resolve<Pointer>();
+            return FunctionDescriptor::template resolve<Pointer>();
         }
 
         /**
@@ -3024,10 +3024,10 @@ namespace refl
          * \endcode
          */
         template <typename A, typename Descriptor>
-        constexpr const A& get_attribute(Descriptor d) noexcept
+        constexpr const A& get_attribute(Descriptor) noexcept
         {
             static_assert(trait::is_descriptor_v<Descriptor>);
-            return util::get<A>(d.attributes);
+            return util::get<A>(Descriptor::attributes);
         }
 
         /**
@@ -3039,10 +3039,10 @@ namespace refl
          * \endcode
          */
         template <template<typename...> typename A, typename Descriptor>
-        constexpr const auto& get_attribute(Descriptor d) noexcept
+        constexpr const auto& get_attribute(Descriptor) noexcept
         {
             static_assert(trait::is_descriptor_v<Descriptor>);
-            return util::get_instance<A>(d.attributes);
+            return util::get_instance<A>(Descriptor::attributes);
         }
 
         /**
@@ -3208,16 +3208,16 @@ namespace refl
          * \endcode
          */
         template <typename TypeDescriptor>
-        constexpr auto get_simple_name(TypeDescriptor t)
+        constexpr auto get_simple_name(TypeDescriptor)
         {
             static_assert(trait::is_type_v<TypeDescriptor>);
-            constexpr size_t template_start = t.name.find('<');
-            constexpr size_t scope_last = t.name.rfind(':', template_start);
+            constexpr size_t template_start = TypeDescriptor::name.find('<');
+            constexpr size_t scope_last = TypeDescriptor::name.rfind(':', template_start);
             if constexpr (scope_last == const_string<0>::npos) {
-                return t.name;
+                return TypeDescriptor::name;
             }
             else {
-                return t.name.template substr<scope_last + 1, template_start - scope_last - 1>();
+                return TypeDescriptor::name.template substr<scope_last + 1, template_start - scope_last - 1>();
             }
         }
 
@@ -3230,10 +3230,10 @@ namespace refl
          * \endcode
          */
         template <typename MemberDescriptor>
-        constexpr auto get_debug_name_const(MemberDescriptor d)
+        constexpr auto get_debug_name_const(MemberDescriptor)
         {
             static_assert(trait::is_member_v<MemberDescriptor>);
-            return d.declarator.name + "::" + d.name;
+            return MemberDescriptor::declarator.name + "::" + MemberDescriptor::name;
         }
 
         /**
