@@ -4073,30 +4073,34 @@ namespace refl
             static_assert(refl::trait::is_reflectable_v<type>, "Unsupported type!");
             typedef type_descriptor<type> type_descriptor;
 
-            std::optional<U> result;
+            std::conditional_t<std::is_void_v<U>, bool, std::optional<U>> result{};
 
-            bool found{ false };
             for_each(type_descriptor::members, [&](auto member) {
                 using member_t = decltype(member);
-                if (found) return;
+                if (result) return;
 
                 if constexpr (std::is_invocable_r_v<U, decltype(member), T, Args...>) {
                     if constexpr (trait::is_member_v<member_t>) {
                         if (std::strcmp(member.name.c_str(), name) == 0) {
-                            result.emplace(member(target, std::forward<Args>(args)...));
-                            found = true;
+                            if constexpr (std::is_void_v<U>) {
+                                member(target, std::forward<Args>(args)...);
+                                result = true;
+                            }
+                            else {
+                                result.emplace(member(target, std::forward<Args>(args)...));
+                            }
                         }
                     }
                 }
             });
 
-            if (found) {
-                return std::move(*result);
-            }
-            else {
+            if (!result) {
                 throw std::runtime_error(std::string("The member ")
                     + type_descriptor::name.str() + "::" + name
                     + " is not compatible with the provided parameters or return type, is not reflected or does not exist!");
+            }
+            if constexpr (!std::is_void_v<U>) {
+                return std::move(*result);
             }
         }
 
