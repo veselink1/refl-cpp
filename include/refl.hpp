@@ -58,9 +58,11 @@ namespace std
 
 #endif
 
-#ifdef _MSC_VER
-// Disable VS warning for "Not enough arguments for macro"
-// (emitted when a REFL_ macro is not provided any attributes)
+// Disable warnings about non-conformant variadic macros
+// There isn't any fix before c++20
+#if defined(__clang__)
+#pragma clang diagnostic ignored "-Wgnu-zero-variadic-macro-arguments"
+#elif defined(_MSC_VER)
 #pragma warning( disable : 4003 )
 #endif
 
@@ -3181,8 +3183,14 @@ namespace refl
         [[deprecated]] constexpr auto get_bases(TypeDescriptor t) noexcept
         {
             static_assert(trait::is_type_v<TypeDescriptor>);
+#ifdef __GNUG__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
             static_assert(has_bases(t), "Target type does not have a bases<A, B, ...> attribute.");
-
+#ifdef __GNUG__
+#pragma GCC diagnostic pop
+#endif
             constexpr auto bases = get_attribute<attr::base_types>(t);
             using base_types = typename decltype(bases)::list_type;
             return trait::map_t<detail::get_type_descriptor, base_types>{};

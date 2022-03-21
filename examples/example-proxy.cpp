@@ -99,7 +99,7 @@ using User = value_proxy<model::User>;
 
 int main()
 {
-    User user{{ 10 }};
+    User user{{ 10, {} }};
 
     assert(user.id() == 10);
     // user.id(10) // fails with a static assertion (is_writable(member))

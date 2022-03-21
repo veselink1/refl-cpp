@@ -20,7 +20,7 @@ void ProcessClass()
       {
          if constexpr (refl::descriptor::is_writable(member))
          {
-            auto reader = refl::descriptor::get_reader(member);
+            auto reader [[maybe_unused]] = refl::descriptor::get_reader(member);
             // etc.
          }
          else if constexpr (! refl::descriptor::has_writer(member))

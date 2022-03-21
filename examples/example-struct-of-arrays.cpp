@@ -1,6 +1,7 @@
 #include "refl.hpp"
 #include <iostream>
 #include <vector>
+#include <cassert>
 
 /********************************/
 template <typename T>
@@ -22,13 +23,13 @@ public:
     using readable_members = readable_member_list<std::remove_cv_t<T>>;
     static_assert(readable_members::size > 0, "Type has no fields!");
 
-    struct_of_arrays(size_t capacity = 4)
+    struct_of_arrays()
     {
     }
 
     void push_back(const T& value)
     {
-        for_each(readable_members {}, [&](auto member, size_t index) {
+        for_each(readable_members {}, [&](auto member) {
             constexpr auto i = refl::trait::index_of_v<decltype(member), readable_members>;
             std::get<i>(storage_).push_back(member(value));
         });
@@ -36,15 +37,6 @@ public:
 
     void pop_back()
     {
-        for_each(readable_members{}, [&](auto member) {
-            constexpr auto i = refl::trait::index_of_v<decltype(member), readable_members>;
-            std::get<i>(storage_).pop_back();
-        });
-    }
-
-    T at(size_t index) const
-    {
-        T t{};
         for_each(readable_members{}, [&](auto member) {
             constexpr auto i = refl::trait::index_of_v<decltype(member), readable_members>;
             std::get<i>(storage_).pop_back();
@@ -164,6 +156,9 @@ int main()
 
     std::cout << "size=" << colors.size() << "\n";
     for (size_t i = 0; i < colors.size(); i++) {
+        assert(red_chan[i] == colors.red(i));
+        assert(green_chan[i] == colors.green(i));
+        assert(blue_chan[i] == colors.blue(i));
         std::cout << "r=" << red_chan[i] << ",g=" << green_chan[i] << ",b=" << blue_chan[i] << "\n";
     }
 }

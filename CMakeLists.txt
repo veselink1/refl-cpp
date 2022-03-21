@@ -25,9 +25,9 @@ target_include_directories(
 
 target_compile_features(refl-cpp INTERFACE cxx_std_17)
 if (MSVC)
-  add_compile_options(/W4)
+  add_compile_options(/W4 /WX)
 else()
-  add_compile_options(-Wall -Wextra -pedantic)
+  add_compile_options(-Wall -Wextra -pedantic -Wpedantic -Wconversion -Werror)
 endif()
 # ---- Install ----
 

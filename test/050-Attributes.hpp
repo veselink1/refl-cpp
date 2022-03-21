@@ -103,9 +103,20 @@ TEST_CASE( "attributes" ) {
     }
 
     SECTION( "built-in attributes" ) {
-
         SECTION( "bases<>" ) {
+#if defined(__GNUG__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif defined(_MSC_VER)
+#pragma warning( push )
+#pragma warning( disable : 4996 )
+#endif
             using bases_t = decltype(get_bases(reflect<Derived>()));
+#if defined(__GNUG__)
+#pragma GCC diagnostic pop
+#elif defined(_MSC_VER)
+#pragma warning( pop )
+#endif
             REQUIRE( bases_t::size == 1 );
             REQUIRE( std::is_same_v<trait::first_t<bases_t>::type, Base> );
         }
