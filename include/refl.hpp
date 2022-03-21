@@ -59,7 +59,11 @@ namespace std
 #endif
 
 // Disable warnings about non-conformant variadic macros
-// There isn't any fix before c++20
+// There isn't any real standards compliant fix before c++20
+
+// Note that gcc doesn't have a way to disable these warnings specifically,
+// but they don't triggered for gnu variants of the standards (which CMake uses
+// by default) with recent versions of the compiler.
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wgnu-zero-variadic-macro-arguments"
 #elif defined(_MSC_VER)

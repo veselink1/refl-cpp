@@ -52,7 +52,7 @@ REFL_AUTO(
     type(User, Table{"Users"}),
     field(id, Column{"ID", DataType::ID}),
     field(email, Column{"Email", DataType::TEXT})
-);
+)
 
 template <typename Member>
 constexpr auto make_sql_field_spec(Member)

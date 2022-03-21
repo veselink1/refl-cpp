@@ -95,6 +95,10 @@ const auto& get(const struct_of_arrays<T>& soa)
     return soa[member{}];
 }
 
+#if defined(__clang__) || (defined(__GNUG__) && __GNUC__ >= 10)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmismatched-tags"
+#endif
 namespace std
 {
     template <typename T>
@@ -110,6 +114,9 @@ namespace std
         using type = decltype(std::declval<struct_of_arrays<T>>()[descriptor{}]);
     };
 }
+#if defined(__clang__) || (defined(__GNUG__) && __GNUC__ >= 10)
+#pragma GCC diagnostic pop
+#endif
 
 /********************************/
 
