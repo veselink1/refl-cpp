@@ -77,6 +77,7 @@ TEST_CASE( "runtime utils" ) {
 
     SECTION( "invoke" ) {
         REQUIRE( runtime::invoke<int>(Bar{}, "x", 1) == 1 );
+        runtime::invoke<void>(Bar{}, "f");
     }
 
 }
