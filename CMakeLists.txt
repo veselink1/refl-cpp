@@ -25,9 +25,16 @@ target_include_directories(
 
 target_compile_features(refl-cpp INTERFACE cxx_std_17)
 if (MSVC)
-  add_compile_options(/W4)
+  add_compile_options(/W4 /WX)
 else()
-  add_compile_options(-Wall -Wextra -pedantic)
+  add_compile_options(-Wall -Wextra -pedantic -Wconversion)
+  if ( NOT ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND "${CMAKE_CXX_COMPILER_VERSION}" VERSION_LESS "8.0") )
+    add_compile_options(-pedantic-errors -Werror)
+  endif()
+  if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang" AND "${CMAKE_CXX_COMPILER_VERSION}" VERSION_LESS "6.0")
+    # old versions of clang do not recognize invalid missing braces with templated code
+    add_compile_options(-Wno-missing-braces)
+  endif()
 endif()
 # ---- Install ----
 

@@ -56,7 +56,7 @@ public:
     template <typename Member>
     auto& get()
     {
-        constexpr size_t idx = refl::trait::index_of_v<Member, member_list>;
+        constexpr auto idx = refl::trait::index_of_v<Member, member_list>;
         static_assert(idx != -1);
         return refl::util::get<idx>(data);
     }
@@ -64,7 +64,7 @@ public:
     template <typename Member>
     const auto& get() const
     {
-        constexpr size_t idx = refl::trait::index_of_v<Member, member_list>;
+        constexpr auto idx = refl::trait::index_of_v<Member, member_list>;
         static_assert(idx != -1);
         return refl::util::get<idx>(data);
     }

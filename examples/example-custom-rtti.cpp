@@ -109,7 +109,7 @@ int main()
 {
     FirstPersonController fpc;
     Pawn& pawn = fpc; // refer through parent type
-    const TypeInfo& pawnTypeInfo = pawn.GetTypeInfo(); // get custom type info
+    const TypeInfo& pawnTypeInfo [[maybe_unused]] = pawn.GetTypeInfo(); // get custom type info
 
     // access the name through our TypeInfo object
     assert(pawnTypeInfo.Name() == "FirstPersonController");

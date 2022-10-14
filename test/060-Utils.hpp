@@ -48,7 +48,7 @@ TEST_CASE( "utilities" ) {
             // Do nothing.
         });
 
-        std::array<int, 2> fe{};
+        std::array<size_t, 2> fe{};
         util::for_each(type_list<int, int>{}, [&](auto, size_t i) {
             fe[i] = i;
         });
@@ -63,7 +63,7 @@ TEST_CASE( "utilities" ) {
     }
 
     SECTION( "count_if" ) {
-        constexpr int cnt = util::count_if(type_list<int, float>{}, [](auto x) {
+        constexpr auto cnt = util::count_if(type_list<int, float>{}, [](auto x) {
             return std::is_integral_v<decltype(x)>;
         });
         REQUIRE( cnt == 1 );
