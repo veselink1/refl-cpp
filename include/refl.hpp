@@ -34,7 +34,13 @@
 #include <sstream>
 #include <iomanip> // std::quoted
 
-#if defined(__APPLE__)
+#if __has_include(<version>)
+    #include <version>
+#else
+    #include <ciso646>
+#endif
+
+#if defined(__APPLE__) || defined(_LIBCPP_VERSION)
 
 #include <memory>
 #include <complex>
