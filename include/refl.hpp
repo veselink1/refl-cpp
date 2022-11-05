@@ -33,30 +33,8 @@
 #include <ostream>
 #include <sstream>
 #include <iomanip> // std::quoted
-
-#if defined(__APPLE__)
-
 #include <memory>
 #include <complex>
-
-#else
-
-namespace std
-{
-    template <typename T, typename Deleter>
-    class unique_ptr;
-
-    template <typename T>
-    class shared_ptr;
-
-    template <typename T>
-    class weak_ptr;
-
-    template <typename T>
-    class complex;
-} // namespace std
-
-#endif
 
 #ifdef _MSC_VER
 // Disable VS warning for "Not enough arguments for macro"
