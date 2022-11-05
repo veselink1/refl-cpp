@@ -1,9 +1,16 @@
 var searchData=
 [
-  ['changelog_2emd_0',['CHANGELOG.md',['../_c_h_a_n_g_e_l_o_g_8md.html',1,'']]],
-  ['cmake_5fminimum_5frequired_1',['cmake_minimum_required',['../_c_make_lists_8txt.html#aaa3a42cc8ae2878e9f158d9ca45a77d0',1,'CMakeLists.txt']]],
-  ['cmakelists_2etxt_2',['CMakeLists.txt',['../_c_make_lists_8txt.html',1,'']]],
-  ['code_5fof_5fconduct_2emd_3',['CODE_OF_CONDUCT.md',['../_c_o_d_e___o_f___c_o_n_d_u_c_t_8md.html',1,'']]],
-  ['changelog_4',['Changelog',['../md__c_h_a_n_g_e_l_o_g.html',1,'']]],
-  ['contributor_20covenant_20code_20of_20conduct_5',['Contributor Covenant Code of Conduct',['../md__c_o_d_e__o_f__c_o_n_d_u_c_t.html',1,'']]]
+  ['accumulate_0',['accumulate',['../namespacerefl_1_1util.html#a75e4295de1bf1350238fe01eb71d9cc1',1,'refl::util']]],
+  ['any_1',['any',['../structrefl_1_1attr_1_1usage_1_1any.html',1,'refl::attr::usage']]],
+  ['append_2',['append',['../structrefl_1_1trait_1_1append.html',1,'refl::trait']]],
+  ['append_5ft_3',['append_t',['../namespacerefl_1_1trait.html#a644910ba9f353221e50e2541a492e5cc',1,'refl::trait']]],
+  ['apply_4',['apply',['../namespacerefl_1_1util.html#ab5d05c1c63f4794ce67cbdd71f322ae6',1,'refl::util']]],
+  ['as_5ftuple_5',['as_tuple',['../namespacerefl_1_1util.html#a2eef47de6755754bb8666bf61b118014',1,'refl::util']]],
+  ['as_5ftuple_3c_20t_3c_20ts_2e_2e_2e_20_3e_20_3e_6',['as_tuple&lt; T&lt; Ts... &gt; &gt;',['../structrefl_1_1trait_1_1as__tuple_3_01_t_3_01_ts_8_8_8_01_4_01_4.html',1,'refl::trait']]],
+  ['as_5ftuple_5ft_7',['as_tuple_t',['../namespacerefl_1_1trait.html#a7528d00a7777f3ea5bae8b6bb2814b26',1,'refl::trait']]],
+  ['as_5ftype_5flist_8',['as_type_list',['../namespacerefl_1_1util.html#a17fc91d7a4e148a502003f8ce4edeeef',1,'refl::util']]],
+  ['as_5ftype_5flist_3c_20t_3c_20ts_2e_2e_2e_20_3e_20_3e_9',['as_type_list&lt; T&lt; Ts... &gt; &gt;',['../structrefl_1_1trait_1_1as__type__list_3_01_t_3_01_ts_8_8_8_01_4_01_4.html',1,'refl::trait']]],
+  ['as_5ftype_5flist_5ft_10',['as_type_list_t',['../namespacerefl_1_1trait.html#ae2279db43338368acb8af9ade961a504',1,'refl::trait']]],
+  ['attribute_5ftypes_11',['attribute_types',['../classrefl_1_1descriptor_1_1member__descriptor__base.html#ae8eb41df4e6d17f6e223f8ed5abe581d',1,'refl::descriptor::member_descriptor_base::attribute_types()'],['../classrefl_1_1descriptor_1_1type__descriptor.html#a0b45390046a31d03e076aa44899005a4',1,'refl::descriptor::type_descriptor::attribute_types()']]],
+  ['attributes_12',['attributes',['../classrefl_1_1descriptor_1_1member__descriptor__base.html#a410121cb42388625a57cfb910d31cdb7',1,'refl::descriptor::member_descriptor_base::attributes()'],['../classrefl_1_1descriptor_1_1type__descriptor.html#ad71db44823dc75bcdd6bcd98449bab31',1,'refl::descriptor::type_descriptor::attributes()']]]
 ];

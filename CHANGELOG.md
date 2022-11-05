@@ -1,4 +1,10 @@
 # Changelog
+
+### v0.12.4
+  - `runtime::invoke` functions with void return type [#68](https://github.com/veselink1/refl-cpp/pull/68) (thanks @ohanar)
+  - Faster `trait::get_t` - speeds up compilation for large classes [#72](https://github.com/veselink1/refl-cpp/pull/72), see discussion in [#71](https://github.com/veselink1/refl-cpp/issues/71)
+  - Fix for Apple Clang and libc++ [#76](https://github.com/veselink1/refl-cpp/pull/76)
+
 ### v0.12.3
   - Fixed inverted order of `refl::util::filter()` and its users [#65](https://github.com/veselink1/refl-cpp/issues/65) (thanks @RalphSteinhagen)
 

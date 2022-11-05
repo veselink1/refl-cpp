@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['templates_17',['templates',['../_c_make_lists_8txt.html#aff4ff3a7bf99e704dc5f9eb72480786a',1,'CMakeLists.txt']]]
+  ['attributes_341',['attributes',['../classrefl_1_1descriptor_1_1member__descriptor__base.html#a410121cb42388625a57cfb910d31cdb7',1,'refl::descriptor::member_descriptor_base::attributes()'],['../classrefl_1_1descriptor_1_1type__descriptor.html#ad71db44823dc75bcdd6bcd98449bab31',1,'refl::descriptor::type_descriptor::attributes()']]]
 ];
